@@ -263,6 +263,20 @@ tr.drag-over { border-top: 2px solid #2563EB; }
 .accordion-table tbody tr:last-child td { border-bottom: none; }
 .accordion-table tbody tr:hover { background: #FAFAFA; }
 
+/* ── Compact radio options (form inline) ── */
+.radio-opts { display: flex; flex-wrap: wrap; gap: 8px; }
+.radio-opt { display: flex; align-items: center; gap: 6px; padding: 7px 14px; border: 1.5px solid #E5E7EB; border-radius: 8px; cursor: pointer; font-size: 13px; color: #374151; transition: all 0.15s; user-select: none; }
+.radio-opt:hover { border-color: #93C5FD; }
+.radio-opt.selected { border-color: #2563EB; background: #EFF6FF; color: #1D4ED8; font-weight: 500; }
+.radio-opt .radio-dot { width: 14px; height: 14px; flex-shrink: 0; }
+/* ── Checkbox multi-select ── */
+.checkbox-opts { display: flex; flex-wrap: wrap; gap: 8px; }
+.checkbox-opt { display: flex; align-items: center; gap: 7px; padding: 7px 14px; border: 1.5px solid #E5E7EB; border-radius: 8px; cursor: pointer; font-size: 13px; color: #374151; transition: all 0.15s; user-select: none; }
+.checkbox-opt:hover { border-color: #93C5FD; }
+.checkbox-opt.checked { border-color: #2563EB; background: #EFF6FF; color: #1D4ED8; font-weight: 500; }
+.checkbox-opt .chk-box { width: 14px; height: 14px; border: 1.5px solid #D1D5DB; border-radius: 3px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 10px; }
+.checkbox-opt.checked .chk-box { background: #2563EB; border-color: #2563EB; color: #fff; }
+.field-note { font-size: 11px; color: #9CA3AF; margin-top: 4px; }
 /* ── Review page ── */
 .rv-section { margin-bottom: 0; }
 .rv-section-title { font-size: 13px; font-weight: 700; color: #111827; padding: 14px 0 10px; border-bottom: 1px solid #F3F4F6; margin-bottom: 2px; }
@@ -388,44 +402,86 @@ tr.drag-over { border-top: 2px solid #2563EB; }
       </div>
       <div class="section-body">
         <div class="form-grid">
-          <div class="form-group">
+
+          <!-- Funder Name -->
+          <div class="form-group" style="grid-column:1/-1;">
             <label class="form-label">Funder Name <span class="req">*</span></label>
-            <input class="form-input" placeholder="e.g. TH_SPL_Starlight_ABS_01" />
+            <input class="form-input" style="max-width:420px;" placeholder="e.g. TH_SPL_Starlight_ABS_01" />
           </div>
-          <div class="form-group">
+
+          <!-- Funder Scheme — radio -->
+          <div class="form-group" style="grid-column:1/-1;">
             <label class="form-label">Funder Scheme <span class="req">*</span></label>
-            <select class="form-select">
-              <option value="">Select scheme</option>
-              <option>ABS</option><option>ABL</option><option>YBL</option><option>Channeling</option>
-            </select>
+            <div class="radio-opts" id="scheme-opts">
+              <div class="radio-opt selected" onclick="selectRadioOpt('scheme-opts',this)">
+                <div class="radio-dot on" id="scheme-dot-0"></div>ABS
+              </div>
+              <div class="radio-opt" onclick="selectRadioOpt('scheme-opts',this)">
+                <div class="radio-dot" id="scheme-dot-1"></div>ABL
+              </div>
+            </div>
           </div>
-          <div class="form-group">
+
+          <!-- Product — radio -->
+          <div class="form-group" style="grid-column:1/-1;">
             <label class="form-label">Product <span class="req">*</span></label>
+            <div class="radio-opts" id="product-opts">
+              <div class="radio-opt" onclick="selectRadioOpt('product-opts',this)">
+                <div class="radio-dot"></div>BCL
+              </div>
+              <div class="radio-opt selected" onclick="selectRadioOpt('product-opts',this)">
+                <div class="radio-dot on"></div>SPL
+              </div>
+              <div class="radio-opt" onclick="selectRadioOpt('product-opts',this)">
+                <div class="radio-dot"></div>SCL
+              </div>
+              <div class="radio-opt" onclick="selectRadioOpt('product-opts',this)">
+                <div class="radio-dot"></div>Term loan
+              </div>
+            </div>
+            <div class="field-note">Pulled from BE's biz_type</div>
+          </div>
+
+          <!-- Loan Type — multi checkbox (MY only) -->
+          <div class="form-group" style="grid-column:1/-1;">
+            <label class="form-label">Loan Type <span class="req">*</span> <span style="font-size:11px;color:#9CA3AF;font-weight:400;">(MY only)</span></label>
+            <div class="checkbox-opts">
+              <div class="checkbox-opt" onclick="toggleCheckbox(this)">
+                <div class="chk-box"></div>SFinancing-i
+              </div>
+              <div class="checkbox-opt checked" onclick="toggleCheckbox(this)">
+                <div class="chk-box">✓</div>SLoan
+              </div>
+            </div>
+            <div class="field-note">Pulled from BE's sub_biz_type</div>
+          </div>
+
+          <!-- Originator -->
+          <div class="form-group">
+            <label class="form-label">Originator <span class="req">*</span></label>
             <select class="form-select">
-              <option value="">Select product</option>
-              <option>SPL</option><option>MPL</option><option>BNPLite</option>
+              <option value="">Select originator</option>
+              <option>Monee</option>
+              <option>Unicorn</option>
             </select>
           </div>
+
+          <!-- Investor -->
           <div class="form-group">
-            <label class="form-label">Loan Type</label>
-            <input class="form-input" placeholder="e.g. Shariah, SFinancing-i" />
-          </div>
-          <div class="form-group">
-            <label class="form-label">Originator</label>
-            <input class="form-input" placeholder="e.g. Monee" />
-          </div>
-          <div class="form-group">
-            <label class="form-label">Investor</label>
+            <label class="form-label">Investor <span class="req">*</span></label>
             <input class="form-input" placeholder="e.g. JPM" />
           </div>
+
+          <!-- License (TH only) -->
           <div class="form-group">
-            <label class="form-label">Licensee</label>
-            <input class="form-input" placeholder="e.g. CCC" />
+            <label class="form-label">License <span class="req">*</span> <span style="font-size:11px;color:#9CA3AF;font-weight:400;">(TH only)</span></label>
+            <select class="form-select">
+              <option value="">Select license</option>
+              <option>CCC</option>
+              <option>DGL</option>
+            </select>
           </div>
-          <div class="form-group">
-            <label class="form-label">Grade</label>
-            <input class="form-input" placeholder="e.g. UNICORN" />
-          </div>
+
         </div>
       </div>
     </div>
@@ -434,32 +490,17 @@ tr.drag-over { border-top: 2px solid #2563EB; }
     <div class="section-card">
       <div class="section-header">
         <div class="section-title">SPV &amp; Tranche Info</div>
-        <div class="section-sub">Define the SPV entity and tranche parameters for this funder.</div>
+        <div class="section-sub">Define the SPV entity and tranche number for this funder.</div>
       </div>
       <div class="section-body">
         <div class="form-grid">
           <div class="form-group">
-            <label class="form-label">SPV Name <span class="req">*</span></label>
+            <label class="form-label">SPV Name</label>
             <input class="form-input" placeholder="e.g. TH_SPL_ABS_01" />
           </div>
           <div class="form-group">
-            <label class="form-label">Tranche <span class="req">*</span></label>
-            <input class="form-input" placeholder="e.g. 01" />
-          </div>
-          <div class="form-group">
-            <label class="form-label">Tranche Type</label>
-            <select class="form-select">
-              <option value="">Select type</option>
-              <option>ABS</option><option>Senior</option><option>Mezzanine</option><option>Junior</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Rate (%)</label>
-            <input class="form-input" type="number" step="0.01" placeholder="0.00" />
-          </div>
-          <div class="form-group">
-            <label class="form-label">Effective Date</label>
-            <input class="form-input" type="date" />
+            <label class="form-label">Tranche</label>
+            <input class="form-input" type="number" placeholder="e.g. 1" min="1" />
           </div>
         </div>
       </div>
@@ -1680,6 +1721,24 @@ tr.drag-over { border-top: 2px solid #2563EB; }
 </div><!-- /flow-view -->
 
 <script>
+/* ── Compact radio & checkbox helpers ── */
+function selectRadioOpt(groupId, el) {
+  document.querySelectorAll('#' + groupId + ' .radio-opt').forEach(o => {
+    o.classList.remove('selected');
+    const dot = o.querySelector('.radio-dot');
+    if (dot) dot.classList.remove('on');
+  });
+  el.classList.add('selected');
+  const dot = el.querySelector('.radio-dot');
+  if (dot) dot.classList.add('on');
+}
+
+function toggleCheckbox(el) {
+  el.classList.toggle('checked');
+  const box = el.querySelector('.chk-box');
+  if (box) box.textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
 /* ── Flow switching ── */
 function switchFlow(target) {
   document.querySelectorAll('.flow').forEach(f => f.classList.remove('active'));
