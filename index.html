@@ -224,6 +224,36 @@ tr.drag-over { border-top: 2px solid #2563EB; }
 .tn-input:focus { border-color: #2563EB; background: #fff; box-shadow: 0 0 0 2px rgba(37,99,235,0.1); }
 .tn-changed { border-color: #FBBF24 !important; background: #FFFBEB !important; }
 
+/* ── Ops Flow selector cards ── */
+.ops-flow-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.ops-flow-card { border: 2px solid #E5E7EB; border-radius: 10px; padding: 16px; cursor: pointer; transition: all 0.15s; }
+.ops-flow-card:hover:not(.selected) { border-color: #93C5FD; }
+.ops-flow-card.selected { border-color: #2563EB; background: #EFF6FF; }
+.ops-flow-card-top { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.ops-flow-card-title { font-size: 13px; font-weight: 700; color: #111827; }
+.ops-flow-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 0; }
+.ops-stat { display: flex; flex-direction: column; gap: 1px; }
+.ops-stat-label { font-size: 10px; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.04em; }
+.ops-stat-val { font-size: 12px; font-weight: 600; color: #374151; }
+.ops-stat-green { color: #16A34A !important; }
+
+/* ── Milestone type badge ── */
+.ms-type-tag { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+.ms-type-operation { background: #DBEAFE; color: #1D4ED8; }
+.ms-type-system { background: #F3F4F6; color: #6B7280; }
+
+/* ── Template dropdown ── */
+.template-dropdown { position: relative; }
+.tpl-dd-menu { display: none; position: absolute; right: 0; top: calc(100% + 4px); background: #fff; border: 1px solid #E5E7EB; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.1); z-index: 200; min-width: 240px; padding: 4px 0; }
+.template-dropdown.open .tpl-dd-menu { display: block; }
+.tpl-dd-item { display: flex; align-items: center; justify-content: space-between; padding: 9px 14px; cursor: pointer; font-size: 13px; color: #374151; }
+.tpl-dd-item:hover { background: #F9FAFB; }
+.tpl-dd-tag { font-size: 11px; color: #9CA3AF; background: #F3F4F6; padding: 2px 7px; border-radius: 4px; margin-left: 8px; }
+
+/* ── Milestone offset number input ── */
+.ms-offset-input { width: 70px; border: 1px solid #D1D5DB; border-radius: 5px; padding: 5px 8px; font-size: 13px; color: #374151; text-align: center; outline: none; }
+.ms-offset-input:focus { border-color: #2563EB; box-shadow: 0 0 0 2px rgba(37,99,235,0.1); }
+
 /* ── Floating Update Flow button ── */
 .update-flow-btn {
   position: fixed; bottom: 32px; right: 36px;
@@ -898,88 +928,134 @@ tr.drag-over { border-top: 2px solid #2563EB; }
   <div class="page" id="page-s4">
 
     <div class="info-notice">
-      A Management Plan binds a Flow Template to an anchor date, generating the full milestone schedule for this funder's ABS cycle. TC approval is required before tasks are generated.
+      Configure the operational flow and milestone schedule for this funder. Actual cycle dates are generated after Close Date is confirmed — submit for Ticket Center approval when ready.
     </div>
 
-    <!-- Flow Template -->
+    <!-- Section A: Ops Flow -->
     <div class="section-card">
       <div class="section-header">
-        <div class="section-title">Flow Template</div>
-        <div class="section-sub">Select the reusable template that defines milestone sequence, cycle frequency, and T+N offsets.</div>
+        <div class="section-title">Ops Flow</div>
+        <div class="section-sub">Select the operational model. This determines the milestone list and system behaviors for each cycle.</div>
+      </div>
+      <div class="section-body">
+        <div class="ops-flow-cards">
+          <div class="ops-flow-card selected" id="flow-card-abs" onclick="selectOpsFlow('abs')">
+            <div class="ops-flow-card-top">
+              <div class="radio-dot on" id="flow-dot-abs"></div>
+              <div class="ops-flow-card-title">ABS (Non-Net)</div>
+            </div>
+            <div class="ops-flow-stats">
+              <div class="ops-stat"><span class="ops-stat-label">Collection</span><span class="ops-stat-val">3–4× / month</span></div>
+              <div class="ops-stat"><span class="ops-stat-label">Replenishment</span><span class="ops-stat-val">2–4× / month</span></div>
+              <div class="ops-stat"><span class="ops-stat-label">Mode</span><span class="ops-stat-val">Non-Net</span></div>
+              <div class="ops-stat"><span class="ops-stat-label">Capital Eff.</span><span class="ops-stat-val">Standard</span></div>
+            </div>
+          </div>
+          <div class="ops-flow-card" id="flow-card-abs-net" onclick="selectOpsFlow('abs-net')">
+            <div class="ops-flow-card-top">
+              <div class="radio-dot" id="flow-dot-abs-net"></div>
+              <div class="ops-flow-card-title">ABS Net</div>
+            </div>
+            <div class="ops-flow-stats">
+              <div class="ops-stat"><span class="ops-stat-label">Collection</span><span class="ops-stat-val">4× / month</span></div>
+              <div class="ops-stat"><span class="ops-stat-label">Replenishment</span><span class="ops-stat-val">4× / month</span></div>
+              <div class="ops-stat"><span class="ops-stat-label">Mode</span><span class="ops-stat-val">Net</span></div>
+              <div class="ops-stat"><span class="ops-stat-label">Capital Eff.</span><span class="ops-stat-val ops-stat-green">100%</span></div>
+            </div>
+          </div>
+          <div class="ops-flow-card" id="flow-card-abl" onclick="selectOpsFlow('abl')">
+            <div class="ops-flow-card-top">
+              <div class="radio-dot" id="flow-dot-abl"></div>
+              <div class="ops-flow-card-title">ABL</div>
+            </div>
+            <div class="ops-flow-stats">
+              <div class="ops-stat"><span class="ops-stat-label">Collection</span><span class="ops-stat-val">2× / month</span></div>
+              <div class="ops-stat"><span class="ops-stat-label">Replenishment</span><span class="ops-stat-val">1–2× / month</span></div>
+              <div class="ops-stat"><span class="ops-stat-label">Mode</span><span class="ops-stat-val">Non-Net</span></div>
+              <div class="ops-stat"><span class="ops-stat-label">Capital Eff.</span><span class="ops-stat-val">90–95%</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section B: Cycle Setting -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-title">Cycle Setting</div>
       </div>
       <div class="section-body">
         <div class="form-grid">
-          <div class="form-group" style="grid-column:1/-1;">
-            <label class="form-label">Flow Template <span class="req">*</span></label>
-            <select class="form-select">
-              <option>TH_SPL_ABS_Standard_Monthly — Active · 7 milestones · Every 4 weeks</option>
-              <option>TH_BCL_ABS_BiMonthly — Active · 7 milestones · Every 8 weeks</option>
-              <option>TH_SPL_ABL_Monthly — Active · 5 milestones · Every 4 weeks</option>
+          <div class="form-group">
+            <label class="form-label">Cycle Length <span class="req">*</span></label>
+            <select class="form-select" id="cycle-length" onchange="onCycleLengthChange(this)">
+              <option value="14">Every 2 weeks (14 days)</option>
+              <option value="28" selected>Every 4 weeks (28 days)</option>
+              <option value="56">Every 8 weeks (56 days)</option>
+              <option value="custom">Custom…</option>
             </select>
-            <div class="form-hint">Only Active templates are selectable. <span style="color:#2563EB;cursor:pointer;">View template detail ↗</span></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Offset Day Type <span class="req">*</span></label>
+            <div class="radio-opts" style="margin-top:4px;">
+              <div class="radio-opt selected" id="daytype-cal" onclick="selectDayType('cal')">
+                <div class="radio-dot on" id="daytype-dot-cal"></div>Calendar Days
+              </div>
+              <div class="radio-opt" id="daytype-biz" onclick="selectDayType('biz')">
+                <div class="radio-dot" id="daytype-dot-biz"></div>Business Days
+              </div>
+            </div>
+          </div>
+          <div class="form-group" id="custom-days-group" style="display:none;">
+            <label class="form-label">Custom Length (days)</label>
+            <input class="form-input" type="number" id="custom-cycle-days" min="1" placeholder="e.g. 21" style="width:120px;" oninput="recomputeSchedule()" />
           </div>
         </div>
+      </div>
+    </div>
 
-        <div class="divider"></div>
-
-        <!-- Template preview — draggable -->
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-          <div style="font-size:12px;font-weight:600;color:#374151;">Template — Milestone Sequence Preview</div>
-          <div style="font-size:11px;color:#9CA3AF;">⠿ Drag to reorder &nbsp;·&nbsp; Click T+N to edit</div>
+    <!-- Section C: Milestone Configuration -->
+    <div class="section-card">
+      <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;">
+        <div>
+          <div class="section-title">Milestone Configuration</div>
+          <div class="section-sub">Offset = calendar days from Cycle Start. <span style="background:#F3F4F6;color:#6B7280;padding:1px 6px;border-radius:3px;font-size:11px;font-weight:600;">System</span> milestones are auto-triggered and cannot be adjusted.</div>
         </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <div class="template-dropdown" id="load-tpl-dd">
+            <button class="btn-outline-sm" onclick="toggleTplDropdown(event)">Load Template ▾</button>
+            <div class="tpl-dd-menu" id="tpl-dd-menu">
+              <div class="tpl-dd-item" onclick="loadTemplate('TH_SPL_ABS_Standard', 'abs')">TH_SPL_ABS_Standard <span class="tpl-dd-tag">7 milestones</span></div>
+              <div class="tpl-dd-item" onclick="loadTemplate('TH_BCL_ABS_Net_Monthly', 'abs-net')">TH_BCL_ABS_Net_Monthly <span class="tpl-dd-tag">9 milestones</span></div>
+              <div class="tpl-dd-item" onclick="loadTemplate('MY_BCL_ABL_BiMonthly', 'abl')">MY_BCL_ABL_BiMonthly <span class="tpl-dd-tag">5 milestones</span></div>
+            </div>
+          </div>
+          <button class="btn-outline-sm" onclick="showSaveTemplateModal()">Save as Template</button>
+        </div>
+      </div>
+      <div class="section-body" style="padding:0;">
         <div class="tbl-wrap">
-          <table id="milestone-table">
-            <thead><tr><th style="width:32px;"></th><th style="width:36px;">Seq</th><th>Milestone</th><th style="width:140px;">T+N Offset (days)</th><th>Dependency</th></tr></thead>
-            <tbody id="milestone-tbody">
-              <tr draggable="true" data-id="1"><td><span class="drag-handle">⠿</span></td><td class="seq-num">1</td><td><span class="milestone-tag">Servicer Report Date</span></td><td><input class="tn-input" value="T+0" data-orig="T+0" /></td><td class="dep-cell">— Cycle anchor</td></tr>
-              <tr draggable="true" data-id="2"><td><span class="drag-handle">⠿</span></td><td class="seq-num">2</td><td><span class="milestone-tag">Portfolio Selection / Batch Creation</span></td><td><input class="tn-input" value="T+2" data-orig="T+2" /></td><td class="dep-cell">After #1</td></tr>
-              <tr draggable="true" data-id="3"><td><span class="drag-handle">⠿</span></td><td class="seq-num">3</td><td><span class="milestone-tag">Sale Notice / System Cutoff</span></td><td><input class="tn-input" value="T+3" data-orig="T+3" /></td><td class="dep-cell">After #2</td></tr>
-              <tr draggable="true" data-id="4"><td><span class="drag-handle">⠿</span></td><td class="seq-num">4</td><td><span class="milestone-tag">Collection Deposit Date</span></td><td><input class="tn-input" value="T+7" data-orig="T+7" /></td><td class="dep-cell">After #3</td></tr>
-              <tr draggable="true" data-id="5"><td><span class="drag-handle">⠿</span></td><td class="seq-num">5</td><td><span class="milestone-tag">Sale Date</span></td><td><input class="tn-input" value="T+7" data-orig="T+7" /></td><td class="dep-cell">After #4</td></tr>
-              <tr draggable="true" data-id="6"><td><span class="drag-handle">⠿</span></td><td class="seq-num">6</td><td><span class="milestone-tag">Confirmation Date (ABL)</span></td><td><input class="tn-input" value="T+8" data-orig="T+8" /></td><td class="dep-cell">After #5</td></tr>
-              <tr draggable="true" data-id="7"><td><span class="drag-handle">⠿</span></td><td class="seq-num">7</td><td><span class="milestone-tag">Settlement Date (ABL)</span></td><td><input class="tn-input" value="T+10" data-orig="T+10" /></td><td class="dep-cell">After #6</td></tr>
-            </tbody>
+          <table id="milestone-config-table">
+            <thead>
+              <tr>
+                <th style="width:44px;">#</th>
+                <th>Milestone</th>
+                <th style="width:120px;">Type</th>
+                <th style="width:200px;">Offset (days from Cycle Start)</th>
+              </tr>
+            </thead>
+            <tbody id="milestone-config-tbody"></tbody>
           </table>
         </div>
       </div>
     </div>
 
-    <!-- Plan Parameters -->
-    <div class="section-card">
-      <div class="section-header">
-        <div class="section-title">Plan Parameters</div>
-      </div>
-      <div class="section-body">
-        <div class="form-grid">
-          <div class="form-group">
-            <label class="form-label">Plan Start Date</label>
-            <input class="form-input" type="date" id="plan-start" oninput="recomputeSchedule()" />
-            <div class="form-hint">Optional — leave blank if not yet determined</div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Plan End Date</label>
-            <input class="form-input" type="date" id="plan-end" />
-            <div class="form-hint">Optional</div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Plan Name <span class="req">*</span></label>
-            <input class="form-input" placeholder="e.g. TH_SPL_STARLIGHT_ABS_T1_2025" />
-          </div>
-          <div class="form-group">
-            <label class="form-label">Cycle Frequency</label>
-            <input class="form-input" id="cycle-freq" value="Every 4 weeks" disabled style="background:#F9FAFB;color:#9CA3AF;" />
-            <div class="form-hint">Inherited from Flow Template — read only</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Schedule Preview — Calendar -->
+    <!-- Section D: Schedule Preview -->
     <div class="section-card">
       <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;">
         <div>
           <div class="section-title">Schedule Preview</div>
-          <div class="section-sub">Computed from Plan Start Date + T+N offsets. Defaults to the 1st of current month if no date is set.</div>
+          <div class="section-sub">Enter a reference date to preview the first cycle. Actual plan dates are generated after Close Date is confirmed.</div>
         </div>
         <div style="display:flex;align-items:center;gap:8px;">
           <button class="pg-btn" id="cal-prev" onclick="shiftCalMonth(-1)">‹</button>
@@ -988,9 +1064,12 @@ tr.drag-over { border-top: 2px solid #2563EB; }
         </div>
       </div>
       <div class="section-body" style="padding:16px 20px 20px;">
-        <!-- legend -->
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap;">
+          <label style="font-size:12px;color:#374151;font-weight:500;white-space:nowrap;">Reference Cycle Start</label>
+          <input class="form-input" type="date" id="plan-start" oninput="recomputeSchedule()" style="width:180px;" />
+          <span style="font-size:11px;color:#9CA3AF;">Optional — leave blank to preview from today</span>
+        </div>
         <div id="cal-legend" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;"></div>
-        <!-- calendar grid -->
         <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:#E5E7EB;border:1px solid #E5E7EB;border-radius:8px;overflow:hidden;">
           <div style="background:#F9FAFB;padding:8px 0;text-align:center;font-size:11px;font-weight:600;color:#9CA3AF;">Mon</div>
           <div style="background:#F9FAFB;padding:8px 0;text-align:center;font-size:11px;font-weight:600;color:#9CA3AF;">Tue</div>
@@ -1004,11 +1083,10 @@ tr.drag-over { border-top: 2px solid #2563EB; }
       </div>
     </div>
 
-
     <div class="footer-nav">
       <button class="btn-outline-sm" style="padding:10px 20px;font-size:13px;" onclick="showPage('s2',null)">← Back: Portfolio Setting</button>
       <div style="display:flex;gap:10px;">
-        <button class="btn-outline-sm" style="padding:10px 20px;font-size:13px;">Save draft</button>
+        <button class="btn-outline-sm" style="padding:10px 20px;font-size:13px;">Save Draft</button>
         <button class="btn-primary-lg" onclick="showPage('s3',null)">Next: Auto Report Management →</button>
       </div>
     </div>
@@ -1201,6 +1279,23 @@ tr.drag-over { border-top: 2px solid #2563EB; }
 </div>
 
 <!-- ══ + Add New Confirm Popup ══ -->
+<!-- Save as Template modal -->
+<div class="confirm-overlay" id="save-tpl-modal">
+  <div class="confirm-box" style="width:440px;">
+    <div class="confirm-title">Save as Template</div>
+    <div class="confirm-body">Save the current ops flow + milestone offsets as a reusable template for your region.</div>
+    <div style="margin-bottom:16px;">
+      <label class="form-label" style="margin-bottom:6px;display:block;">Template Name <span style="color:#DC2626;">*</span></label>
+      <input class="form-input" id="tpl-name-input" placeholder="e.g. TH_SPL_ABS_Standard" style="width:100%;" />
+      <div class="form-hint" style="margin-top:4px;">Visible to all BD in your region (TH / MY)</div>
+    </div>
+    <div class="confirm-actions">
+      <button class="btn-outline-sm" style="padding:9px 18px;font-size:13px;" onclick="document.getElementById('save-tpl-modal').classList.remove('open')">Cancel</button>
+      <button class="btn-primary-lg" style="padding:9px 20px;font-size:14px;" onclick="confirmSaveTemplate()">Save Template</button>
+    </div>
+  </div>
+</div>
+
 <div class="confirm-overlay" id="add-new-confirm">
   <div class="confirm-box">
     <div class="confirm-title">Save before leaving?</div>
@@ -1950,16 +2045,134 @@ function selectPricing(card) {
   card.querySelector('.radio-dot').classList.add('on');
 }
 
+/* ── Ops Flow milestone definitions ── */
+const OPS_FLOW_MILESTONES = {
+  'abs': [
+    { label: 'Servicer Report Date',    short: 'Servicer',    type: 'operation', offset: 0,  bg: '#DBEAFE', color: '#1D4ED8' },
+    { label: 'Batch Creation Date',     short: 'Batch',       type: 'operation', offset: 1,  bg: '#EDE9FE', color: '#6D28D9' },
+    { label: 'Sale Notice Date',        short: 'Sale Notice', type: 'operation', offset: 2,  bg: '#FEF3C7', color: '#92400E' },
+    { label: 'System Cutoff Date',      short: 'Sys Cutoff',  type: 'system',    offset: 3,  bg: '#F3F4F6', color: '#6B7280' },
+    { label: 'Sale Date',               short: 'Sale Date',   type: 'operation', offset: 4,  bg: '#D1FAE5', color: '#065F46' },
+    { label: 'System Selling Date',     short: 'Sys Selling', type: 'system',    offset: 5,  bg: '#F3F4F6', color: '#6B7280' },
+    { label: 'Collection Deposit Date', short: 'Collection',  type: 'operation', offset: 7,  bg: '#CCFBF1', color: '#0F766E' },
+  ],
+  'abs-net': [
+    { label: 'Servicer Report Date',    short: 'Servicer',    type: 'operation', offset: 0,  bg: '#DBEAFE', color: '#1D4ED8' },
+    { label: 'Reconciliation Date',     short: 'Reconcile',   type: 'operation', offset: 1,  bg: '#FCE7F3', color: '#9D174D' },
+    { label: 'Payment Initiation Date', short: 'Payment',     type: 'operation', offset: 1,  bg: '#FEF3C7', color: '#92400E' },
+    { label: 'Batch Creation Date',     short: 'Batch',       type: 'operation', offset: 2,  bg: '#EDE9FE', color: '#6D28D9' },
+    { label: 'Sale Notice Date',        short: 'Sale Notice', type: 'operation', offset: 3,  bg: '#FFFBEB', color: '#B45309' },
+    { label: 'System Cutoff Date',      short: 'Sys Cutoff',  type: 'system',    offset: 4,  bg: '#F3F4F6', color: '#6B7280' },
+    { label: 'Sale Date',               short: 'Sale Date',   type: 'operation', offset: 5,  bg: '#D1FAE5', color: '#065F46' },
+    { label: 'System Selling Date',     short: 'Sys Selling', type: 'system',    offset: 6,  bg: '#F3F4F6', color: '#6B7280' },
+    { label: 'Collection Deposit Date', short: 'Collection',  type: 'operation', offset: 7,  bg: '#CCFBF1', color: '#0F766E' },
+  ],
+  'abl': [
+    { label: 'Servicer Report Date',    short: 'Servicer',    type: 'operation', offset: 0,  bg: '#DBEAFE', color: '#1D4ED8' },
+    { label: 'Batch Creation Date',     short: 'Batch',       type: 'operation', offset: 1,  bg: '#EDE9FE', color: '#6D28D9' },
+    { label: 'Sale Notice Date',        short: 'Sale Notice', type: 'operation', offset: 2,  bg: '#FEF3C7', color: '#92400E' },
+    { label: 'System Cutoff Date',      short: 'Sys Cutoff',  type: 'system',    offset: 3,  bg: '#F3F4F6', color: '#6B7280' },
+    { label: 'Sale Date',               short: 'Sale Date',   type: 'operation', offset: 4,  bg: '#D1FAE5', color: '#065F46' },
+  ],
+};
+
+let currentOpsFlow = 'abs';
+
+/* ── Ops Flow selection ── */
+function selectOpsFlow(type) {
+  currentOpsFlow = type;
+  ['abs','abs-net','abl'].forEach(t => {
+    const card = document.getElementById('flow-card-' + t);
+    const dot  = document.getElementById('flow-dot-' + t);
+    if (card) card.classList.toggle('selected', t === type);
+    if (dot)  dot.classList.toggle('on', t === type);
+  });
+  renderMilestoneTable(type);
+  recomputeSchedule();
+}
+
+function renderMilestoneTable(type) {
+  const tbody = document.getElementById('milestone-config-tbody');
+  if (!tbody) return;
+  const milestones = OPS_FLOW_MILESTONES[type] || [];
+  tbody.innerHTML = milestones.map((m, i) => {
+    const isSystem = m.type === 'system';
+    const rowStyle = isSystem ? 'background:#F9FAFB;' : '';
+    const typeBadge = isSystem
+      ? `<span class="ms-type-tag ms-type-system">System</span>`
+      : `<span class="ms-type-tag ms-type-operation">Operation</span>`;
+    const offsetCell = isSystem
+      ? `<span style="color:#9CA3AF;font-size:13px;">+${m.offset}d &nbsp;<span style="font-size:11px;font-weight:500;">auto</span></span>`
+      : `<div style="display:flex;align-items:center;gap:6px;"><span style="font-size:12px;color:#9CA3AF;">+</span><input class="ms-offset-input" type="number" value="${m.offset}" min="0" onchange="onOffsetChange(${i},this)" /><span style="font-size:12px;color:#9CA3AF;">days</span></div>`;
+    return `<tr style="${rowStyle}">
+      <td style="color:#9CA3AF;font-size:12px;padding-left:20px;">${i + 1}</td>
+      <td><span class="cal-chip" style="background:${m.bg};color:${m.color};">${m.label}</span></td>
+      <td>${typeBadge}</td>
+      <td style="padding:10px 14px;">${offsetCell}</td>
+    </tr>`;
+  }).join('');
+}
+
+function onOffsetChange(idx, input) {
+  const val = parseInt(input.value, 10);
+  if (isNaN(val) || val < 0) { input.value = 0; return; }
+  OPS_FLOW_MILESTONES[currentOpsFlow][idx].offset = val;
+  recomputeSchedule();
+}
+
+/* ── Day type toggle ── */
+function selectDayType(type) {
+  ['cal','biz'].forEach(t => {
+    document.getElementById('daytype-' + t).classList.toggle('selected', t === type);
+    document.getElementById('daytype-dot-' + t).classList.toggle('on', t === type);
+  });
+}
+
+/* ── Cycle length change ── */
+function onCycleLengthChange(sel) {
+  const custom = document.getElementById('custom-days-group');
+  if (custom) custom.style.display = sel.value === 'custom' ? '' : 'none';
+  recomputeSchedule();
+}
+
+/* ── Template dropdown ── */
+function toggleTplDropdown(e) {
+  e.stopPropagation();
+  document.getElementById('load-tpl-dd').classList.toggle('open');
+}
+
+function loadTemplate(name, flowType) {
+  document.getElementById('load-tpl-dd').classList.remove('open');
+  if (flowType) selectOpsFlow(flowType);
+  const toast = document.getElementById('update-toast');
+  toast.textContent = `✓ Template "${name}" loaded`;
+  toast.classList.add('visible');
+  setTimeout(() => toast.classList.remove('visible'), 2200);
+}
+
+/* ── Save as Template modal ── */
+function showSaveTemplateModal() {
+  document.getElementById('tpl-name-input').value = '';
+  document.getElementById('save-tpl-modal').classList.add('open');
+}
+
+function confirmSaveTemplate() {
+  const name = document.getElementById('tpl-name-input').value.trim();
+  if (!name) { document.getElementById('tpl-name-input').style.borderColor = '#DC2626'; return; }
+  document.getElementById('save-tpl-modal').classList.remove('open');
+  const toast = document.getElementById('update-toast');
+  toast.textContent = `✓ Template "${name}" saved to region`;
+  toast.classList.add('visible');
+  setTimeout(() => toast.classList.remove('visible'), 2200);
+}
+
+/* ── Close dropdown on outside click ── */
+document.addEventListener('click', () => {
+  const dd = document.getElementById('load-tpl-dd');
+  if (dd) dd.classList.remove('open');
+});
+
 /* ── Calendar state ── */
-const MILESTONES = [
-  { offset: 0,  label: 'Servicer Report',      short: 'Servicer',    bg: '#DBEAFE', color: '#1D4ED8' },
-  { offset: 2,  label: 'Portfolio Selection',   short: 'Port. Select', bg: '#EDE9FE', color: '#6D28D9' },
-  { offset: 3,  label: 'Sale Notice / Cutoff',  short: 'Sale Notice',  bg: '#FEF3C7', color: '#92400E' },
-  { offset: 7,  label: 'Collection Deposit',    short: 'Collection',   bg: '#D1FAE5', color: '#065F46' },
-  { offset: 7,  label: 'Sale Date',             short: 'Sale Date',    bg: '#CCFBF1', color: '#0F766E' },
-  { offset: 8,  label: 'Confirmation (ABL)',     short: 'Confirm ABL',  bg: '#E0E7FF', color: '#3730A3' },
-  { offset: 10, label: 'Settlement (ABL)',       short: 'Settle ABL',   bg: '#FCE7F3', color: '#9D174D' },
-];
 
 let calViewYear, calViewMonth; // currently displayed month
 
@@ -1971,9 +2184,13 @@ function getAnchorDate() {
 }
 
 function getCycleIntervalDays() {
-  const txt = (document.getElementById('cycle-freq') || {}).value || 'Every 4 weeks';
-  const m = txt.match(/(\d+)\s*week/i);
-  return m ? parseInt(m[1]) * 7 : 28;
+  const sel = document.getElementById('cycle-length');
+  if (!sel) return 28;
+  if (sel.value === 'custom') {
+    const v = parseInt((document.getElementById('custom-cycle-days') || {}).value, 10);
+    return isNaN(v) || v < 1 ? 28 : v;
+  }
+  return parseInt(sel.value, 10) || 28;
 }
 
 function recomputeSchedule() {
@@ -2000,7 +2217,7 @@ function renderCalendar() {
   for (let cycleOffset = 0; cycleOffset <= twoYears; cycleOffset += intervalDays) {
     const cycleStart = new Date(anchor);
     cycleStart.setDate(cycleStart.getDate() + cycleOffset);
-    MILESTONES.forEach(m => {
+    (OPS_FLOW_MILESTONES[currentOpsFlow] || []).forEach(m => {
       const d = new Date(cycleStart);
       d.setDate(d.getDate() + m.offset);
       const key = d.toISOString().slice(0, 10);
@@ -2017,7 +2234,7 @@ function renderCalendar() {
 
   // legend
   const legend = document.getElementById('cal-legend');
-  legend.innerHTML = MILESTONES.map(m => {
+  legend.innerHTML = (OPS_FLOW_MILESTONES[currentOpsFlow] || []).map(m => {
     const d = new Date(anchor); d.setDate(d.getDate() + m.offset);
     const dateStr = d.toISOString().slice(0,10);
     return `<div style="display:flex;align-items:center;gap:5px;">
@@ -2115,7 +2332,7 @@ function commitFlow() {
 
 /* ── Init after DOM ready ── */
 (function init() {
-  recomputeSchedule(); // render calendar on load with default anchor
+  selectOpsFlow('abs'); // populate milestone table + calendar on load
 
   /* T+N inline edit */
   document.querySelectorAll('.tn-input').forEach(inp => {
