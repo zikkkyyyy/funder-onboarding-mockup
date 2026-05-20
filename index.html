@@ -409,51 +409,37 @@ tr.drag-over { border-top: 2px solid #2563EB; }
             <input class="form-input" style="max-width:420px;" placeholder="e.g. TH_SPL_Starlight_ABS_01" />
           </div>
 
-          <!-- Funder Scheme — radio -->
-          <div class="form-group" style="grid-column:1/-1;">
+          <!-- Funder Scheme -->
+          <div class="form-group">
             <label class="form-label">Funder Scheme <span class="req">*</span></label>
-            <div class="radio-opts" id="scheme-opts">
-              <div class="radio-opt selected" onclick="selectRadioOpt('scheme-opts',this)">
-                <div class="radio-dot on" id="scheme-dot-0"></div>ABS
-              </div>
-              <div class="radio-opt" onclick="selectRadioOpt('scheme-opts',this)">
-                <div class="radio-dot" id="scheme-dot-1"></div>ABL
-              </div>
-            </div>
+            <select class="form-select">
+              <option value="">Select scheme</option>
+              <option>ABS</option>
+              <option>ABL</option>
+            </select>
           </div>
 
-          <!-- Product — radio -->
-          <div class="form-group" style="grid-column:1/-1;">
+          <!-- Product -->
+          <div class="form-group">
             <label class="form-label">Product <span class="req">*</span></label>
-            <div class="radio-opts" id="product-opts">
-              <div class="radio-opt" onclick="selectRadioOpt('product-opts',this)">
-                <div class="radio-dot"></div>BCL
-              </div>
-              <div class="radio-opt selected" onclick="selectRadioOpt('product-opts',this)">
-                <div class="radio-dot on"></div>SPL
-              </div>
-              <div class="radio-opt" onclick="selectRadioOpt('product-opts',this)">
-                <div class="radio-dot"></div>SCL
-              </div>
-              <div class="radio-opt" onclick="selectRadioOpt('product-opts',this)">
-                <div class="radio-dot"></div>Term loan
-              </div>
-            </div>
+            <select class="form-select">
+              <option value="">Select product</option>
+              <option>BCL</option>
+              <option>SPL</option>
+              <option>SCL</option>
+              <option>Term loan</option>
+            </select>
             <div class="field-note">Pulled from BE's biz_type</div>
           </div>
 
-          <!-- Loan Type — multi checkbox (MY only) -->
+          <!-- Loan Type (MY only) — multi select -->
           <div class="form-group" style="grid-column:1/-1;">
             <label class="form-label">Loan Type <span class="req">*</span> <span style="font-size:11px;color:#9CA3AF;font-weight:400;">(MY only)</span></label>
-            <div class="checkbox-opts">
-              <div class="checkbox-opt" onclick="toggleCheckbox(this)">
-                <div class="chk-box"></div>SFinancing-i
-              </div>
-              <div class="checkbox-opt checked" onclick="toggleCheckbox(this)">
-                <div class="chk-box">✓</div>SLoan
-              </div>
-            </div>
-            <div class="field-note">Pulled from BE's sub_biz_type</div>
+            <select class="form-select" multiple style="height:72px;padding:6px 10px;background-image:none;">
+              <option>SFinancing-i</option>
+              <option>SLoan</option>
+            </select>
+            <div class="field-note">Pulled from BE's sub_biz_type · Hold Ctrl / ⌘ to select multiple</div>
           </div>
 
           <!-- Originator -->
