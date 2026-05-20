@@ -1,0 +1,2112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Funder Onboarding — Portfolio Setting &amp; Management Plan</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #F5F6FA; color: #1A1A2E; font-size: 14px; }
+
+/* ── Top nav ── */
+.topnav { background: #fff; border-bottom: 1px solid #E5E7EB; padding: 0 32px; height: 52px; display: flex; align-items: center; gap: 6px; font-size: 13px; color: #6B7280; position: sticky; top: 0; z-index: 100; }
+.topnav a { color: #6B7280; text-decoration: none; }
+.topnav a:hover { color: #2563EB; }
+.topnav .sep { color: #D1D5DB; }
+.topnav .current { color: #111827; font-weight: 500; }
+
+/* ── Step bar ── */
+.stepbar { background: #fff; border-bottom: 1px solid #E5E7EB; padding: 0 32px; display: flex; align-items: stretch; }
+.step-item { display: flex; align-items: center; gap: 10px; padding: 18px 28px 18px 0; position: relative; cursor: pointer; }
+.step-item:not(:last-child)::after { content: '›'; position: absolute; right: 8px; color: #D1D5DB; font-size: 18px; }
+.step-num { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; border: 2px solid #D1D5DB; color: #9CA3AF; background: #fff; }
+.step-text { font-size: 13px; color: #9CA3AF; white-space: nowrap; }
+.step-item.done .step-num { background: #2563EB; border-color: #2563EB; color: #fff; }
+.step-item.done .step-text { color: #374151; }
+.step-item.active .step-num { background: #fff; border-color: #2563EB; color: #2563EB; font-weight: 700; }
+.step-item.active .step-text { color: #2563EB; font-weight: 600; }
+.step-item.active { border-bottom: 3px solid #2563EB; margin-bottom: -1px; }
+
+/* ── Content ── */
+.content { max-width: 1000px; margin: 0 auto; padding: 28px 32px 60px; }
+
+/* ── Page switcher (demo nav) ── */
+.demo-switch { display: flex; gap: 8px; margin-bottom: 20px; align-items: center; }
+.demo-switch span { font-size: 12px; color: #9CA3AF; }
+.demo-btn { padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer; border: 1px solid #D1D5DB; background: #fff; color: #374151; }
+.demo-btn.active { background: #EFF6FF; color: #2563EB; border-color: #2563EB; }
+
+/* ── Section card ── */
+.section-card { background: #fff; border-radius: 10px; border: 1px solid #E5E7EB; margin-bottom: 16px; overflow: hidden; }
+.section-header { padding: 16px 20px; border-bottom: 1px solid #F3F4F6; }
+.section-title { font-size: 15px; font-weight: 600; color: #111827; }
+.section-sub { font-size: 12px; color: #6B7280; margin-top: 2px; }
+.section-body { padding: 20px; }
+
+/* ── Pricing model radio cards ── */
+.pricing-group-label { font-size: 11px; font-weight: 700; color: #6B7280; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
+.radio-cards { display: flex; gap: 14px; flex-wrap: wrap; }
+.radio-card { border: 2px solid #E5E7EB; border-radius: 10px; padding: 14px 18px; cursor: pointer; transition: all 0.15s; flex: 0 0 220px; }
+.radio-card.selected { border-color: #2563EB; background: #EFF6FF; }
+.radio-card:hover:not(.selected) { border-color: #93C5FD; }
+.radio-card-top { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.radio-dot { width: 16px; height: 16px; border-radius: 50%; border: 2px solid #D1D5DB; flex-shrink: 0; position: relative; }
+.radio-dot.on { border-color: #2563EB; }
+.radio-dot.on::after { content: ''; width: 8px; height: 8px; background: #2563EB; border-radius: 50%; position: absolute; top: 2px; left: 2px; }
+.radio-card-title { font-size: 13px; font-weight: 600; color: #111827; }
+.radio-card-desc { font-size: 12px; color: #6B7280; line-height: 1.5; }
+
+/* ── Divider ── */
+.divider { height: 1px; background: #F3F4F6; margin: 18px 0; }
+
+/* ── Clawback section ── */
+.clawback-label { font-size: 11px; font-weight: 700; color: #6B7280; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; }
+.toggle-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.toggle-row-label { font-size: 13px; color: #374151; }
+.toggle { width: 42px; height: 24px; background: #2563EB; border-radius: 24px; position: relative; cursor: pointer; transition: background 0.2s; flex-shrink: 0; }
+.toggle.off { background: #D1D5DB; }
+.toggle::after { content: ''; width: 18px; height: 18px; background: #fff; border-radius: 50%; position: absolute; top: 3px; left: 21px; transition: left 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+.toggle.off::after { left: 3px; }
+.mode-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+.mode-option { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #374151; cursor: pointer; }
+.mode-option .radio-dot { width: 14px; height: 14px; }
+.mode-option .radio-dot.on::after { width: 6px; height: 6px; top: 2px; left: 2px; }
+.n-input-row { display: flex; align-items: center; gap: 10px; }
+.n-input-label { font-size: 12px; color: #6B7280; }
+.n-input { width: 80px; border: 1px solid #D1D5DB; border-radius: 6px; padding: 6px 10px; font-size: 13px; color: #374151; text-align: center; outline: none; }
+.n-input:focus { border-color: #2563EB; }
+
+/* ── Table shared ── */
+.tbl-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+thead th { padding: 11px 14px; text-align: left; font-size: 12px; font-weight: 600; color: #6B7280; background: #F9FAFB; border-bottom: 1px solid #E5E7EB; white-space: nowrap; }
+tbody td { padding: 13px 14px; font-size: 13px; color: #374151; border-bottom: 1px solid #F3F4F6; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: #FAFAFA; }
+.td-id { font-weight: 500; color: #374151; }
+.td-rule { color: #374151; }
+.status-enable { color: #16A34A; font-size: 12px; font-weight: 500; }
+.status-disable { color: #9CA3AF; font-size: 12px; font-weight: 500; }
+
+/* ── Buttons ── */
+.btn { padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer; border: none; transition: all 0.15s; }
+.btn-edit { background: #2563EB; color: #fff; }
+.btn-edit:hover { background: #1D4ED8; }
+.btn-disable { background: #DC2626; color: #fff; }
+.btn-disable:hover { background: #B91C1C; }
+.btn-enable { background: #16A34A; color: #fff; }
+.btn-enable:hover { background: #15803D; }
+.btn-ops { display: flex; gap: 6px; align-items: center; }
+.btn-outline-sm { padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer; border: 1px solid #D1D5DB; background: #fff; color: #374151; }
+.btn-outline-sm:hover { background: #F3F4F6; }
+.btn-primary-lg { padding: 10px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; background: #2563EB; color: #fff; }
+.btn-primary-lg:hover { background: #1D4ED8; }
+
+/* ── Empty state ── */
+.empty-state { padding: 40px; text-align: center; color: #9CA3AF; }
+.empty-icon { font-size: 32px; margin-bottom: 8px; }
+.empty-text { font-size: 13px; }
+
+/* ── Add row ── */
+.add-row { display: inline-flex; align-items: center; gap: 4px; color: #2563EB; font-size: 12px; font-weight: 500; cursor: pointer; margin-top: 12px; }
+.add-row:hover { text-decoration: underline; }
+
+/* ── Form elements ── */
+.form-select { border: 1px solid #D1D5DB; border-radius: 6px; padding: 7px 28px 7px 10px; font-size: 13px; color: #374151; outline: none; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 8px center; appearance: none; }
+.form-input { border: 1px solid #D1D5DB; border-radius: 6px; padding: 7px 10px; font-size: 13px; color: #374151; outline: none; width: 100%; }
+.form-input:focus, .form-select:focus { border-color: #2563EB; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-label { font-size: 12px; font-weight: 500; color: #374151; }
+.form-label .req { color: #DC2626; }
+.form-hint { font-size: 11px; color: #9CA3AF; }
+.badge { display: inline-flex; align-items: center; padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+.badge-active { background: #DCFCE7; color: #16A34A; }
+.badge-pending { background: #FEF9C3; color: #92400E; }
+.badge-draft { background: #F3F4F6; color: #6B7280; }
+.badge-override { background: #FEE2E2; color: #DC2626; }
+
+/* ── Milestone table (mgmt plan) ── */
+.milestone-tag { display: inline-block; background: #EFF6FF; color: #2563EB; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 4px; }
+
+/* ── Info notice ── */
+.info-notice { background: #EFF6FF; border-left: 3px solid #2563EB; padding: 10px 14px; border-radius: 0 6px 6px 0; font-size: 12px; color: #1D4ED8; line-height: 1.6; margin-bottom: 16px; }
+
+/* ── Footer nav ── */
+.footer-nav { display: flex; justify-content: space-between; align-items: center; padding-top: 24px; }
+
+/* ── Calendar ── */
+.cal-day { background: #fff; min-height: 80px; padding: 6px 8px; display: flex; flex-direction: column; gap: 3px; }
+.cal-day.other-month { background: #FAFAFA; }
+.cal-day.has-milestone { background: #F8FAFF; }
+.cal-day-num { font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 2px; }
+.cal-day.other-month .cal-day-num { color: #D1D5DB; }
+.cal-day.is-anchor .cal-day-num { background: #2563EB; color: #fff; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+.cal-chip { font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 4px; line-height: 1.4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ── Clawback disabled state ── */
+#clawback-config.dimmed, #n-input-row.dimmed { opacity: 0.38; pointer-events: none; user-select: none; }
+
+/* ── Page visibility ── */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ── Modal overlay ── */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 1000; align-items: center; justify-content: center; }
+.modal-overlay.open { display: flex; }
+.modal { background: #fff; border-radius: 12px; width: 760px; max-width: 95vw; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 8px 40px rgba(0,0,0,0.18); }
+.modal-header { padding: 20px 24px 16px; border-bottom: 1px solid #F3F4F6; display: flex; align-items: flex-start; justify-content: space-between; }
+.modal-title { font-size: 16px; font-weight: 700; color: #111827; }
+.modal-sub { font-size: 13px; color: #6B7280; margin-top: 3px; }
+.modal-close { width: 28px; height: 28px; border-radius: 6px; border: none; background: #F3F4F6; cursor: pointer; font-size: 16px; color: #6B7280; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.modal-close:hover { background: #E5E7EB; }
+.modal-filters { padding: 14px 24px; border-bottom: 1px solid #F3F4F6; display: flex; gap: 10px; flex-wrap: wrap; }
+.modal-body { flex: 1; overflow-y: auto; }
+.modal-footer { padding: 14px 24px; border-top: 1px solid #F3F4F6; display: flex; justify-content: flex-end; gap: 10px; }
+.modal-select-link { color: #2563EB; font-size: 13px; font-weight: 500; cursor: pointer; }
+.modal-select-link:hover { text-decoration: underline; }
+.modal-pagination { padding: 12px 20px; display: flex; align-items: center; justify-content: flex-end; gap: 8px; font-size: 13px; color: #6B7280; border-top: 1px solid #F3F4F6; }
+.pg-btn { width: 28px; height: 28px; border-radius: 5px; border: 1px solid #E5E7EB; background: #fff; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.pg-btn.active { background: #2563EB; color: #fff; border-color: #2563EB; }
+.go-input { width: 48px; border: 1px solid #D1D5DB; border-radius: 5px; padding: 4px 6px; font-size: 12px; text-align: center; outline: none; }
+
+/* ── Confirm popup ── */
+.confirm-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 1100; align-items: center; justify-content: center; }
+.confirm-overlay.open { display: flex; }
+.confirm-box { background: #fff; border-radius: 12px; width: 400px; padding: 28px 28px 20px; box-shadow: 0 8px 40px rgba(0,0,0,0.18); }
+.confirm-title { font-size: 15px; font-weight: 700; color: #111827; margin-bottom: 8px; }
+.confirm-body { font-size: 13px; color: #6B7280; line-height: 1.6; margin-bottom: 20px; }
+.confirm-actions { display: flex; justify-content: flex-end; gap: 10px; }
+
+/* ── Report row edit state ── */
+.report-row.editing { background: #FFFBEB !important; }
+.btn-save  { background: #2563EB; color: #fff; }
+.btn-save:hover { background: #1D4ED8; }
+.btn-cancel-edit { background: #fff; color: #374151; border: 1px solid #D1D5DB; }
+.btn-cancel-edit:hover { background: #F3F4F6; }
+.btn-edit-more { background: #fff; color: #374151; border: 1px solid #D1D5DB; }
+.btn-edit-more:hover { background: #F3F4F6; }
+
+/* ── Report table (inline editable) ── */
+.report-table { border-collapse: collapse; }
+.report-table thead th { padding: 10px 14px; text-align: left; font-size: 12px; font-weight: 600; color: #6B7280; background: #F9FAFB; border-bottom: 1px solid #E5E7EB; white-space: nowrap; border-right: none; }
+.report-table tbody td { padding: 12px 14px; font-size: 13px; color: #374151; border-bottom: 1px solid #F3F4F6; vertical-align: middle; }
+.report-table tbody tr:last-child td { border-bottom: none; }
+.report-table tbody tr:hover td { background: #F9FAFB; }
+.report-table td input.inline-edit { border: 1px solid transparent; border-radius: 5px; padding: 3px 7px; font-size: 13px; background: transparent; width: 100%; outline: none; min-width: 140px; }
+.report-table td input.inline-edit:hover { border-color: #D1D5DB; background: #F9FAFB; }
+.report-table td input.inline-edit:focus { border-color: #2563EB; background: #fff; }
+.report-row.imported td { background: #fff; }
+/* ── Table action links ── */
+.tbl-actions { display: flex; align-items: center; gap: 0; white-space: nowrap; }
+.tbl-act-link { font-size: 13px; color: #2563EB; cursor: pointer; padding: 0 8px; background: none; border: none; font-family: inherit; }
+.tbl-act-link:first-child { padding-left: 0; }
+.tbl-act-link:hover { text-decoration: underline; color: #1D4ED8; }
+.tbl-act-link.danger { color: #DC2626; }
+.tbl-act-sep { color: #D1D5DB; font-size: 12px; }
+.status-live { color: #16A34A; font-size: 12px; font-weight: 500; }
+.status-pending { color: #D97706; font-size: 12px; font-weight: 500; }
+/* ── Pagination ── */
+.tbl-pagination { display: flex; align-items: center; justify-content: flex-end; gap: 8px; padding: 12px 16px; border-top: 1px solid #F3F4F6; font-size: 13px; color: #6B7280; }
+.pg-btn { width: 30px; height: 30px; border-radius: 6px; border: 1px solid #E5E7EB; background: #fff; cursor: pointer; font-size: 13px; color: #374151; display: flex; align-items: center; justify-content: center; }
+.pg-btn.active { background: #2563EB; color: #fff; border-color: #2563EB; }
+.pg-btn:hover:not(.active) { background: #F3F4F6; }
+.pg-size-select { border: 1px solid #E5E7EB; border-radius: 6px; padding: 4px 8px; font-size: 13px; color: #374151; background: #fff; cursor: pointer; }
+
+/* ── Draggable milestone table ── */
+.drag-handle { cursor: grab; color: #D1D5DB; font-size: 16px; padding: 0 6px; user-select: none; }
+.drag-handle:hover { color: #9CA3AF; }
+tr.dragging { opacity: 0.4; background: #EFF6FF !important; }
+tr.drag-over { border-top: 2px solid #2563EB; }
+.tn-input { width: 70px; border: 1px solid transparent; border-radius: 5px; padding: 4px 7px; font-size: 13px; color: #374151; text-align: center; background: transparent; outline: none; transition: border-color 0.15s, background 0.15s; }
+.tn-input:hover { border-color: #D1D5DB; background: #F9FAFB; }
+.tn-input:focus { border-color: #2563EB; background: #fff; box-shadow: 0 0 0 2px rgba(37,99,235,0.1); }
+.tn-changed { border-color: #FBBF24 !important; background: #FFFBEB !important; }
+
+/* ── Floating Update Flow button ── */
+.update-flow-btn {
+  position: fixed; bottom: 32px; right: 36px;
+  background: #2563EB; color: #fff;
+  border: none; border-radius: 10px;
+  padding: 13px 24px; font-size: 14px; font-weight: 600;
+  cursor: pointer; box-shadow: 0 4px 16px rgba(37,99,235,0.35);
+  display: flex; align-items: center; gap: 8px;
+  opacity: 0; transform: translateY(12px);
+  transition: opacity 0.2s, transform 0.2s;
+  pointer-events: none; z-index: 999;
+}
+.update-flow-btn.visible { opacity: 1; transform: translateY(0); pointer-events: all; }
+.update-flow-btn:hover { background: #1D4ED8; }
+.update-flow-btn .check { font-size: 16px; }
+.update-flow-toast {
+  position: fixed; bottom: 90px; right: 36px;
+  background: #111827; color: #fff;
+  border-radius: 8px; padding: 10px 18px; font-size: 13px;
+  opacity: 0; transform: translateY(6px);
+  transition: opacity 0.25s, transform 0.25s;
+  pointer-events: none; z-index: 999;
+}
+.update-flow-toast.visible { opacity: 1; transform: translateY(0); }
+
+/* ── Accordion ── */
+.accordion-hd { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: #F9FAFB; border-bottom: 1px solid #E5E7EB; cursor: pointer; user-select: none; }
+.accordion-hd:hover { background: #F3F4F6; }
+.accordion-chevron { font-size: 14px; color: #6B7280; transition: transform 0.2s; display: inline-block; }
+.accordion-chevron.collapsed { transform: rotate(-90deg); }
+.accordion-label { font-size: 13px; font-weight: 600; color: #374151; }
+.accordion-body { overflow: hidden; transition: max-height 0.25s ease; }
+.accordion-body.collapsed { display: none; }
+.accordion-table { width: 100%; border-collapse: collapse; }
+.accordion-table thead th { padding: 11px 14px; text-align: left; font-size: 12px; font-weight: 600; color: #6B7280; background: #F9FAFB; border-bottom: 1px solid #E5E7EB; }
+.accordion-table tbody td { padding: 13px 14px; font-size: 13px; color: #374151; border-bottom: 1px solid #F3F4F6; }
+.accordion-table tbody tr:last-child td { border-bottom: none; }
+.accordion-table tbody tr:hover { background: #FAFAFA; }
+
+/* ── Review page ── */
+.rv-section { margin-bottom: 0; }
+.rv-section-title { font-size: 13px; font-weight: 700; color: #111827; padding: 14px 0 10px; border-bottom: 1px solid #F3F4F6; margin-bottom: 2px; }
+.rv-row { display: flex; align-items: baseline; padding: 9px 0; border-bottom: 1px solid #F9FAFB; }
+.rv-row:last-child { border-bottom: none; }
+.rv-label { width: 180px; flex-shrink: 0; font-size: 12px; color: #9CA3AF; }
+.rv-value { font-size: 13px; color: #111827; font-weight: 500; flex: 1; }
+.rv-table { width: 100%; border-collapse: collapse; margin-top: 4px; }
+.rv-table thead th { padding: 9px 12px; font-size: 11px; font-weight: 600; color: #6B7280; background: #F9FAFB; border-bottom: 1px solid #E5E7EB; text-align: left; }
+.rv-table tbody td { padding: 10px 12px; font-size: 13px; color: #374151; border-bottom: 1px solid #F3F4F6; }
+.rv-table tbody tr:last-child td { border-bottom: none; }
+
+/* ── Flow containers ── */
+.flow { display: none; }
+.flow.active { display: block; }
+
+/* ── App layout (sidebar + main) ── */
+.app-layout { display: flex; min-height: 100vh; }
+.sidebar { width: 220px; background: #1A2B45; flex-shrink: 0; position: sticky; top: 0; height: 100vh; overflow-y: auto; display: flex; flex-direction: column; }
+.sidebar-logo { padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; gap: 8px; }
+.sidebar-logo-icon { width: 28px; height: 28px; background: #2563EB; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+.sidebar-logo-text { font-size: 14px; font-weight: 700; color: #fff; }
+.sidebar-logo-sub { font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 1px; }
+.sidebar-nav { padding: 10px 0; flex: 1; }
+.sidebar-group-hd { padding: 8px 18px; font-size: 11px; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.06em; cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: color 0.15s; }
+.sidebar-group-hd:hover { color: rgba(255,255,255,0.6); }
+.sidebar-item { padding: 8px 18px 8px 30px; font-size: 12.5px; color: rgba(255,255,255,0.55); cursor: pointer; border-radius: 0; transition: all 0.15s; display: flex; align-items: center; }
+.sidebar-item:hover { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.85); }
+.sidebar-item.active { background: #2563EB; color: #fff; font-weight: 500; }
+.sidebar-item.active:hover { background: #1D4ED8; }
+
+/* ── List top nav ── */
+.list-topnav { background: #fff; border-bottom: 1px solid #E5E7EB; padding: 0 28px; height: 52px; display: flex; align-items: center; justify-content: space-between; font-size: 13px; color: #6B7280; position: sticky; top: 0; z-index: 99; }
+.list-topnav-crumb { display: flex; align-items: center; gap: 6px; }
+.list-topnav a { color: #6B7280; text-decoration: none; }
+.list-topnav a:hover { color: #2563EB; }
+.list-topnav .sep { color: #D1D5DB; }
+.list-topnav .current { color: #111827; font-weight: 500; }
+.list-topnav-right { display: flex; align-items: center; gap: 12px; font-size: 12px; color: #9CA3AF; }
+
+/* ── List page content ── */
+.list-main { padding: 24px 28px 48px; }
+.list-toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.list-title { font-size: 18px; font-weight: 700; color: #111827; }
+.list-filter { display: flex; gap: 10px; margin-bottom: 16px; align-items: center; flex-wrap: wrap; }
+
+/* ── Lender list table ── */
+.lender-table { width: 100%; border-collapse: collapse; background: #fff; }
+.lender-table thead th { padding: 11px 14px; text-align: left; font-size: 12px; font-weight: 600; color: #6B7280; background: #F9FAFB; border-bottom: 1px solid #E5E7EB; white-space: nowrap; }
+.lender-table tbody td { padding: 13px 14px; font-size: 13px; color: #374151; border-bottom: 1px solid #F3F4F6; vertical-align: middle; }
+.lender-table tbody tr:last-child td { border-bottom: none; }
+.lender-table tbody tr:hover td { background: #F9FAFB; }
+.lender-table .num-col { color: #9CA3AF; font-size: 12px; }
+.status-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+.status-active-badge { background: #DCFCE7; color: #16A34A; }
+.status-inactive-badge { background: #FEE2E2; color: #DC2626; }
+.status-draft-badge { background: #FEF3C7; color: #D97706; }
+.scheme-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; background: #EFF6FF; color: #2563EB; }
+
+/* ── View mode tabs ── */
+.sidebar-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.view-tabs { background: #fff; border-bottom: 1px solid #E5E7EB; padding: 0 28px; display: flex; align-items: stretch; flex-shrink: 0; }
+.view-tab { padding: 14px 18px; font-size: 13px; color: #9CA3AF; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -1px; white-space: nowrap; display: flex; align-items: center; gap: 7px; transition: all 0.15s; }
+.view-tab:hover { color: #374151; }
+.view-tab.active { color: #2563EB; font-weight: 600; border-bottom-color: #2563EB; }
+.view-tab-num { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; background: #F3F4F6; color: #9CA3AF; flex-shrink: 0; }
+.view-tab.active .view-tab-num { background: #2563EB; color: #fff; }
+.view-tab.done .view-tab-num { background: #2563EB; color: #fff; }
+.view-tab.done { color: #374151; }
+
+/* ── View mode section cards ── */
+.view-scroll { flex: 1; overflow-y: auto; padding: 24px 28px 80px; }
+.view-section { background: #fff; border-radius: 10px; border: 1px solid #E5E7EB; margin-bottom: 14px; overflow: hidden; }
+.view-section-hd { padding: 14px 20px; border-bottom: 1px solid #F3F4F6; display: flex; align-items: center; justify-content: space-between; }
+.view-section-title { font-size: 14px; font-weight: 600; color: #111827; }
+.view-section-body { padding: 18px 20px; }
+.view-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 32px; }
+.view-field { display: flex; flex-direction: column; gap: 3px; }
+.view-label { font-size: 11px; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.04em; }
+.view-value { font-size: 13px; color: #374151; }
+.empty-state-sm { text-align: center; padding: 28px 20px; }
+.empty-state-sm .ico { font-size: 24px; color: #D1D5DB; margin-bottom: 6px; }
+.empty-state-sm .txt { font-size: 12px; color: #9CA3AF; }
+
+/* ── View footer nav ── */
+.view-footer { background: #fff; border-top: 1px solid #E5E7EB; padding: 14px 28px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; position: sticky; bottom: 0; z-index: 50; }
+</style>
+</head>
+<body>
+
+<!-- ══ Flow: Create / Onboarding ══ -->
+<div id="flow-create" class="flow active">
+
+<!-- Top nav -->
+<div class="topnav">
+  <a href="#">Home</a><span class="sep">/</span>
+  <a href="#" onclick="switchFlow('list');return false;">Lender Management</a><span class="sep">/</span>
+  <a href="#" onclick="switchFlow('list');return false;">Lender List</a><span class="sep">/</span>
+  <span class="current">Lender Detail</span>
+</div>
+
+<!-- Step bar -->
+<div class="stepbar">
+  <div class="step-item active" id="tab-s1" onclick="showPage('s1',this)"><div class="step-num">01</div><div class="step-text">Basic Info</div></div>
+  <div class="step-item" id="tab-s2" onclick="showPage('s2',this)"><div class="step-num">02</div><div class="step-text">Portfolio Setting</div></div>
+  <div class="step-item" id="tab-s4" onclick="showPage('s4',this)"><div class="step-num">03</div><div class="step-text">ABS Plan</div></div>
+  <div class="step-item" id="tab-s3" onclick="showPage('s3',this)"><div class="step-num">04</div><div class="step-text">Auto Report Management</div></div>
+  <div class="step-item" id="tab-s5" onclick="showPage('s5',this)"><div class="step-num">05</div><div class="step-text">Review</div></div>
+</div>
+
+<div class="content">
+
+  <!-- ══════════════════════════════════════
+       PAGE: Step 1 — Basic Info
+  ══════════════════════════════════════ -->
+  <div class="page active" id="page-s1">
+
+    <!-- Funder Info -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-title">Funder Info</div>
+        <div class="section-sub">Core identity of the funder. Used across all ABS operations.</div>
+      </div>
+      <div class="section-body">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Funder Name <span class="req">*</span></label>
+            <input class="form-input" placeholder="e.g. TH_SPL_Starlight_ABS_01" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Funder Scheme <span class="req">*</span></label>
+            <select class="form-select">
+              <option value="">Select scheme</option>
+              <option>ABS</option><option>ABL</option><option>YBL</option><option>Channeling</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Product <span class="req">*</span></label>
+            <select class="form-select">
+              <option value="">Select product</option>
+              <option>SPL</option><option>MPL</option><option>BNPLite</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Loan Type</label>
+            <input class="form-input" placeholder="e.g. Shariah, SFinancing-i" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Originator</label>
+            <input class="form-input" placeholder="e.g. Monee" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Investor</label>
+            <input class="form-input" placeholder="e.g. JPM" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Licensee</label>
+            <input class="form-input" placeholder="e.g. CCC" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Grade</label>
+            <input class="form-input" placeholder="e.g. UNICORN" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SPV & Tranche Info -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-title">SPV &amp; Tranche Info</div>
+        <div class="section-sub">Define the SPV entity and tranche parameters for this funder.</div>
+      </div>
+      <div class="section-body">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">SPV Name <span class="req">*</span></label>
+            <input class="form-input" placeholder="e.g. TH_SPL_ABS_01" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tranche <span class="req">*</span></label>
+            <input class="form-input" placeholder="e.g. 01" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tranche Type</label>
+            <select class="form-select">
+              <option value="">Select type</option>
+              <option>ABS</option><option>Senior</option><option>Mezzanine</option><option>Junior</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Rate (%)</label>
+            <input class="form-input" type="number" step="0.01" placeholder="0.00" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Effective Date</label>
+            <input class="form-input" type="date" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Life cycle -->
+    <div class="section-card">
+      <div class="section-header"><div class="section-title">Life cycle</div></div>
+      <div class="section-body">
+        <div style="text-align:center;padding:24px 0;">
+          <div style="font-size:28px;color:#D1D5DB;margin-bottom:8px;">🔒</div>
+          <div style="font-size:13px;font-weight:500;color:#374151;margin-bottom:2px;">Life cycle</div>
+          <div style="font-size:12px;color:#9CA3AF;">TBD</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Issue size -->
+    <div class="section-card">
+      <div class="section-header"><div class="section-title">Issue size</div></div>
+      <div class="section-body">
+        <div style="text-align:center;padding:24px 0;">
+          <div style="font-size:28px;color:#D1D5DB;margin-bottom:8px;">🔒</div>
+          <div style="font-size:13px;font-weight:500;color:#374151;margin-bottom:2px;">Issue size</div>
+          <div style="font-size:12px;color:#9CA3AF;">TBD</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-nav">
+      <span style="font-size:13px;color:#374151;cursor:pointer;" onclick="switchFlow('list')">Back</span>
+      <div style="display:flex;gap:10px;">
+        <button class="btn-outline-sm" style="padding:10px 20px;font-size:13px;">Save draft</button>
+        <button class="btn-primary-lg" onclick="showPage('s2',document.getElementById('tab-s2'))">Next: Portfolio Setting →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       PAGE: Step 2 — Portfolio Setting
+  ══════════════════════════════════════ -->
+  <div class="page" id="page-s2">
+
+    <!-- Pricing & Terms -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-title">Pricing &amp; Terms</div>
+        <div class="section-sub">This determines how to calculate the interest split at cutoff.</div>
+      </div>
+      <div class="section-body">
+        <div class="pricing-group-label">Pricing Model &nbsp;ⓘ</div>
+        <div class="radio-cards">
+          <div class="radio-card selected" onclick="selectPricing(this)">
+            <div class="radio-card-top">
+              <div class="radio-dot on"></div>
+              <div class="radio-card-title">Accrued interest</div>
+            </div>
+            <div class="radio-card-desc">Interest is earned progressively over time and is only recognised day by day as it accrues</div>
+          </div>
+          <div class="radio-card" onclick="selectPricing(this)">
+            <div class="radio-card-top">
+              <div class="radio-dot"></div>
+              <div class="radio-card-title">Cash flow based</div>
+            </div>
+            <div class="radio-card-desc">Only actual cash received (principal and interest) is recognised and distributed</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Auto Clawback -->
+    <div class="section-card">
+      <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;">
+        <div>
+          <div class="section-title">Auto Clawback</div>
+          <div class="section-sub">Configure clawback calculation method applied at cutoff.</div>
+        </div>
+        <div class="toggle" id="clawback-toggle" onclick="toggleClawback(this)"></div>
+      </div>
+      <div class="section-body" id="clawback-config">
+        <div class="pricing-group-label">Mode &nbsp;ⓘ</div>
+        <div class="radio-cards">
+          <div class="radio-card" id="mode1-card" onclick="selectMode(1)">
+            <div class="radio-card-top">
+              <div class="radio-dot" id="mode1-dot"></div>
+              <div class="radio-card-title">Accrued to Pre-Completion</div>
+            </div>
+            <div class="radio-card-desc">Mode 1</div>
+          </div>
+          <div class="radio-card selected" id="mode2-card" onclick="selectMode(2)">
+            <div class="radio-card-top">
+              <div class="radio-dot on" id="mode2-dot"></div>
+              <div class="radio-card-title">Accrued to Restructure Date</div>
+            </div>
+            <div class="radio-card-desc">Mode 2</div>
+          </div>
+        </div>
+        <div class="n-input-row" id="n-input-row" style="margin-top:14px;">
+          <div class="n-input-label">N input</div>
+          <input class="n-input" id="n-input-field" type="number" value="1" min="1" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Rule List -->
+    <div class="section-card" style="overflow:visible;">
+      <div class="accordion-hd" onclick="toggleAccordion('rule-body')">
+        <span class="accordion-chevron" id="chev-rule-body">▾</span>
+        <span class="accordion-label">Rule List</span>
+        <button class="btn-outline-sm" style="margin-left:auto;" onclick="event.stopPropagation()">+ Add Rule</button>
+      </div>
+      <div id="rule-body">
+        <table class="accordion-table">
+          <thead><tr><th style="width:100px;">Rule ID</th><th>Rules</th><th style="width:120px;">Status</th><th style="width:180px;">Operation</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="td-id">86</td>
+              <td>Outstanding Principal in range [0.01,150000.00]</td>
+              <td><span class="status-enable">Enable</span></td>
+              <td><div class="btn-ops"><button class="btn btn-edit">Edit</button><button class="btn btn-disable">Disable</button></div></td>
+            </tr>
+            <tr>
+              <td class="td-id">87</td>
+              <td>LoanCurrentMaxDpd LessEqual 0</td>
+              <td><span class="status-enable">Enable</span></td>
+              <td><div class="btn-ops"><button class="btn btn-edit">Edit</button><button class="btn btn-disable">Disable</button></div></td>
+            </tr>
+            <tr>
+              <td class="td-id">88</td>
+              <td>User Current Max DPD LessEqual 0</td>
+              <td><span class="status-enable">Enable</span></td>
+              <td><div class="btn-ops"><button class="btn btn-edit">Edit</button><button class="btn btn-disable">Disable</button></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Traffic Control -->
+    <div class="section-card" style="overflow:visible;">
+      <div class="accordion-hd" onclick="toggleAccordion('tc-body')">
+        <span class="accordion-chevron" id="chev-tc-body">▾</span>
+        <span class="accordion-label">Traffic Control</span>
+        <button class="btn-outline-sm" style="margin-left:auto;" onclick="event.stopPropagation()">+ Add Rule</button>
+      </div>
+      <div id="tc-body">
+        <table class="accordion-table">
+          <thead><tr><th style="width:100px;">Rule ID</th><th>Traffic Description</th><th style="width:100px;">Tenor</th><th style="width:120px;">Status</th><th style="width:180px;">Operation</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="td-id">25</td><td>Daily Disbursement Count: 0</td><td>Default</td>
+              <td><span class="status-enable">Enable</span></td>
+              <td><div class="btn-ops"><button class="btn btn-edit">Edit</button><button class="btn btn-disable">Disable</button></div></td>
+            </tr>
+            <tr>
+              <td class="td-id">26</td><td>Daily Disbursement Count For Tenor: 100</td><td>1M</td>
+              <td><span class="status-disable">Disable</span></td>
+              <td><div class="btn-ops"><button class="btn btn-edit">Edit</button><button class="btn btn-enable">Enable</button></div></td>
+            </tr>
+            <tr>
+              <td class="td-id">27</td><td>Daily Disbursement Count For Tenor: 100</td><td>2M</td>
+              <td><span class="status-disable">Disable</span></td>
+              <td><div class="btn-ops"><button class="btn btn-edit">Edit</button><button class="btn btn-enable">Enable</button></div></td>
+            </tr>
+            <tr>
+              <td class="td-id">28</td><td>Daily Disbursement Count For Tenor: 100</td><td>3M</td>
+              <td><span class="status-disable">Disable</span></td>
+              <td><div class="btn-ops"><button class="btn btn-edit">Edit</button><button class="btn btn-enable">Enable</button></div></td>
+            </tr>
+            <tr>
+              <td class="td-id">56</td><td>Daily Disbursement Count For Tenor: 4,100</td><td>4M</td>
+              <td><span class="status-enable">Enable</span></td>
+              <td><div class="btn-ops"><button class="btn btn-edit">Edit</button><button class="btn btn-disable">Disable</button></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Funder Fee Config -->
+    <div class="section-card">
+      <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;">
+        <div class="section-title">Funder Fee Config</div>
+        <button class="btn-outline-sm">+ Add Fee</button>
+      </div>
+      <div class="section-body" style="padding:0;">
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr>
+              <th>Fee Type</th><th>Tenor</th><th>Target Group</th>
+              <th>Value &amp; Effective Time</th><th>Update By</th><th>Operation</th>
+            </tr></thead>
+            <tbody>
+              <tr><td colspan="6"><div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">No data</div></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-nav">
+      <button class="btn-outline-sm" style="padding:10px 20px;font-size:13px;" onclick="showPage('s1',document.getElementById('tab-s1'))">← Back</button>
+      <div style="display:flex;gap:10px;">
+        <button class="btn-outline-sm" style="padding:10px 20px;font-size:13px;">Save draft</button>
+        <button class="btn-primary-lg" onclick="showPage('s4',null)">Next: ABS Plan →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       PAGE: Step 4 — Auto Report Management
+  ══════════════════════════════════════ -->
+  <div class="page" id="page-s3">
+
+    <!-- toolbar -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <div>
+        <div style="font-size:18px;font-weight:700;color:#111827;">Auto Report Management</div>
+        <div style="font-size:13px;color:#6B7280;margin-top:2px;">Configure report templates linked to this funder. Supports inline editing after import.</div>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn-outline-sm" style="padding:8px 16px;font-size:13px;" onclick="document.getElementById('import-modal').classList.add('open')">Import</button>
+        <button class="btn btn-edit" style="padding:8px 18px;font-size:13px;" onclick="document.getElementById('add-new-confirm').classList.add('open')">+ Add New</button>
+      </div>
+    </div>
+
+    <!-- filter bar -->
+    <div class="section-card" style="margin-bottom:14px;">
+      <div style="padding:14px 20px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <select class="form-select" style="width:180px;"><option value="">Status: All</option><option>Draft</option><option>Active</option><option>Disabled</option></select>
+        <input class="form-input" style="width:220px;" placeholder="🔍  Search report name…" />
+        <button class="btn-outline-sm" style="padding:7px 14px;">Reset</button>
+        <button class="btn btn-edit" style="padding:7px 14px;">Query</button>
+      </div>
+    </div>
+
+    <!-- report list -->
+    <div class="section-card">
+      <div class="section-body" style="padding:0;">
+        <div class="tbl-wrap">
+          <table class="report-table" style="width:100%;">
+            <thead><tr>
+              <th style="width:88px;">Report ID</th>
+              <th style="min-width:160px;">Report Name</th>
+              <th style="min-width:150px;">Report Type</th>
+              <th style="min-width:180px;">Funder Name</th>
+              <th style="width:90px;text-align:center;">Field Count</th>
+              <th style="width:110px;">File Output Type</th>
+              <th style="width:80px;">Status</th>
+              <th style="width:130px;">Generation Type</th>
+              <th style="width:120px;">Generation Date</th>
+              <th style="width:140px;">Updated At</th>
+              <th style="width:160px;">Action</th>
+            </tr></thead>
+            <tbody>
+              <tr class="report-row" id="rrow-718634">
+                <td style="color:#6B7280;">718634</td>
+                <td>
+                  <span class="rname-display">Pending Sold Loan Tape</span>
+                  <input class="inline-edit rname-input" value="Pending Sold Loan Tape" style="display:none;" />
+                </td>
+                <td>
+                  <span class="rtype-display">Pending Sold Loan Tape</span>
+                  <select class="form-select rtype-input" style="display:none;width:170px;">
+                    <option>Pending Sold Loan Tape</option><option>Collection Report</option><option>Servicer Report</option><option>Settlement Report</option>
+                  </select>
+                </td>
+                <td style="color:#6B7280;font-size:12px;">TH_SPL_Starlight_ABS_01</td>
+                <td style="text-align:center;">42</td>
+                <td>zip</td>
+                <td><span class="status-live">Live</span></td>
+                <td style="color:#374151;">ABS_SCENARIO</td>
+                <td style="color:#374151;">Cutoff</td>
+                <td style="color:#9CA3AF;font-size:12px;">2026-05-12 06:08</td>
+                <td><div class="tbl-actions" id="btns-718634">
+                  <button class="tbl-act-link">View</button>
+                  <span class="tbl-act-sep">|</span>
+                  <button class="tbl-act-link" onclick="startEdit('718634')">Edit</button>
+                  <span class="tbl-act-sep">|</span>
+                  <button class="tbl-act-link">More ▾</button>
+                </div></td>
+              </tr>
+              <tr class="report-row" id="rrow-718117">
+                <td style="color:#6B7280;">718117</td>
+                <td>
+                  <span class="rname-display">Pending Sold Loan Tape v2</span>
+                  <input class="inline-edit rname-input" value="Pending Sold Loan Tape v2" style="display:none;" />
+                </td>
+                <td>
+                  <span class="rtype-display">Pending Sold Loan Tape</span>
+                  <select class="form-select rtype-input" style="display:none;width:170px;">
+                    <option>Pending Sold Loan Tape</option><option>Collection Report</option><option>Servicer Report</option><option>Settlement Report</option>
+                  </select>
+                </td>
+                <td style="color:#6B7280;font-size:12px;">TH_SPL_Starlight_ABS_01</td>
+                <td style="text-align:center;">13</td>
+                <td>csv</td>
+                <td><span class="status-pending">Pending</span></td>
+                <td style="color:#374151;">FIXED_DATE</td>
+                <td style="color:#374151;">20th</td>
+                <td style="color:#9CA3AF;font-size:12px;">2026-05-14 06:08</td>
+                <td><div class="tbl-actions" id="btns-718117">
+                  <button class="tbl-act-link">View</button>
+                  <span class="tbl-act-sep">|</span>
+                  <button class="tbl-act-link" onclick="startEdit('718117')">Edit</button>
+                  <span class="tbl-act-sep">|</span>
+                  <button class="tbl-act-link">More ▾</button>
+                </div></td>
+              </tr>
+              <tr class="report-row" id="rrow-717604">
+                <td style="color:#6B7280;">717604</td>
+                <td>
+                  <span class="rname-display">TH_SPL_Starlight_ABS_T1_Pending_Sold_Loan_Tape</span>
+                  <input class="inline-edit rname-input" value="TH_SPL_Starlight_ABS_T1_Pending_Sold_Loan_Tape" style="display:none;" />
+                </td>
+                <td>
+                  <span class="rtype-display">Pending Sold Loan Tape</span>
+                  <select class="form-select rtype-input" style="display:none;width:170px;">
+                    <option>Pending Sold Loan Tape</option><option>Collection Report</option><option>Servicer Report</option><option>Settlement Report</option>
+                  </select>
+                </td>
+                <td style="color:#6B7280;font-size:12px;">TH_SPL_Starlight_ABS_01</td>
+                <td style="text-align:center;">46</td>
+                <td>csv</td>
+                <td><span class="status-pending">Pending</span></td>
+                <td style="color:#374151;">ABS_SCENARIO</td>
+                <td style="color:#374151;">Cutoff</td>
+                <td style="color:#9CA3AF;font-size:12px;">2026-05-17 06:08</td>
+                <td><div class="tbl-actions" id="btns-717604">
+                  <button class="tbl-act-link">View</button>
+                  <span class="tbl-act-sep">|</span>
+                  <button class="tbl-act-link" onclick="startEdit('717604')">Edit</button>
+                  <span class="tbl-act-sep">|</span>
+                  <button class="tbl-act-link">More ▾</button>
+                </div></td>
+              </tr>
+              <tr class="report-row" id="rrow-718119">
+                <td style="color:#6B7280;">718119</td>
+                <td>
+                  <span class="rname-display">Copy of Pending Sold Loan Tape v2</span>
+                  <input class="inline-edit rname-input" value="Copy of Pending Sold Loan Tape v2" style="display:none;" />
+                </td>
+                <td>
+                  <span class="rtype-display">Pending Sold Loan Tape</span>
+                  <select class="form-select rtype-input" style="display:none;width:170px;">
+                    <option>Pending Sold Loan Tape</option><option>Collection Report</option><option>Servicer Report</option><option>Settlement Report</option>
+                  </select>
+                </td>
+                <td style="color:#6B7280;font-size:12px;">TH_SPL_Starlight_ABS_01</td>
+                <td style="text-align:center;">13</td>
+                <td>—</td>
+                <td><span class="status-pending">Pending</span></td>
+                <td style="color:#9CA3AF;">—</td>
+                <td style="color:#9CA3AF;">—</td>
+                <td style="color:#9CA3AF;font-size:12px;">2026-05-11 06:08</td>
+                <td><div class="tbl-actions" id="btns-718119">
+                  <button class="tbl-act-link">View</button>
+                  <span class="tbl-act-sep">|</span>
+                  <button class="tbl-act-link" onclick="startEdit('718119')">Edit</button>
+                  <span class="tbl-act-sep">|</span>
+                  <button class="tbl-act-link">More ▾</button>
+                </div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- pagination -->
+        <div class="tbl-pagination">
+          <span>1–4 of 4 items</span>
+          <button class="pg-btn">‹</button>
+          <button class="pg-btn active">1</button>
+          <button class="pg-btn">›</button>
+          <select class="pg-size-select"><option>15 / page</option><option>30 / page</option><option>50 / page</option></select>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-nav">
+      <button class="btn-outline-sm" style="padding:10px 20px;font-size:13px;" onclick="showPage('s4',null)">← Back: Management Plan</button>
+      <div style="display:flex;gap:10px;">
+        <button class="btn-outline-sm" style="padding:10px 20px;font-size:13px;">Save draft</button>
+        <button class="btn-primary-lg" onclick="showPage('s5',document.getElementById('tab-s5'))">Next: Review →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       PAGE: Step 4 — Management Plan
+       Source: [ABS] Planning Schedule PRD
+  ══════════════════════════════════════ -->
+  <div class="page" id="page-s4">
+
+    <div class="info-notice">
+      A Management Plan binds a Flow Template to an anchor date, generating the full milestone schedule for this funder's ABS cycle. TC approval is required before tasks are generated.
+    </div>
+
+    <!-- Flow Template -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-title">Flow Template</div>
+        <div class="section-sub">Select the reusable template that defines milestone sequence, cycle frequency, and T+N offsets.</div>
+      </div>
+      <div class="section-body">
+        <div class="form-grid">
+          <div class="form-group" style="grid-column:1/-1;">
+            <label class="form-label">Flow Template <span class="req">*</span></label>
+            <select class="form-select">
+              <option>TH_SPL_ABS_Standard_Monthly — Active · 7 milestones · Every 4 weeks</option>
+              <option>TH_BCL_ABS_BiMonthly — Active · 7 milestones · Every 8 weeks</option>
+              <option>TH_SPL_ABL_Monthly — Active · 5 milestones · Every 4 weeks</option>
+            </select>
+            <div class="form-hint">Only Active templates are selectable. <span style="color:#2563EB;cursor:pointer;">View template detail ↗</span></div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Template preview — draggable -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+          <div style="font-size:12px;font-weight:600;color:#374151;">Template — Milestone Sequence Preview</div>
+          <div style="font-size:11px;color:#9CA3AF;">⠿ Drag to reorder &nbsp;·&nbsp; Click T+N to edit</div>
+        </div>
+        <div class="tbl-wrap">
+          <table id="milestone-table">
+            <thead><tr><th style="width:32px;"></th><th style="width:36px;">Seq</th><th>Milestone</th><th style="width:140px;">T+N Offset (days)</th><th>Dependency</th></tr></thead>
+            <tbody id="milestone-tbody">
+              <tr draggable="true" data-id="1"><td><span class="drag-handle">⠿</span></td><td class="seq-num">1</td><td><span class="milestone-tag">Servicer Report Date</span></td><td><input class="tn-input" value="T+0" data-orig="T+0" /></td><td class="dep-cell">— Cycle anchor</td></tr>
+              <tr draggable="true" data-id="2"><td><span class="drag-handle">⠿</span></td><td class="seq-num">2</td><td><span class="milestone-tag">Portfolio Selection / Batch Creation</span></td><td><input class="tn-input" value="T+2" data-orig="T+2" /></td><td class="dep-cell">After #1</td></tr>
+              <tr draggable="true" data-id="3"><td><span class="drag-handle">⠿</span></td><td class="seq-num">3</td><td><span class="milestone-tag">Sale Notice / System Cutoff</span></td><td><input class="tn-input" value="T+3" data-orig="T+3" /></td><td class="dep-cell">After #2</td></tr>
+              <tr draggable="true" data-id="4"><td><span class="drag-handle">⠿</span></td><td class="seq-num">4</td><td><span class="milestone-tag">Collection Deposit Date</span></td><td><input class="tn-input" value="T+7" data-orig="T+7" /></td><td class="dep-cell">After #3</td></tr>
+              <tr draggable="true" data-id="5"><td><span class="drag-handle">⠿</span></td><td class="seq-num">5</td><td><span class="milestone-tag">Sale Date</span></td><td><input class="tn-input" value="T+7" data-orig="T+7" /></td><td class="dep-cell">After #4</td></tr>
+              <tr draggable="true" data-id="6"><td><span class="drag-handle">⠿</span></td><td class="seq-num">6</td><td><span class="milestone-tag">Confirmation Date (ABL)</span></td><td><input class="tn-input" value="T+8" data-orig="T+8" /></td><td class="dep-cell">After #5</td></tr>
+              <tr draggable="true" data-id="7"><td><span class="drag-handle">⠿</span></td><td class="seq-num">7</td><td><span class="milestone-tag">Settlement Date (ABL)</span></td><td><input class="tn-input" value="T+10" data-orig="T+10" /></td><td class="dep-cell">After #6</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Plan Parameters -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-title">Plan Parameters</div>
+      </div>
+      <div class="section-body">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Plan Start Date</label>
+            <input class="form-input" type="date" id="plan-start" oninput="recomputeSchedule()" />
+            <div class="form-hint">Optional — leave blank if not yet determined</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Plan End Date</label>
+            <input class="form-input" type="date" id="plan-end" />
+            <div class="form-hint">Optional</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Plan Name <span class="req">*</span></label>
+            <input class="form-input" placeholder="e.g. TH_SPL_STARLIGHT_ABS_T1_2025" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Cycle Frequency</label>
+            <input class="form-input" id="cycle-freq" value="Every 4 weeks" disabled style="background:#F9FAFB;color:#9CA3AF;" />
+            <div class="form-hint">Inherited from Flow Template — read only</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Schedule Preview — Calendar -->
+    <div class="section-card">
+      <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;">
+        <div>
+          <div class="section-title">Schedule Preview</div>
+          <div class="section-sub">Computed from Plan Start Date + T+N offsets. Defaults to the 1st of current month if no date is set.</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <button class="pg-btn" id="cal-prev" onclick="shiftCalMonth(-1)">‹</button>
+          <span id="cal-month-label" style="font-size:13px;font-weight:600;color:#374151;min-width:110px;text-align:center;"></span>
+          <button class="pg-btn" id="cal-next" onclick="shiftCalMonth(1)">›</button>
+        </div>
+      </div>
+      <div class="section-body" style="padding:16px 20px 20px;">
+        <!-- legend -->
+        <div id="cal-legend" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;"></div>
+        <!-- calendar grid -->
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:#E5E7EB;border:1px solid #E5E7EB;border-radius:8px;overflow:hidden;">
+          <div style="background:#F9FAFB;padding:8px 0;text-align:center;font-size:11px;font-weight:600;color:#9CA3AF;">Mon</div>
+          <div style="background:#F9FAFB;padding:8px 0;text-align:center;font-size:11px;font-weight:600;color:#9CA3AF;">Tue</div>
+          <div style="background:#F9FAFB;padding:8px 0;text-align:center;font-size:11px;font-weight:600;color:#9CA3AF;">Wed</div>
+          <div style="background:#F9FAFB;padding:8px 0;text-align:center;font-size:11px;font-weight:600;color:#9CA3AF;">Thu</div>
+          <div style="background:#F9FAFB;padding:8px 0;text-align:center;font-size:11px;font-weight:600;color:#9CA3AF;">Fri</div>
+          <div style="background:#F9FAFB;padding:8px 0;text-align:center;font-size:11px;font-weight:600;color:#9CA3AF;">Sat</div>
+          <div style="background:#F9FAFB;padding:8px 0;text-align:center;font-size:11px;font-weight:600;color:#9CA3AF;">Sun</div>
+          <div id="cal-grid" style="display:contents;"></div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="footer-nav">
+      <button class="btn-outline-sm" style="padding:10px 20px;font-size:13px;" onclick="showPage('s2',null)">← Back: Portfolio Setting</button>
+      <div style="display:flex;gap:10px;">
+        <button class="btn-outline-sm" style="padding:10px 20px;font-size:13px;">Save draft</button>
+        <button class="btn-primary-lg" onclick="showPage('s3',null)">Next: Auto Report Management →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       PAGE: Step 5 — Review
+  ══════════════════════════════════════ -->
+  <div class="page" id="page-s5">
+    <div class="section-card">
+      <div class="section-body">
+
+        <!-- Basic Info -->
+        <div class="rv-section">
+          <div class="rv-section-title">Basic Info</div>
+          <div class="rv-row"><span class="rv-label">Funder Name</span><span class="rv-value">TH_SPL_Starlight_ABS_01</span></div>
+          <div class="rv-row"><span class="rv-label">Funder Scheme</span><span class="rv-value">ABS</span></div>
+          <div class="rv-row"><span class="rv-label">Product</span><span class="rv-value">SPL</span></div>
+          <div class="rv-row"><span class="rv-label">Loan Type</span><span class="rv-value">Shariah, SFinancing-i</span></div>
+          <div class="rv-row"><span class="rv-label">Originator</span><span class="rv-value">Monee</span></div>
+          <div class="rv-row"><span class="rv-label">Investor</span><span class="rv-value">JPM</span></div>
+          <div class="rv-row"><span class="rv-label">Licensee</span><span class="rv-value">CCC</span></div>
+          <div class="rv-row"><span class="rv-label">SPV Name</span><span class="rv-value">Stellar</span></div>
+          <div class="rv-row"><span class="rv-label">Tranche</span><span class="rv-value">01</span></div>
+        </div>
+
+        <!-- Portfolio Setting -->
+        <div class="rv-section" style="margin-top:20px;">
+          <div class="rv-section-title">Portfolio Setting</div>
+          <div class="rv-row"><span class="rv-label">Pricing mode</span><span class="rv-value">Accrued Interest</span></div>
+          <div class="rv-row"><span class="rv-label">Auto Clawback Enabled</span><span class="rv-value">Yes</span></div>
+          <div class="rv-row"><span class="rv-label">Auto Clawback Mode</span><span class="rv-value">Mode 2</span></div>
+          <div class="rv-row"><span class="rv-label">N Input</span><span class="rv-value">1</span></div>
+          <div class="rv-row" style="align-items:flex-start;">
+            <span class="rv-label" style="padding-top:2px;">Rule List</span>
+            <div style="flex:1;">
+              <table class="rv-table">
+                <thead><tr><th style="width:80px;">Rule ID</th><th>Rules</th><th style="width:80px;">Status</th></tr></thead>
+                <tbody>
+                  <tr><td>131</td><td>Outstanding Principal in range [0.01, 150000.00]</td><td><span class="status-enable">Enable</span></td></tr>
+                  <tr><td>132</td><td>LoanCurrentMaxDpd LessEqual 0</td><td><span class="status-enable">Enable</span></td></tr>
+                  <tr><td>133</td><td>User Current Max DPD LessEqual 0</td><td><span class="status-enable">Enable</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="rv-row" style="align-items:flex-start;">
+            <span class="rv-label" style="padding-top:2px;">Traffic Control</span>
+            <div style="flex:1;">
+              <table class="rv-table">
+                <thead><tr><th style="width:80px;">Rule ID</th><th>Traffic Description</th><th style="width:60px;">Tenor</th><th style="width:80px;">Status</th></tr></thead>
+                <tbody>
+                  <tr><td>25</td><td>Daily Disbursement Count: 0</td><td>Default</td><td><span class="status-enable">Enable</span></td></tr>
+                  <tr><td>26</td><td>Daily Disbursement Count For Tenor: 100</td><td>1M</td><td><span class="status-disable">Disable</span></td></tr>
+                  <tr><td>27</td><td>Daily Disbursement Count For Tenor: 100</td><td>2M</td><td><span class="status-disable">Disable</span></td></tr>
+                  <tr><td>28</td><td>Daily Disbursement Count For Tenor: 100</td><td>3M</td><td><span class="status-disable">Disable</span></td></tr>
+                  <tr><td>56</td><td>Daily Disbursement Count For Tenor: 4,100</td><td>4M</td><td><span class="status-enable">Enable</span></td></tr>
+                  <tr><td>57</td><td>Daily Disbursement Count For Tenor: 4,100</td><td>5M</td><td><span class="status-enable">Enable</span></td></tr>
+                  <tr><td>29</td><td>Daily Disbursement Count For Tenor: 4,100</td><td>6M</td><td><span class="status-enable">Enable</span></td></tr>
+                  <tr><td>30</td><td>Daily Disbursement Count For Tenor: 4,100</td><td>12M</td><td><span class="status-enable">Enable</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Management Plan -->
+        <div class="rv-section" style="margin-top:20px;">
+          <div class="rv-section-title">Management Plan</div>
+          <div class="rv-row"><span class="rv-label">Flow Template</span><span class="rv-value">TH_SPL_ABS_Standard_Monthly</span></div>
+          <div class="rv-row"><span class="rv-label">Cycle Frequency</span><span class="rv-value">Every 4 weeks</span></div>
+          <div class="rv-row"><span class="rv-label">Plan Name</span><span class="rv-value">TH_SPL_Starlight_2025_Plan</span></div>
+        </div>
+
+        <!-- Auto Report Management -->
+        <div class="rv-section" style="margin-top:20px;">
+          <div class="rv-section-title">Auto Report Management</div>
+          <div style="margin-top:8px;">
+            <table class="rv-table">
+              <thead><tr>
+                <th style="width:80px;">Report ID</th><th>Report Name</th><th>Report Type</th>
+                <th>Funder Name</th><th style="width:80px;text-align:center;">Field Count</th>
+                <th style="width:80px;">Status</th><th style="width:130px;">Updated At</th>
+              </tr></thead>
+              <tbody>
+                <tr><td style="color:#6B7280;">718634</td><td>Pending Sold Loan Tape</td><td>Pending Sold Loan Tape</td><td style="color:#6B7280;font-size:12px;">TH_SPL_Starlight_ABS_01</td><td style="text-align:center;">42</td><td><span class="status-live">Live</span></td><td style="color:#9CA3AF;font-size:12px;">2026-05-12 06:08</td></tr>
+                <tr><td style="color:#6B7280;">718117</td><td>Pending Sold Loan Tape v2</td><td>Pending Sold Loan Tape</td><td style="color:#6B7280;font-size:12px;">TH_SPL_Starlight_ABS_01</td><td style="text-align:center;">13</td><td><span class="status-pending">Pending</span></td><td style="color:#9CA3AF;font-size:12px;">2026-05-14 06:08</td></tr>
+                <tr><td style="color:#6B7280;">717604</td><td>TH_SPL_Starlight_ABS_T1_Pending_Sold_Loan_Tape</td><td>Pending Sold Loan Tape</td><td style="color:#6B7280;font-size:12px;">TH_SPL_Starlight_ABS_01</td><td style="text-align:center;">46</td><td><span class="status-pending">Pending</span></td><td style="color:#9CA3AF;font-size:12px;">2026-05-17 06:08</td></tr>
+                <tr><td style="color:#6B7280;">718119</td><td>Copy of Pending Sold Loan Tape v2</td><td>Pending Sold Loan Tape</td><td style="color:#6B7280;font-size:12px;">TH_SPL_Starlight_ABS_01</td><td style="text-align:center;">13</td><td><span class="status-pending">Pending</span></td><td style="color:#9CA3AF;font-size:12px;">2026-05-11 06:08</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="footer-nav">
+      <button class="btn-outline-sm" style="padding:10px 20px;font-size:13px;" onclick="showPage('s3',null)">← Back: Auto Report Management</button>
+      <div style="display:flex;gap:10px;">
+        <button class="btn-outline-sm" style="padding:10px 20px;font-size:13px;">Save draft</button>
+        <button class="btn-primary-lg" style="padding:10px 24px;">Submit</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /content -->
+</div><!-- /flow-create -->
+
+<!-- ══ Import Template Modal ══ -->
+<div class="modal-overlay" id="import-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">Import Template</div>
+        <div class="modal-sub">Select an existing report structure to use as a template for the current funder.</div>
+      </div>
+      <button class="modal-close" onclick="document.getElementById('import-modal').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-filters">
+      <select class="form-select" style="width:190px;"><option value="">Please select funder</option><option>TH_BCL_Pacific_Two_ABS_01</option><option>TH_SPL_Umi_ABS_01</option><option>TH_SPL_Starlight_ABS_01</option></select>
+      <select class="form-select" style="width:160px;"><option value="">Report Type</option><option>Pending Sold Loan Tape</option><option>Collection Report</option><option>Servicer Report</option></select>
+      <input class="form-input" style="width:200px;" placeholder="🔍  Enter keyword" />
+      <button class="btn-outline-sm" style="padding:7px 14px;">Reset</button>
+      <button class="btn btn-edit" style="padding:7px 16px;">Search</button>
+    </div>
+    <div class="modal-body">
+      <table style="width:100%;border-collapse:collapse;">
+        <thead><tr>
+          <th style="padding:11px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;white-space:nowrap;">Report ID</th>
+          <th style="padding:11px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;">Report Name</th>
+          <th style="padding:11px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;white-space:nowrap;">Report Type</th>
+          <th style="padding:11px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;white-space:nowrap;">Funder Name</th>
+          <th style="padding:11px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;text-align:center;white-space:nowrap;">Field Include</th>
+          <th style="padding:11px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;white-space:nowrap;">Last Update</th>
+          <th style="padding:11px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;text-align:center;white-space:nowrap;">Action: Select</th>
+        </tr></thead>
+        <tbody id="import-tbody">
+          <tr style="border-bottom:1px solid #F3F4F6;" id="irow-762048">
+            <td style="padding:13px 16px;font-size:13px;color:#374151;">762048</td>
+            <td style="padding:13px 16px;font-size:13px;color:#374151;">test - {funder_name} {cutoff_date}</td>
+            <td style="padding:13px 16px;font-size:13px;color:#374151;">Pending Sold Loan Tape</td>
+            <td style="padding:13px 16px;font-size:13px;color:#374151;">TH_BCL_Pacific_Two_ABS_01</td>
+            <td style="padding:13px 16px;font-size:13px;text-align:center;">59</td>
+            <td style="padding:13px 16px;font-size:13px;color:#374151;white-space:nowrap;">2026-05-07 17:58</td>
+            <td style="padding:13px 16px;text-align:center;"><span class="modal-select-link" onclick="selectTemplate('762048','test - {funder_name} {cutoff_date}','Pending Sold Loan Tape',59)">Select</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid #F3F4F6;" id="irow-753852">
+            <td style="padding:13px 16px;font-size:13px;">753852</td>
+            <td style="padding:13px 16px;font-size:13px;">test2 {YYYY-MM-DD} {project_name}</td>
+            <td style="padding:13px 16px;font-size:13px;">Pending Sold Loan Tape</td>
+            <td style="padding:13px 16px;font-size:13px;">TH_SPL_Umi_ABS_01</td>
+            <td style="padding:13px 16px;font-size:13px;text-align:center;">62</td>
+            <td style="padding:13px 16px;font-size:13px;white-space:nowrap;">2026-04-21 14:51</td>
+            <td style="padding:13px 16px;text-align:center;"><span class="modal-select-link" onclick="selectTemplate('753852','test2 {YYYY-MM-DD} {project_name}','Pending Sold Loan Tape',62)">Select</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid #F3F4F6;" id="irow-738799">
+            <td style="padding:13px 16px;font-size:13px;">738799</td>
+            <td style="padding:13px 16px;font-size:13px;">{funder_name}_Additional_Receivables_Loan_Tape_{cutoff_date}_[Pending-Sold]</td>
+            <td style="padding:13px 16px;font-size:13px;">Pending Sold Loan Tape</td>
+            <td style="padding:13px 16px;font-size:13px;">TH_SPL_Pacific_ABS_01</td>
+            <td style="padding:13px 16px;font-size:13px;text-align:center;">27</td>
+            <td style="padding:13px 16px;font-size:13px;white-space:nowrap;">2026-04-09 09:01</td>
+            <td style="padding:13px 16px;text-align:center;"><span class="modal-select-link" onclick="selectTemplate('738799','{funder_name}_Additional_Receivables_Loan_Tape_{cutoff_date}_[Pending-Sold]','Pending Sold Loan Tape',27)">Select</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid #F3F4F6;" id="irow-718634">
+            <td style="padding:13px 16px;font-size:13px;">718634</td>
+            <td style="padding:13px 16px;font-size:13px;">Pending Sold Loan Tape</td>
+            <td style="padding:13px 16px;font-size:13px;">Pending Sold Loan Tape</td>
+            <td style="padding:13px 16px;font-size:13px;">TH_SPL_Starlight_ABS_01</td>
+            <td style="padding:13px 16px;font-size:13px;text-align:center;">42</td>
+            <td style="padding:13px 16px;font-size:13px;white-space:nowrap;">2025-11-21 23:51</td>
+            <td style="padding:13px 16px;text-align:center;"><span class="modal-select-link" onclick="selectTemplate('718634','Pending Sold Loan Tape','Pending Sold Loan Tape',42)">Select</span></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="modal-pagination">
+        <span>1–4 of 7 items</span>
+        <button class="pg-btn active">1</button>
+        <button class="pg-btn">2</button>
+        <button class="pg-btn">›</button>
+        <span>Go to</span><input class="go-input" value="" /><span>Page</span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-outline-sm" style="padding:9px 20px;font-size:13px;" onclick="document.getElementById('import-modal').classList.remove('open')">Cancel</button>
+      <button class="btn btn-edit" style="padding:9px 20px;font-size:13px;" id="confirm-import-btn" disabled onclick="confirmImport()">Confirm Import</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ + Add New Confirm Popup ══ -->
+<div class="confirm-overlay" id="add-new-confirm">
+  <div class="confirm-box">
+    <div class="confirm-title">Save before leaving?</div>
+    <div class="confirm-body">
+      Your current configuration will be saved as <strong>Draft</strong> before redirecting you to create a new report template.<br/><br/>
+      You can return to this funder's report list at any time to continue editing.
+    </div>
+    <div class="confirm-actions">
+      <button class="btn-outline-sm" style="padding:9px 18px;font-size:13px;" onclick="document.getElementById('add-new-confirm').classList.remove('open')">Cancel</button>
+      <button class="btn btn-edit" style="padding:9px 18px;font-size:13px;" onclick="handleAddNew()">Save and Redirect</button>
+    </div>
+  </div>
+</div>
+
+<!-- Floating Update Flow button -->
+<button class="update-flow-btn" id="update-flow-btn" onclick="commitFlow()">
+  <span class="check">↑</span> Update Flow
+</button>
+<div class="update-flow-toast" id="update-toast">✓ Flow template updated</div>
+
+<!-- ══════════════════════════════════════
+     FLOW: Lender List
+══════════════════════════════════════ -->
+<div id="flow-list" class="flow">
+  <div class="app-layout">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">S</div>
+        <div><div class="sidebar-logo-text">SEO Money</div><div class="sidebar-logo-sub">Funding · Admin</div></div>
+      </div>
+      <div class="sidebar-nav">
+        <div class="sidebar-group-hd">Routing Management ▾</div>
+        <div class="sidebar-group-hd" style="padding-left:26px;">Lender Management ▾</div>
+        <div class="sidebar-item active" onclick="switchFlow('list')">Lender List</div>
+        <div class="sidebar-item">Pricing Configuration</div>
+        <div class="sidebar-item">Calendar Management</div>
+        <div class="sidebar-group-hd" style="margin-top:4px;">Report Management ▾</div>
+        <div class="sidebar-group-hd" style="margin-top:4px;">Whitelist Configuration</div>
+        <div class="sidebar-group-hd" style="margin-top:4px;">Event System</div>
+        <div class="sidebar-group-hd" style="margin-top:4px;">Clone Center</div>
+        <div class="sidebar-group-hd" style="margin-top:4px;">ABS Auto Report Manage ▾</div>
+      </div>
+    </div>
+    <!-- Main -->
+    <div class="sidebar-main">
+      <div class="list-topnav">
+        <div class="list-topnav-crumb">
+          <a href="#">Routing Management</a><span class="sep">/</span>
+          <a href="#">Lender Management</a><span class="sep">/</span>
+          <span class="current">Lender List</span>
+        </div>
+        <div class="list-topnav-right">
+          <span>Ziqi Xu</span>
+          <span style="background:#EFF6FF;color:#2563EB;padding:3px 8px;border-radius:4px;font-size:11px;font-weight:600;">Admin</span>
+        </div>
+      </div>
+      <div class="list-main">
+        <div class="list-toolbar">
+          <div class="list-title">Lender List</div>
+          <button class="btn-primary-lg" style="font-size:13px;padding:9px 18px;" onclick="switchFlow('create')">+ Create New Funder</button>
+        </div>
+        <!-- filter bar -->
+        <div class="list-filter">
+          <select class="form-select" style="width:160px;"><option>Status: All</option><option>ACTIVE</option><option>INACTIVE</option><option>DRAFT</option></select>
+          <select class="form-select" style="width:160px;"><option>Scheme: All</option><option>ABS</option><option>ABL</option><option>YBL</option><option>Channeling</option></select>
+          <input class="form-input" style="width:220px;" placeholder="🔍  Search funder name…" />
+          <button class="btn-outline-sm" style="padding:7px 14px;">Reset</button>
+          <button class="btn btn-edit" style="padding:7px 14px;">Query</button>
+        </div>
+        <!-- table card -->
+        <div class="section-card" style="overflow:hidden;">
+          <table class="lender-table">
+            <thead><tr>
+              <th style="width:40px;">#</th>
+              <th style="width:90px;">Funder ID</th>
+              <th style="min-width:220px;">Funder Name</th>
+              <th style="width:90px;">Status</th>
+              <th style="width:110px;">Platform/Agent</th>
+              <th style="width:100px;">Funder Scheme</th>
+              <th style="width:160px;">Create Time</th>
+              <th style="width:160px;">OPERATION</th>
+            </tr></thead>
+            <tbody>
+              <tr>
+                <td class="num-col">1</td><td class="num-col">1240037</td>
+                <td style="font-weight:500;">TH_SPC_UNICORN</td>
+                <td><span class="status-badge status-active-badge">ACTIVE</span></td>
+                <td style="color:#6B7280;">UNKNOWN</td>
+                <td><span class="scheme-badge">ABS</span></td>
+                <td style="color:#9CA3AF;font-size:12px;">2023-08-19 15:01:35</td>
+                <td><div class="tbl-actions">
+                  <button class="tbl-act-link">View</button><span class="tbl-act-sep">|</span>
+                  <button class="tbl-act-link">Edit</button><span class="tbl-act-sep">|</span>
+                  <button class="tbl-act-link">More ▾</button>
+                </div></td>
+              </tr>
+              <tr>
+                <td class="num-col">2</td><td class="num-col">194191</td>
+                <td style="font-weight:500;">TH_SPL_Pioneer_01</td>
+                <td><span class="status-badge status-active-badge">ACTIVE</span></td>
+                <td style="color:#6B7280;">UNKNOWN</td>
+                <td><span class="scheme-badge">ABS</span></td>
+                <td style="color:#9CA3AF;font-size:12px;">2023-08-05 11:29:04</td>
+                <td><div class="tbl-actions">
+                  <button class="tbl-act-link">View</button><span class="tbl-act-sep">|</span>
+                  <button class="tbl-act-link">Edit</button><span class="tbl-act-sep">|</span>
+                  <button class="tbl-act-link">More ▾</button>
+                </div></td>
+              </tr>
+              <tr>
+                <td class="num-col">3</td><td class="num-col">199530</td>
+                <td style="font-weight:500;">BCL_SEABANK01</td>
+                <td><span class="status-badge status-draft-badge">DRAFT</span></td>
+                <td style="color:#6B7280;">UNKNOWN</td>
+                <td><span class="scheme-badge">ABS</span></td>
+                <td style="color:#9CA3AF;font-size:12px;">2023-08-11 08:35:09</td>
+                <td><div class="tbl-actions">
+                  <button class="tbl-act-link">View</button><span class="tbl-act-sep">|</span>
+                  <button class="tbl-act-link">Edit</button><span class="tbl-act-sep">|</span>
+                  <button class="tbl-act-link">More ▾</button>
+                </div></td>
+              </tr>
+              <tr>
+                <td class="num-col">4</td><td class="num-col">1040011</td>
+                <td style="font-weight:500;">USD4_SPL_ABS_01</td>
+                <td><span class="status-badge status-inactive-badge">INACTIVE</span></td>
+                <td style="color:#6B7280;">UNKNOWN</td>
+                <td><span class="scheme-badge" style="background:#F3F4F6;color:#6B7280;">ABL</span></td>
+                <td style="color:#9CA3AF;font-size:12px;">2024-01-27 09:11:53</td>
+                <td><div class="tbl-actions">
+                  <button class="tbl-act-link">View</button><span class="tbl-act-sep">|</span>
+                  <button class="tbl-act-link">Edit</button><span class="tbl-act-sep">|</span>
+                  <button class="tbl-act-link">More ▾</button>
+                </div></td>
+              </tr>
+              <tr>
+                <td class="num-col">5</td><td class="num-col">1000527</td>
+                <td style="font-weight:500;">TH_MAD_SPL_ABS_01</td>
+                <td><span class="status-badge" style="background:#F3F4F6;color:#6B7280;">—</span></td>
+                <td style="color:#6B7280;">Seamless</td>
+                <td><span class="scheme-badge" style="background:#FEF3C7;color:#D97706;">YBL</span></td>
+                <td style="color:#9CA3AF;font-size:12px;">2024-07-19 17:09:53</td>
+                <td><div class="tbl-actions">
+                  <button class="tbl-act-link">View</button><span class="tbl-act-sep">|</span>
+                  <button class="tbl-act-link">Edit</button><span class="tbl-act-sep">|</span>
+                  <button class="tbl-act-link">More ▾</button>
+                </div></td>
+              </tr>
+              <tr>
+                <td class="num-col">6</td><td class="num-col">1040641</td>
+                <td style="font-weight:500;">TH_SPL_Allstar_ABS_01</td>
+                <td><span class="status-badge" style="background:#F3F4F6;color:#6B7280;">—</span></td>
+                <td style="color:#6B7280;">Seamless</td>
+                <td><span class="scheme-badge">ABS</span></td>
+                <td style="color:#9CA3AF;font-size:12px;">2024-08-09 14:38:12</td>
+                <td><div class="tbl-actions">
+                  <button class="tbl-act-link">View</button><span class="tbl-act-sep">|</span>
+                  <button class="tbl-act-link">Edit</button><span class="tbl-act-sep">|</span>
+                  <button class="tbl-act-link">More ▾</button>
+                </div></td>
+              </tr>
+              <tr>
+                <td class="num-col">7</td><td class="num-col">1061001</td>
+                <td style="font-weight:500;">TH_MND_SPL_ABS_01_2024</td>
+                <td><span class="status-badge" style="background:#F3F4F6;color:#6B7280;">—</span></td>
+                <td style="color:#6B7280;">Seamless</td>
+                <td><span class="scheme-badge" style="background:#F3F4F6;color:#6B7280;">ABL</span></td>
+                <td style="color:#9CA3AF;font-size:12px;">2024-11-18 16:41:53</td>
+                <td><div class="tbl-actions">
+                  <button class="tbl-act-link">View</button><span class="tbl-act-sep">|</span>
+                  <button class="tbl-act-link">Edit</button><span class="tbl-act-sep">|</span>
+                  <button class="tbl-act-link">More ▾</button>
+                </div></td>
+              </tr>
+              <tr>
+                <td class="num-col">8</td><td class="num-col">1085111</td>
+                <td style="font-weight:500;">TH_SPL_SPL_01</td>
+                <td><span class="status-badge" style="background:#F3F4F6;color:#6B7280;">—</span></td>
+                <td style="color:#6B7280;">Seamless</td>
+                <td><span class="scheme-badge" style="background:#F3F4F6;color:#6B7280;">ABL</span></td>
+                <td style="color:#9CA3AF;font-size:12px;">2024-11-19 17:40:48</td>
+                <td><div class="tbl-actions">
+                  <button class="tbl-act-link">View</button><span class="tbl-act-sep">|</span>
+                  <button class="tbl-act-link">Edit</button><span class="tbl-act-sep">|</span>
+                  <button class="tbl-act-link">More ▾</button>
+                </div></td>
+              </tr>
+              <!-- Starlight — the funder from our mockup -->
+              <tr style="background:#FFFBEB;">
+                <td class="num-col">9</td><td class="num-col">1051002</td>
+                <td style="font-weight:600;color:#111827;">TH_SPL_Starlight_ABS_01 <span style="font-size:11px;background:#EFF6FF;color:#2563EB;padding:1px 6px;border-radius:4px;margin-left:4px;font-weight:500;">this funder</span></td>
+                <td><span class="status-badge status-active-badge">ACTIVE</span></td>
+                <td style="color:#6B7280;">Seamless</td>
+                <td><span class="scheme-badge">ABS</span></td>
+                <td style="color:#9CA3AF;font-size:12px;">2024-12-13 09:17:02</td>
+                <td><div class="tbl-actions">
+                  <button class="tbl-act-link" onclick="switchFlow('view')">View</button><span class="tbl-act-sep">|</span>
+                  <button class="tbl-act-link" onclick="switchFlow('create')">Edit</button><span class="tbl-act-sep">|</span>
+                  <button class="tbl-act-link">More ▾</button>
+                </div></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="tbl-pagination">
+            <span>1–9 of 9 items</span>
+            <button class="pg-btn">‹</button>
+            <button class="pg-btn active">1</button>
+            <button class="pg-btn">›</button>
+            <select class="pg-size-select"><option>15 / page</option><option>30 / page</option></select>
+          </div>
+        </div>
+      </div>
+    </div><!-- /sidebar-main -->
+  </div><!-- /app-layout -->
+</div><!-- /flow-list -->
+
+<!-- ══════════════════════════════════════
+     FLOW: Lender Detail — View Mode
+══════════════════════════════════════ -->
+<div id="flow-view" class="flow">
+  <div class="app-layout" style="height:100vh;overflow:hidden;">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">S</div>
+        <div><div class="sidebar-logo-text">SEO Money</div><div class="sidebar-logo-sub">Funding · Admin</div></div>
+      </div>
+      <div class="sidebar-nav">
+        <div class="sidebar-group-hd">Routing Management ▾</div>
+        <div class="sidebar-group-hd" style="padding-left:26px;">Lender Management ▾</div>
+        <div class="sidebar-item active">Lender List</div>
+        <div class="sidebar-item">Pricing Configuration</div>
+        <div class="sidebar-item">Calendar Management</div>
+        <div class="sidebar-group-hd" style="margin-top:4px;">Report Management ▾</div>
+        <div class="sidebar-group-hd" style="margin-top:4px;">Whitelist Configuration</div>
+        <div class="sidebar-group-hd" style="margin-top:4px;">Event System</div>
+        <div class="sidebar-group-hd" style="margin-top:4px;">Clone Center</div>
+        <div class="sidebar-group-hd" style="margin-top:4px;">ABS Auto Report Manage ▾</div>
+      </div>
+    </div>
+    <!-- Main -->
+    <div class="sidebar-main" style="overflow-y:auto;">
+      <!-- Top nav -->
+      <div class="list-topnav">
+        <div class="list-topnav-crumb">
+          <a href="#" onclick="switchFlow('list');return false;">Lender Management</a><span class="sep">/</span>
+          <a href="#" onclick="switchFlow('list');return false;">Lender List</a><span class="sep">/</span>
+          <span class="current">Lender Detail</span>
+        </div>
+        <div class="list-topnav-right">
+          <span>Ziqi Xu</span>
+          <span style="background:#EFF6FF;color:#2563EB;padding:3px 8px;border-radius:4px;font-size:11px;font-weight:600;">Admin</span>
+        </div>
+      </div>
+      <!-- Tabs -->
+      <div class="view-tabs">
+        <div class="view-tab done" onclick="switchViewTab('vt-basic',this)"><span class="view-tab-num">✓</span>Basic Info</div>
+        <div class="view-tab active" onclick="switchViewTab('vt-portfolio',this)"><span class="view-tab-num">02</span>Portfolio Setting</div>
+        <div class="view-tab" onclick="switchViewTab('vt-plan',this)"><span class="view-tab-num">03</span>Management Plan</div>
+        <div class="view-tab" onclick="switchViewTab('vt-report',this)"><span class="view-tab-num">04</span>Auto Report Management</div>
+        <div class="view-tab" onclick="switchViewTab('vt-review',this)"><span class="view-tab-num">05</span>Review</div>
+      </div>
+
+      <!-- Tab: Basic Info -->
+      <div class="view-scroll" id="vt-basic" style="display:none;">
+        <div class="view-section">
+          <div class="view-section-hd">
+            <span class="view-section-title">Funder Info</span>
+            <button class="btn-outline-sm" style="padding:6px 14px;font-size:12px;">Edit</button>
+          </div>
+          <div class="view-section-body">
+            <div class="view-grid">
+              <div class="view-field"><span class="view-label">Funder Name</span><span class="view-value">TH_SPL_Starlight_ABS_01</span></div>
+              <div class="view-field"><span class="view-label">Funder Scheme</span><span class="view-value">ABS</span></div>
+              <div class="view-field"><span class="view-label">Platform / Agent</span><span class="view-value">Seamless</span></div>
+              <div class="view-field"><span class="view-label">Status</span><span class="view-value"><span class="status-badge status-active-badge">ACTIVE</span></span></div>
+              <div class="view-field"><span class="view-label">Create Time</span><span class="view-value" style="color:#9CA3AF;">2024-12-13 09:17:02</span></div>
+              <div class="view-field"><span class="view-label">Grade</span><span class="view-value">UNICORN</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="view-section">
+          <div class="view-section-hd">
+            <span class="view-section-title">SPV &amp; Tranche Info</span>
+            <button class="btn-outline-sm" style="padding:6px 14px;font-size:12px;">Edit</button>
+          </div>
+          <div class="view-section-body">
+            <div class="view-grid">
+              <div class="view-field"><span class="view-label">SPV Name</span><span class="view-value">TH_SPL_ABS_01</span></div>
+              <div class="view-field"><span class="view-label">Tranche Type</span><span class="view-value">ABS</span></div>
+              <div class="view-field"><span class="view-label">Tranche Name</span><span class="view-value">K_GEN_[TRANCHE]</span></div>
+              <div class="view-field"><span class="view-label">Rate</span><span class="view-value">—</span></div>
+              <div class="view-field"><span class="view-label">Effective Date</span><span class="view-value" style="color:#9CA3AF;">2026-01-27 07:41:00</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="view-section">
+          <div class="view-section-hd"><span class="view-section-title">Life cycle</span></div>
+          <div class="view-section-body">
+            <div class="empty-state-sm">
+              <div style="font-size:28px;color:#D1D5DB;margin-bottom:8px;">🔒</div>
+              <div style="font-size:13px;font-weight:500;color:#374151;margin-bottom:2px;">Life cycle</div>
+              <div style="font-size:12px;color:#9CA3AF;">TBD</div>
+            </div>
+          </div>
+        </div>
+        <div class="view-section">
+          <div class="view-section-hd"><span class="view-section-title">Issue size</span></div>
+          <div class="view-section-body">
+            <div class="empty-state-sm">
+              <div style="font-size:28px;color:#D1D5DB;margin-bottom:8px;">🔒</div>
+              <div style="font-size:13px;font-weight:500;color:#374151;margin-bottom:2px;">Issue size</div>
+              <div style="font-size:12px;color:#9CA3AF;">TBD</div>
+            </div>
+          </div>
+        </div>
+        <div class="view-footer">
+          <span style="font-size:13px;color:#374151;cursor:pointer;" onclick="switchFlow('list')">Back</span>
+          <div style="display:flex;gap:10px;align-items:center;">
+            <button class="btn-outline-sm" style="padding:9px 20px;font-size:13px;border:none;color:#374151;background:none;">Cancel</button>
+            <button class="btn-primary-lg" style="font-size:13px;padding:9px 24px;" onclick="switchViewTab('vt-portfolio',document.querySelectorAll('.view-tab')[1])">Next</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: Portfolio Setting -->
+      <div class="view-scroll" id="vt-portfolio">
+        <!-- Pricing & Terms -->
+        <div class="view-section">
+          <div class="view-section-hd">
+            <span class="view-section-title">Pricing &amp; Terms</span>
+            <button class="btn-outline-sm" style="padding:6px 14px;font-size:12px;" onclick="switchFlow('create')">Edit</button>
+          </div>
+          <div class="view-section-body">
+            <div style="margin-bottom:12px;">
+              <div class="view-label" style="margin-bottom:6px;">Pricing Model</div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div class="radio-dot on" style="flex-shrink:0;"></div>
+                <span style="font-size:13px;font-weight:600;color:#111827;">Accrued Interest</span>
+                <span style="font-size:12px;color:#6B7280;margin-left:4px;">Interest recognised day by day as it accrues</span>
+              </div>
+            </div>
+            <div style="margin-bottom:12px;">
+              <div class="view-label" style="margin-bottom:6px;">Auto Clawback</div>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <div class="toggle" style="pointer-events:none;"></div>
+                <span style="font-size:13px;color:#374151;">Enabled</span>
+                <span style="font-size:12px;color:#6B7280;">· Mode 1: Discount &amp; Pre-Completion</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Rule List -->
+        <div class="view-section" style="overflow:visible;">
+          <div class="accordion-hd" onclick="toggleAccordion('vr-rule-body')">
+            <span class="accordion-chevron" id="chev-vr-rule-body">▾</span>
+            <span class="accordion-label">Rule List</span>
+          </div>
+          <div id="vr-rule-body">
+            <table class="accordion-table">
+              <thead><tr><th style="width:80px;">Rule ID</th><th>Rules</th><th style="width:100px;">Status</th><th style="width:160px;">Operation</th></tr></thead>
+              <tbody>
+                <tr><td>65</td><td>Outstanding Principal in range [0.01, 99999999]</td><td><span class="status-enable">Enable</span></td><td><div class="btn-ops"><button class="btn btn-edit btn-sm">Edit</button><button class="btn btn-disable btn-sm">Disable</button></div></td></tr>
+                <tr><td>100</td><td>LoanCommittedStatus LoanStatus</td><td><span class="status-enable">Enable</span></td><td><div class="btn-ops"><button class="btn btn-edit btn-sm">Edit</button><button class="btn btn-disable btn-sm">Disable</button></div></td></tr>
+                <tr><td>100</td><td>User Current Max FPR LoanStatus</td><td><span class="status-enable">Enable</span></td><td><div class="btn-ops"><button class="btn btn-edit btn-sm">Edit</button><button class="btn btn-disable btn-sm">Disable</button></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <!-- Traffic Control -->
+        <div class="view-section" style="overflow:visible;">
+          <div class="accordion-hd" onclick="toggleAccordion('vr-tc-body')">
+            <span class="accordion-chevron" id="chev-vr-tc-body">▾</span>
+            <span class="accordion-label">Traffic Control</span>
+          </div>
+          <div id="vr-tc-body">
+            <table class="accordion-table">
+              <thead><tr><th style="width:80px;">Rule ID</th><th>Traffic Description</th><th style="width:80px;">Tenor</th><th style="width:90px;">Status</th><th style="width:160px;">Operation</th></tr></thead>
+              <tbody>
+                <tr><td>22</td><td>Daily Disbursement Count: 0</td><td>Default</td><td><span class="status-enable">Enable</span></td><td><div class="btn-ops"><button class="btn btn-edit btn-sm">Edit</button><button class="btn btn-disable btn-sm">Disable</button></div></td></tr>
+                <tr><td>36</td><td>Daily Disbursement Count For Tenor: 100</td><td>100</td><td><span class="status-disable">Disable</span></td><td><div class="btn-ops"><button class="btn btn-edit btn-sm">Edit</button><button class="btn btn-enable btn-sm">Enable</button></div></td></tr>
+                <tr><td>37</td><td>Daily Disbursement Count For Tenor: 200</td><td>200</td><td><span class="status-disable">Disable</span></td><td><div class="btn-ops"><button class="btn btn-edit btn-sm">Edit</button><button class="btn btn-enable btn-sm">Enable</button></div></td></tr>
+                <tr><td>28</td><td>Daily Disbursement Count For Tenor: 300</td><td>300</td><td><span class="status-disable">Disable</span></td><td><div class="btn-ops"><button class="btn btn-edit btn-sm">Edit</button><button class="btn btn-enable btn-sm">Enable</button></div></td></tr>
+                <tr><td>57</td><td>Daily Disbursement Count For Tenor: 4,000</td><td>4,000</td><td><span class="status-enable">Enable</span></td><td><div class="btn-ops"><button class="btn btn-edit btn-sm">Edit</button><button class="btn btn-disable btn-sm">Disable</button></div></td></tr>
+                <tr><td>67</td><td>Daily Disbursement Count For Tenor: 4,500</td><td>4,500</td><td><span class="status-enable">Enable</span></td><td><div class="btn-ops"><button class="btn btn-edit btn-sm">Edit</button><button class="btn btn-disable btn-sm">Disable</button></div></td></tr>
+                <tr><td>29</td><td>Daily Disbursement Count For Tenor: 6,000</td><td>6,000</td><td><span class="status-enable">Enable</span></td><td><div class="btn-ops"><button class="btn btn-edit btn-sm">Edit</button><button class="btn btn-disable btn-sm">Disable</button></div></td></tr>
+                <tr><td>56</td><td>Daily Disbursement Count For Tenor: LIM</td><td>LIM</td><td><span class="status-enable">Enable</span></td><td><div class="btn-ops"><button class="btn btn-edit btn-sm">Edit</button><button class="btn btn-disable btn-sm">Disable</button></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <!-- EC / PC Rules -->
+        <div class="view-section">
+          <div class="view-section-hd"><span class="view-section-title">EC / PC Rules</span></div>
+          <div class="view-section-body"><div class="empty-state-sm"><div class="ico">🔒</div><div class="txt">EC/PC rules config</div></div></div>
+        </div>
+        <!-- Loan selection strategy -->
+        <div class="view-section">
+          <div class="view-section-hd"><span class="view-section-title">Loan selection strategy</span></div>
+          <div class="view-section-body"><div class="empty-state-sm"><div class="ico">🔒</div><div class="txt">Loan selection strategy config</div></div></div>
+        </div>
+        <!-- Issue size -->
+        <div class="view-section">
+          <div class="view-section-hd"><span class="view-section-title">Issue size</span></div>
+          <div class="view-section-body"><div class="empty-state-sm"><div class="ico">🔒</div><div class="txt">Issue size &amp; tranche allocation</div></div></div>
+        </div>
+        <div class="view-footer">
+          <button class="btn-outline-sm" style="padding:9px 20px;font-size:13px;" onclick="switchFlow('list')">← Back to Lender List</button>
+          <div style="display:flex;gap:10px;">
+            <button class="btn-outline-sm" style="padding:9px 20px;font-size:13px;">Cancel</button>
+            <button class="btn-primary-lg" style="font-size:13px;padding:9px 20px;" onclick="switchViewTab('vt-plan',document.querySelectorAll('.view-tab')[2])">Next →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: Management Plan -->
+      <div class="view-scroll" id="vt-plan" style="display:none;">
+        <div class="view-section">
+          <div class="view-section-hd"><span class="view-section-title">ABS Plan</span><button class="btn-outline-sm" style="padding:6px 14px;font-size:12px;" onclick="switchFlow('create')">Edit</button></div>
+          <div class="view-section-body">
+            <div class="view-grid">
+              <div class="view-field"><span class="view-label">Flow Template</span><span class="view-value">TH_SPL_ABS_Standard_Monthly</span></div>
+              <div class="view-field"><span class="view-label">Cycle Frequency</span><span class="view-value">Every 4 weeks</span></div>
+              <div class="view-field"><span class="view-label">Plan Name</span><span class="view-value">TH_SPL_Starlight_2025_Plan</span></div>
+              <div class="view-field"><span class="view-label">Plan Start Date</span><span class="view-value" style="color:#9CA3AF;">Not set (defaults to 1st of month)</span></div>
+              <div class="view-field"><span class="view-label">Plan End Date</span><span class="view-value" style="color:#9CA3AF;">Not set</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="view-footer">
+          <button class="btn-outline-sm" style="padding:9px 20px;font-size:13px;" onclick="switchFlow('list')">← Back to Lender List</button>
+          <div style="display:flex;gap:10px;">
+            <button class="btn-outline-sm" style="padding:9px 20px;font-size:13px;">Cancel</button>
+            <button class="btn-primary-lg" style="font-size:13px;padding:9px 20px;" onclick="switchViewTab('vt-report',document.querySelectorAll('.view-tab')[3])">Next →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: Auto Report Management -->
+      <div class="view-scroll" id="vt-report" style="display:none;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+          <div>
+            <div style="font-size:13px;color:#6B7280;">Number of Reports: <strong style="color:#111827;">4</strong> &nbsp;·&nbsp; Last Edit Time: <strong style="color:#111827;">2026-05-19 09:00:00</strong></div>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn-outline-sm" style="padding:7px 14px;font-size:12px;" onclick="document.getElementById('import-modal').classList.add('open')">Import</button>
+            <button class="btn btn-edit" style="padding:7px 14px;font-size:12px;">Remove</button>
+          </div>
+        </div>
+        <!-- filter -->
+        <div class="section-card" style="margin-bottom:14px;">
+          <div style="padding:12px 18px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+            <input class="form-input" style="width:120px;" placeholder="Report ID" />
+            <input class="form-input" style="width:200px;" placeholder="Report Name" />
+            <select class="form-select" style="width:180px;"><option>Report Type: All</option><option>Pending Sold Loan Tape</option><option>Collection Report</option></select>
+            <select class="form-select" style="width:120px;"><option>Status: All</option><option>Live</option><option>Pending</option></select>
+            <button class="btn btn-edit" style="padding:7px 14px;font-size:12px;">Query</button>
+            <button class="btn-outline-sm" style="padding:7px 14px;font-size:12px;">Remove</button>
+            <button class="btn-outline-sm" style="padding:7px 14px;font-size:12px;">Collapse ▲</button>
+          </div>
+        </div>
+        <div class="section-card">
+          <div style="padding:0;">
+            <div class="tbl-wrap">
+              <table class="report-table" style="width:100%;">
+                <thead><tr>
+                  <th style="width:88px;">Report ID</th>
+                  <th style="min-width:160px;">Report Name</th>
+                  <th style="min-width:150px;">Report Type</th>
+                  <th style="min-width:160px;">Funder Name</th>
+                  <th style="width:90px;text-align:center;">Field Count</th>
+                  <th style="width:110px;">File Output Type</th>
+                  <th style="width:80px;">Status</th>
+                  <th style="width:130px;">Generation Type</th>
+                  <th style="width:120px;">Generation Date</th>
+                  <th style="width:140px;">Updated At</th>
+                  <th style="width:160px;">Action</th>
+                </tr></thead>
+                <tbody>
+                  <tr class="report-row"><td style="color:#6B7280;">718634</td><td>Pending Sold Loan Tape</td><td>Pending Sold Loan Tape</td><td style="color:#6B7280;font-size:12px;">TH_SPL_Starlight_ABS_01</td><td style="text-align:center;">42</td><td>zip</td><td><span class="status-live">Live</span></td><td>ABS_SCENARIO</td><td>Cutoff</td><td style="color:#9CA3AF;font-size:12px;">2026-05-12 06:08</td><td><div class="tbl-actions"><button class="tbl-act-link">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">More ▾</button></div></td></tr>
+                  <tr class="report-row"><td style="color:#6B7280;">718117</td><td>Pending Sold Loan Tape v2</td><td>Pending Sold Loan Tape</td><td style="color:#6B7280;font-size:12px;">TH_SPL_Starlight_ABS_01</td><td style="text-align:center;">13</td><td>csv</td><td><span class="status-pending">Pending</span></td><td>FIXED_DATE</td><td>20th</td><td style="color:#9CA3AF;font-size:12px;">2026-05-14 06:08</td><td><div class="tbl-actions"><button class="tbl-act-link">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">More ▾</button></div></td></tr>
+                  <tr class="report-row"><td style="color:#6B7280;">717604</td><td>TH_SPL_Starlight_ABS_T1_Pending_Sold_Loan_Tape</td><td>Pending Sold Loan Tape</td><td style="color:#6B7280;font-size:12px;">TH_SPL_Starlight_ABS_01</td><td style="text-align:center;">46</td><td>csv</td><td><span class="status-pending">Pending</span></td><td>ABS_SCENARIO</td><td>Cutoff</td><td style="color:#9CA3AF;font-size:12px;">2026-05-17 06:08</td><td><div class="tbl-actions"><button class="tbl-act-link">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">More ▾</button></div></td></tr>
+                  <tr class="report-row"><td style="color:#6B7280;">718119</td><td>Copy of Pending Sold Loan Tape v2</td><td>Pending Sold Loan Tape</td><td style="color:#6B7280;font-size:12px;">TH_SPL_Starlight_ABS_01</td><td style="text-align:center;">13</td><td>—</td><td><span class="status-pending">Pending</span></td><td style="color:#9CA3AF;">—</td><td style="color:#9CA3AF;">—</td><td style="color:#9CA3AF;font-size:12px;">2026-05-11 06:08</td><td><div class="tbl-actions"><button class="tbl-act-link">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">More ▾</button></div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="tbl-pagination">
+              <span>1–4 of 4 items</span>
+              <button class="pg-btn">‹</button><button class="pg-btn active">1</button><button class="pg-btn">›</button>
+              <select class="pg-size-select"><option>15 / page</option></select>
+            </div>
+          </div>
+        </div>
+        <div class="view-footer">
+          <button class="btn-outline-sm" style="padding:9px 20px;font-size:13px;" onclick="switchFlow('list')">← Back to Lender List</button>
+          <div style="display:flex;gap:10px;">
+            <button class="btn-outline-sm" style="padding:9px 20px;font-size:13px;">Cancel</button>
+            <button class="btn-primary-lg" style="font-size:13px;padding:9px 20px;">Submit →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: Review -->
+      <div class="view-scroll" id="vt-review" style="display:none;">
+        <div class="view-section">
+          <div class="view-section-hd"><span class="view-section-title">Review</span></div>
+          <div class="view-section-body"><div class="empty-state-sm"><div class="ico">📋</div><div class="txt">Review &amp; confirm all settings before saving.</div></div></div>
+        </div>
+        <div class="view-footer">
+          <button class="btn-outline-sm" style="padding:9px 20px;font-size:13px;" onclick="switchFlow('list')">← Back to Lender List</button>
+          <div style="display:flex;gap:10px;">
+            <button class="btn-outline-sm" style="padding:9px 20px;font-size:13px;">Cancel</button>
+            <button class="btn-primary-lg" style="font-size:13px;padding:9px 20px;">Save</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /sidebar-main -->
+  </div><!-- /app-layout -->
+</div><!-- /flow-view -->
+
+<script>
+/* ── Flow switching ── */
+function switchFlow(target) {
+  document.querySelectorAll('.flow').forEach(f => f.classList.remove('active'));
+  if (target === 'list') {
+    document.getElementById('flow-list').classList.add('active');
+  } else if (target === 'view') {
+    document.getElementById('flow-view').classList.add('active');
+    // default to portfolio tab on entry
+    switchViewTab('vt-portfolio', document.querySelectorAll('.view-tab')[1]);
+  } else {
+    document.getElementById('flow-create').classList.add('active');
+  }
+  window.scrollTo(0, 0);
+}
+
+/* ── View tab switching ── */
+function switchViewTab(tabId, tabEl) {
+  // hide all scroll panels
+  ['vt-basic','vt-portfolio','vt-plan','vt-report','vt-review'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+  const panel = document.getElementById(tabId);
+  if (panel) panel.style.display = '';
+  // update tab active state
+  document.querySelectorAll('.view-tab').forEach(t => t.classList.remove('active'));
+  if (tabEl) tabEl.classList.add('active');
+}
+
+/* ── Page navigation ── */
+function showPage(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('.step-item').forEach(s => s.classList.remove('active'));
+  const tab = document.getElementById('tab-' + id);
+  if (tab) tab.classList.add('active');
+  document.querySelectorAll('.demo-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+}
+
+/* ── Report row inline edit ── */
+function startEdit(id) {
+  const row = document.getElementById('rrow-' + id);
+  const btns = document.getElementById('btns-' + id);
+
+  // show inputs, hide display text
+  row.querySelector('.rname-display').style.display = 'none';
+  row.querySelector('.rname-input').style.display = '';
+  row.querySelector('.rtype-display').style.display = 'none';
+  row.querySelector('.rtype-input').style.display = '';
+
+  // sync select to current display value
+  const curType = row.querySelector('.rtype-display').textContent.trim();
+  const sel = row.querySelector('.rtype-input');
+  [...sel.options].forEach(o => o.selected = o.value === curType);
+
+  row.classList.add('editing');
+
+  btns.innerHTML = `
+    <button class="btn btn-sm btn-edit-more" onclick="editMore('${id}')">Edit More</button>
+    <button class="btn btn-sm btn-save"        onclick="saveEdit('${id}')">Save</button>
+    <button class="btn btn-sm btn-cancel-edit" onclick="cancelEdit('${id}')">Cancel</button>`;
+}
+
+function saveEdit(id) {
+  const row = document.getElementById('rrow-' + id);
+  const newName = row.querySelector('.rname-input').value;
+  const newType = row.querySelector('.rtype-input').value;
+
+  row.querySelector('.rname-display').textContent = newName;
+  row.querySelector('.rtype-display').textContent = newType;
+  _exitEditMode(id);
+}
+
+function cancelEdit(id) {
+  const row = document.getElementById('rrow-' + id);
+  // revert input to current display value
+  row.querySelector('.rname-input').value = row.querySelector('.rname-display').textContent;
+  const curType = row.querySelector('.rtype-display').textContent.trim();
+  const sel = row.querySelector('.rtype-input');
+  [...sel.options].forEach(o => o.selected = o.value === curType);
+  _exitEditMode(id);
+}
+
+function editMore(id) {
+  cancelEdit(id);
+  document.getElementById('add-new-confirm').classList.add('open');
+}
+
+function _exitEditMode(id) {
+  const row = document.getElementById('rrow-' + id);
+  const btns = document.getElementById('btns-' + id);
+  row.querySelector('.rname-display').style.display = '';
+  row.querySelector('.rname-input').style.display = 'none';
+  row.querySelector('.rtype-display').style.display = '';
+  row.querySelector('.rtype-input').style.display = 'none';
+  row.classList.remove('editing');
+  btns.innerHTML = `
+    <button class="tbl-act-link">View</button>
+    <span class="tbl-act-sep">|</span>
+    <button class="tbl-act-link" onclick="startEdit('${id}')">Edit</button>
+    <span class="tbl-act-sep">|</span>
+    <button class="tbl-act-link">More ▾</button>`;
+}
+
+/* ── Import Template modal ── */
+let pendingImport = null;
+
+function selectTemplate(id, name, type, fields) {
+  // highlight selected row
+  document.querySelectorAll('#import-tbody tr').forEach(r => r.style.background = '');
+  const row = document.getElementById('irow-' + id);
+  if (row) row.style.background = '#EFF6FF';
+  pendingImport = { id, name, type, fields };
+  document.getElementById('confirm-import-btn').disabled = false;
+}
+
+function confirmImport() {
+  if (!pendingImport) return;
+  const tbody = document.querySelector('.report-table tbody');
+  // remove empty-state row if present
+  const empty = tbody.querySelector('td[colspan]');
+  if (empty) empty.closest('tr').remove();
+  // build new row
+  const newId = pendingImport.id;
+  const now = new Date().toISOString().slice(0,16).replace('T',' ');
+  const tr = document.createElement('tr');
+  tr.className = 'report-row';
+  tr.id = 'rrow-' + newId;
+  tr.innerHTML = `
+    <td style="color:#6B7280;">${newId}</td>
+    <td>
+      <span class="rname-display">${pendingImport.name}</span>
+      <input class="inline-edit rname-input" value="${pendingImport.name}" style="display:none;" />
+    </td>
+    <td>
+      <span class="rtype-display">${pendingImport.type}</span>
+      <select class="form-select rtype-input" style="display:none;width:170px;">
+        <option>Pending Sold Loan Tape</option><option>Collection Report</option><option>Servicer Report</option><option>Settlement Report</option>
+      </select>
+    </td>
+    <td style="color:#6B7280;font-size:12px;">TH_SPL_Starlight_ABS_01</td>
+    <td style="text-align:center;">${pendingImport.fields}</td>
+    <td>csv</td>
+    <td><span class="status-pending">Pending</span></td>
+    <td style="color:#9CA3AF;">—</td>
+    <td style="color:#9CA3AF;">—</td>
+    <td style="color:#9CA3AF;font-size:12px;">${now}</td>
+    <td><div class="tbl-actions" id="btns-${newId}">
+      <button class="tbl-act-link">View</button>
+      <span class="tbl-act-sep">|</span>
+      <button class="tbl-act-link" onclick="startEdit('${newId}')">Edit</button>
+      <span class="tbl-act-sep">|</span>
+      <button class="tbl-act-link">More ▾</button>
+    </div></td>`;
+  tbody.appendChild(tr);
+  // reset & close
+  pendingImport = null;
+  document.getElementById('confirm-import-btn').disabled = true;
+  document.querySelectorAll('#import-tbody tr').forEach(r => r.style.background = '');
+  document.getElementById('import-modal').classList.remove('open');
+  // toast
+  const toast = document.getElementById('update-toast');
+  toast.textContent = '✓ Template imported';
+  toast.classList.add('visible');
+  setTimeout(() => { toast.classList.remove('visible'); toast.textContent = '✓ Flow template updated'; }, 2200);
+}
+
+function handleAddNew() {
+  document.getElementById('add-new-confirm').classList.remove('open');
+  const toast = document.getElementById('update-toast');
+  toast.textContent = '✓ Draft saved — redirecting…';
+  toast.classList.add('visible');
+  setTimeout(() => toast.classList.remove('visible'), 2200);
+}
+
+function toggleAccordion(id) {
+  const body = document.getElementById(id);
+  const chevId = 'chev-' + id;
+  const chev = document.getElementById(chevId);
+  const collapsed = body.classList.toggle('collapsed');
+  if (chev) chev.classList.toggle('collapsed', collapsed);
+}
+
+function toggleClawback(el) {
+  el.classList.toggle('off');
+  const enabled = !el.classList.contains('off');
+  document.getElementById('clawback-config').classList.toggle('dimmed', !enabled);
+  document.getElementById('n-input-row').classList.toggle('dimmed', !enabled);
+}
+
+function selectMode(n) {
+  document.getElementById('mode1-dot').classList.toggle('on', n === 1);
+  document.getElementById('mode2-dot').classList.toggle('on', n === 2);
+  document.getElementById('mode1-card').classList.toggle('selected', n === 1);
+  document.getElementById('mode2-card').classList.toggle('selected', n === 2);
+  document.getElementById('n-input-row').style.display = n === 2 ? 'flex' : 'none';
+}
+
+function selectPricing(card) {
+  document.querySelectorAll('.radio-card').forEach(c => {
+    c.classList.remove('selected');
+    c.querySelector('.radio-dot').classList.remove('on');
+  });
+  card.classList.add('selected');
+  card.querySelector('.radio-dot').classList.add('on');
+}
+
+/* ── Calendar state ── */
+const MILESTONES = [
+  { offset: 0,  label: 'Servicer Report',      short: 'Servicer',    bg: '#DBEAFE', color: '#1D4ED8' },
+  { offset: 2,  label: 'Portfolio Selection',   short: 'Port. Select', bg: '#EDE9FE', color: '#6D28D9' },
+  { offset: 3,  label: 'Sale Notice / Cutoff',  short: 'Sale Notice',  bg: '#FEF3C7', color: '#92400E' },
+  { offset: 7,  label: 'Collection Deposit',    short: 'Collection',   bg: '#D1FAE5', color: '#065F46' },
+  { offset: 7,  label: 'Sale Date',             short: 'Sale Date',    bg: '#CCFBF1', color: '#0F766E' },
+  { offset: 8,  label: 'Confirmation (ABL)',     short: 'Confirm ABL',  bg: '#E0E7FF', color: '#3730A3' },
+  { offset: 10, label: 'Settlement (ABL)',       short: 'Settle ABL',   bg: '#FCE7F3', color: '#9D174D' },
+];
+
+let calViewYear, calViewMonth; // currently displayed month
+
+function getAnchorDate() {
+  const v = document.getElementById('plan-start').value;
+  if (v) return new Date(v + 'T00:00:00');
+  const now = new Date();
+  return new Date(now.getFullYear(), now.getMonth(), 1);
+}
+
+function getCycleIntervalDays() {
+  const txt = (document.getElementById('cycle-freq') || {}).value || 'Every 4 weeks';
+  const m = txt.match(/(\d+)\s*week/i);
+  return m ? parseInt(m[1]) * 7 : 28;
+}
+
+function recomputeSchedule() {
+  const anchor = getAnchorDate();
+  calViewYear  = anchor.getFullYear();
+  calViewMonth = anchor.getMonth();
+  renderCalendar();
+}
+
+function shiftCalMonth(delta) {
+  calViewMonth += delta;
+  if (calViewMonth > 11) { calViewMonth = 0;  calViewYear++; }
+  if (calViewMonth < 0)  { calViewMonth = 11; calViewYear--; }
+  renderCalendar();
+}
+
+function renderCalendar() {
+  const anchor = getAnchorDate();
+  const intervalDays = getCycleIntervalDays();
+  const twoYears = 365 * 2;
+
+  // build date → milestones map across ALL cycles for 2 years
+  const dateMap = {};
+  for (let cycleOffset = 0; cycleOffset <= twoYears; cycleOffset += intervalDays) {
+    const cycleStart = new Date(anchor);
+    cycleStart.setDate(cycleStart.getDate() + cycleOffset);
+    MILESTONES.forEach(m => {
+      const d = new Date(cycleStart);
+      d.setDate(d.getDate() + m.offset);
+      const key = d.toISOString().slice(0, 10);
+      if (!dateMap[key]) dateMap[key] = [];
+      // avoid duplicates when two milestones land on the same date in the same cycle
+      const alreadyHas = dateMap[key].some(x => x.label === m.label);
+      if (!alreadyHas) dateMap[key].push(m);
+    });
+  }
+
+  // month label
+  const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('cal-month-label').textContent = monthNames[calViewMonth] + ' ' + calViewYear;
+
+  // legend
+  const legend = document.getElementById('cal-legend');
+  legend.innerHTML = MILESTONES.map(m => {
+    const d = new Date(anchor); d.setDate(d.getDate() + m.offset);
+    const dateStr = d.toISOString().slice(0,10);
+    return `<div style="display:flex;align-items:center;gap:5px;">
+      <span class="cal-chip" style="background:${m.bg};color:${m.color};">${m.short}</span>
+      <span style="font-size:11px;color:#6B7280;">${dateStr}</span>
+    </div>`;
+  }).join('');
+
+  // grid days
+  const grid = document.getElementById('cal-grid');
+  grid.innerHTML = '';
+
+  const firstDay = new Date(calViewYear, calViewMonth, 1);
+  // Monday-based: Mon=0 … Sun=6
+  let startOffset = (firstDay.getDay() + 6) % 7;
+  const daysInMonth   = new Date(calViewYear, calViewMonth + 1, 0).getDate();
+  const daysInPrevMonth = new Date(calViewYear, calViewMonth, 0).getDate();
+  const totalCells = Math.ceil((startOffset + daysInMonth) / 7) * 7;
+
+  const anchorKey = anchor.toISOString().slice(0, 10);
+
+  for (let i = 0; i < totalCells; i++) {
+    let dayNum, dateKey, isOther = false;
+    if (i < startOffset) {
+      dayNum = daysInPrevMonth - startOffset + 1 + i;
+      const d = new Date(calViewYear, calViewMonth - 1, dayNum);
+      dateKey = d.toISOString().slice(0, 10);
+      isOther = true;
+    } else if (i >= startOffset + daysInMonth) {
+      dayNum = i - startOffset - daysInMonth + 1;
+      const d = new Date(calViewYear, calViewMonth + 1, dayNum);
+      dateKey = d.toISOString().slice(0, 10);
+      isOther = true;
+    } else {
+      dayNum = i - startOffset + 1;
+      const d = new Date(calViewYear, calViewMonth, dayNum);
+      dateKey = d.toISOString().slice(0, 10);
+    }
+
+    const chips = dateMap[dateKey] || [];
+    const isAnchor = dateKey === anchorKey;
+
+    const cell = document.createElement('div');
+    cell.className = 'cal-day' +
+      (isOther ? ' other-month' : '') +
+      (chips.length ? ' has-milestone' : '') +
+      (isAnchor ? ' is-anchor' : '');
+
+    const numEl = document.createElement('div');
+    numEl.className = 'cal-day-num';
+    numEl.textContent = dayNum;
+    cell.appendChild(numEl);
+
+    chips.forEach(m => {
+      const chip = document.createElement('div');
+      chip.className = 'cal-chip';
+      chip.style.background = m.bg;
+      chip.style.color = m.color;
+      chip.textContent = m.short;
+      cell.appendChild(chip);
+    });
+
+    grid.appendChild(cell);
+  }
+}
+
+/* ── Dirty state ── */
+function markDirty() {
+  document.getElementById('update-flow-btn').classList.add('visible');
+}
+function clearDirty() {
+  document.getElementById('update-flow-btn').classList.remove('visible');
+}
+
+/* ── Renumber rows immediately (call after every drag drop) ── */
+function renumberRows() {
+  const rows = Array.from(document.querySelectorAll('#milestone-tbody tr'));
+  rows.forEach((row, i) => {
+    row.querySelector('.seq-num').textContent = i + 1;
+    row.querySelector('.dep-cell').textContent = i === 0 ? '— Cycle anchor' : 'After #' + i;
+  });
+}
+
+/* ── Commit: persist T+N orig values, hide button, show toast ── */
+function commitFlow() {
+  document.querySelectorAll('.tn-input').forEach(inp => {
+    inp.dataset.orig = inp.value;
+    inp.classList.remove('tn-changed');
+  });
+  clearDirty();
+  const toast = document.getElementById('update-toast');
+  toast.classList.add('visible');
+  setTimeout(() => toast.classList.remove('visible'), 2200);
+}
+
+/* ── Init after DOM ready ── */
+(function init() {
+  recomputeSchedule(); // render calendar on load with default anchor
+
+  /* T+N inline edit */
+  document.querySelectorAll('.tn-input').forEach(inp => {
+    inp.addEventListener('input', () => {
+      inp.classList.toggle('tn-changed', inp.value !== inp.dataset.orig);
+      const anyChanged = Array.from(document.querySelectorAll('.tn-input')).some(i => i.value !== i.dataset.orig);
+      anyChanged ? markDirty() : clearDirty();
+    });
+    /* prevent drag from firing when clicking input */
+    inp.addEventListener('mousedown', e => e.stopPropagation());
+  });
+
+  /* Drag-and-drop */
+  const tbody = document.getElementById('milestone-tbody');
+  let dragSrc = null;
+
+  function rebindRows() {
+    tbody.querySelectorAll('tr').forEach(row => {
+      row.setAttribute('draggable', 'true');
+      row.ondragstart = e => {
+        dragSrc = row;
+        row.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', ''); // required for Firefox
+      };
+      row.ondragend = () => {
+        tbody.querySelectorAll('tr').forEach(r => r.classList.remove('dragging', 'drag-over'));
+      };
+      row.ondragover = e => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        if (row === dragSrc) return;
+        tbody.querySelectorAll('tr').forEach(r => r.classList.remove('drag-over'));
+        row.classList.add('drag-over');
+      };
+      row.ondragleave = () => row.classList.remove('drag-over');
+      row.ondrop = e => {
+        e.preventDefault();
+        if (!dragSrc || row === dragSrc) return;
+        row.classList.remove('drag-over');
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+        const srcIdx = rows.indexOf(dragSrc);
+        const tgtIdx = rows.indexOf(row);
+        if (srcIdx < tgtIdx) tbody.insertBefore(dragSrc, row.nextSibling);
+        else tbody.insertBefore(dragSrc, row);
+        renumberRows();
+        markDirty();
+      };
+    });
+  }
+
+  rebindRows();
+})();
+</script>
+</body>
+</html>
