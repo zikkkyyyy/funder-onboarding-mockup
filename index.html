@@ -277,6 +277,17 @@ tr.drag-over { border-top: 2px solid #2563EB; }
 .checkbox-opt .chk-box { width: 14px; height: 14px; border: 1.5px solid #D1D5DB; border-radius: 3px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 10px; }
 .checkbox-opt.checked .chk-box { background: #2563EB; border-color: #2563EB; color: #fff; }
 .field-note { font-size: 11px; color: #9CA3AF; margin-top: 4px; }
+.multi-dd { position: relative; }
+.multi-dd-trigger { display: flex; align-items: center; justify-content: space-between; border: 1px solid #D1D5DB; border-radius: 6px; padding: 7px 10px; font-size: 13px; color: #374151; background: #fff; cursor: pointer; user-select: none; }
+.multi-dd-trigger:hover { border-color: #9CA3AF; }
+.multi-dd.open .multi-dd-trigger { border-color: #2563EB; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+.multi-dd-label { flex: 1; color: #374151; }
+.multi-dd-label.placeholder { color: #9CA3AF; }
+.multi-dd-menu { position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: #fff; border: 1px solid #E5E7EB; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.1); z-index: 200; padding: 4px 0; display: none; }
+.multi-dd.open .multi-dd-menu { display: block; }
+.multi-dd-item { display: flex; align-items: center; gap: 8px; padding: 8px 12px; cursor: pointer; font-size: 13px; color: #374151; }
+.multi-dd-item:hover { background: #F9FAFB; }
+.multi-dd-item input[type="checkbox"] { width: 14px; height: 14px; accent-color: #2563EB; cursor: pointer; flex-shrink: 0; }
 /* ── Review page ── */
 .rv-section { margin-bottom: 0; }
 .rv-section-title { font-size: 13px; font-weight: 700; color: #111827; padding: 14px 0 10px; border-bottom: 1px solid #F3F4F6; margin-bottom: 2px; }
@@ -432,14 +443,20 @@ tr.drag-over { border-top: 2px solid #2563EB; }
             <div class="field-note">Pulled from BE's biz_type</div>
           </div>
 
-          <!-- Loan Type (MY only) — multi select -->
+          <!-- Loan Type (MY only) — multi-select dropdown -->
           <div class="form-group" style="grid-column:1/-1;">
             <label class="form-label">Loan Type <span class="req">*</span> <span style="font-size:11px;color:#9CA3AF;font-weight:400;">(MY only)</span></label>
-            <select class="form-select" multiple style="height:72px;padding:6px 10px;background-image:none;">
-              <option>SFinancing-i</option>
-              <option>SLoan</option>
-            </select>
-            <div class="field-note">Pulled from BE's sub_biz_type · Hold Ctrl / ⌘ to select multiple</div>
+            <div class="multi-dd" id="loanTypeDD">
+              <div class="multi-dd-trigger" onclick="toggleMultiDD('loanTypeDD')">
+                <span class="multi-dd-label placeholder" id="loanTypeDDLabel">Please select</span>
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+              </div>
+              <div class="multi-dd-menu" id="loanTypeDDMenu">
+                <label class="multi-dd-item"><input type="checkbox" value="SFinancing-i" onchange="updateMultiDD('loanTypeDD')"><span>SFinancing-i</span></label>
+                <label class="multi-dd-item"><input type="checkbox" value="SLoan" onchange="updateMultiDD('loanTypeDD')"><span>SLoan</span></label>
+              </div>
+            </div>
+            <div class="field-note">Pulled from BE's sub_biz_type · Multiple selection allowed</div>
           </div>
 
           <!-- Originator -->
@@ -2152,6 +2169,32 @@ function commitFlow() {
 
   rebindRows();
 })();
+
+// ── Multi-select dropdown ─────────────────────────────────
+function toggleMultiDD(id) {
+  const dd = document.getElementById(id);
+  const isOpen = dd.classList.contains('open');
+  document.querySelectorAll('.multi-dd.open').forEach(el => el.classList.remove('open'));
+  if (!isOpen) dd.classList.add('open');
+}
+function updateMultiDD(id) {
+  const dd = document.getElementById(id);
+  const checked = Array.from(dd.querySelectorAll('input[type="checkbox"]:checked')).map(c => c.value);
+  const label = dd.querySelector('.multi-dd-label');
+  if (checked.length === 0) {
+    label.textContent = 'Please select';
+    label.classList.add('placeholder');
+  } else {
+    label.textContent = checked.join(', ');
+    label.classList.remove('placeholder');
+  }
+}
+// Close dropdown when clicking outside
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.multi-dd')) {
+    document.querySelectorAll('.multi-dd.open').forEach(el => el.classList.remove('open'));
+  }
+});
 </script>
 </body>
 </html>
