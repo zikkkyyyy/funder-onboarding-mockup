@@ -290,6 +290,12 @@ tr.drag-over { border-top: 2px solid #2563EB; }
 .sp-preview-row:last-child { border-bottom:none; }
 .sp-preview-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; margin-right:10px; }
 .sp-preview-line { width:2px; background:#E5E7EB; margin-left:4px; height:20px; margin-right:16px; margin-top:2px; }
+/* ── Cross-cycle impact row ── */
+.sp-cycle-warn-row td { padding:0 16px 8px 52px !important; }
+.sp-cycle-warn-box { display:flex; align-items:flex-start; gap:8px; background:#FFFBEB; border:1px solid #FDE68A; border-radius:6px; padding:8px 12px; font-size:12px; color:#92400E; line-height:1.5; }
+.sp-cycle-warn-box .warn-icon { font-size:14px; flex-shrink:0; margin-top:1px; }
+.sp-cutoff-merge-badge { display:inline-flex; align-items:center; gap:5px; background:#FEF3C7; border:1px solid #FCD34D; border-radius:5px; padding:3px 8px; font-size:11px; font-weight:600; color:#92400E; margin-top:4px; }
+.sp-display-only-tag { display:inline-flex; align-items:center; gap:4px; background:#F3F4F6; border-radius:4px; padding:2px 7px; font-size:11px; color:#6B7280; font-style:italic; }
 
 /* ── Ops Flow selector cards ── */
 .ops-flow-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
@@ -2540,7 +2546,10 @@ function submitBatchAdjust() {
 }
 
 /* ══ Sub Plan logic ══ */
-const SP_CYCLE_STARTS = { 18:'2026-05-19', 19:'2026-06-16', 20:'2026-07-14', 21:'2026-08-11' };
+const SP_CYCLE_STARTS  = { 18:'2026-05-19', 19:'2026-06-16', 20:'2026-07-14', 21:'2026-08-11' };
+const SP_CYCLE_ENDS    = { 18:'2026-06-15', 19:'2026-07-13', 20:'2026-08-10', 21:'2026-09-07' };
+// Approximate batch cutoff date for each cycle (used for merge detection)
+const SP_CUTOFF_DATES  = { 18:'2026-05-19', 19:'2026-06-16', 20:'2026-07-14', 21:'2026-08-11' };
 let spCascadeOn = false;
 let spModes = []; // 'delay' | 'date' per milestone row
 
@@ -2575,7 +2584,10 @@ function renderSpMilestoneTable(cycleNum) {
     const nameCell = m.indicative
       ? `<span class="cal-chip" style="background:${m.bg};color:${m.color};border:1.5px dashed ${m.color};">${m.label}</span><span style="font-size:10px;color:#9CA3AF;margin-left:5px;vertical-align:middle;">indicative</span>`
       : `<span class="cal-chip" style="background:${m.bg};color:${m.color};">${m.label}</span>`;
-    const adjCell = (isSystem || isTbd)
+    const isDisplayOnly = m.indicative; // Sale Date = manual / display-only
+    const adjCell = isDisplayOnly
+      ? `<div style="display:flex;align-items:center;gap:6px;"><span class="sp-display-only-tag">📌 display only · set manually</span></div>`
+      : (isSystem || isTbd)
       ? `<div style="display:flex;align-items:center;gap:5px;color:#9CA3AF;font-size:12px;"><span>🔒</span><span>— auto</span></div>`
       : `<div style="display:flex;align-items:center;gap:6px;">
            <div class="sp-adj-toggle">
@@ -2591,15 +2603,15 @@ function renderSpMilestoneTable(cycleNum) {
       { code:'US', label:'US' }, { code:'MY', label:'MY' },
     ];
     const spUid = 'sp_hol_' + i;
-    const spHolCell = isSystem
-      ? `<div class="hol-chk-group">${spHolRegions.map((r,ri) =>
-          `<label class="hol-chk-label locked"><input type="checkbox" checked disabled><span class="hol-chk-box"></span>${r.label}</label>`
-        ).join('')}</div>`
+    const spHolCell = (isSystem || isDisplayOnly)
+      ? `<div class="hol-chk-group">${spHolRegions.map(() =>
+          `<label class="hol-chk-label locked"><input type="checkbox" checked disabled><span class="hol-chk-box"></span></label>`
+        ).join('')}<span style="font-size:11px;color:#9CA3AF;font-style:italic;">inherited</span></div>`
       : `<div class="hol-chk-group">${spHolRegions.map((r,ri) =>
           `<label class="hol-chk-label"><input type="checkbox" name="sp-hol-${i}" data-region="${r.code}" checked onchange="onSpHolChange();updateSpNewDate(${i})"><span class="hol-chk-box"></span>${r.label}</label>`
         ).join('')}</div>`;
 
-    return '<tr style="' + rowBg + '" id="sp-row-' + i + '" data-orig="' + origStr + '" data-offset="' + (m.offset||0) + '">'
+    return '<tr style="' + rowBg + '" id="sp-row-' + i + '" data-orig="' + origStr + '" data-offset="' + (m.offset||0) + '" data-label="' + m.label + '" data-is-batch-cutoff="' + (i===0?'1':'0') + '">'
       + '<td style="padding:11px 16px;font-size:12px;color:#9CA3AF;">' + (i+1) + '</td>'
       + '<td style="padding:11px 16px;">' + nameCell + '</td>'
       + '<td style="padding:11px 16px;">' + typeBadge + '</td>'
@@ -2607,7 +2619,8 @@ function renderSpMilestoneTable(cycleNum) {
       + '<td style="padding:11px 16px;" colspan="2">' + adjCell + '</td>'
       + '<td style="padding:11px 16px;font-size:12px;" id="sp-newdate-' + i + '"><span class="sp-new-date unchanged">—</span></td>'
       + '<td style="padding:10px 14px;">' + spHolCell + '</td>'
-      + '</tr>';
+      + '</tr>'
+      + '<tr id="sp-warn-' + i + '" style="display:none;"><td colspan="8" class="sp-cycle-warn-row"><div class="sp-cycle-warn-box"><span class="warn-icon">⚠️</span><div id="sp-warn-msg-' + i + '"></div></div></td></tr>';
   }).join('');
   renderSpPreview(cycleNum);
 }
@@ -2643,7 +2656,12 @@ function updateSpNewDate(idx) {
   let newDate;
   if (mode === 'delay') {
     const delay = parseInt((document.getElementById('sp-delay-' + idx) || {}).value, 10);
-    if (isNaN(delay) || delay === 0) { cell.innerHTML = '<span class="sp-new-date unchanged">—</span>'; return; }
+    if (isNaN(delay) || delay === 0) {
+      cell.innerHTML = '<span class="sp-new-date unchanged">—</span>';
+      const wr = document.getElementById('sp-warn-' + idx);
+      if (wr) wr.style.display = 'none';
+      return;
+    }
     // Collect which regions are checked for this milestone
     const holInputs = document.querySelectorAll(`input[name="sp-hol-${idx}"]`);
     const skipRegions = Array.from(holInputs).filter(cb => cb.checked).map(cb => cb.dataset.region);
@@ -2665,7 +2683,41 @@ function updateSpNewDate(idx) {
     if (!newDate || newDate === origStr) { cell.innerHTML = '<span class="sp-new-date unchanged">—</span>'; return; }
   }
   cell.innerHTML = `<span class="sp-new-date changed">⇒ ${newDate}</span>`;
-  renderSpPreview(parseInt((document.getElementById('sp-cycle-select') || {}).value) || 18);
+
+  // Cross-cycle boundary check
+  const cycleNum = parseInt((document.getElementById('sp-cycle-select') || {}).value) || 18;
+  const cycleEnd = SP_CYCLE_ENDS[cycleNum];
+  const warnRow = document.getElementById('sp-warn-' + idx);
+  const warnMsg = document.getElementById('sp-warn-msg-' + idx);
+  const nextCycleNum = cycleNum + 1;
+  const nextCycleStart = SP_CYCLE_STARTS[nextCycleNum];
+  const nextCycleEnd   = SP_CYCLE_ENDS[nextCycleNum];
+
+  if (warnRow && warnMsg && cycleEnd && newDate > cycleEnd) {
+    const rowEl = document.getElementById('sp-row-' + idx);
+    const milestoneLabel = rowEl ? rowEl.dataset.label : 'This milestone';
+    const isBatchCutoff  = rowEl && rowEl.dataset.isBatchCutoff === '1';
+
+    // Check cutoff merge: is the new date the same as the next cycle's cutoff start?
+    const mergeHtml = (isBatchCutoff && nextCycleStart && newDate === nextCycleStart)
+      ? `<br><span class="sp-cutoff-merge-badge">🔀 Batch Cutoff coincides with Cycle #${nextCycleNum} cutoff — system will merge into one task</span>`
+      : '';
+
+    warnMsg.innerHTML = `
+      <strong>${milestoneLabel}</strong> delayed to <strong>${newDate}</strong> —
+      falls within Cycle #${nextCycleNum} period
+      ${nextCycleStart ? `(${nextCycleStart} – ${nextCycleEnd || '…'})` : ''}.
+      <br>
+      <span style="color:#065F46;font-weight:600;">✓ Remains associated with Cycle #${cycleNum}</span> ·
+      <span>Cycle #${nextCycleNum} is unaffected</span>
+      ${mergeHtml}
+    `;
+    warnRow.style.display = '';
+  } else if (warnRow) {
+    warnRow.style.display = 'none';
+  }
+
+  renderSpPreview(cycleNum);
 }
 
 function onSpHolChange() {
