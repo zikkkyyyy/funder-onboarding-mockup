@@ -2456,9 +2456,17 @@ tr.drag-over { border-top: 2px solid #2563EB; }
           <div class="list-toolbar">
             <div>
               <div class="list-title">Workflow Template</div>
-              <div style="font-size:12px;color:#6B7280;margin-top:2px;">Reusable milestone configurations for ABS / ABL programs · region-isolated</div>
+              <div id="wft-select-hint" style="font-size:11px;color:#9CA3AF;margin-top:2px;display:none;">
+                ✓ <span id="wft-select-count">0</span> template(s) selected
+              </div>
+              <div id="wft-default-sub" style="font-size:12px;color:#6B7280;margin-top:2px;">Reusable milestone configurations for ABS / ABL programs · region-isolated</div>
             </div>
-            <button class="btn-primary-lg" style="font-size:13px;padding:9px 18px;">+ Add New</button>
+            <div style="display:flex;gap:10px;align-items:center;">
+              <button id="wft-batch-btn" class="btn-outline-sm" style="padding:9px 16px;font-size:13px;display:none;" onclick="wftBatchEdit()">
+                ✏️ Batch Edit
+              </button>
+              <button class="btn-primary-lg" style="font-size:13px;padding:9px 18px;">+ Add New</button>
+            </div>
           </div>
           <div class="list-filter">
             <select class="form-select" style="width:160px;"><option>Status: All</option><option>Active</option><option>Draft</option><option>Disabled</option></select>
@@ -2470,7 +2478,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
           <div class="section-card" style="overflow:hidden;">
             <table class="lender-table">
               <thead><tr>
-                <th style="width:40px;padding:11px 10px 11px 16px;"><input type="checkbox" /></th>
+                <th style="width:40px;padding:11px 10px 11px 16px;"><input type="checkbox" id="wft-chk-all" onchange="wftToggleAll(this)" /></th>
                 <th style="width:100px;">Template ID</th>
                 <th style="min-width:200px;">Template Name</th>
                 <th style="width:120px;">Ops Flow</th>
@@ -2483,7 +2491,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
               </tr></thead>
               <tbody>
                 <tr>
-                  <td style="padding:11px 10px 11px 16px;"><input type="checkbox" /></td>
+                  <td style="padding:11px 10px 11px 16px;"><input type="checkbox" class="wft-row-chk" onchange="wftUpdateSelection()" /></td>
                   <td class="num-col" style="cursor:pointer;color:#2563EB;" onclick="wftShowDetail('abs')">WFT-0001</td>
                   <td style="font-weight:500;cursor:pointer;" onclick="wftShowDetail('abs')">TH_SPL_ABS_Standard</td>
                   <td><span class="status-badge" style="background:#DBEAFE;color:#1D4ED8;">ABS Non-Net</span></td>
@@ -2495,7 +2503,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                   <td><div class="tbl-actions"><button class="tbl-act-link" onclick="wftShowDetail('abs')">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">Disable</button></div></td>
                 </tr>
                 <tr>
-                  <td style="padding:11px 10px 11px 16px;"><input type="checkbox" /></td>
+                  <td style="padding:11px 10px 11px 16px;"><input type="checkbox" class="wft-row-chk" onchange="wftUpdateSelection()" /></td>
                   <td class="num-col" style="cursor:pointer;color:#2563EB;" onclick="wftShowDetail('abs-net')">WFT-0002</td>
                   <td style="font-weight:500;cursor:pointer;" onclick="wftShowDetail('abs-net')">TH_BCL_ABS_Net_Monthly</td>
                   <td><span class="status-badge" style="background:#F3E8FF;color:#7C3AED;">ABS Net</span></td>
@@ -2507,7 +2515,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                   <td><div class="tbl-actions"><button class="tbl-act-link" onclick="wftShowDetail('abs-net')">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">Disable</button></div></td>
                 </tr>
                 <tr>
-                  <td style="padding:11px 10px 11px 16px;"><input type="checkbox" /></td>
+                  <td style="padding:11px 10px 11px 16px;"><input type="checkbox" class="wft-row-chk" onchange="wftUpdateSelection()" /></td>
                   <td class="num-col" style="cursor:pointer;color:#2563EB;" onclick="wftShowDetail('abl')">WFT-0003</td>
                   <td style="font-weight:500;cursor:pointer;" onclick="wftShowDetail('abl')">MY_BCL_ABL_BiMonthly</td>
                   <td><span class="status-badge" style="background:#FEF3C7;color:#92400E;">ABL</span></td>
@@ -3169,6 +3177,43 @@ const WFT_DATA = {
     plans: []
   }
 };
+
+function wftToggleAll(masterChk) {
+  document.querySelectorAll('.wft-row-chk').forEach(c => { c.checked = masterChk.checked; });
+  wftUpdateSelection();
+}
+
+function wftUpdateSelection() {
+  const all = document.querySelectorAll('.wft-row-chk');
+  const checked = document.querySelectorAll('.wft-row-chk:checked');
+  const count = checked.length;
+  const master = document.getElementById('wft-chk-all');
+  if (master) {
+    master.checked = count === all.length && all.length > 0;
+    master.indeterminate = count > 0 && count < all.length;
+  }
+  const hint = document.getElementById('wft-select-hint');
+  const sub  = document.getElementById('wft-default-sub');
+  const btn  = document.getElementById('wft-batch-btn');
+  const countEl = document.getElementById('wft-select-count');
+  if (count > 0) {
+    if (hint) { hint.style.display = 'block'; countEl.textContent = count; }
+    if (sub)  sub.style.display = 'none';
+    if (btn)  { btn.style.display = 'flex'; btn.style.color = '#2563EB'; btn.style.borderColor = '#2563EB'; btn.style.background = '#EFF6FF'; }
+  } else {
+    if (hint) hint.style.display = 'none';
+    if (sub)  sub.style.display = 'block';
+    if (btn)  btn.style.display = 'none';
+  }
+}
+
+function wftBatchEdit() {
+  const count = document.querySelectorAll('.wft-row-chk:checked').length;
+  const toast = document.getElementById('update-toast');
+  toast.textContent = `✏️ Batch Edit — ${count} template(s) selected. (Edit panel coming soon)`;
+  toast.classList.add('visible');
+  setTimeout(() => toast.classList.remove('visible'), 2800);
+}
 
 function wftShowList() {
   document.getElementById('wft-list-view').style.display = '';
