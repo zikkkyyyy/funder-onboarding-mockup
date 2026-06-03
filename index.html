@@ -204,6 +204,14 @@ tbody tr:hover { background: #FAFAFA; }
 .tbl-act-link:first-child { padding-left: 0; }
 .tbl-act-link:hover { text-decoration: underline; color: #1D4ED8; }
 .tbl-act-link.danger { color: #DC2626; }
+/* More dropdown */
+.more-dd-wrap { position:relative; display:inline-block; }
+.more-dd-menu { display:none; position:absolute; right:0; top:100%; margin-top:4px; background:#fff; border:1px solid #E5E7EB; border-radius:6px; box-shadow:0 4px 12px rgba(0,0,0,.1); z-index:200; min-width:130px; padding:4px 0; }
+.more-dd-wrap.open .more-dd-menu { display:block; }
+.more-dd-item { display:block; width:100%; padding:7px 14px; font-size:12px; color:#374151; cursor:pointer; background:none; border:none; text-align:left; font-family:inherit; white-space:nowrap; }
+.more-dd-item:hover { background:#F9FAFB; color:#111827; }
+.more-dd-item.danger { color:#DC2626; }
+.more-dd-item.danger:hover { background:#FEF2F2; }
 .tbl-act-sep { color: #D1D5DB; font-size: 12px; }
 .status-live { color: #16A34A; font-size: 12px; font-weight: 500; }
 .status-pending { color: #D97706; font-size: 12px; font-weight: 500; }
@@ -290,8 +298,8 @@ tr.drag-over { border-top: 2px solid #2563EB; }
 .ops-flow-card.selected { border-color: #2563EB; background: #EFF6FF; }
 .ops-flow-card-top { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
 .ops-flow-card-title { font-size: 13px; font-weight: 700; color: #111827; }
-.ops-flow-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 0; }
-.ops-stat { display: flex; flex-direction: column; gap: 1px; }
+.ops-flow-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 0; margin-top: 4px; }
+.ops-stat { display: flex; flex-direction: column; gap: 2px; align-items: center; text-align: center; padding: 4px 0; }
 .ops-stat-label { font-size: 10px; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.04em; }
 .ops-stat-val { font-size: 12px; font-weight: 600; color: #374151; }
 .ops-stat-green { color: #16A34A !important; }
@@ -308,6 +316,55 @@ tr.drag-over { border-top: 2px solid #2563EB; }
 .tpl-dd-item { display: flex; align-items: center; justify-content: space-between; padding: 9px 14px; cursor: pointer; font-size: 13px; color: #374151; }
 .tpl-dd-item:hover { background: #F9FAFB; }
 .tpl-dd-tag { font-size: 11px; color: #9CA3AF; background: #F3F4F6; padding: 2px 7px; border-radius: 4px; margin-left: 8px; }
+
+/* ── Holiday region chips (per milestone) ── */
+/* Ant Design–style holiday checkboxes */
+.hol-chk-group { display:flex; flex-wrap:wrap; gap:8px 12px; }
+.hol-chk-label { display:inline-flex; align-items:center; gap:6px; font-size:12px; color:#374151; cursor:pointer; user-select:none; line-height:1; }
+.hol-chk-label input[type="checkbox"] { display:none; }
+.hol-chk-box { width:15px; height:15px; border:1.5px solid #D9D9D9; border-radius:3px; background:#fff; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all .15s; }
+.hol-chk-label input:checked + .hol-chk-box { background:#1677FF; border-color:#1677FF; }
+.hol-chk-box::after { content:''; display:none; width:4px; height:7px; border:1.5px solid #fff; border-top:none; border-left:none; transform:rotate(45deg) translateY(-1px); }
+.hol-chk-label input:checked + .hol-chk-box::after { display:block; }
+.hol-chk-label:hover .hol-chk-box { border-color:#1677FF; }
+.hol-chk-label.locked { opacity:.4; pointer-events:none; }
+/* Tooltip */
+.tip { position:relative; display:inline-flex; align-items:center; cursor:help; color:#9CA3AF; font-size:12px; }
+.tip-box { display:none; position:absolute; bottom:calc(100% + 7px); left:50%; transform:translateX(-50%); background:#1E293B; color:#fff; font-size:11px; line-height:1.55; padding:7px 10px; border-radius:5px; width:220px; white-space:normal; z-index:400; pointer-events:none; font-weight:400; box-shadow:0 4px 12px rgba(0,0,0,.18); }
+.tip-box::after { content:''; position:absolute; top:100%; left:50%; transform:translateX(-50%); border:5px solid transparent; border-top-color:#1E293B; }
+.tip:hover .tip-box { display:block; }
+/* Offset-from select */
+.offset-from-sel { font-size:12px; border:1px solid #D1D5DB; border-radius:5px; padding:4px 6px; color:#374151; background:#fff; cursor:pointer; outline:none; max-width:130px; }
+.offset-from-sel:focus { border-color:#2563EB; }
+.offset-from-sel:disabled { background:#F9FAFB; color:#9CA3AF; cursor:default; }
+.hol-select-all { margin-bottom:5px; padding-bottom:5px; border-bottom:1px solid #F3F4F6; }
+/* Header Select All — brand green, 14×14, per spec */
+.hol-header-chk { display:inline-flex; align-items:center; gap:8px; cursor:pointer; user-select:none; line-height:1; vertical-align:middle; }
+.hol-header-chk input[type="checkbox"] { display:none; }
+.hol-header-chk-box { width:14px; height:14px; border:1.5px solid #D9D9D9; border-radius:3px; background:#fff; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all .15s; }
+/* checked — green fill + checkmark */
+.hol-header-chk input:checked + .hol-header-chk-box { background:#1D9E75; border-color:#1D9E75; }
+.hol-header-chk-box::after { content:''; display:none; }
+.hol-header-chk input:checked + .hol-header-chk-box::after { display:block; width:4px; height:7px; border:1.5px solid #fff; border-top:none; border-left:none; transform:rotate(45deg) translateY(-1px); }
+/* indeterminate — green fill + horizontal dash */
+.hol-header-chk input:indeterminate + .hol-header-chk-box { background:#1D9E75; border-color:#1D9E75; }
+.hol-header-chk input:indeterminate + .hol-header-chk-box::after { display:block; width:8px; height:2px; background:#fff; border-radius:1px; }
+.hol-header-chk:hover .hol-header-chk-box { border-color:#1D9E75; }
+/* Legend bar */
+.cal-legend-bar { display:flex; align-items:center; flex-wrap:wrap; gap:10px; background:#F9FAFB; border:1px solid #E5E7EB; border-radius:8px 8px 0 0; padding:10px 16px; margin-bottom:0; border-bottom:none; }
+.cal-legend-group { display:flex; align-items:center; flex-wrap:wrap; gap:12px 16px; }
+.cal-legend-item { display:inline-flex; align-items:center; gap:6px; white-space:nowrap; }
+.cal-legend-dot { width:10px; height:10px; border-radius:3px; flex-shrink:0; }
+.cal-legend-label { font-size:12px; color:#6B7280; }
+.cal-legend-meta { font-size:11px; color:#9CA3AF; }
+.cal-legend-divider { width:1px; height:16px; background:#E5E7EB; flex-shrink:0; margin:0 4px; }
+@media (max-width:600px) {
+  .cal-legend-bar { flex-direction:column; align-items:flex-start; }
+  .cal-legend-divider { display:none; }
+}
+/* Holiday calendar cells */
+.cal-day.is-holiday { background:#FFF7F0; }
+.cal-holiday-lbl { font-size:9px; color:#D97706; background:#FEF3C7; border-radius:3px; padding:1px 4px; margin-bottom:2px; display:inline-block; }
 
 /* ── Milestone offset number input ── */
 .ms-offset-input { width: 70px; border: 1px solid #D1D5DB; border-radius: 5px; padding: 5px 8px; font-size: 13px; color: #374151; text-align: center; outline: none; }
@@ -773,25 +830,37 @@ tr.drag-over { border-top: 2px solid #2563EB; }
       </div>
     </div>
 
-    <!-- Funder Fee Config -->
-    <div class="section-card">
+    <!-- EC / PC Rules — locked (Phase 2) -->
+    <div class="section-card" style="opacity:.6;">
       <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;">
-        <div class="section-title">Funder Fee Config</div>
-        <button class="btn-outline-sm">+ Add Fee</button>
-      </div>
-      <div class="section-body" style="padding:0;">
-        <div class="tbl-wrap">
-          <table>
-            <thead><tr>
-              <th>Fee Type</th><th>Tenor</th><th>Target Group</th>
-              <th>Value &amp; Effective Time</th><th>Update By</th><th>Operation</th>
-            </tr></thead>
-            <tbody>
-              <tr><td colspan="6"><div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">No data</div></div></td></tr>
-            </tbody>
-          </table>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div class="section-title" style="margin:0;">EC / PC Rules</div>
+          <span style="font-size:11px;background:#F3F4F6;color:#6B7280;border:1px solid #E5E7EB;border-radius:4px;padding:2px 7px;font-weight:600;">🔒 Phase 2</span>
         </div>
       </div>
+      <div class="section-body" style="color:#9CA3AF;font-size:13px;">Not configurable in this phase. Will be supported in Phase 2.</div>
+    </div>
+
+    <!-- Loan Selection Strategy — locked (Phase 2) -->
+    <div class="section-card" style="opacity:.6;">
+      <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div class="section-title" style="margin:0;">Loan Selection Strategy</div>
+          <span style="font-size:11px;background:#F3F4F6;color:#6B7280;border:1px solid #E5E7EB;border-radius:4px;padding:2px 7px;font-weight:600;">🔒 Phase 2</span>
+        </div>
+      </div>
+      <div class="section-body" style="color:#9CA3AF;font-size:13px;">Not configurable in this phase. Will be supported in Phase 2.</div>
+    </div>
+
+    <!-- Issue Size — locked (Phase 2) -->
+    <div class="section-card" style="opacity:.6;">
+      <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div class="section-title" style="margin:0;">Issue Size</div>
+          <span style="font-size:11px;background:#F3F4F6;color:#6B7280;border:1px solid #E5E7EB;border-radius:4px;padding:2px 7px;font-weight:600;">🔒 Phase 2</span>
+        </div>
+      </div>
+      <div class="section-body" style="color:#9CA3AF;font-size:13px;">Not configurable in this phase. Will be supported in Phase 2.</div>
     </div>
 
     <div class="footer-nav">
@@ -1077,6 +1146,45 @@ tr.drag-over { border-top: 2px solid #2563EB; }
       </div>
     </div>
 
+    <!-- Section B2: Plan Anchor Dates -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-title">Plan Anchor Dates</div>
+        <div class="section-sub">Both dates are optional at onboarding — fill in after Close Date and first Sale are confirmed.</div>
+      </div>
+      <div class="section-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px 32px;">
+
+          <!-- First Batch Cutoff Date -->
+          <div>
+            <label class="form-label" style="display:flex;align-items:center;gap:6px;">
+              First Batch Cutoff Date
+              <span style="font-size:10px;background:#EFF6FF;color:#2563EB;padding:1px 6px;border-radius:3px;font-weight:600;">Phase 1</span>
+            </label>
+            <input class="form-input" type="date" id="first-batch-cutoff" oninput="recomputeSchedule()" style="width:180px;margin-top:4px;" />
+            <div style="font-size:11px;color:#9CA3AF;margin-top:4px;">T for cycle 1. Milestone dates are calculated from this anchor.</div>
+          </div>
+
+          <!-- Revolving Start Date -->
+          <div>
+            <label class="form-label" style="display:flex;align-items:center;gap:6px;">
+              Revolving Start Date
+              <span style="font-size:10px;background:#F0FDF4;color:#15803D;padding:1px 6px;border-radius:3px;font-weight:600;">After first Sale</span>
+            </label>
+            <input class="form-input" type="date" id="revolving-start" style="width:180px;margin-top:4px;" />
+            <div style="font-size:11px;color:#9CA3AF;margin-top:4px;">Start of revolving cycles. Auto-shifts one cycle forward if First Batch Sale Date slips into the next cycle segment.</div>
+          </div>
+
+        </div>
+
+        <!-- Dependency note -->
+        <div style="margin-top:16px;padding:10px 14px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:6px;font-size:12px;color:#92400E;display:flex;gap:8px;">
+          <span>⚠</span>
+          <span>If a delay in First Batch pushes <strong>Sale Date</strong> into the next cycle segment, Revolving Start will automatically shift one further cycle. Within revolving cycles, each cycle's delays are isolated — they do not affect subsequent cycles.</span>
+        </div>
+      </div>
+    </div>
+
     <!-- Section C: Milestone Configuration -->
     <div class="section-card">
       <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;">
@@ -1103,8 +1211,21 @@ tr.drag-over { border-top: 2px solid #2563EB; }
               <tr>
                 <th style="width:44px;">#</th>
                 <th>Milestone</th>
-                <th style="width:120px;">Type</th>
-                <th style="width:200px;">Offset (days from Cycle Start)</th>
+                <th style="width:100px;">Type</th>
+                <th style="width:150px;">Offset from</th>
+                <th style="width:160px;">
+                  <span style="display:inline-flex;align-items:center;gap:5px;">
+                    Offset (days)
+                    <span class="tip">ⓘ<span class="tip-box"><strong>T = cycle end date + 1</strong><br>The day after the current cycle's last day. Example: if cycle is Day 1–5, T = Day 6.</span></span>
+                  </span>
+                </th>
+                <th style="width:300px;">
+  <label class="hol-header-chk" id="hol-header-lbl" aria-label="Select all holiday regions">
+    <input type="checkbox" id="hol-select-all-header" checked onclick="onHolHeaderClick(this)">
+    <span class="hol-header-chk-box"></span>
+    <span style="font-weight:600;color:#374151;">Skip Holidays of</span>
+  </label>
+</th>
               </tr>
             </thead>
             <tbody id="milestone-config-tbody"></tbody>
@@ -1127,13 +1248,13 @@ tr.drag-over { border-top: 2px solid #2563EB; }
         </div>
       </div>
       <div class="section-body" style="padding:16px 20px 20px;">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap;">
-          <label style="font-size:12px;color:#374151;font-weight:500;white-space:nowrap;">Reference Cycle Start</label>
-          <input class="form-input" type="date" id="plan-start" oninput="recomputeSchedule()" style="width:180px;" />
-          <span style="font-size:11px;color:#9CA3AF;">Optional — leave blank to preview from today</span>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
+          <span style="font-size:12px;color:#374151;font-weight:500;">Preview anchored to:</span>
+          <span id="preview-anchor-label" style="font-size:12px;color:#2563EB;font-weight:600;"></span>
+          <span style="font-size:11px;color:#9CA3AF;" id="preview-anchor-hint">Set "First Batch Cutoff Date" above to anchor the preview</span>
         </div>
-        <div id="cal-legend" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;"></div>
-        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:#E5E7EB;border:1px solid #E5E7EB;border-radius:8px;overflow:hidden;">
+        <div id="cal-legend"></div>
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:#E5E7EB;border:1px solid #E5E7EB;border-top:none;border-radius:0 0 8px 8px;overflow:hidden;">
           <div style="background:#F9FAFB;padding:8px 0;text-align:center;font-size:11px;font-weight:600;color:#9CA3AF;">Mon</div>
           <div style="background:#F9FAFB;padding:8px 0;text-align:center;font-size:11px;font-weight:600;color:#9CA3AF;">Tue</div>
           <div style="background:#F9FAFB;padding:8px 0;text-align:center;font-size:11px;font-weight:600;color:#9CA3AF;">Wed</div>
@@ -1418,12 +1539,23 @@ tr.drag-over { border-top: 2px solid #2563EB; }
       </div>
       <div class="list-main">
         <div class="list-toolbar">
-          <div class="list-title">Lender List</div>
-          <button class="btn-primary-lg" style="font-size:13px;padding:9px 18px;" onclick="switchFlow('create')">+ Create New Funder</button>
+          <div>
+            <div class="list-title">Lender List</div>
+            <div id="lib-select-hint" style="font-size:11px;color:#9CA3AF;margin-top:2px;display:none;">
+              ✓ <span id="lib-select-count">0</span> funder(s) selected — click "Batch Adjust Plans" to continue
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:center;">
+            <button id="btn-batch-adjust" class="btn-outline-sm" style="padding:9px 16px;font-size:13px;color:#374151;display:flex;align-items:center;gap:6px;" onclick="onBatchAdjustClick()">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h6"/><circle cx="19" cy="18" r="3"/><path d="M19 15v3m0 0v3m0-3h3m-3 0h-3" stroke-width="1.8"/></svg>
+              Batch Adjust Plans
+            </button>
+            <button class="btn-primary-lg" style="font-size:13px;padding:9px 18px;" onclick="switchFlow('create')">+ Create New Funder</button>
+          </div>
         </div>
         <!-- filter bar -->
         <div class="list-filter">
-          <select class="form-select" style="width:160px;"><option>Status: All</option><option>ACTIVE</option><option>INACTIVE</option><option>DRAFT</option></select>
+          <select class="form-select" style="width:160px;"><option>Status: All</option><option>DRAFT</option><option>PENDING</option><option>ACTIVE</option><option>INACTIVE</option></select>
           <select class="form-select" style="width:160px;"><option>Scheme: All</option><option>ABS</option><option>ABL</option><option>YBL</option><option>Channeling</option></select>
           <input class="form-input" style="width:220px;" placeholder="🔍  Search funder name…" />
           <button class="btn-outline-sm" style="padding:7px 14px;">Reset</button>
@@ -1508,27 +1640,35 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                 <td style="padding:11px 10px 11px 16px;"><input type="checkbox" class="row-chk" onchange="onRowCheck(this,'TH_MND_SPL_ABS_01_2024','ABL')" /></td>
                 <td class="num-col">7</td><td class="num-col">1061001</td>
                 <td style="font-weight:500;">TH_MND_SPL_ABS_01_2024</td>
-                <td><span class="status-badge" style="background:#F3F4F6;color:#6B7280;">—</span></td>
+                <td><span class="status-badge" style="background:#FEF3C7;color:#92400E;border:1px solid #FDE68A;">DRAFT</span></td>
                 <td><span style="font-size:11px;font-weight:600;color:#6B7280;background:#F3F4F6;padding:2px 7px;border-radius:4px;">ABL</span></td>
                 <td><span class="scheme-badge" style="background:#F3F4F6;color:#6B7280;">ABL</span></td>
                 <td style="color:#9CA3AF;font-size:12px;">2024-11-18 16:41:53</td>
-                <td><div class="tbl-actions"><button class="tbl-act-link">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">More ▾</button></div></td>
+                <td><div class="tbl-actions"><button class="tbl-act-link">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">Edit</button><span class="tbl-act-sep">|</span>
+                  <div class="more-dd-wrap" id="more-7"><button class="tbl-act-link" onclick="toggleMoreDD('more-7',event)">More ▾</button>
+                    <div class="more-dd-menu"><button class="more-dd-item" onclick="showConfirmPopup('Activate','TH_MND_SPL_ABS_01_2024')">Activate</button></div>
+                  </div>
+                </div></td>
               </tr>
               <tr id="lrow-8">
                 <td style="padding:11px 10px 11px 16px;"><input type="checkbox" class="row-chk" onchange="onRowCheck(this,'TH_SPL_SPL_01','ABL')" /></td>
                 <td class="num-col">8</td><td class="num-col">1085111</td>
                 <td style="font-weight:500;">TH_SPL_SPL_01</td>
-                <td><span class="status-badge" style="background:#F3F4F6;color:#6B7280;">—</span></td>
+                <td><span class="status-badge" style="background:#FEF3C7;color:#92400E;border:1px solid #FDE68A;">DRAFT</span></td>
                 <td><span style="font-size:11px;font-weight:600;color:#6B7280;background:#F3F4F6;padding:2px 7px;border-radius:4px;">ABL</span></td>
                 <td><span class="scheme-badge" style="background:#F3F4F6;color:#6B7280;">ABL</span></td>
                 <td style="color:#9CA3AF;font-size:12px;">2024-11-19 17:40:48</td>
-                <td><div class="tbl-actions"><button class="tbl-act-link">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">More ▾</button></div></td>
+                <td><div class="tbl-actions"><button class="tbl-act-link">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">Edit</button><span class="tbl-act-sep">|</span>
+                  <div class="more-dd-wrap" id="more-8"><button class="tbl-act-link" onclick="toggleMoreDD('more-8',event)">More ▾</button>
+                    <div class="more-dd-menu"><button class="more-dd-item" onclick="showConfirmPopup('Activate','TH_SPL_SPL_01')">Activate</button></div>
+                  </div>
+                </div></td>
               </tr>
               <!-- Starlight -->
               <tr id="lrow-9" style="background:#FFFBEB;">
                 <td style="padding:11px 10px 11px 16px;"><input type="checkbox" class="row-chk" onchange="onRowCheck(this,'TH_SPL_Starlight_ABS_01','ABS')" /></td>
                 <td class="num-col">9</td><td class="num-col">1051002</td>
-                <td style="font-weight:600;color:#111827;">TH_SPL_Starlight_ABS_01 <span style="font-size:11px;background:#EFF6FF;color:#2563EB;padding:1px 6px;border-radius:4px;margin-left:4px;font-weight:500;">this funder</span></td>
+                <td style="font-weight:600;color:#111827;">TH_SPL_Starlight_ABS_01</td>
                 <td><span class="status-badge status-active-badge">ACTIVE</span></td>
                 <td><span style="font-size:11px;font-weight:600;color:#1D4ED8;background:#DBEAFE;padding:2px 7px;border-radius:4px;">ABS</span></td>
                 <td><span class="scheme-badge">ABS</span></td>
@@ -1536,7 +1676,9 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                 <td><div class="tbl-actions">
                   <button class="tbl-act-link" onclick="switchFlow('view')">View</button><span class="tbl-act-sep">|</span>
                   <button class="tbl-act-link" onclick="switchFlow('create')">Edit</button><span class="tbl-act-sep">|</span>
-                  <button class="tbl-act-link">More ▾</button>
+                  <div class="more-dd-wrap" id="more-9"><button class="tbl-act-link" onclick="toggleMoreDD('more-9',event)">More ▾</button>
+                    <div class="more-dd-menu"><button class="more-dd-item danger" onclick="showConfirmPopup('Revert','TH_SPL_Starlight_ABS_01')">Revert to Draft</button></div>
+                  </div>
                 </div></td>
               </tr>
             </tbody>
@@ -1659,6 +1801,12 @@ tr.drag-over { border-top: 2px solid #2563EB; }
             <div class="ms-check-delay"><input class="sp-delay-input" type="number" min="0" value="3" style="width:60px;" /><span style="font-size:12px;color:#9CA3AF;">days</span></div>
           </div>
 
+          <!-- System milestone note -->
+          <div style="margin-top:12px;padding:8px 12px;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:5px;font-size:11px;color:#6B7280;display:flex;gap:6px;">
+            <span>🔒</span>
+            <span>System milestones (Sys Cutoff, Sys Selling) recalculate automatically based on their preceding milestone. Manual adjustment is not available.</span>
+          </div>
+
           <!-- Holiday calendar -->
           <div style="margin-top:14px;padding-top:14px;border-top:1px solid #F3F4F6;">
             <div style="font-size:12px;font-weight:600;color:#374151;margin-bottom:8px;">Skip holidays of</div>
@@ -1678,6 +1826,25 @@ tr.drag-over { border-top: 2px solid #2563EB; }
           <button class="btn-outline-sm" style="padding:9px 18px;" onclick="document.getElementById('batch-modal').classList.remove('open')">Cancel</button>
           <button class="btn-primary-lg" style="padding:9px 20px;font-size:13px;" onclick="submitBatchAdjust()">Submit to TC →</button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirm Action Popup -->
+  <div class="modal-overlay" id="confirm-action-popup">
+    <div class="modal" style="width:420px;">
+      <div class="modal-header">
+        <div class="modal-title" id="confirm-action-title">Are you sure to activate this funder?</div>
+        <button class="modal-close" onclick="document.getElementById('confirm-action-popup').classList.remove('open')">✕</button>
+      </div>
+      <div class="modal-body" style="padding:16px 24px 20px;">
+        <div style="font-size:13px;color:#6B7280;margin-bottom:4px;">Funder</div>
+        <div style="font-size:14px;font-weight:600;color:#111827;" id="confirm-action-body"></div>
+        <div style="font-size:12px;color:#9CA3AF;margin-top:8px;">This will create a Ticket Center approval request. The status will update once the ticket is approved.</div>
+      </div>
+      <div class="modal-footer" style="display:flex;justify-content:flex-end;gap:10px;padding:12px 24px;">
+        <button class="btn-outline-sm" style="padding:8px 18px;" onclick="document.getElementById('confirm-action-popup').classList.remove('open')">No</button>
+        <button class="btn-primary-lg" style="font-size:13px;padding:8px 18px;" onclick="confirmAction()">Yes</button>
       </div>
     </div>
   </div>
@@ -1899,6 +2066,8 @@ tr.drag-over { border-top: 2px solid #2563EB; }
               <div class="view-field"><span class="view-label">Cycle Length</span><span class="view-value">Every 4 weeks · Calendar Days</span></div>
               <div class="view-field"><span class="view-label">Plan Name</span><span class="view-value">TH_SPL_Starlight_ABS_T1_2026</span></div>
               <div class="view-field"><span class="view-label">Close Date</span><span class="view-value" style="color:#9CA3AF;">Not set</span></div>
+              <div class="view-field"><span class="view-label">First Batch Cutoff Date</span><span class="view-value" style="color:#9CA3AF;">Not set</span></div>
+              <div class="view-field"><span class="view-label">Revolving Start Date</span><span class="view-value" style="color:#9CA3AF;">Not set</span></div>
               <div class="view-field"><span class="view-label">Status</span><span class="view-value"><span class="badge badge-pending">Pending TC Approval</span></span></div>
             </div>
             <!-- milestone summary -->
@@ -2138,10 +2307,25 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                   <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;width:80px;">Mode</th>
                   <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;width:220px;">Adjustment</th>
                   <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;width:130px;">New Date</th>
+                  <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;">
+                    <label class="hol-header-chk" aria-label="Select all holiday regions">
+                      <input type="checkbox" id="sp-hol-select-all" checked onclick="onSpHolHeaderClick(this)">
+                      <span class="hol-header-chk-box"></span>
+                      <span style="font-weight:600;color:#374151;">Skip Holidays of</span>
+                    </label>
+                  </th>
                 </tr>
               </thead>
               <tbody id="sp-milestone-tbody"></tbody>
             </table>
+          </div>
+        </div>
+
+        <!-- Cycle boundary rules note -->
+        <div style="display:flex;align-items:flex-start;gap:10px;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:8px;padding:12px 16px;margin-top:12px;">
+          <span style="font-size:16px;line-height:1.4;">ℹ️</span>
+          <div style="font-size:12px;color:#166534;line-height:1.6;">
+            <strong>Cycle Boundary Rules:</strong> A milestone delayed into the next cycle period remains associated with its <em>original</em> cycle — the subsequent cycle is not affected. If two batch cutoff dates coincide due to cascaded delays, the system merges them into a single cutoff task.
           </div>
         </div>
 
@@ -2226,12 +2410,84 @@ function updateSelectAll() {
   master.checked = checked.length === all.length && all.length > 0;
 }
 
+/* ── More dropdown ── */
+function toggleMoreDD(id, e) {
+  e.stopPropagation();
+  const wrap = document.getElementById(id);
+  const isOpen = wrap.classList.contains('open');
+  // close all open dropdowns first
+  document.querySelectorAll('.more-dd-wrap.open').forEach(w => w.classList.remove('open'));
+  if (!isOpen) wrap.classList.add('open');
+}
+document.addEventListener('click', () => {
+  document.querySelectorAll('.more-dd-wrap.open').forEach(w => w.classList.remove('open'));
+});
+
+function showConfirmPopup(action, funderName) {
+  document.querySelectorAll('.more-dd-wrap.open').forEach(w => w.classList.remove('open'));
+  const popup = document.getElementById('confirm-action-popup');
+  const title = document.getElementById('confirm-action-title');
+  const body = document.getElementById('confirm-action-body');
+  const isRevert = action === 'Revert';
+  title.textContent = `Are you sure to ${isRevert ? 'revert' : 'activate'} this funder?`;
+  body.textContent = funderName;
+  popup.classList.add('open');
+  popup._action = action;
+  popup._funder = funderName;
+}
+
+function confirmAction() {
+  const popup = document.getElementById('confirm-action-popup');
+  popup.classList.remove('open');
+  const toast = document.getElementById('update-toast');
+  toast.textContent = `✓ ${popup._funder} — ${popup._action} request submitted to Ticket Center`;
+  toast.classList.add('visible');
+  setTimeout(() => toast.classList.remove('visible'), 2800);
+}
+
 function updateBulkBar() {
   const bar = document.getElementById('bulk-bar');
   const count = Object.keys(selectedPlans).length;
   document.getElementById('bulk-count').textContent = count;
   document.getElementById('bulk-names').textContent = Object.keys(selectedPlans).join(' · ');
   bar.classList.toggle('visible', count > 0);
+  // update toolbar hint + button state
+  const hint = document.getElementById('lib-select-hint');
+  const btnBatch = document.getElementById('btn-batch-adjust');
+  const countEl = document.getElementById('lib-select-count');
+  if (hint) hint.style.display = count > 0 ? 'block' : 'none';
+  if (countEl) countEl.textContent = count;
+  if (btnBatch) {
+    if (count > 0) {
+      btnBatch.style.color = '#2563EB';
+      btnBatch.style.borderColor = '#2563EB';
+      btnBatch.style.background = '#EFF6FF';
+    } else {
+      btnBatch.style.color = '#374151';
+      btnBatch.style.borderColor = '';
+      btnBatch.style.background = '';
+    }
+  }
+}
+
+function onBatchAdjustClick() {
+  const count = Object.keys(selectedPlans).length;
+  if (count === 0) {
+    // no selection: highlight the checkbox column as hint
+    const hint = document.getElementById('lib-select-hint');
+    if (hint) {
+      hint.style.display = 'block';
+      hint.style.color = '#D97706';
+      hint.innerHTML = '← Check the boxes in the table to select funders first';
+      setTimeout(() => {
+        hint.style.color = '#9CA3AF';
+        hint.innerHTML = '✓ <span id="lib-select-count">0</span> funder(s) selected — click "Batch Adjust Plans" to continue';
+        hint.style.display = 'none';
+      }, 2200);
+    }
+    return;
+  }
+  openBatchModal();
 }
 
 function clearAllSelections() {
@@ -2303,19 +2559,24 @@ function renderSpMilestoneTable(cycleNum) {
   const cycleStart = new Date((SP_CYCLE_STARTS[cycleNum] || '2026-05-19') + 'T00:00:00');
   const milestones = OPS_FLOW_MILESTONES['abs'];
   spModes = milestones.map(() => 'delay');
+  // serial chain dates
+  const chainDates = computeMilestoneDates(cycleStart, milestones);
 
   const tbody = document.getElementById('sp-milestone-tbody');
   tbody.innerHTML = milestones.map((m, i) => {
-    const origDate = new Date(cycleStart);
-    origDate.setDate(origDate.getDate() + m.offset);
-    const origStr = origDate.toISOString().slice(0,10);
+    const origDate = chainDates[i];
+    const origStr = origDate ? origDate.toISOString().slice(0,10) : '—';
     const isSystem = m.type === 'system';
+    const isTbd = m.offsetTbd;
     const rowBg = isSystem ? 'background:#F9FAFB;' : '';
     const typeBadge = isSystem
       ? `<span class="ms-type-tag ms-type-system">System</span>`
       : `<span class="ms-type-tag ms-type-operation">Operation</span>`;
-    const adjCell = isSystem
-      ? `<span style="color:#9CA3AF;font-size:12px;">—</span>`
+    const nameCell = m.indicative
+      ? `<span class="cal-chip" style="background:${m.bg};color:${m.color};border:1.5px dashed ${m.color};">${m.label}</span><span style="font-size:10px;color:#9CA3AF;margin-left:5px;vertical-align:middle;">indicative</span>`
+      : `<span class="cal-chip" style="background:${m.bg};color:${m.color};">${m.label}</span>`;
+    const adjCell = (isSystem || isTbd)
+      ? `<div style="display:flex;align-items:center;gap:5px;color:#9CA3AF;font-size:12px;"><span>🔒</span><span>— auto</span></div>`
       : `<div style="display:flex;align-items:center;gap:6px;">
            <div class="sp-adj-toggle">
              <button class="sp-adj-btn active" id="sp-btn-delay-${i}" onclick="setSpMode(${i},'delay')">+Xd</button>
@@ -2324,13 +2585,28 @@ function renderSpMilestoneTable(cycleNum) {
            <input class="sp-delay-input" id="sp-delay-${i}" type="number" min="0" placeholder="0" oninput="onSpDelayChange(${i},this)" />
            <input class="sp-date-input" id="sp-date-${i}" type="date" value="${origStr}" style="display:none;" oninput="onSpDateChange(${i},this)" />
          </div>`;
-    return '<tr style="' + rowBg + '" id="sp-row-' + i + '" data-orig="' + origStr + '" data-offset="' + m.offset + '">'
+    // Holiday checkboxes per Sub Plan row
+    const spHolRegions = [
+      { code:'TH', label:'TH' }, { code:'SG', label:'SG' }, { code:'HK', label:'HK' },
+      { code:'US', label:'US' }, { code:'MY', label:'MY' },
+    ];
+    const spUid = 'sp_hol_' + i;
+    const spHolCell = isSystem
+      ? `<div class="hol-chk-group">${spHolRegions.map((r,ri) =>
+          `<label class="hol-chk-label locked"><input type="checkbox" checked disabled><span class="hol-chk-box"></span>${r.label}</label>`
+        ).join('')}</div>`
+      : `<div class="hol-chk-group">${spHolRegions.map((r,ri) =>
+          `<label class="hol-chk-label"><input type="checkbox" name="sp-hol-${i}" data-region="${r.code}" checked onchange="onSpHolChange();updateSpNewDate(${i})"><span class="hol-chk-box"></span>${r.label}</label>`
+        ).join('')}</div>`;
+
+    return '<tr style="' + rowBg + '" id="sp-row-' + i + '" data-orig="' + origStr + '" data-offset="' + (m.offset||0) + '">'
       + '<td style="padding:11px 16px;font-size:12px;color:#9CA3AF;">' + (i+1) + '</td>'
-      + '<td style="padding:11px 16px;"><span class="cal-chip" style="background:' + m.bg + ';color:' + m.color + ';">' + m.label + '</span></td>'
+      + '<td style="padding:11px 16px;">' + nameCell + '</td>'
       + '<td style="padding:11px 16px;">' + typeBadge + '</td>'
       + '<td style="padding:11px 16px;font-size:13px;color:#374151;" id="sp-orig-' + i + '">' + origStr + '</td>'
       + '<td style="padding:11px 16px;" colspan="2">' + adjCell + '</td>'
       + '<td style="padding:11px 16px;font-size:12px;" id="sp-newdate-' + i + '"><span class="sp-new-date unchanged">—</span></td>'
+      + '<td style="padding:10px 14px;">' + spHolCell + '</td>'
       + '</tr>';
   }).join('');
   renderSpPreview(cycleNum);
@@ -2368,15 +2644,50 @@ function updateSpNewDate(idx) {
   if (mode === 'delay') {
     const delay = parseInt((document.getElementById('sp-delay-' + idx) || {}).value, 10);
     if (isNaN(delay) || delay === 0) { cell.innerHTML = '<span class="sp-new-date unchanged">—</span>'; return; }
+    // Collect which regions are checked for this milestone
+    const holInputs = document.querySelectorAll(`input[name="sp-hol-${idx}"]`);
+    const skipRegions = Array.from(holInputs).filter(cb => cb.checked).map(cb => cb.dataset.region);
     const d = new Date(origStr + 'T00:00:00');
-    d.setDate(d.getDate() + delay);
-    newDate = d.toISOString().slice(0,10);
+    if (skipRegions.length > 0) {
+      // Advance day-by-day, skipping holiday dates
+      let count = 0;
+      while (count < delay) {
+        d.setDate(d.getDate() + 1);
+        const key = d.toISOString().slice(0, 10);
+        if (!HOLIDAY_DATES.has(key)) count++;
+      }
+    } else {
+      d.setDate(d.getDate() + delay);
+    }
+    newDate = d.toISOString().slice(0, 10);
   } else {
     newDate = (document.getElementById('sp-date-' + idx) || {}).value;
     if (!newDate || newDate === origStr) { cell.innerHTML = '<span class="sp-new-date unchanged">—</span>'; return; }
   }
   cell.innerHTML = `<span class="sp-new-date changed">⇒ ${newDate}</span>`;
   renderSpPreview(parseInt((document.getElementById('sp-cycle-select') || {}).value) || 18);
+}
+
+function onSpHolChange() {
+  // Update the "select all" header state
+  const all = document.querySelectorAll('input[name^="sp-hol-"]');
+  const master = document.getElementById('sp-hol-select-all');
+  if (!master) return;
+  const checked = Array.from(all).filter(c => c.checked).length;
+  if (checked === 0) { master.checked = false; master.indeterminate = false; }
+  else if (checked === all.length) { master.checked = true; master.indeterminate = false; }
+  else { master.checked = false; master.indeterminate = true; }
+}
+
+function onSpHolHeaderClick(masterChk) {
+  const all = document.querySelectorAll('input[name^="sp-hol-"]:not(:disabled)');
+  const allChecked = Array.from(all).every(c => c.checked);
+  const newVal = !allChecked;
+  masterChk.checked = newVal;
+  masterChk.indeterminate = false;
+  all.forEach(c => { c.checked = newVal; });
+  // Recompute all new dates
+  (OPS_FLOW_MILESTONES['abs'] || []).forEach((_, i) => updateSpNewDate(i));
 }
 
 function cascadeFrom(changedIdx) {
@@ -2653,13 +2964,13 @@ function selectPricing(card) {
 /* ── Ops Flow milestone definitions ── */
 const OPS_FLOW_MILESTONES = {
   'abs': [
-    { label: 'Servicer Report Date',    short: 'Servicer',    type: 'operation', offset: 0,  bg: '#DBEAFE', color: '#1D4ED8' },
-    { label: 'Batch Creation Date',     short: 'Batch',       type: 'operation', offset: 1,  bg: '#EDE9FE', color: '#6D28D9' },
-    { label: 'Sale Notice Date',        short: 'Sale Notice', type: 'operation', offset: 2,  bg: '#FEF3C7', color: '#92400E' },
-    { label: 'System Cutoff Date',      short: 'Sys Cutoff',  type: 'system',    offset: 3,  bg: '#F3F4F6', color: '#6B7280' },
-    { label: 'Sale Date',               short: 'Sale Date',   type: 'operation', offset: 4,  bg: '#D1FAE5', color: '#065F46' },
-    { label: 'System Selling Date',     short: 'Sys Selling', type: 'system',    offset: 5,  bg: '#F3F4F6', color: '#6B7280' },
-    { label: 'Collection Deposit Date', short: 'Collection',  type: 'operation', offset: 7,  bg: '#CCFBF1', color: '#0F766E' },
+    { label: 'Servicer Report Date',    short: 'Servicer',    type: 'operation', offset: 0,  offsetFrom: 'T',         offsetRef: null, bg: '#DBEAFE', color: '#1D4ED8' },
+    { label: 'Batch Creation Date',     short: 'Batch',       type: 'operation', offset: 1,  offsetFrom: 'milestone', offsetRef: 1,    bg: '#EDE9FE', color: '#6D28D9' },
+    { label: 'Sale Notice Date',        short: 'Sale Notice', type: 'operation', offset: 1,  offsetFrom: 'milestone', offsetRef: 2,    bg: '#FEF3C7', color: '#92400E' },
+    { label: 'System Cutoff Date',      short: 'Sys Cutoff',  type: 'system',    offset: 3,  offsetFrom: 'milestone', offsetRef: 3,    bg: '#F3F4F6', color: '#6B7280' },
+    { label: 'Sale Date',               short: 'Sale Date',   type: 'operation', offset: 7,  offsetFrom: 'milestone', offsetRef: 4,    bg: '#D1FAE5', color: '#065F46', indicative: true },
+    { label: 'System Selling Date',     short: 'Sys Selling', type: 'system',    offset: 1,  offsetFrom: 'milestone', offsetRef: 5,    bg: '#F3F4F6', color: '#6B7280' },
+    { label: 'Collection Deposit Date', short: 'Collection',  type: 'operation', offset: 0,  offsetFrom: 'milestone', offsetRef: 5,    bg: '#CCFBF1', color: '#0F766E', offsetTbd: true },
   ],
   'abs-net': [
     { label: 'Servicer Report Date',    short: 'Servicer',    type: 'operation', offset: 0,  bg: '#DBEAFE', color: '#1D4ED8' },
@@ -2677,7 +2988,7 @@ const OPS_FLOW_MILESTONES = {
     { label: 'Batch Creation Date',     short: 'Batch',       type: 'operation', offset: 1,  bg: '#EDE9FE', color: '#6D28D9' },
     { label: 'Sale Notice Date',        short: 'Sale Notice', type: 'operation', offset: 2,  bg: '#FEF3C7', color: '#92400E' },
     { label: 'System Cutoff Date',      short: 'Sys Cutoff',  type: 'system',    offset: 3,  bg: '#F3F4F6', color: '#6B7280' },
-    { label: 'Sale Date',               short: 'Sale Date',   type: 'operation', offset: 4,  bg: '#D1FAE5', color: '#065F46' },
+    { label: 'Sale Date',               short: 'Sale Date',   type: 'operation', offset: 4,  bg: '#D1FAE5', color: '#065F46', indicative: true },
   ],
   'my': [
     { label: 'TBD — Pending BD confirmation', short: 'TBD', type: 'operation', offset: 0, bg: '#FEF3C7', color: '#B45309' },
@@ -2709,16 +3020,105 @@ function renderMilestoneTable(type) {
     const typeBadge = isSystem
       ? `<span class="ms-type-tag ms-type-system">System</span>`
       : `<span class="ms-type-tag ms-type-operation">Operation</span>`;
+
+    // Offset from cell
+    const offsetFromOptions = ['<option value="T"' + (m.offsetFrom === 'T' ? ' selected' : '') + '>T</option>']
+      .concat(milestones.slice(0, i).map((_, j) =>
+        `<option value="${j+1}"${m.offsetFrom === 'milestone' && m.offsetRef === j+1 ? ' selected' : ''}>Milestone ${j+1}</option>`
+      )).join('');
+    const offsetFromCell = isSystem
+      ? `<div style="display:flex;align-items:center;gap:5px;color:#9CA3AF;font-size:12px;">
+           <span style="font-size:13px;">🔒</span>
+           <span>${m.offsetFrom === 'T' ? 'T' : 'Milestone ' + m.offsetRef}</span>
+         </div>`
+      : (i === 0
+          ? `<span style="font-size:12px;font-weight:600;color:#374151;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:4px;padding:2px 8px;">T</span>`
+          : `<select class="offset-from-sel" onchange="onOffsetFromChange(${i},this)">${offsetFromOptions}</select>`);
+
+    // Offset (days) cell
     const offsetCell = isSystem
-      ? `<span style="color:#9CA3AF;font-size:13px;">+${m.offset}d &nbsp;<span style="font-size:11px;font-weight:500;">auto</span></span>`
-      : `<div style="display:flex;align-items:center;gap:6px;"><span style="font-size:12px;color:#9CA3AF;">+</span><input class="ms-offset-input" type="number" value="${m.offset}" min="0" onchange="onOffsetChange(${i},this)" /><span style="font-size:12px;color:#9CA3AF;">days</span></div>`;
+      ? `<div style="display:flex;align-items:center;gap:5px;">
+           <span style="font-size:13px;">🔒</span>
+           <span style="color:#9CA3AF;font-size:13px;">+${m.offset}d <span style="font-size:11px;">auto</span></span>
+         </div>`
+      : m.offsetTbd
+        ? `<span style="font-size:12px;color:#9CA3AF;font-style:italic;">TBD</span>`
+        : `<div style="display:flex;align-items:center;gap:6px;">
+             <span style="font-size:12px;color:#9CA3AF;">+</span>
+             <input class="ms-offset-input" type="number" value="${m.offset}" min="0" onchange="onOffsetChange(${i},this)" />
+             <span style="font-size:12px;color:#9CA3AF;">days</span>
+           </div>`;
+
+    // Holiday checkboxes
+    const holRegions = [
+      { code:'TH', label:'Thailand (TH)' }, { code:'MY', label:'Malaysia (MY)' },
+      { code:'SG', label:'Singapore (SG)' }, { code:'HK', label:'Hong Kong (HK)' },
+      { code:'US', label:'United States (US)' },
+    ];
+    const uid = 'ms_' + i;
+    const holCell = `<div class="hol-chk-group">${holRegions.map((r, ri) =>
+        `<label class="hol-chk-label"><input type="checkbox" id="${uid}_${ri}" name="hol-all" checked onchange="updateHolHeaderAll()"><span class="hol-chk-box"></span>${r.label}</label>`
+      ).join('')}</div>`;
+
+    const milestoneCell = m.indicative
+      ? `<span class="cal-chip" style="background:${m.bg};color:${m.color};">${m.label}</span><span style="margin-left:6px;font-size:10px;color:#9CA3AF;background:#F3F4F6;border-radius:3px;padding:1px 5px;vertical-align:middle;">indicative</span>`
+      : `<span class="cal-chip" style="background:${m.bg};color:${m.color};">${m.label}</span>`;
+
     return `<tr style="${rowStyle}">
       <td style="color:#9CA3AF;font-size:12px;padding-left:20px;">${i + 1}</td>
-      <td><span class="cal-chip" style="background:${m.bg};color:${m.color};">${m.label}</span></td>
-      <td>${typeBadge}</td>
+      <td style="padding:10px 14px;">${milestoneCell}</td>
+      <td style="padding:10px 14px;">${typeBadge}</td>
+      <td style="padding:10px 14px;">${offsetFromCell}</td>
       <td style="padding:10px 14px;">${offsetCell}</td>
+      <td style="padding:10px 14px;">${holCell}</td>
     </tr>`;
   }).join('');
+}
+
+function onOffsetFromChange(idx, sel) {
+  const v = sel.value;
+  const m = OPS_FLOW_MILESTONES[currentOpsFlow][idx];
+  if (v === 'T') { m.offsetFrom = 'T'; m.offsetRef = null; }
+  else { m.offsetFrom = 'milestone'; m.offsetRef = parseInt(v, 10); }
+  recomputeSchedule();
+}
+
+function onHolHeaderClick(masterChk) {
+  // indeterminate OR unchecked → select all; all checked → deselect all
+  const all = document.querySelectorAll('input[name="hol-all"]');
+  const allChecked = Array.from(all).every(c => c.checked);
+  const newVal = !allChecked; // all-checked → deselect; anything else → select
+  // prevent browser's native toggle from fighting us
+  masterChk.checked = newVal;
+  masterChk.indeterminate = false;
+  all.forEach(c => { c.checked = newVal; });
+}
+function updateHolHeaderAll() {
+  const all = document.querySelectorAll('input[name="hol-all"]');
+  const n = Array.from(all).filter(c => c.checked).length;
+  const master = document.getElementById('hol-select-all-header');
+  if (!master) return;
+  master.indeterminate = n > 0 && n < all.length;
+  master.checked = n === all.length;
+  // WCAG 2.1: indeterminate must be set via JS property, not CSS alone
+  // (already done above via master.indeterminate = true)
+}
+
+/* Serial chain: compute each milestone date relative to its offsetFrom anchor */
+function computeMilestoneDates(T, milestones) {
+  const dates = [];
+  milestones.forEach((m, i) => {
+    if (m.offsetTbd) { dates.push(null); return; }
+    let ref;
+    if (!m.offsetFrom || m.offsetFrom === 'T' || !m.offsetRef) {
+      ref = new Date(T);
+    } else {
+      ref = dates[m.offsetRef - 1] ? new Date(dates[m.offsetRef - 1]) : new Date(T);
+    }
+    ref.setDate(ref.getDate() + (m.offset || 0));
+    dates.push(ref);
+  });
+  return dates;
 }
 
 function onOffsetChange(idx, input) {
@@ -2729,6 +3129,24 @@ function onOffsetChange(idx, input) {
 }
 
 /* ── Cycle segments ── */
+/* Sample holiday dates (TH + MY) for calendar preview */
+const HOLIDAY_DATES = new Set([
+  '2026-05-01', // Labour Day (TH/MY)
+  '2026-05-11', // Visakha Bucha Day substitute (TH)
+  '2026-06-01', // Yang di-Pertuan Agong's Birthday (MY)
+  '2026-06-03', // H.M. King Coronation Day (TH)
+  '2026-07-06', // Asahna Bucha Day (TH)
+  '2026-08-12', // HM Queen Mother's Birthday (TH)
+]);
+const HOLIDAY_LABELS = {
+  '2026-05-01': 'Labour Day',
+  '2026-05-11': 'Visakha Bucha',
+  '2026-06-01': "Agong's Birthday",
+  '2026-06-03': 'Coronation Day',
+  '2026-07-06': 'Asahna Bucha',
+  '2026-08-12': "Queen's Birthday",
+};
+
 const SEG_COLORS = ['#2563EB','#7C3AED','#0891B2','#059669','#D97706','#DC2626','#6B7280'];
 let cycleSegments = [
   { from: 1,  to: 5,   eom: false },
@@ -2855,8 +3273,11 @@ document.addEventListener('click', () => {
 let calViewYear, calViewMonth; // currently displayed month
 
 function getAnchorDate() {
-  const v = document.getElementById('plan-start').value;
-  if (v) return new Date(v + 'T00:00:00');
+  // Prefer First Batch Cutoff Date; fallback to legacy plan-start; then today
+  const cutoff = document.getElementById('first-batch-cutoff');
+  if (cutoff && cutoff.value) return new Date(cutoff.value + 'T00:00:00');
+  const legacy = document.getElementById('plan-start');
+  if (legacy && legacy.value) return new Date(legacy.value + 'T00:00:00');
   const now = new Date();
   return new Date(now.getFullYear(), now.getMonth(), 1);
 }
@@ -2876,6 +3297,20 @@ function recomputeSchedule() {
   calViewYear  = anchor.getFullYear();
   calViewMonth = anchor.getMonth();
   renderCalendar();
+  // update anchor label in preview header
+  const lbl = document.getElementById('preview-anchor-label');
+  const hint = document.getElementById('preview-anchor-hint');
+  const cutoffEl = document.getElementById('first-batch-cutoff');
+  if (lbl && hint) {
+    const cutoffVal = cutoffEl && cutoffEl.value;
+    if (cutoffVal) {
+      lbl.textContent = 'First Batch Cutoff Date · ' + cutoffVal;
+      hint.style.display = 'none';
+    } else {
+      lbl.textContent = '';
+      hint.style.display = '';
+    }
+  }
 }
 
 function shiftCalMonth(delta) {
@@ -2890,17 +3325,18 @@ function renderCalendar() {
   const intervalDays = getCycleIntervalDays();
   const twoYears = 365 * 2;
 
-  // build date → milestones map across ALL cycles for 2 years
+  // build date → milestones map across ALL cycles for 2 years (serial chain)
+  const milestones = OPS_FLOW_MILESTONES[currentOpsFlow] || [];
   const dateMap = {};
   for (let cycleOffset = 0; cycleOffset <= twoYears; cycleOffset += intervalDays) {
     const cycleStart = new Date(anchor);
     cycleStart.setDate(cycleStart.getDate() + cycleOffset);
-    (OPS_FLOW_MILESTONES[currentOpsFlow] || []).forEach(m => {
-      const d = new Date(cycleStart);
-      d.setDate(d.getDate() + m.offset);
+    const dates = computeMilestoneDates(cycleStart, milestones);
+    dates.forEach((d, idx) => {
+      if (!d) return;
+      const m = milestones[idx];
       const key = d.toISOString().slice(0, 10);
       if (!dateMap[key]) dateMap[key] = [];
-      // avoid duplicates when two milestones land on the same date in the same cycle
       const alreadyHas = dateMap[key].some(x => x.label === m.label);
       if (!alreadyHas) dateMap[key].push(m);
     });
@@ -2910,16 +3346,40 @@ function renderCalendar() {
   const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   document.getElementById('cal-month-label').textContent = monthNames[calViewMonth] + ' ' + calViewYear;
 
-  // legend
+  // legend — use serial chain dates
   const legend = document.getElementById('cal-legend');
-  legend.innerHTML = (OPS_FLOW_MILESTONES[currentOpsFlow] || []).map(m => {
-    const d = new Date(anchor); d.setDate(d.getDate() + m.offset);
-    const dateStr = d.toISOString().slice(0,10);
-    return `<div style="display:flex;align-items:center;gap:5px;">
-      <span class="cal-chip" style="background:${m.bg};color:${m.color};">${m.short}</span>
-      <span style="font-size:11px;color:#6B7280;">${dateStr}</span>
+
+  // Static legend config (chip color + label + meta per spec)
+  const LEGEND_ITEMS = [
+    { dot: '#B5D4F4', dotBorder: '',                              label: 'Servicer Report',   meta: '' },
+    { dot: '#CECBF6', dotBorder: '',                              label: 'Batch Creation',    meta: '' },
+    { dot: '#FAC775', dotBorder: '',                              label: 'Sale Notice',       meta: '' },
+    { dot: '#D3D1C7', dotBorder: '',                              label: 'Sys Cutoff',        meta: '· auto', lock: true },
+    { dot: '#CCFBF1', dotBorder: '1.5px dashed #1D9E75',         label: 'Sale Date',         meta: '· indicative' },
+    { dot: '#C0DD97', dotBorder: '',                              label: 'Sys Selling',       meta: '· auto', lock: true },
+    { dot: '#9FE1CB', dotBorder: '',                              label: 'Collection',        meta: '' },
+  ];
+
+  const msItems = LEGEND_ITEMS.map(item => {
+    const dotStyle = `background:${item.dot};${item.dotBorder ? 'border:'+item.dotBorder+';background:transparent;' : ''}`;
+    const lockIcon = item.lock ? `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2.2" style="flex-shrink:0;margin-left:2px;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>` : '';
+    const metaHtml = item.meta ? `<span class="cal-legend-meta">${item.meta}</span>` : '';
+    return `<div class="cal-legend-item">
+      <span class="cal-legend-dot" style="${dotStyle}"></span>
+      <span class="cal-legend-label">${item.label}</span>${metaHtml}${lockIcon}
     </div>`;
   }).join('');
+
+  const holidayItem = `<div class="cal-legend-item">
+    <span style="display:inline-block;width:12px;height:12px;background:#FAEEDA;border:1px solid #EF9F27;border-radius:2px;flex-shrink:0;"></span>
+    <span class="cal-legend-label" style="color:#92400E;">Holiday</span>
+  </div>`;
+
+  legend.innerHTML = `<div class="cal-legend-bar">
+    <div class="cal-legend-group">${msItems}</div>
+    <div class="cal-legend-divider" style="margin-left:auto;"></div>
+    <div class="cal-legend-group">${holidayItem}</div>
+  </div>`;
 
   // grid days
   const grid = document.getElementById('cal-grid');
@@ -2954,23 +3414,33 @@ function renderCalendar() {
 
     const chips = dateMap[dateKey] || [];
     const isAnchor = dateKey === anchorKey;
+    const isHoliday = !isOther && HOLIDAY_DATES.has(dateKey);
 
     const cell = document.createElement('div');
     cell.className = 'cal-day' +
       (isOther ? ' other-month' : '') +
       (chips.length ? ' has-milestone' : '') +
-      (isAnchor ? ' is-anchor' : '');
+      (isAnchor ? ' is-anchor' : '') +
+      (isHoliday ? ' is-holiday' : '');
 
     const numEl = document.createElement('div');
     numEl.className = 'cal-day-num';
     numEl.textContent = dayNum;
     cell.appendChild(numEl);
 
+    if (isHoliday) {
+      const hlbl = document.createElement('div');
+      hlbl.className = 'cal-holiday-lbl';
+      hlbl.textContent = HOLIDAY_LABELS[dateKey] || 'Holiday';
+      cell.appendChild(hlbl);
+    }
+
     chips.forEach(m => {
       const chip = document.createElement('div');
       chip.className = 'cal-chip';
       chip.style.background = m.bg;
       chip.style.color = m.color;
+      chip.style.opacity = isHoliday ? '0.45' : '1';
       chip.textContent = m.short;
       cell.appendChild(chip);
     });
