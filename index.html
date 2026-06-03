@@ -1523,7 +1523,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
         <div class="sidebar-item active" onclick="switchFlow('list')">Lender List</div>
         <div class="sidebar-item">Pricing Configuration</div>
         <div class="sidebar-item">Calendar Management</div>
-        <div class="sidebar-item">Workflow Template</div>
+        <div class="sidebar-item" onclick="switchFlow('wf-template')">Workflow Template</div>
         <div class="sidebar-group-hd" style="margin-top:4px;">Report Management ▾</div>
         <div class="sidebar-group-hd" style="margin-top:4px;">Whitelist Configuration</div>
         <div class="sidebar-group-hd" style="margin-top:4px;">Event System</div>
@@ -1875,7 +1875,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
         <div class="sidebar-item active">Lender List</div>
         <div class="sidebar-item">Pricing Configuration</div>
         <div class="sidebar-item">Calendar Management</div>
-        <div class="sidebar-item">Workflow Template</div>
+        <div class="sidebar-item" onclick="switchFlow('wf-template')">Workflow Template</div>
         <div class="sidebar-group-hd" style="margin-top:4px;">Report Management ▾</div>
         <div class="sidebar-group-hd" style="margin-top:4px;">Whitelist Configuration</div>
         <div class="sidebar-group-hd" style="margin-top:4px;">Event System</div>
@@ -2361,6 +2361,263 @@ tr.drag-over { border-top: 2px solid #2563EB; }
   </div>
 </div><!-- /flow-sub-plan -->
 
+<!-- ══════════════════════════════════════
+     FLOW: Workflow Template
+══════════════════════════════════════ -->
+<div id="flow-wf-template" class="flow">
+  <div class="app-layout">
+    <div class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">S</div>
+        <div><div class="sidebar-logo-text">SEO Money</div><div class="sidebar-logo-sub">Funding · Admin</div></div>
+      </div>
+      <div class="sidebar-nav">
+        <div class="sidebar-group-hd">Routing Management ▾</div>
+        <div class="sidebar-group-hd" style="padding-left:26px;">Lender Management ▾</div>
+        <div class="sidebar-item" onclick="switchFlow('list')">Lender List</div>
+        <div class="sidebar-item">Pricing Configuration</div>
+        <div class="sidebar-item">Calendar Management</div>
+        <div class="sidebar-item active">Workflow Template</div>
+        <div class="sidebar-group-hd" style="margin-top:4px;">Report Management ▾</div>
+        <div class="sidebar-group-hd" style="margin-top:4px;">Whitelist Configuration</div>
+        <div class="sidebar-group-hd" style="margin-top:4px;">Event System</div>
+        <div class="sidebar-group-hd" style="margin-top:4px;">Clone Center</div>
+        <div class="sidebar-group-hd" style="margin-top:4px;">ABS Auto Report Manage ▾</div>
+      </div>
+    </div>
+    <div class="sidebar-main" style="overflow-y:auto;">
+
+      <!-- ── LIST VIEW ── -->
+      <div id="wft-list-view">
+        <div class="list-topnav">
+          <div class="list-topnav-crumb">
+            <a href="#" onclick="switchFlow('list');return false;">Lender Management</a><span class="sep">/</span>
+            <span class="current">Workflow Template</span>
+          </div>
+          <div class="list-topnav-right">TH Region · Zikky</div>
+        </div>
+        <div class="list-main">
+          <div class="list-toolbar">
+            <div>
+              <div class="list-title">Workflow Template</div>
+              <div style="font-size:12px;color:#6B7280;margin-top:2px;">Reusable milestone configurations for ABS / ABL programs · region-isolated</div>
+            </div>
+            <button class="btn-primary-lg" style="font-size:13px;padding:9px 18px;">+ Add New</button>
+          </div>
+          <div class="list-filter">
+            <div class="filter-grid">
+              <div class="filter-group">
+                <label class="filter-label">Template Name</label>
+                <input class="filter-input" placeholder="Search name..." />
+              </div>
+              <div class="filter-group">
+                <label class="filter-label">Ops Flow</label>
+                <select class="filter-select">
+                  <option>All</option>
+                  <option>ABS Non-Net</option>
+                  <option>ABS Net</option>
+                  <option>ABL</option>
+                  <option>MY Gross Basis</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label class="filter-label">Status</label>
+                <select class="filter-select">
+                  <option>All</option>
+                  <option>Active</option>
+                  <option>Draft</option>
+                  <option>Disabled</option>
+                </select>
+              </div>
+            </div>
+            <button class="btn-query">Query</button>
+          </div>
+          <div class="list-table-wrap">
+            <table class="list-table">
+              <thead>
+                <tr>
+                  <th>Template ID</th>
+                  <th>Template Name</th>
+                  <th>Ops Flow</th>
+                  <th>Cycle Segments</th>
+                  <th style="text-align:center;width:90px;">Milestones</th>
+                  <th style="width:80px;">Status</th>
+                  <th>Created By</th>
+                  <th>Last Updated</th>
+                  <th style="width:180px;">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="list-id-cell" style="cursor:pointer;" onclick="wftShowDetail('abs')">WFT-0001</td>
+                  <td style="font-weight:500;color:#111827;cursor:pointer;" onclick="wftShowDetail('abs')">TH_SPL_ABS_Standard</td>
+                  <td><span class="badge badge-active" style="background:#DBEAFE;color:#1D4ED8;">ABS Non-Net</span></td>
+                  <td style="font-size:12px;color:#374151;font-family:monospace;">1–5 · 6–15 · 16–25 · 26–EOM</td>
+                  <td style="text-align:center;"><span style="background:#EFF6FF;color:#2563EB;font-size:12px;font-weight:600;padding:2px 8px;border-radius:4px;">7</span></td>
+                  <td><span class="badge badge-active">Active</span></td>
+                  <td style="font-size:12px;color:#6B7280;">ziqi.xu@shopee.com</td>
+                  <td style="font-size:12px;color:#6B7280;">2026-05-01</td>
+                  <td>
+                    <div style="display:flex;gap:5px;">
+                      <button onclick="wftShowDetail('abs')" style="color:#2563EB;border:1px solid #BFDBFE;border-radius:5px;padding:3px 10px;font-size:12px;background:#EFF6FF;cursor:pointer;">View</button>
+                      <button style="color:#374151;border:1px solid #D1D5DB;border-radius:5px;padding:3px 10px;font-size:12px;background:#fff;cursor:pointer;">Edit</button>
+                      <button style="color:#6B7280;border:1px solid #D1D5DB;border-radius:5px;padding:3px 10px;font-size:12px;background:#fff;cursor:pointer;">Disable</button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="list-id-cell" style="cursor:pointer;" onclick="wftShowDetail('abs-net')">WFT-0002</td>
+                  <td style="font-weight:500;color:#111827;cursor:pointer;" onclick="wftShowDetail('abs-net')">TH_BCL_ABS_Net_Monthly</td>
+                  <td><span class="badge badge-active" style="background:#F3E8FF;color:#7C3AED;">ABS Net</span></td>
+                  <td style="font-size:12px;color:#374151;font-family:monospace;">1–15 · 16–EOM</td>
+                  <td style="text-align:center;"><span style="background:#EFF6FF;color:#2563EB;font-size:12px;font-weight:600;padding:2px 8px;border-radius:4px;">9</span></td>
+                  <td><span class="badge badge-active">Active</span></td>
+                  <td style="font-size:12px;color:#6B7280;">pinhan.wang@shopee.com</td>
+                  <td style="font-size:12px;color:#6B7280;">2026-03-15</td>
+                  <td>
+                    <div style="display:flex;gap:5px;">
+                      <button onclick="wftShowDetail('abs-net')" style="color:#2563EB;border:1px solid #BFDBFE;border-radius:5px;padding:3px 10px;font-size:12px;background:#EFF6FF;cursor:pointer;">View</button>
+                      <button style="color:#374151;border:1px solid #D1D5DB;border-radius:5px;padding:3px 10px;font-size:12px;background:#fff;cursor:pointer;">Edit</button>
+                      <button style="color:#6B7280;border:1px solid #D1D5DB;border-radius:5px;padding:3px 10px;font-size:12px;background:#fff;cursor:pointer;">Disable</button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="list-id-cell" style="cursor:pointer;" onclick="wftShowDetail('abl')">WFT-0003</td>
+                  <td style="font-weight:500;color:#111827;cursor:pointer;" onclick="wftShowDetail('abl')">MY_BCL_ABL_BiMonthly</td>
+                  <td><span class="badge badge-active" style="background:#FEF3C7;color:#92400E;">ABL</span></td>
+                  <td style="font-size:12px;color:#374151;font-family:monospace;">1–EOM</td>
+                  <td style="text-align:center;"><span style="background:#EFF6FF;color:#2563EB;font-size:12px;font-weight:600;padding:2px 8px;border-radius:4px;">5</span></td>
+                  <td><span class="badge badge-pending">Draft</span></td>
+                  <td style="font-size:12px;color:#6B7280;">ziqi.xu@shopee.com</td>
+                  <td style="font-size:12px;color:#6B7280;">2026-06-01</td>
+                  <td>
+                    <div style="display:flex;gap:5px;">
+                      <button onclick="wftShowDetail('abl')" style="color:#2563EB;border:1px solid #BFDBFE;border-radius:5px;padding:3px 10px;font-size:12px;background:#EFF6FF;cursor:pointer;">View</button>
+                      <button style="color:#374151;border:1px solid #D1D5DB;border-radius:5px;padding:3px 10px;font-size:12px;background:#fff;cursor:pointer;">Edit</button>
+                      <button style="color:#DC2626;border:1px solid #FCA5A5;border-radius:5px;padding:3px 10px;font-size:12px;background:#fff;cursor:pointer;">Delete</button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="list-pagination">
+            <span style="font-size:12px;color:#6B7280;">Showing 3 of 3 templates</span>
+            <div style="display:flex;gap:4px;">
+              <button class="pg-btn" disabled>‹</button>
+              <button class="pg-btn" style="background:#2563EB;color:#fff;border-color:#2563EB;">1</button>
+              <button class="pg-btn" disabled>›</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── DETAIL VIEW ── -->
+      <div id="wft-detail-view" style="display:none;">
+        <div class="list-topnav">
+          <div class="list-topnav-crumb">
+            <a href="#" onclick="wftShowList();return false;">Lender Management</a><span class="sep">/</span>
+            <a href="#" onclick="wftShowList();return false;">Workflow Template</a><span class="sep">/</span>
+            <span class="current" id="wft-detail-title">TH_SPL_ABS_Standard</span>
+          </div>
+          <div class="list-topnav-right">TH Region · Zikky</div>
+        </div>
+        <div class="list-main">
+          <div class="list-toolbar">
+            <div>
+              <div class="list-title" id="wft-detail-name">TH_SPL_ABS_Standard</div>
+              <div style="margin-top:6px;display:flex;align-items:center;gap:8px;" id="wft-detail-badges"></div>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <button class="btn-outline-sm" style="padding:8px 18px;font-size:13px;">Edit</button>
+              <button class="btn-outline-sm" id="wft-disable-btn" style="padding:8px 18px;font-size:13px;">Disable</button>
+              <button class="btn-outline-sm" style="padding:8px 18px;font-size:13px;" onclick="wftShowList()">← Back</button>
+            </div>
+          </div>
+
+          <!-- Basic Information -->
+          <div class="section-card" style="margin-bottom:16px;">
+            <div class="section-header"><div class="section-title">Basic Information</div></div>
+            <div class="section-body">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px 40px;">
+                <div class="view-field"><span class="view-label">Template ID</span><span class="view-value" id="wft-info-id">—</span></div>
+                <div class="view-field"><span class="view-label">Template Name</span><span class="view-value" id="wft-info-name">—</span></div>
+                <div class="view-field"><span class="view-label">Ops Flow</span><span id="wft-info-flow">—</span></div>
+                <div class="view-field"><span class="view-label">Offset Day Type</span><span class="view-value" id="wft-info-daytype">Calendar Days</span></div>
+                <div class="view-field" style="grid-column:1/-1;">
+                  <span class="view-label">Cycle Segments</span>
+                  <div id="wft-info-seg-bar" style="margin-top:8px;"></div>
+                </div>
+                <div class="view-field"><span class="view-label">Status</span><span id="wft-info-status">—</span></div>
+                <div class="view-field"><span class="view-label">Region</span><span class="view-value" id="wft-info-region">—</span></div>
+                <div class="view-field"><span class="view-label">Created By</span><span class="view-value" id="wft-info-created-by">—</span></div>
+                <div class="view-field"><span class="view-label">Last Updated</span><span class="view-value" id="wft-info-updated">—</span></div>
+                <div class="view-field"><span class="view-label">Created At</span><span class="view-value" id="wft-info-created-at">—</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Milestone Configuration -->
+          <div class="section-card" style="margin-bottom:16px;">
+            <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;">
+              <div>
+                <div class="section-title">Milestone Configuration</div>
+                <div class="section-sub">Offset = days from Cycle Start (T). <span style="background:#F3F4F6;color:#6B7280;padding:1px 6px;border-radius:3px;font-size:11px;font-weight:600;">System</span> milestones auto-triggered; cannot be adjusted.</div>
+              </div>
+            </div>
+            <div class="section-body" style="padding:0;">
+              <div class="tbl-wrap">
+                <table id="wft-milestone-table">
+                  <thead>
+                    <tr>
+                      <th style="width:44px;">#</th>
+                      <th>Milestone</th>
+                      <th style="width:100px;">Type</th>
+                      <th style="width:150px;">Offset from</th>
+                      <th style="width:160px;">Offset (days)</th>
+                      <th>
+                        <label class="hol-header-chk">
+                          <input type="checkbox" checked>
+                          <span class="hol-header-chk-box"></span>
+                          <span style="font-weight:600;color:#374151;">Skip Holidays of</span>
+                        </label>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody id="wft-milestone-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Management Plans Using This Template -->
+          <div class="section-card">
+            <div class="section-header">
+              <div class="section-title">Management Plans Using This Template</div>
+              <div class="section-sub" id="wft-plans-sub">—</div>
+            </div>
+            <div class="section-body" style="padding:0;">
+              <table style="width:100%;border-collapse:collapse;">
+                <thead>
+                  <tr>
+                    <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;text-align:left;">Plan ID</th>
+                    <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;text-align:left;">Funder</th>
+                    <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;text-align:left;">Plan Version</th>
+                    <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;text-align:left;">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="wft-plans-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div><!-- /flow-wf-template -->
+
 <script>
 /* ── Compact radio & checkbox helpers ── */
 function selectRadioOpt(groupId, el) {
@@ -2816,9 +3073,146 @@ function switchFlow(target) {
   } else if (target === 'sub-plan') {
     document.getElementById('flow-sub-plan').classList.add('active');
     initSubPlan();
+  } else if (target === 'wf-template') {
+    document.getElementById('flow-wf-template').classList.add('active');
+    wftShowList();
   } else {
     document.getElementById('flow-create').classList.add('active');
   }
+  window.scrollTo(0, 0);
+}
+
+/* ══ Workflow Template logic ══ */
+const WFT_DATA = {
+  'abs': {
+    id: 'WFT-0001', name: 'TH_SPL_ABS_Standard', flow: 'ABS Non-Net',
+    flowBadge: '<span class="badge badge-active" style="background:#DBEAFE;color:#1D4ED8;">ABS Non-Net</span>',
+    dayType: 'Calendar Days', region: 'Thailand (TH)',
+    segments: [{ from:1,to:5 },{ from:6,to:15 },{ from:16,to:25 },{ from:26,toEOM:true }],
+    status: 'Active', statusBadge: '<span class="badge badge-active">Active</span>',
+    createdBy: 'ziqi.xu@shopee.com', updated: '2026-05-01', createdAt: '2026-04-15',
+    milestoneType: 'abs',
+    plans: [
+      { id:'PLN-TH-0012', funder:'TH_SPL_Starlight_ABS_01', version:'v1', status:'Active' },
+      { id:'PLN-TH-0018', funder:'TH_SPL_Moonrise_ABS_01',  version:'v2', status:'Active' },
+    ]
+  },
+  'abs-net': {
+    id: 'WFT-0002', name: 'TH_BCL_ABS_Net_Monthly', flow: 'ABS Net',
+    flowBadge: '<span class="badge badge-active" style="background:#F3E8FF;color:#7C3AED;">ABS Net</span>',
+    dayType: 'Business Days', region: 'Thailand (TH)',
+    segments: [{ from:1,to:15 },{ from:16,toEOM:true }],
+    status: 'Active', statusBadge: '<span class="badge badge-active">Active</span>',
+    createdBy: 'pinhan.wang@shopee.com', updated: '2026-03-15', createdAt: '2026-03-01',
+    milestoneType: 'abs-net',
+    plans: [
+      { id:'PLN-TH-0021', funder:'TH_BCL_Capital_ABS_Net_01', version:'v1', status:'Active' },
+    ]
+  },
+  'abl': {
+    id: 'WFT-0003', name: 'MY_BCL_ABL_BiMonthly', flow: 'ABL',
+    flowBadge: '<span class="badge badge-active" style="background:#FEF3C7;color:#92400E;">ABL</span>',
+    dayType: 'Calendar Days', region: 'Malaysia (MY)',
+    segments: [{ from:1,toEOM:true }],
+    status: 'Draft', statusBadge: '<span class="badge badge-pending">Draft</span>',
+    createdBy: 'ziqi.xu@shopee.com', updated: '2026-06-01', createdAt: '2026-06-01',
+    milestoneType: 'abl',
+    plans: []
+  }
+};
+
+function wftShowList() {
+  document.getElementById('wft-list-view').style.display = '';
+  document.getElementById('wft-detail-view').style.display = 'none';
+  window.scrollTo(0, 0);
+}
+
+function wftShowDetail(type) {
+  const d = WFT_DATA[type];
+  if (!d) return;
+  document.getElementById('wft-list-view').style.display = 'none';
+  document.getElementById('wft-detail-view').style.display = '';
+
+  // Header
+  document.getElementById('wft-detail-title').textContent = d.name;
+  document.getElementById('wft-detail-name').textContent = d.name;
+  document.getElementById('wft-detail-badges').innerHTML = d.flowBadge + ' ' + d.statusBadge;
+  const disableBtn = document.getElementById('wft-disable-btn');
+  if (d.status === 'Disabled') { disableBtn.textContent = 'Enable'; disableBtn.style.color = '#16A34A'; disableBtn.style.borderColor = '#BBF7D0'; }
+  else { disableBtn.textContent = d.status === 'Draft' ? 'Delete' : 'Disable'; disableBtn.style.color = d.status === 'Draft' ? '#DC2626' : '#374151'; disableBtn.style.borderColor = d.status === 'Draft' ? '#FCA5A5' : '#D1D5DB'; }
+
+  // Basic Info
+  document.getElementById('wft-info-id').textContent = d.id;
+  document.getElementById('wft-info-name').textContent = d.name;
+  document.getElementById('wft-info-flow').innerHTML = d.flowBadge;
+  document.getElementById('wft-info-daytype').textContent = d.dayType;
+  document.getElementById('wft-info-status').innerHTML = d.statusBadge;
+  document.getElementById('wft-info-region').textContent = d.region;
+  document.getElementById('wft-info-created-by').textContent = d.createdBy;
+  document.getElementById('wft-info-updated').textContent = d.updated;
+  document.getElementById('wft-info-created-at').textContent = d.createdAt;
+
+  // Cycle Segments bar
+  const colors = ['#2563EB','#7C3AED','#0891B2','#16A34A','#D97706'];
+  const bar = document.getElementById('wft-info-seg-bar');
+  const segs = d.segments;
+  const labels = segs.map(s => s.toEOM ? s.from + '–EOM' : s.from + '–' + s.to);
+  bar.innerHTML = `<div style="display:flex;gap:2px;border-radius:6px;overflow:hidden;margin-bottom:6px;">
+    ${segs.map((s,i) => `<div style="flex:${s.toEOM ? 2 : 1};background:${colors[i]};color:#fff;font-size:11px;font-weight:600;text-align:center;padding:6px 4px;">${labels[i]}</div>`).join('')}
+  </div>
+  <div style="font-size:11px;color:#9CA3AF;">Each segment = one cycle. Pattern repeats every month.</div>`;
+
+  // Milestone table — reuse renderMilestoneTable logic
+  const milestones = OPS_FLOW_MILESTONES[d.milestoneType] || [];
+  const holRegions = [
+    { code:'TH', label:'Thailand (TH)' }, { code:'MY', label:'Malaysia (MY)' },
+    { code:'SG', label:'Singapore (SG)' }, { code:'HK', label:'Hong Kong (HK)' },
+    { code:'US', label:'United States (US)' },
+  ];
+  const tbody = document.getElementById('wft-milestone-tbody');
+  tbody.innerHTML = milestones.map((m, i) => {
+    const isSystem = m.type === 'system';
+    const typeBadge = isSystem ? `<span class="ms-type-tag ms-type-system">System</span>` : `<span class="ms-type-tag ms-type-operation">Operation</span>`;
+    const offsetFromOptions = ['<option value="T" selected>T (Cycle Start)</option>']
+      .concat(milestones.slice(0, i).map((_, j) => `<option value="${j+1}">Milestone ${j+1}</option>`)).join('');
+    const offsetFromCell = isSystem
+      ? `<span style="font-size:12px;color:#9CA3AF;">🔒 ${m.offsetFrom === 'T' ? 'T' : 'Milestone ' + m.offsetRef}</span>`
+      : (i === 0 ? `<span style="font-size:12px;font-weight:600;color:#374151;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:4px;padding:2px 8px;">T</span>`
+                 : `<select class="offset-from-sel">${offsetFromOptions}</select>`);
+    const offsetCell = isSystem
+      ? `<span style="color:#9CA3AF;font-size:13px;">🔒 +${m.offset}d auto</span>`
+      : `<div style="display:flex;align-items:center;gap:6px;"><span style="font-size:12px;color:#9CA3AF;">+</span><input class="ms-offset-input" type="number" value="${m.offset}" min="0" /><span style="font-size:12px;color:#9CA3AF;">days</span></div>`;
+    const uid = 'wft_ms_' + i;
+    const holCell = `<div class="hol-chk-group">${holRegions.map((r,ri) =>
+      `<label class="hol-chk-label${isSystem?' locked':''}"><input type="checkbox" ${isSystem?'disabled ':' '}checked><span class="hol-chk-box"></span>${r.label}</label>`
+    ).join('')}</div>`;
+    const nameCell = m.indicative
+      ? `<span class="cal-chip" style="background:${m.bg};color:${m.color};border:1.5px dashed ${m.color};">${m.label}</span><span style="font-size:10px;color:#9CA3AF;margin-left:6px;vertical-align:middle;">indicative</span>`
+      : `<span class="cal-chip" style="background:${m.bg};color:${m.color};">${m.label}</span>`;
+    return `<tr style="${isSystem?'background:#F9FAFB;':''}">
+      <td style="color:#9CA3AF;font-size:12px;padding-left:20px;">${i+1}</td>
+      <td style="padding:10px 14px;">${nameCell}</td>
+      <td style="padding:10px 14px;">${typeBadge}</td>
+      <td style="padding:10px 14px;">${offsetFromCell}</td>
+      <td style="padding:10px 14px;">${offsetCell}</td>
+      <td style="padding:10px 14px;">${holCell}</td>
+    </tr>`;
+  }).join('');
+
+  // Plans table
+  const plansTbody = document.getElementById('wft-plans-tbody');
+  document.getElementById('wft-plans-sub').textContent = d.plans.length + ' plan(s) using this template';
+  if (d.plans.length === 0) {
+    plansTbody.innerHTML = `<tr><td colspan="4" style="padding:20px 16px;text-align:center;color:#9CA3AF;font-size:13px;">No management plans linked yet</td></tr>`;
+  } else {
+    plansTbody.innerHTML = d.plans.map(p => `<tr>
+      <td style="padding:11px 16px;font-size:13px;color:#2563EB;font-weight:500;cursor:pointer;">${p.id}</td>
+      <td style="padding:11px 16px;font-size:13px;color:#374151;">${p.funder}</td>
+      <td style="padding:11px 16px;font-size:13px;color:#374151;">${p.version}</td>
+      <td style="padding:11px 16px;"><span class="badge badge-active">${p.status}</span></td>
+    </tr>`).join('');
+  }
+
   window.scrollTo(0, 0);
 }
 
