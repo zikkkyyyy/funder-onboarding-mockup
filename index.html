@@ -333,7 +333,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
 .hol-chk-box::after { content:''; display:none; width:4px; height:7px; border:1.5px solid #fff; border-top:none; border-left:none; transform:rotate(45deg) translateY(-1px); }
 .hol-chk-label input:checked + .hol-chk-box::after { display:block; }
 .hol-chk-label:hover .hol-chk-box { border-color:#1677FF; }
-.hol-chk-label.locked { opacity:.4; pointer-events:none; }
+/* .hol-chk-label.locked removed — all milestone holiday checkboxes use uniform style */
 /* Tooltip */
 .tip { position:relative; display:inline-flex; align-items:center; cursor:help; color:#9CA3AF; font-size:12px; }
 .tip-box { display:none; position:absolute; bottom:calc(100% + 7px); left:50%; transform:translateX(-50%); background:#1E293B; color:#fff; font-size:11px; line-height:1.55; padding:7px 10px; border-radius:5px; width:220px; white-space:normal; z-index:400; pointer-events:none; font-weight:400; box-shadow:0 4px 12px rgba(0,0,0,.18); }
@@ -2913,7 +2913,7 @@ function renderSpMilestoneTable(cycleNum) {
     const spUid = 'sp_hol_' + i;
     const spHolCell = (isSystem || isDisplayOnly)
       ? `<div class="hol-chk-group">${spHolRegions.map(() =>
-          `<label class="hol-chk-label locked"><input type="checkbox" checked disabled><span class="hol-chk-box"></span></label>`
+          `<label class="hol-chk-label"><input type="checkbox" checked><span class="hol-chk-box"></span></label>`
         ).join('')}<span style="font-size:11px;color:#9CA3AF;font-style:italic;">inherited</span></div>`
       : `<div class="hol-chk-group">${spHolRegions.map((r,ri) =>
           `<label class="hol-chk-label"><input type="checkbox" name="sp-hol-${i}" data-region="${r.code}" checked onchange="onSpHolChange();updateSpNewDate(${i})"><span class="hol-chk-box"></span>${r.label}</label>`
@@ -3233,7 +3233,7 @@ function wftShowDetail(type) {
       : `<div style="display:flex;align-items:center;gap:6px;"><span style="font-size:12px;color:#9CA3AF;">+</span><input class="ms-offset-input" type="number" value="${m.offset}" min="0" /><span style="font-size:12px;color:#9CA3AF;">days</span></div>`;
     const uid = 'wft_ms_' + i;
     const holCell = `<div class="hol-chk-group">${holRegions.map((r,ri) =>
-      `<label class="hol-chk-label${isSystem?' locked':''}"><input type="checkbox" ${isSystem?'disabled ':' '}checked><span class="hol-chk-box"></span>${r.label}</label>`
+      `<label class="hol-chk-label"><input type="checkbox" checked><span class="hol-chk-box"></span>${r.label}</label>`
     ).join('')}</div>`;
     const nameCell = m.indicative
       ? `<span class="cal-chip" style="background:${m.bg};color:${m.color};border:1.5px dashed ${m.color};">${m.label}</span><span style="font-size:10px;color:#9CA3AF;margin-left:6px;vertical-align:middle;">indicative</span>`
