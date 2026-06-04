@@ -2692,6 +2692,8 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                     <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;text-align:left;">Plan ID</th>
                     <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;text-align:left;">Funder</th>
                     <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;text-align:left;">Plan Version</th>
+                    <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;text-align:left;">First Batch Cutoff Date</th>
+                    <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;text-align:left;">Revolving Start Date</th>
                     <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;text-align:left;">Status</th>
                   </tr>
                 </thead>
@@ -3284,8 +3286,8 @@ const WFT_DATA = {
     createdBy: 'ziqi.xu@shopee.com', updated: '2026-05-01', createdAt: '2026-04-15',
     milestoneType: 'abs',
     plans: [
-      { id:'PLN-TH-0012', funder:'TH_SPL_Starlight_ABS_01', version:'v1', status:'Active' },
-      { id:'PLN-TH-0018', funder:'TH_SPL_Moonrise_ABS_01',  version:'v2', status:'Active' },
+      { id:'PLN-TH-0012', funder:'TH_SPL_Starlight_ABS_01', version:'v1', firstBatch:'2026-01-05', revolving:'2026-02-05', status:'Active' },
+      { id:'PLN-TH-0018', funder:'TH_SPL_Moonrise_ABS_01',  version:'v2', firstBatch:'2026-03-10', revolving:'2026-04-10', status:'Active' },
     ]
   },
   'abs-net': {
@@ -3297,7 +3299,7 @@ const WFT_DATA = {
     createdBy: 'pinhan.wang@shopee.com', updated: '2026-03-15', createdAt: '2026-03-01',
     milestoneType: 'abs-net',
     plans: [
-      { id:'PLN-TH-0021', funder:'TH_BCL_Capital_ABS_Net_01', version:'v1', status:'Active' },
+      { id:'PLN-TH-0021', funder:'TH_BCL_Capital_ABS_Net_01', version:'v1', firstBatch:'2026-02-16', revolving:'—', status:'Active' },
     ]
   },
   'abl': {
@@ -3486,6 +3488,8 @@ function wftShowDetail(type) {
       <td style="padding:11px 16px;font-size:13px;color:#2563EB;font-weight:500;cursor:pointer;">${p.id}</td>
       <td style="padding:11px 16px;font-size:13px;color:#374151;">${p.funder}</td>
       <td style="padding:11px 16px;font-size:13px;color:#374151;">${p.version}</td>
+      <td style="padding:11px 16px;font-size:12px;color:${p.firstBatch && p.firstBatch !== '—' ? '#374151' : '#9CA3AF'};">${p.firstBatch || '<span style="color:#9CA3AF;">Not set</span>'}</td>
+      <td style="padding:11px 16px;font-size:12px;color:${p.revolving && p.revolving !== '—' ? '#374151' : '#9CA3AF'};">${p.revolving === '—' ? '<span style="color:#9CA3AF;">Not set</span>' : (p.revolving || '<span style="color:#9CA3AF;">Not set</span>')}</td>
       <td style="padding:11px 16px;"><span class="badge badge-active">${p.status}</span></td>
     </tr>`).join('');
   }
