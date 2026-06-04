@@ -3674,7 +3674,7 @@ const OPS_FLOW_MILESTONES = {
     { label: 'Sys Cutoff',      short: 'Sys Cutoff',      type: 'operation', offset: 1,  offsetFrom: 'milestone', offsetRef: 2,    bg: '#F1F5F9', color: '#475569' },
     { label: 'Collection',      short: 'Collection',      type: 'operation', offset: 3,  offsetFrom: 'milestone', offsetRef: 1,    bg: '#CCFBF1', color: '#0F766E' },
     { label: 'Sale Date',   short: 'Sale Date',   type: 'operation', offset: 0, offsetFrom: 'formula', formula: 'max(M3+3d, M1+4d)',      formulaRefs: [3,1], bg: '#D1FAE5', color: '#065F46', indicative: true },
-    { label: 'Sys Selling', short: 'Sys Selling', type: 'operation', offset: 0, offsetFrom: 'formula', formula: 'max(M4, M3+3d, M1+4d)',   formulaRefs: [4,3,1], bg: '#E0E7FF', color: '#4338CA' },
+    { label: 'Sys Selling', short: 'Sys Selling', type: 'operation', offset: 0, offsetFrom: 'formula', formula: 'max(M3+3d, M1+4d)', formulaRefs: [3,1], bg: '#E0E7FF', color: '#4338CA' },
   ],
   'abs-net': [
     { label: 'Servicer Report Date',    short: 'Servicer',    type: 'operation', offset: 0,  bg: '#DBEAFE', color: '#1D4ED8' },
