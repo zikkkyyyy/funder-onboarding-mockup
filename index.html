@@ -1212,21 +1212,8 @@ tr.drag-over { border-top: 2px solid #2563EB; }
     <div class="section-card">
       <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;">
         <div>
-          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
-            <div class="section-title">Milestone Configuration</div>
-            <div style="display:flex;align-items:center;gap:8px;">
-              <span style="font-size:12px;font-weight:600;color:#374151;">Offset Day Type <span class="req">*</span></span>
-              <div class="radio-opts" style="margin:0;display:flex;gap:6px;">
-                <div class="radio-opt selected" id="daytype-cal" onclick="selectDayType('cal')" style="justify-content:center;padding:5px 14px;font-size:12px;">
-                  <div class="radio-dot on" id="daytype-dot-cal"></div>Calendar Days
-                </div>
-                <div class="radio-opt" id="daytype-biz" onclick="selectDayType('biz')" style="justify-content:center;padding:5px 14px;font-size:12px;">
-                  <div class="radio-dot" id="daytype-dot-biz"></div>Business Days
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="section-sub" style="margin-top:6px;">Applies to all milestone offsets in this template. <span style="background:#F3F4F6;color:#6B7280;padding:1px 6px;border-radius:3px;font-size:11px;font-weight:600;">System</span> milestones are auto-triggered and cannot be adjusted.</div>
+          <div class="section-title">Milestone Configuration</div>
+          <div class="section-sub">Configure milestone offset values and holiday skip per milestone. <span style="background:#F3F4F6;color:#6B7280;padding:1px 6px;border-radius:3px;font-size:11px;font-weight:600;">System</span> milestones are auto-triggered and cannot be adjusted.</div>
         </div>
         <div style="display:flex;gap:8px;align-items:center;">
           <div class="template-dropdown" id="load-tpl-dd">
@@ -1239,6 +1226,15 @@ tr.drag-over { border-top: 2px solid #2563EB; }
           </div>
           <button class="btn-outline-sm" onclick="showSaveTemplateModal()">Save as Template</button>
         </div>
+      </div>
+      <!-- Offset Day Type bar -->
+      <div style="padding:10px 20px;border-bottom:1px solid #F3F4F6;background:#FAFAFA;display:flex;align-items:center;gap:12px;">
+        <span style="font-size:13px;font-weight:600;color:#374151;">Offset Day Type <span class="req">*</span></span>
+        <div class="mode-toggle" style="margin-bottom:0;">
+          <button class="mode-toggle-btn active" id="daytype-cal" onclick="selectDayType('cal')">Calendar Days</button>
+          <button class="mode-toggle-btn" id="daytype-biz" onclick="selectDayType('biz')">Business Days</button>
+        </div>
+        <span style="font-size:12px;color:#9CA3AF;">Applies to all Offset (days) values in this template</span>
       </div>
       <div class="section-body" style="padding:0;">
         <div class="tbl-wrap">
@@ -3915,11 +3911,11 @@ function renderCycleStrip() {
   }).join('');
 }
 
-/* ── Day type toggle ── */
+/* ── Day type segmented toggle ── */
 function selectDayType(type) {
   ['cal','biz'].forEach(t => {
-    document.getElementById('daytype-' + t).classList.toggle('selected', t === type);
-    document.getElementById('daytype-dot-' + t).classList.toggle('on', t === type);
+    const el = document.getElementById('daytype-' + t);
+    if (el) el.classList.toggle('active', t === type);
   });
 }
 
