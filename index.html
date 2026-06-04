@@ -1955,55 +1955,6 @@ tr.drag-over { border-top: 2px solid #2563EB; }
   </div>
 
 <!-- Edit Information Modal (SPV & Tranche) -->
-<div class="modal-overlay" id="spv-edit-modal">
-  <div class="modal" style="width:480px;">
-    <div class="modal-header">
-      <div>
-        <div class="modal-title">Edit Information</div>
-      </div>
-      <button class="modal-close" onclick="closeSpvEditModal()">✕</button>
-    </div>
-    <div class="modal-body" style="padding:20px 24px 8px;">
-      <div class="form-group" style="margin-bottom:20px;">
-        <label class="form-label" style="font-size:13px;margin-bottom:6px;display:block;"><span style="color:#DC2626;">*</span> Select Field</label>
-        <select class="form-select" id="spv-edit-field" style="width:100%;padding:10px 14px;font-size:13px;border:1px solid #D1D5DB;border-radius:8px;color:#374151;background:#fff;appearance:none;-webkit-appearance:none;background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E&quot;);background-repeat:no-repeat;background-position:right 12px center;">
-          <option value="" disabled selected>Please select Field</option>
-          <option value="spv_name">SPV Name</option>
-          <option value="tranche">Tranche</option>
-        </select>
-      </div>
-      <div class="form-group" style="margin-bottom:20px;">
-        <label class="form-label" style="font-size:13px;margin-bottom:6px;display:block;"><span style="color:#DC2626;">*</span> Effective Time</label>
-        <div style="position:relative;">
-          <input type="datetime-local" id="spv-edit-effective" class="form-input" style="width:100%;padding:10px 40px 10px 14px;font-size:13px;border:1px solid #D1D5DB;border-radius:8px;color:#374151;" placeholder="Please select effective time" />
-          <span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:#9CA3AF;pointer-events:none;">📅</span>
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer" style="padding:12px 24px;display:flex;justify-content:flex-end;gap:10px;">
-      <button class="btn-outline-sm" style="padding:8px 24px;font-size:13px;" onclick="cancelSpvEdit()">Cancel</button>
-      <button class="btn-primary-lg" style="font-size:13px;padding:8px 24px;" onclick="submitSpvEdit()">OK</button>
-    </div>
-  </div>
-</div>
-
-<!-- Cancel Edit Confirm Modal -->
-<div class="modal-overlay" id="spv-cancel-confirm">
-  <div class="modal" style="width:420px;">
-    <div class="modal-header">
-      <div class="modal-title">Are you sure to cancel editing?</div>
-      <button class="modal-close" onclick="document.getElementById('spv-cancel-confirm').classList.remove('open')">✕</button>
-    </div>
-    <div class="modal-body" style="padding:16px 24px 20px;">
-      <div style="font-size:13px;color:#6B7280;line-height:1.6;">Unsaved changes will be discarded.</div>
-    </div>
-    <div class="modal-footer" style="display:flex;justify-content:flex-end;gap:10px;padding:12px 24px;">
-      <button class="btn-outline-sm" style="padding:8px 18px;" onclick="document.getElementById('spv-cancel-confirm').classList.remove('open')">No</button>
-      <button class="btn-primary-lg" style="font-size:13px;padding:8px 18px;" onclick="confirmCancelSpvEdit()">Yes, cancel</button>
-    </div>
-  </div>
-</div>
-
 </div><!-- /flow-list -->
 
 <!-- ══════════════════════════════════════
@@ -2054,44 +2005,61 @@ tr.drag-over { border-top: 2px solid #2563EB; }
 
       <!-- Tab: Basic Info -->
       <div class="view-scroll" id="vt-basic">
+        <!-- Funder Info -->
         <div class="view-section">
-          <div class="view-section-hd">
-            <span class="view-section-title">Funder Info</span>
-            <!-- Funder Info is read-only; no Edit -->
+          <div class="view-section-hd" style="cursor:pointer;" onclick="toggleAccordion('vi-funder-body');this.querySelector('.vi-chev').classList.toggle('collapsed')">
+            <span class="view-section-title">Funder info</span>
+            <span class="vi-chev" style="font-size:16px;color:#6B7280;transition:transform 0.2s;">▲</span>
           </div>
-          <div class="view-section-body">
-            <div class="view-grid">
-              <div class="view-field"><span class="view-label">Funder Name</span><span class="view-value">TH_SPL_Starlight_ABS_01</span></div>
-              <div class="view-field"><span class="view-label">Funder Scheme</span><span class="view-value">ABS</span></div>
-              <div class="view-field"><span class="view-label">Platform / Agent</span><span class="view-value">Seamless</span></div>
-              <div class="view-field"><span class="view-label">Status</span><span class="view-value"><span class="status-badge status-active-badge">ACTIVE</span></span></div>
-              <div class="view-field"><span class="view-label">Create Time</span><span class="view-value" style="color:#9CA3AF;">2024-12-13 09:17:02</span></div>
-              <div class="view-field"><span class="view-label">Grade</span><span class="view-value">UNICORN</span></div>
+          <div id="vi-funder-body">
+            <div style="padding:18px 20px;">
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px 24px;">
+                <div><div class="view-label" style="margin-bottom:3px;">Funder ID</div><div style="font-size:13px;color:#111827;font-weight:500;">TH-2024-001</div></div>
+                <div><div class="view-label" style="margin-bottom:3px;">Funder Name</div><div style="font-size:13px;color:#111827;font-weight:500;">TH_SPL_Starlight_ABS_01</div></div>
+                <div><div class="view-label" style="margin-bottom:3px;">Funder Scheme</div><div style="font-size:13px;color:#111827;font-weight:500;">ABS</div></div>
+                <div><div class="view-label" style="margin-bottom:3px;">Product</div><div style="font-size:13px;color:#111827;font-weight:500;">SPL</div></div>
+                <div><div class="view-label" style="margin-bottom:3px;">Loan Type</div><div style="font-size:13px;color:#111827;font-weight:500;">SLoan, SFinancing-i</div></div>
+                <div><div class="view-label" style="margin-bottom:3px;">Create Time</div><div style="font-size:13px;color:#111827;font-weight:500;">2024-12-13 09:17:02</div></div>
+                <div><div class="view-label" style="margin-bottom:3px;">Originator</div><div style="font-size:13px;color:#111827;font-weight:500;">Monee</div></div>
+                <div><div class="view-label" style="margin-bottom:3px;">Investor</div><div style="font-size:13px;color:#111827;font-weight:500;">Starlight Capital</div></div>
+                <div><div class="view-label" style="margin-bottom:3px;">License</div><div style="font-size:13px;color:#111827;font-weight:500;">DGL</div></div>
+              </div>
             </div>
           </div>
         </div>
+
+        <!-- SPV & Tranche Info -->
         <div class="view-section">
-          <div class="view-section-hd">
-            <span class="view-section-title">SPV &amp; Tranche Info</span>
-            <button class="btn-outline-sm" style="padding:6px 14px;font-size:12px;" onclick="openSpvEditModal()">Edit</button>
+          <div class="view-section-hd" style="cursor:pointer;" onclick="toggleAccordion('vi-spv-body');this.querySelector('.vi-chev').classList.toggle('collapsed')">
+            <span class="view-section-title">SPV &amp; tranche info</span>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <button class="btn-edit" style="padding:6px 18px;font-size:13px;border-radius:6px;" onclick="event.stopPropagation();openSpvEditModal()">Edit</button>
+              <span class="vi-chev" style="font-size:16px;color:#6B7280;transition:transform 0.2s;">▲</span>
+            </div>
           </div>
-          <div class="view-section-body">
-            <div class="view-grid">
-              <div class="view-field"><span class="view-label">SPV Name</span><span class="view-value">TH_SPL_ABS_01</span></div>
-              <div class="view-field"><span class="view-label">Tranche Type</span><span class="view-value">ABS</span></div>
-              <div class="view-field"><span class="view-label">Tranche Name</span><span class="view-value">K_GEN_[TRANCHE]</span></div>
-              <div class="view-field"><span class="view-label">Rate</span><span class="view-value">—</span></div>
-              <div class="view-field"><span class="view-label">Effective Date</span><span class="view-value" style="color:#9CA3AF;">2026-01-27 07:41:00</span></div>
+          <div id="vi-spv-body">
+            <div style="padding:18px 20px;">
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px 24px;">
+                <div><div class="view-label" style="margin-bottom:3px;">SPV Name</div><div style="font-size:13px;color:#111827;font-weight:500;">UMI</div></div>
+                <div><div class="view-label" style="margin-bottom:3px;">Tranche</div><div style="font-size:13px;color:#111827;font-weight:500;">01</div></div>
+              </div>
             </div>
           </div>
         </div>
+
+        <!-- Life cycle -->
         <div class="view-section">
-          <div class="view-section-hd"><span class="view-section-title">Life cycle</span></div>
-          <div class="view-section-body">
-            <div class="empty-state-sm">
-              <div style="font-size:28px;color:#D1D5DB;margin-bottom:8px;">🔒</div>
-              <div style="font-size:13px;font-weight:500;color:#374151;margin-bottom:2px;">Life cycle</div>
-              <div style="font-size:12px;color:#9CA3AF;">TBD</div>
+          <div class="view-section-hd" style="cursor:pointer;" onclick="toggleAccordion('vi-lifecycle-body');this.querySelector('.vi-chev').classList.toggle('collapsed')">
+            <span class="view-section-title">Life cycle</span>
+            <span class="vi-chev" style="font-size:16px;color:#6B7280;transition:transform 0.2s;">▲</span>
+          </div>
+          <div id="vi-lifecycle-body">
+            <div class="view-section-body">
+              <div class="empty-state-sm">
+                <div style="font-size:28px;color:#D1D5DB;margin-bottom:8px;">🔒</div>
+                <div style="font-size:13px;font-weight:500;color:#374151;margin-bottom:2px;">Life cycle</div>
+                <div style="font-size:12px;color:#9CA3AF;">TBD</div>
+              </div>
             </div>
           </div>
         </div>
@@ -4970,6 +4938,37 @@ function spSubmit() {
         <button class="btn-outline-sm" style="padding:8px 18px;" onclick="bspClose()">Cancel</button>
         <button class="btn-primary-lg" id="bsp-next-btn" style="font-size:13px;padding:8px 24px;" onclick="bspNext()">Next →</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- SPV Edit Modal (global) -->
+<div class="modal-overlay" id="spv-edit-modal">
+  <div class="modal" style="width:480px;">
+    <div class="modal-header">
+      <div><div class="modal-title">Edit Information</div></div>
+      <button class="modal-close" onclick="closeSpvEditModal()">✕</button>
+    </div>
+    <div class="modal-body" style="padding:20px 24px 8px;">
+      <div class="form-group" style="margin-bottom:20px;">
+        <label class="form-label" style="font-size:13px;margin-bottom:6px;display:block;"><span style="color:#DC2626;">*</span> Select Field</label>
+        <select class="form-select" id="spv-edit-field" style="width:100%;padding:10px 14px;font-size:13px;border:1px solid #D1D5DB;border-radius:8px;color:#374151;background:#fff;appearance:none;-webkit-appearance:none;background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E&quot;);background-repeat:no-repeat;background-position:right 12px center;">
+          <option value="" disabled selected>Please select Field</option>
+          <option value="spv_name">SPV Name</option>
+          <option value="tranche">Tranche</option>
+        </select>
+      </div>
+      <div class="form-group" style="margin-bottom:20px;">
+        <label class="form-label" style="font-size:13px;margin-bottom:6px;display:block;"><span style="color:#DC2626;">*</span> Effective Time</label>
+        <div style="position:relative;">
+          <input type="datetime-local" id="spv-edit-effective" class="form-input" style="width:100%;padding:10px 40px 10px 14px;font-size:13px;border:1px solid #D1D5DB;border-radius:8px;color:#374151;" />
+          <span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:#9CA3AF;pointer-events:none;">📅</span>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer" style="padding:12px 24px;display:flex;justify-content:flex-end;gap:10px;">
+      <button class="btn-outline-sm" style="padding:8px 24px;font-size:13px;" onclick="closeSpvEditModal()">Cancel</button>
+      <button class="btn-primary-lg" style="font-size:13px;padding:8px 24px;" onclick="submitSpvEdit()">OK</button>
     </div>
   </div>
 </div>
