@@ -648,13 +648,13 @@ tr.drag-over { border-top: 2px solid #2563EB; }
           <!-- Funder Name -->
           <div class="form-group" style="grid-column:1/-1;">
             <label class="form-label">Funder Name <span class="req">*</span></label>
-            <input class="form-input" style="max-width:420px;" placeholder="e.g. TH_SPL_Starlight_ABS_01" />
+            <input id="s1-funder-name" class="form-input" style="max-width:420px;" placeholder="e.g. TH_SPL_Starlight_ABS_01" />
           </div>
 
           <!-- Funder Scheme -->
           <div class="form-group">
             <label class="form-label">Funder Scheme <span class="req">*</span></label>
-            <select class="form-select">
+            <select id="s1-funder-scheme" class="form-select">
               <option value="">Select scheme</option>
               <option>ABS</option>
               <option>ABL</option>
@@ -664,7 +664,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
           <!-- Product -->
           <div class="form-group">
             <label class="form-label">Product <span class="req">*</span></label>
-            <select class="form-select">
+            <select id="s1-product" class="form-select">
               <option value="">Select product</option>
               <option>BCL</option>
               <option>SPL</option>
@@ -693,7 +693,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
           <!-- Originator -->
           <div class="form-group">
             <label class="form-label">Originator <span class="req">*</span></label>
-            <select class="form-select">
+            <select id="s1-originator" class="form-select">
               <option value="">Select originator</option>
               <option>Monee</option>
               <option>Unicorn</option>
@@ -703,13 +703,13 @@ tr.drag-over { border-top: 2px solid #2563EB; }
           <!-- Investor -->
           <div class="form-group">
             <label class="form-label">Investor <span class="req">*</span></label>
-            <input class="form-input" placeholder="e.g. JPM" />
+            <input id="s1-investor" class="form-input" placeholder="e.g. JPM" />
           </div>
 
           <!-- License (TH only) -->
           <div class="form-group">
             <label class="form-label">License <span class="req">*</span> <span style="font-size:11px;color:#9CA3AF;font-weight:400;">(TH only)</span></label>
-            <select class="form-select">
+            <select id="s1-license" class="form-select">
               <option value="">Select license</option>
               <option>CCC</option>
               <option>DGL</option>
@@ -752,23 +752,11 @@ tr.drag-over { border-top: 2px solid #2563EB; }
       </div>
     </div>
 
-    <!-- Issue size -->
-    <div class="section-card">
-      <div class="section-header"><div class="section-title">Issue size</div></div>
-      <div class="section-body">
-        <div style="text-align:center;padding:24px 0;">
-          <div style="font-size:28px;color:#D1D5DB;margin-bottom:8px;">🔒</div>
-          <div style="font-size:13px;font-weight:500;color:#374151;margin-bottom:2px;">Issue size</div>
-          <div style="font-size:12px;color:#9CA3AF;">TBD</div>
-        </div>
-      </div>
-    </div>
-
     <div class="footer-nav">
       <span style="font-size:13px;color:#374151;cursor:pointer;" onclick="switchFlow('list')">Back</span>
       <div style="display:flex;gap:10px;">
         <button class="btn-outline-sm" style="padding:10px 20px;font-size:13px;">Save draft</button>
-        <button class="btn-primary-lg" onclick="showPage('s2',document.getElementById('tab-s2'))">Next: Portfolio Setting →</button>
+        <button class="btn-primary-lg" onclick="s1Next()">Next: Portfolio Setting →</button>
       </div>
     </div>
   </div>
@@ -2057,15 +2045,15 @@ tr.drag-over { border-top: 2px solid #2563EB; }
       </div>
       <!-- Tabs -->
       <div class="view-tabs">
-        <div class="view-tab done" onclick="switchViewTab('vt-basic',this)"><span class="view-tab-num">✓</span>Basic Info</div>
-        <div class="view-tab active" onclick="switchViewTab('vt-portfolio',this)"><span class="view-tab-num">02</span>Portfolio Setting</div>
-        <div class="view-tab" onclick="switchViewTab('vt-plan',this)"><span class="view-tab-num">03</span>Management Plan</div>
-        <div class="view-tab" onclick="switchViewTab('vt-report',this)"><span class="view-tab-num">04</span>Auto Report Management</div>
-        <div class="view-tab" onclick="switchViewTab('vt-review',this)"><span class="view-tab-num">05</span>Review</div>
+        <div class="view-tab active" id="vtab-basic" onclick="switchViewTab('vt-basic',this)"><span class="view-tab-num">✓</span>Basic Info</div>
+        <div class="view-tab done" id="vtab-portfolio" onclick="switchViewTab('vt-portfolio',this)"><span class="view-tab-num">✓</span>Portfolio Setting</div>
+        <div class="view-tab done" id="vtab-plan" onclick="switchViewTab('vt-plan',this)"><span class="view-tab-num">✓</span>Management Plan</div>
+        <div class="view-tab done" id="vtab-report" onclick="switchViewTab('vt-report',this)"><span class="view-tab-num">✓</span>Auto Report Management</div>
+        <div class="view-tab done" id="vtab-review" onclick="switchViewTab('vt-review',this)"><span class="view-tab-num">✓</span>Review</div>
       </div>
 
       <!-- Tab: Basic Info -->
-      <div class="view-scroll" id="vt-basic" style="display:none;">
+      <div class="view-scroll" id="vt-basic">
         <div class="view-section">
           <div class="view-section-hd">
             <span class="view-section-title">Funder Info</span>
@@ -2107,16 +2095,6 @@ tr.drag-over { border-top: 2px solid #2563EB; }
             </div>
           </div>
         </div>
-        <div class="view-section">
-          <div class="view-section-hd"><span class="view-section-title">Issue size</span></div>
-          <div class="view-section-body">
-            <div class="empty-state-sm">
-              <div style="font-size:28px;color:#D1D5DB;margin-bottom:8px;">🔒</div>
-              <div style="font-size:13px;font-weight:500;color:#374151;margin-bottom:2px;">Issue size</div>
-              <div style="font-size:12px;color:#9CA3AF;">TBD</div>
-            </div>
-          </div>
-        </div>
         <div class="view-footer">
           <span style="font-size:13px;color:#374151;cursor:pointer;" onclick="switchFlow('list')">Back</span>
           <div style="display:flex;gap:10px;align-items:center;">
@@ -2127,32 +2105,73 @@ tr.drag-over { border-top: 2px solid #2563EB; }
       </div>
 
       <!-- Tab: Portfolio Setting -->
-      <div class="view-scroll" id="vt-portfolio">
+      <div class="view-scroll" id="vt-portfolio" style="display:none;">
         <!-- Pricing & Terms -->
-        <div class="view-section">
+        <div class="view-section" id="pt-section">
           <div class="view-section-hd">
             <span class="view-section-title">Pricing &amp; Terms</span>
-            <button class="btn-outline-sm" style="padding:6px 14px;font-size:12px;" onclick="switchFlow('create')">Edit</button>
+            <button class="btn-outline-sm" id="pt-edit-btn" style="padding:6px 14px;font-size:12px;" onclick="ptStartEdit()">Edit</button>
           </div>
-          <div class="view-section-body">
-            <div style="margin-bottom:12px;">
-              <div class="view-label" style="margin-bottom:6px;">Pricing Model</div>
-              <div style="display:flex;align-items:center;gap:8px;">
-                <div class="radio-dot on" style="flex-shrink:0;"></div>
-                <span style="font-size:13px;font-weight:600;color:#111827;">Accrued Interest</span>
-                <span style="font-size:12px;color:#6B7280;margin-left:4px;">Interest recognised day by day as it accrues</span>
+
+          <!-- VIEW mode body -->
+          <div class="view-section-body" id="pt-view-body">
+            <div style="display:grid;grid-template-columns:repeat(3,auto);gap:24px 40px;align-items:start;">
+              <div>
+                <div class="view-label" style="margin-bottom:4px;">Pricing Mode <span class="tooltip-wrap"><span class="tooltip-icon">ⓘ</span><span class="tooltip-box">This determines how to calculate the interest split at cutoff.</span></span></div>
+                <div style="font-size:13px;font-weight:600;color:#111827;" id="pt-view-pricing-model">Accrued Interest</div>
+              </div>
+              <div>
+                <div class="view-label" style="margin-bottom:6px;">Auto Clawback Enabled</div>
+                <div class="toggle" style="pointer-events:none;" id="pt-view-toggle"></div>
+              </div>
+              <div>
+                <div class="view-label" style="margin-bottom:4px;">Auto Clawback Mode</div>
+                <div style="font-size:13px;color:#374151;" id="pt-view-mode">Mode 1 (Accrued to Restructure Date)</div>
               </div>
             </div>
-            <div style="margin-bottom:12px;">
-              <div class="view-label" style="margin-bottom:6px;">Auto Clawback</div>
-              <div style="display:flex;align-items:center;gap:10px;">
-                <div class="toggle" style="pointer-events:none;"></div>
-                <span style="font-size:13px;color:#374151;">Enabled</span>
-                <span style="font-size:12px;color:#6B7280;">· Mode 1: Discount &amp; Pre-Completion</span>
+          </div>
+
+          <!-- EDIT mode body -->
+          <div id="pt-edit-body" style="display:none;">
+            <div style="padding:16px 20px;display:grid;grid-template-columns:auto 1fr 1fr auto;gap:24px 40px;align-items:start;border-bottom:1px solid #F3F4F6;">
+              <!-- Col 1: Pricing Mode (read-only) -->
+              <div>
+                <div class="view-label" style="margin-bottom:4px;">Pricing Mode <span class="tooltip-wrap"><span class="tooltip-icon">ⓘ</span><span class="tooltip-box">This determines how to calculate the interest split at cutoff.</span></span></div>
+                <div style="font-size:13px;font-weight:700;color:#111827;text-transform:uppercase;letter-spacing:0.04em;" id="pt-edit-pricing-label">Accrued Interest</div>
               </div>
+              <!-- Col 2: Auto Clawback toggle -->
+              <div>
+                <div class="view-label" style="margin-bottom:8px;">Auto Clawback Enabled</div>
+                <div class="toggle" id="pt-clawback-toggle" onclick="ptToggleClawback()"></div>
+              </div>
+              <!-- Col 3: Mode radios -->
+              <div>
+                <div class="view-label" style="margin-bottom:8px;">Auto Clawback Mode</div>
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                  <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:#374151;cursor:pointer;" onclick="ptSelectMode(1)">
+                    <div class="radio-dot" id="pt-mode1-dot" style="flex-shrink:0;"></div>
+                    Mode 1 (Accrued to Restructure Date)
+                  </label>
+                  <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:#374151;cursor:pointer;" onclick="ptSelectMode(2)">
+                    <div class="radio-dot on" id="pt-mode2-dot" style="flex-shrink:0;"></div>
+                    Mode 2 (Accrued to Pre-Completion)
+                  </label>
+                </div>
+              </div>
+              <!-- Col 4: N Input (Mode 2 only) -->
+              <div id="pt-n-input-row">
+                <div class="view-label" style="margin-bottom:6px;">N Input</div>
+                <input type="number" min="1" value="1" id="pt-n-input" class="form-input" style="width:90px;font-size:13px;" />
+              </div>
+            </div>
+            <!-- Footer with Cancel + Save -->
+            <div style="padding:12px 20px;display:flex;justify-content:flex-end;gap:10px;">
+              <button class="btn-outline-sm" style="padding:7px 18px;font-size:13px;" onclick="ptCancelEdit()">Cancel</button>
+              <button class="btn-primary-lg" style="padding:7px 18px;font-size:13px;" onclick="ptOpenSaveModal()">Save</button>
             </div>
           </div>
         </div>
+
         <!-- Rule List -->
         <div class="view-section" style="overflow:visible;">
           <div class="accordion-hd" onclick="toggleAccordion('vr-rule-body')">
@@ -3424,7 +3443,7 @@ function switchFlow(target) {
     document.getElementById('flow-list').classList.add('active');
   } else if (target === 'view') {
     document.getElementById('flow-view').classList.add('active');
-    switchViewTab('vt-plan', document.querySelectorAll('.view-tab')[2]);
+    switchViewTab('vt-basic', document.getElementById('vtab-basic'));
   } else if (target === 'sub-plan') {
     document.getElementById('flow-sub-plan').classList.add('active');
     initSubPlan();
@@ -3433,6 +3452,7 @@ function switchFlow(target) {
     wftShowList();
   } else {
     document.getElementById('flow-create').classList.add('active');
+    showPage('s1', document.getElementById('tab-s1'));
   }
   window.scrollTo(0, 0);
 }
@@ -4532,6 +4552,91 @@ function bspSubmit() {
   setTimeout(() => toast.classList.remove('visible'), 3500);
 }
 
+/* ── Basic Info step validation ── */
+function s1Next() {
+  const fields = [
+    document.getElementById('s1-funder-name'),
+    document.getElementById('s1-funder-scheme'),
+    document.getElementById('s1-product'),
+    document.getElementById('s1-originator'),
+    document.getElementById('s1-investor'),
+    document.getElementById('s1-license'),
+  ];
+  // Loan Type multi-select: check at least one checkbox checked
+  const loanChecked = document.querySelectorAll('#loanTypeDDMenu input[type=checkbox]:checked').length > 0;
+
+  let allFilled = loanChecked;
+  fields.forEach(f => {
+    const ok = f && f.value.trim() !== '';
+    if (!ok) allFilled = false;
+    if (f) f.style.borderColor = ok ? '' : '#DC2626';
+  });
+  if (!loanChecked) {
+    const trigger = document.querySelector('#loanTypeDD .multi-dd-trigger');
+    if (trigger) trigger.style.borderColor = '#DC2626';
+  } else {
+    const trigger = document.querySelector('#loanTypeDD .multi-dd-trigger');
+    if (trigger) trigger.style.borderColor = '';
+  }
+
+  if (allFilled) {
+    // Tick step 1
+    const tab = document.getElementById('tab-s1');
+    tab.classList.remove('active');
+    tab.classList.add('done');
+    tab.querySelector('.step-num').textContent = '✓';
+    showPage('s2', document.getElementById('tab-s2'));
+  }
+}
+
+/* ── Pricing & Terms inline edit ── */
+let ptSelectedMode = 2;
+
+function ptStartEdit() {
+  document.getElementById('pt-edit-btn').style.display = 'none';
+  document.getElementById('pt-view-body').style.display = 'none';
+  document.getElementById('pt-edit-body').style.display = '';
+  // Sync pricing label into edit panel
+  const model = document.getElementById('pt-view-pricing-model').textContent;
+  document.getElementById('pt-edit-pricing-label').textContent = model.toUpperCase();
+  // Default: Mode 2 selected, N Input visible (matches reference)
+  ptSelectMode(2);
+}
+function ptCancelEdit() {
+  document.getElementById('pt-edit-btn').style.display = '';
+  document.getElementById('pt-view-body').style.display = '';
+  document.getElementById('pt-edit-body').style.display = 'none';
+  // Reset toggle
+  const tog = document.getElementById('pt-clawback-toggle');
+  tog.classList.remove('off');
+  ptSelectMode(2);
+}
+function ptToggleClawback() {
+  document.getElementById('pt-clawback-toggle').classList.toggle('off');
+}
+function ptSelectMode(mode) {
+  ptSelectedMode = mode;
+  document.getElementById('pt-mode1-dot').className = 'radio-dot' + (mode === 1 ? ' on' : '');
+  document.getElementById('pt-mode2-dot').className = 'radio-dot' + (mode === 2 ? ' on' : '');
+  document.getElementById('pt-n-input-row').style.display = mode === 2 ? '' : 'none';
+}
+function ptOpenSaveModal() {
+  document.getElementById('pt-save-modal').classList.add('open');
+}
+function ptSubmitTicket() {
+  document.getElementById('pt-save-modal').classList.remove('open');
+  // Update view mode to reflect saved values
+  const tog = document.getElementById('pt-clawback-toggle');
+  document.getElementById('pt-view-toggle').className = tog.classList.contains('off') ? 'toggle off' : 'toggle';
+  document.getElementById('pt-view-mode').textContent = ptSelectedMode === 1
+    ? 'Mode 1 (Accrued to Restructure Date)' : 'Mode 2 (Accrued to Pre-Completion)';
+  ptCancelEdit();
+  const toast = document.getElementById('toast');
+  toast.textContent = '✓ Ticket created for Pricing & Terms update — pending maker-checker approval';
+  toast.classList.add('visible');
+  setTimeout(() => toast.classList.remove('visible'), 3500);
+}
+
 /* ── Plans table multi-selection ── */
 function wftPlansToggleAll(master) {
   document.querySelectorAll('.plan-row-chk').forEach(chk => {
@@ -4865,6 +4970,24 @@ function spSubmit() {
         <button class="btn-outline-sm" style="padding:8px 18px;" onclick="bspClose()">Cancel</button>
         <button class="btn-primary-lg" id="bsp-next-btn" style="font-size:13px;padding:8px 24px;" onclick="bspNext()">Next →</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Effective Time Modal (global — outside all flows to avoid overflow:hidden clipping) -->
+<div class="modal-overlay" id="pt-save-modal">
+  <div class="modal" style="width:420px;">
+    <div class="modal-header">
+      <div><div class="modal-title">Edit Information</div></div>
+      <button class="modal-close" onclick="document.getElementById('pt-save-modal').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body" style="padding:20px 24px;">
+      <label class="form-label">* Effective Time</label>
+      <input type="datetime-local" class="form-input" id="pt-effective-time" style="font-size:13px;" />
+    </div>
+    <div class="modal-footer" style="display:flex;justify-content:flex-end;gap:10px;padding:12px 24px;">
+      <button class="btn-outline-sm" style="padding:8px 20px;" onclick="document.getElementById('pt-save-modal').classList.remove('open')">Cancel</button>
+      <button class="btn-primary-lg" style="font-size:13px;padding:8px 20px;" onclick="ptSubmitTicket()">OK</button>
     </div>
   </div>
 </div>
