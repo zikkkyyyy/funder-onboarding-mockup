@@ -3431,15 +3431,13 @@ function wftShowDetail(type) {
   document.getElementById('wft-info-updated').textContent = d.updated;
   document.getElementById('wft-info-created-at').textContent = d.createdAt;
 
-  // Cycle Segments bar
-  const colors = ['#2563EB','#7C3AED','#0891B2','#16A34A','#D97706'];
+  // Cycle Segments plain text
   const bar = document.getElementById('wft-info-seg-bar');
   const segs = d.segments;
-  const labels = segs.map(s => s.toEOM ? s.from + '–EOM' : s.from + '–' + s.to);
-  bar.innerHTML = `<div style="display:flex;gap:2px;border-radius:6px;overflow:hidden;margin-bottom:6px;">
-    ${segs.map((s,i) => `<div style="flex:${s.toEOM ? 2 : 1};background:${colors[i]};color:#fff;font-size:11px;font-weight:600;text-align:center;padding:6px 4px;">${labels[i]}</div>`).join('')}
-  </div>
-  <div style="font-size:11px;color:#9CA3AF;">Each segment = one cycle. Pattern repeats every month.</div>`;
+  bar.innerHTML = segs.map((s, i) => {
+    const label = s.toEOM ? s.from + '–EOM' : s.from + '–' + s.to;
+    return `<div style="font-size:13px;color:#374151;">Cycle ${i+1}: ${label}</div>`;
+  }).join('') + `<div style="font-size:11px;color:#9CA3AF;margin-top:4px;">Each segment = one cycle. Pattern repeats every month.</div>`;
 
   // Milestone table — reuse renderMilestoneTable logic
   const milestones = OPS_FLOW_MILESTONES[d.milestoneType] || [];
