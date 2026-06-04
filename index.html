@@ -1217,14 +1217,14 @@ tr.drag-over { border-top: 2px solid #2563EB; }
         </div>
         <div style="display:flex;gap:8px;align-items:center;">
           <div class="template-dropdown" id="load-tpl-dd">
-            <button class="btn-outline-sm" onclick="toggleTplDropdown(event)">Load Template ▾</button>
+            <button class="btn-outline-sm" style="white-space:nowrap;padding:7px 14px;" onclick="toggleTplDropdown(event)">Load Template ▾</button>
             <div class="tpl-dd-menu" id="tpl-dd-menu">
               <div class="tpl-dd-item" onclick="loadTemplate('TH_SPL_ABS_Standard', 'abs')">TH_SPL_ABS_Standard <span class="tpl-dd-tag">7 milestones</span></div>
               <div class="tpl-dd-item" onclick="loadTemplate('TH_BCL_ABS_Net_Monthly', 'abs-net')">TH_BCL_ABS_Net_Monthly <span class="tpl-dd-tag">9 milestones</span></div>
               <div class="tpl-dd-item" onclick="loadTemplate('MY_BCL_ABL_BiMonthly', 'abl')">MY_BCL_ABL_BiMonthly <span class="tpl-dd-tag">5 milestones</span></div>
             </div>
           </div>
-          <button class="btn-outline-sm" onclick="showSaveTemplateModal()">Save as Template</button>
+          <button class="btn-outline-sm" style="white-space:nowrap;padding:7px 14px;" onclick="showSaveTemplateModal()">Save as Template</button>
         </div>
       </div>
       <!-- Offset Day Type bar -->
@@ -1237,7 +1237,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
         </label>
         <label style="display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:#374151;user-select:none;">
           <input type="radio" name="daytype" id="daytype-biz" value="biz" style="display:none;" onchange="selectDayType('biz')">
-          <span class="std-radio-dot" id="daytype-dot-biz" onclick="document.getElementById('daytype-biz').click()" style="width:18px;height:18px;border-radius:50%;border:2px solid #D1D5DB;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;"></span>
+          <span class="std-radio-dot" id="daytype-dot-biz" onclick="document.getElementById('daytype-biz').click()" style="width:18px;height:18px;border-radius:50%;border:2px solid #9CA3AF;background:#fff;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;"></span>
           <span onclick="document.getElementById('daytype-biz').click()">Business Days</span>
         </label>
         <span style="font-size:12px;color:#9CA3AF;margin-left:4px;">Applies to all Offset (days) values in this template</span>
@@ -3923,7 +3923,8 @@ function selectDayType(type) {
     const dot = document.getElementById('daytype-dot-' + t);
     if (!dot) return;
     const selected = t === type;
-    dot.style.borderColor = selected ? '#2563EB' : '#D1D5DB';
+    dot.style.borderColor = selected ? '#2563EB' : '#9CA3AF';
+    dot.style.background = selected ? '' : '#fff';
     dot.innerHTML = selected
       ? '<span style="width:9px;height:9px;border-radius:50%;background:#2563EB;display:block;"></span>'
       : '';
