@@ -1232,14 +1232,14 @@ tr.drag-over { border-top: 2px solid #2563EB; }
         <label class="form-label" style="display:block;margin-bottom:8px;">Offset Day Type <span class="req">*</span></label>
         <div style="display:flex;align-items:center;gap:24px;">
           <label style="display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:#374151;user-select:none;">
-            <input type="radio" name="daytype" id="daytype-cal" value="cal" checked style="display:none;" onchange="selectDayType('cal')">
-            <span id="daytype-dot-cal" onclick="document.getElementById('daytype-cal').click()" style="width:18px;height:18px;border-radius:50%;border:2px solid #2563EB;background:#fff;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;"><span style="width:9px;height:9px;border-radius:50%;background:#2563EB;display:block;"></span></span>
-            <span onclick="document.getElementById('daytype-cal').click()">Calendar Days</span>
+            <input type="radio" name="daytype" id="daytype-cal" value="cal" style="display:none;" onchange="selectDayType('cal')">
+            <span id="daytype-dot-cal" onclick="document.getElementById('daytype-cal').click()" style="width:18px;height:18px;border-radius:50%;border:2px solid #9CA3AF;background:#fff;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;"></span>
+            <span onclick="document.getElementById('daytype-cal').click()">Calendar Days <span style="font-size:11px;color:#9CA3AF;font-weight:600;">D</span></span>
           </label>
           <label style="display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:#374151;user-select:none;">
-            <input type="radio" name="daytype" id="daytype-biz" value="biz" style="display:none;" onchange="selectDayType('biz')">
-            <span id="daytype-dot-biz" onclick="document.getElementById('daytype-biz').click()" style="width:18px;height:18px;border-radius:50%;border:2px solid #9CA3AF;background:#fff;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;"></span>
-            <span onclick="document.getElementById('daytype-biz').click()">Business Days</span>
+            <input type="radio" name="daytype" id="daytype-biz" value="biz" checked style="display:none;" onchange="selectDayType('biz')">
+            <span id="daytype-dot-biz" onclick="document.getElementById('daytype-biz').click()" style="width:18px;height:18px;border-radius:50%;border:2px solid #2563EB;background:#fff;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;"><span style="width:9px;height:9px;border-radius:50%;background:#2563EB;display:block;"></span></span>
+            <span onclick="document.getElementById('daytype-biz').click()">Business Days <span style="font-size:11px;color:#9CA3AF;font-weight:600;">T</span></span>
           </label>
         </div>
         <div class="form-hint" style="margin-top:6px;">Applies to all milestone offset values in this template</div>
@@ -3744,8 +3744,7 @@ function renderMilestoneTable(type) {
         : `<div style="display:flex;align-items:center;gap:6px;">
              <span style="font-size:12px;color:#9CA3AF;">+</span>
              <input class="ms-offset-input" type="number" value="${m.offset}" min="0" onchange="onOffsetChange(${i},this)" />
-             <span style="font-size:12px;color:#9CA3AF;">d</span>
-             ${m.note ? `<span style="font-size:11px;color:#9CA3AF;border:1px solid #E5E7EB;border-radius:3px;padding:1px 5px;">${m.note}</span>` : ''}
+             <span class="daytype-unit" style="font-size:12px;font-weight:600;color:#374151;min-width:12px;"></span>
            </div>`;
 
     // Holiday checkboxes
@@ -3772,6 +3771,10 @@ function renderMilestoneTable(type) {
       <td style="padding:10px 14px;">${holCell}</td>
     </tr>`;
   }).join('');
+  // Sync unit labels with current day type selection
+  const currentType = document.getElementById('daytype-biz') && document.getElementById('daytype-biz').checked ? 'biz' : 'cal';
+  const unit = currentType === 'biz' ? 'T' : 'D';
+  tbody.querySelectorAll('.daytype-unit').forEach(el => { el.textContent = unit; });
 }
 
 function onOffsetFromChange(idx, sel) {
@@ -3922,11 +3925,14 @@ function selectDayType(type) {
     if (!dot) return;
     const selected = t === type;
     dot.style.borderColor = selected ? '#2563EB' : '#9CA3AF';
-    dot.style.background = selected ? '' : '#fff';
+    dot.style.background = '#fff';
     dot.innerHTML = selected
       ? '<span style="width:9px;height:9px;border-radius:50%;background:#2563EB;display:block;"></span>'
       : '';
   });
+  // Update all unit labels in the milestone table
+  const unit = type === 'biz' ? 'T' : 'D';
+  document.querySelectorAll('.daytype-unit').forEach(el => { el.textContent = unit; });
 }
 
 /* ── Cycle length change ── */
