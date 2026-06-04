@@ -452,6 +452,29 @@ tr.drag-over { border-top: 2px solid #2563EB; }
 .rv-table tbody td { padding: 10px 12px; font-size: 13px; color: #374151; border-bottom: 1px solid #F3F4F6; }
 .rv-table tbody tr:last-child td { border-bottom: none; }
 
+/* Wizard progress bar */
+.wizard-steps { display:flex; align-items:center; gap:0; margin-bottom:24px; }
+.wizard-step { display:flex; align-items:center; gap:8px; flex:1; }
+.wizard-step-num { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0; }
+.wizard-step.done .wizard-step-num { background:#2563EB; color:#fff; }
+.wizard-step.active .wizard-step-num { background:#fff; border:2px solid #2563EB; color:#2563EB; }
+.wizard-step.pending .wizard-step-num { background:#fff; border:2px solid #D1D5DB; color:#9CA3AF; }
+.wizard-step-label { font-size:13px; font-weight:500; }
+.wizard-step.active .wizard-step-label { color:#2563EB; }
+.wizard-step.pending .wizard-step-label { color:#9CA3AF; }
+.wizard-connector { flex:0 0 32px; height:1px; background:#E5E7EB; }
+/* Mode toggle */
+.mode-toggle { display:inline-flex; background:#F3F4F6; border-radius:8px; padding:3px; gap:2px; margin-bottom:16px; }
+.mode-toggle-btn { padding:6px 20px; border-radius:6px; font-size:13px; font-weight:500; cursor:pointer; border:none; background:transparent; color:#6B7280; transition:all .15s; }
+.mode-toggle-btn.active { background:#fff; color:#2563EB; box-shadow:0 1px 3px rgba(0,0,0,.1); }
+/* Sub plan review card */
+.sp-review-card { border:1px solid #E5E7EB; border-radius:8px; padding:14px 16px; margin-bottom:10px; }
+.sp-review-card-hd { display:flex; align-items:center; gap:10px; margin-bottom:10px; font-size:13px; font-weight:600; color:#111827; }
+.sp-review-row { display:flex; align-items:baseline; gap:8px; font-size:12px; color:#374151; padding:3px 0; }
+.sp-review-ms { color:#6B7280; width:160px; flex-shrink:0; }
+.sp-review-change { color:#D97706; font-weight:500; }
+.sp-review-unchanged { color:#9CA3AF; }
+
 /* ── Flow containers ── */
 .flow { display: none; }
 .flow.active { display: block; }
@@ -1551,7 +1574,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
             </div>
           </div>
           <div style="display:flex;gap:10px;align-items:center;">
-            <button id="btn-batch-adjust" class="btn-outline-sm" style="padding:9px 16px;font-size:13px;color:#374151;display:flex;align-items:center;gap:6px;" onclick="onBatchAdjustClick()">
+            <button id="btn-batch-adjust" class="btn-outline-sm" style="padding:9px 16px;font-size:13px;color:#374151;display:flex;align-items:center;gap:6px;" onclick="bspOpen()">
               <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h6"/><circle cx="19" cy="18" r="3"/><path d="M19 15v3m0 0v3m0-3h3m-3 0h-3" stroke-width="1.8"/></svg>
               Batch Adjust Plans
             </button>
@@ -4180,6 +4203,292 @@ document.addEventListener('click', function(e) {
     document.querySelectorAll('.multi-dd.open').forEach(el => el.classList.remove('open'));
   }
 });
+
+/* ══ Batch Sub Plan Wizard ══ */
+let bspCurrentStep = 1;
+
+function bspOpen() {
+  bspCurrentStep = 1;
+  bspRenderStep(1);
+  document.getElementById('batch-sp-wizard').classList.add('open');
+}
+
+function bspClose() {
+  document.getElementById('batch-sp-wizard').classList.remove('open');
+}
+
+function bspNext() {
+  if (bspCurrentStep < 3) {
+    bspCurrentStep++;
+    bspRenderStep(bspCurrentStep);
+  } else {
+    bspSubmit();
+  }
+}
+
+function bspPrev() {
+  if (bspCurrentStep > 1) {
+    bspCurrentStep--;
+    bspRenderStep(bspCurrentStep);
+  }
+}
+
+function bspRenderStep(step) {
+  [1,2,3].forEach(i => {
+    const el = document.getElementById('bsp-step-' + i);
+    if (el) el.style.display = i === step ? '' : 'none';
+    const ind = document.getElementById('bsp-step-ind-' + i);
+    if (ind) {
+      ind.className = 'wizard-step ' + (i < step ? 'done' : i === step ? 'active' : 'pending');
+      const num = ind.querySelector('.wizard-step-num');
+      if (num) num.textContent = i < step ? '✓' : i;
+    }
+    const conn = document.getElementById('bsp-conn-' + i);
+    if (conn) conn.style.background = i < step ? '#2563EB' : '#E5E7EB';
+  });
+  const subs = ['Select scope and affected cycles', 'Configure delay per milestone', 'Review and submit Sub Plans'];
+  const subEl = document.getElementById('bsp-wizard-sub');
+  if (subEl) subEl.textContent = `Step ${step} of 3 — ${subs[step-1]}`;
+  const backBtn = document.getElementById('bsp-back-btn');
+  const nextBtn = document.getElementById('bsp-next-btn');
+  if (backBtn) backBtn.style.visibility = step > 1 ? 'visible' : 'hidden';
+  if (nextBtn) { nextBtn.textContent = step === 3 ? 'Submit All Sub Plans →' : 'Next →'; nextBtn.style.background = step === 3 ? '#16A34A' : ''; }
+}
+
+function bspSetMode(mode) {
+  document.getElementById('bsp-quick').style.display = mode === 'quick' ? '' : 'none';
+  document.getElementById('bsp-custom').style.display = mode === 'custom' ? '' : 'none';
+  document.getElementById('bsp-mode-quick').classList.toggle('active', mode === 'quick');
+  document.getElementById('bsp-mode-custom').classList.toggle('active', mode === 'custom');
+}
+
+function bspSubmit() {
+  bspClose();
+  const toast = document.getElementById('update-toast');
+  toast.textContent = '✓ 3 Sub Plans submitted to Ticket Center (SP-2026-019 · SP-2026-020 · SP-2026-021)';
+  toast.classList.add('visible');
+  setTimeout(() => toast.classList.remove('visible'), 3500);
+}
 </script>
+
+<!-- Batch Sub Plan Wizard -->
+<div class="modal-overlay" id="batch-sp-wizard">
+  <div class="modal batch-modal" style="width:720px;max-height:90vh;">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">Create Batch Sub Plan</div>
+        <div class="modal-sub" id="bsp-wizard-sub">Step 1 of 3 — Select scope and affected cycles</div>
+      </div>
+      <button class="modal-close" onclick="bspClose()">✕</button>
+    </div>
+    <div style="padding:0 24px 0;">
+      <!-- Progress bar -->
+      <div class="wizard-steps" style="padding:16px 0 0;">
+        <div class="wizard-step active" id="bsp-step-ind-1">
+          <div class="wizard-step-num">1</div>
+          <div class="wizard-step-label">Select Scope</div>
+        </div>
+        <div class="wizard-connector" id="bsp-conn-1"></div>
+        <div class="wizard-step pending" id="bsp-step-ind-2">
+          <div class="wizard-step-num">2</div>
+          <div class="wizard-step-label">Set Delays</div>
+        </div>
+        <div class="wizard-connector" id="bsp-conn-2"></div>
+        <div class="wizard-step pending" id="bsp-step-ind-3">
+          <div class="wizard-step-num">3</div>
+          <div class="wizard-step-label">Review &amp; Submit</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body" style="padding:16px 24px;overflow-y:auto;max-height:520px;">
+      <!-- Step 1 -->
+      <div id="bsp-step-1">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;">
+          <div class="form-group">
+            <label class="form-label">Reason <span class="req">*</span></label>
+            <input class="form-input" id="bsp-reason" placeholder="e.g. Bank holiday TH Jun 3" value="Bank holiday TH Jun 3" />
+            <div class="form-hint">Shared across all funders. Can be overridden per funder in Step 2.</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Reference Date <span style="color:#9CA3AF;font-weight:400;">(optional)</span></label>
+            <input class="form-input" type="date" id="bsp-ref-date" value="2026-06-03" />
+            <div class="form-hint">System uses this date to auto-identify each funder's active cycle.</div>
+          </div>
+        </div>
+        <div style="font-size:13px;font-weight:600;color:#374151;margin-bottom:10px;">Selected Funders <span style="font-size:12px;font-weight:400;color:#9CA3AF;margin-left:4px;">3 funders · all have active cycles</span></div>
+        <table style="width:100%;border-collapse:collapse;">
+          <thead>
+            <tr style="background:#F9FAFB;">
+              <th style="padding:8px 12px;font-size:11px;font-weight:600;color:#6B7280;text-align:left;border-bottom:1px solid #E5E7EB;">Funder</th>
+              <th style="padding:8px 12px;font-size:11px;font-weight:600;color:#6B7280;text-align:left;border-bottom:1px solid #E5E7EB;">Ops Flow</th>
+              <th style="padding:8px 12px;font-size:11px;font-weight:600;color:#6B7280;text-align:left;border-bottom:1px solid #E5E7EB;">Affected Cycle</th>
+              <th style="padding:8px 12px;font-size:11px;font-weight:600;color:#6B7280;text-align:left;border-bottom:1px solid #E5E7EB;">Cycle Date Range</th>
+              <th style="padding:8px 12px;font-size:11px;font-weight:600;color:#6B7280;text-align:left;border-bottom:1px solid #E5E7EB;">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding:10px 12px;font-size:13px;font-weight:500;color:#111827;border-bottom:1px solid #F3F4F6;">TH_SPL_Starlight_ABS_01</td>
+              <td style="padding:10px 12px;border-bottom:1px solid #F3F4F6;"><span class="status-badge" style="background:#DBEAFE;color:#1D4ED8;">ABS Non-Net</span></td>
+              <td style="padding:10px 12px;font-size:13px;color:#374151;border-bottom:1px solid #F3F4F6;">Cycle #18</td>
+              <td style="padding:10px 12px;font-size:12px;color:#6B7280;border-bottom:1px solid #F3F4F6;">May 19 – Jun 15</td>
+              <td style="padding:10px 12px;border-bottom:1px solid #F3F4F6;"><span class="status-badge status-active-badge">✓ Active</span></td>
+            </tr>
+            <tr>
+              <td style="padding:10px 12px;font-size:13px;font-weight:500;color:#111827;border-bottom:1px solid #F3F4F6;">TH_BCL_DGL_ABS_01</td>
+              <td style="padding:10px 12px;border-bottom:1px solid #F3F4F6;"><span class="status-badge" style="background:#DBEAFE;color:#1D4ED8;">ABS Non-Net</span></td>
+              <td style="padding:10px 12px;font-size:13px;color:#374151;border-bottom:1px solid #F3F4F6;">Cycle #18</td>
+              <td style="padding:10px 12px;font-size:12px;color:#6B7280;border-bottom:1px solid #F3F4F6;">May 26 – Jun 22</td>
+              <td style="padding:10px 12px;border-bottom:1px solid #F3F4F6;"><span class="status-badge status-active-badge">✓ Active</span></td>
+            </tr>
+            <tr>
+              <td style="padding:10px 12px;font-size:13px;font-weight:500;color:#111827;">MY_BCL_Ocean_ABS_01</td>
+              <td style="padding:10px 12px;"><span class="status-badge" style="background:#F3E8FF;color:#7C3AED;">ABS Net</span></td>
+              <td style="padding:10px 12px;font-size:13px;color:#374151;">Cycle #11</td>
+              <td style="padding:10px 12px;font-size:12px;color:#6B7280;">Jun 1 – Jun 30</td>
+              <td style="padding:10px 12px;"><span class="status-badge status-active-badge">✓ Active</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Step 2 -->
+      <div id="bsp-step-2" style="display:none;">
+        <div class="mode-toggle">
+          <button class="mode-toggle-btn active" id="bsp-mode-quick" onclick="bspSetMode('quick')">Quick — Same delay for all</button>
+          <button class="mode-toggle-btn" id="bsp-mode-custom" onclick="bspSetMode('custom')">Custom — Per funder</button>
+        </div>
+
+        <!-- Quick mode -->
+        <div id="bsp-quick">
+          <div style="font-size:12px;color:#6B7280;margin-bottom:14px;">Select milestones to delay. System calculates cascade per each funder's own computation method (T+N stays, M+N follows).</div>
+          <div style="display:flex;align-items:center;gap:24px;margin-bottom:16px;flex-wrap:wrap;">
+            <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#374151;cursor:pointer;"><input type="checkbox" style="accent-color:#2563EB;" /> M3 Sale Notice</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#374151;cursor:pointer;"><input type="checkbox" checked style="accent-color:#2563EB;" id="bsp-m4-chk" /> M4 Sys Cutoff</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#374151;cursor:pointer;"><input type="checkbox" style="accent-color:#2563EB;" /> M5 Sale Date <span style="font-size:11px;color:#9CA3AF;">(T+N, won't cascade)</span></label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#374151;cursor:pointer;"><input type="checkbox" style="accent-color:#2563EB;" /> M6 Sys Selling</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#374151;cursor:pointer;"><input type="checkbox" style="accent-color:#2563EB;" /> M7 Collection</label>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+            <span style="font-size:13px;color:#374151;">Delay all selected milestones by</span>
+            <input type="number" value="3" min="0" style="width:60px;border:1px solid #D1D5DB;border-radius:5px;padding:6px 8px;font-size:14px;font-weight:600;text-align:center;" />
+            <span style="font-size:13px;color:#374151;">business days</span>
+          </div>
+          <!-- Quick preview -->
+          <div style="font-size:12px;font-weight:600;color:#374151;margin-bottom:8px;">Preview — Cascade per funder</div>
+          <table style="width:100%;border-collapse:collapse;font-size:12px;">
+            <thead>
+              <tr style="background:#F9FAFB;">
+                <th style="padding:7px 12px;text-align:left;color:#6B7280;font-weight:600;border-bottom:1px solid #E5E7EB;">Funder</th>
+                <th style="padding:7px 12px;text-align:left;color:#6B7280;font-weight:600;border-bottom:1px solid #E5E7EB;">Milestone</th>
+                <th style="padding:7px 12px;text-align:left;color:#6B7280;font-weight:600;border-bottom:1px solid #E5E7EB;">Original</th>
+                <th style="padding:7px 12px;text-align:left;color:#6B7280;font-weight:600;border-bottom:1px solid #E5E7EB;">After Sub Plan</th>
+                <th style="padding:7px 12px;text-align:left;color:#6B7280;font-weight:600;border-bottom:1px solid #E5E7EB;">Note</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td style="padding:7px 12px;border-bottom:1px solid #F3F4F6;" rowspan="3">Starlight</td><td style="padding:7px 12px;border-bottom:1px solid #F3F4F6;">M4 Sys Cutoff</td><td style="padding:7px 12px;border-bottom:1px solid #F3F4F6;color:#6B7280;">May 23</td><td style="padding:7px 12px;border-bottom:1px solid #F3F4F6;color:#D97706;font-weight:600;">May 28 (+3d)</td><td style="padding:7px 12px;border-bottom:1px solid #F3F4F6;color:#9CA3AF;">delayed</td></tr>
+              <tr><td style="padding:7px 12px;border-bottom:1px solid #F3F4F6;">M6 Sys Selling</td><td style="padding:7px 12px;border-bottom:1px solid #F3F4F6;color:#6B7280;">May 26</td><td style="padding:7px 12px;border-bottom:1px solid #F3F4F6;color:#D97706;font-weight:600;">May 31 (+3d)</td><td style="padding:7px 12px;border-bottom:1px solid #F3F4F6;color:#9CA3AF;">M4+N cascaded</td></tr>
+              <tr><td style="padding:7px 12px;border-bottom:1px solid #E5E7EB;">M5 Sale Date</td><td style="padding:7px 12px;border-bottom:1px solid #E5E7EB;color:#6B7280;">May 21</td><td style="padding:7px 12px;border-bottom:1px solid #E5E7EB;color:#9CA3AF;">May 21</td><td style="padding:7px 12px;border-bottom:1px solid #E5E7EB;color:#9CA3AF;">T+N, unchanged</td></tr>
+              <tr><td style="padding:7px 12px;border-bottom:1px solid #F3F4F6;" rowspan="2">DGL</td><td style="padding:7px 12px;border-bottom:1px solid #F3F4F6;">M4 Sys Cutoff</td><td style="padding:7px 12px;border-bottom:1px solid #F3F4F6;color:#6B7280;">May 30</td><td style="padding:7px 12px;border-bottom:1px solid #F3F4F6;color:#D97706;font-weight:600;">Jun 4 (+3d)</td><td style="padding:7px 12px;border-bottom:1px solid #F3F4F6;color:#9CA3AF;">delayed</td></tr>
+              <tr><td style="padding:7px 12px;border-bottom:1px solid #E5E7EB;">M6 Sys Selling</td><td style="padding:7px 12px;border-bottom:1px solid #E5E7EB;color:#6B7280;">Jun 2</td><td style="padding:7px 12px;border-bottom:1px solid #E5E7EB;color:#D97706;font-weight:600;">Jun 7 (+3d)</td><td style="padding:7px 12px;border-bottom:1px solid #E5E7EB;color:#9CA3AF;">M4+N cascaded</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Custom mode -->
+        <div id="bsp-custom" style="display:none;">
+          <div style="font-size:12px;color:#6B7280;margin-bottom:14px;">Set delay per funder independently. Leave blank = no change. Cascade applies per funder's own milestone computation method.</div>
+          <table style="width:100%;border-collapse:collapse;font-size:13px;">
+            <thead>
+              <tr style="background:#F9FAFB;">
+                <th style="padding:8px 12px;text-align:left;color:#6B7280;font-size:11px;font-weight:600;border-bottom:1px solid #E5E7EB;">Funder</th>
+                <th style="padding:8px 12px;text-align:center;color:#6B7280;font-size:11px;font-weight:600;border-bottom:1px solid #E5E7EB;">M3<br/>Sale Notice</th>
+                <th style="padding:8px 12px;text-align:center;color:#6B7280;font-size:11px;font-weight:600;border-bottom:1px solid #E5E7EB;">M4<br/>Sys Cutoff</th>
+                <th style="padding:8px 12px;text-align:center;color:#6B7280;font-size:11px;font-weight:600;border-bottom:1px solid #E5E7EB;">M6<br/>Sys Selling</th>
+                <th style="padding:8px 12px;text-align:center;color:#6B7280;font-size:11px;font-weight:600;border-bottom:1px solid #E5E7EB;">M7<br/>Collection</th>
+                <th style="padding:8px 12px;text-align:left;color:#6B7280;font-size:11px;font-weight:600;border-bottom:1px solid #E5E7EB;">Override Reason</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding:8px 12px;font-weight:500;border-bottom:1px solid #F3F4F6;">Starlight</td>
+                <td style="padding:8px 12px;text-align:center;border-bottom:1px solid #F3F4F6;"><input type="number" placeholder="—" style="width:52px;border:1px solid #D1D5DB;border-radius:4px;padding:4px 6px;font-size:12px;text-align:center;" /></td>
+                <td style="padding:8px 12px;text-align:center;border-bottom:1px solid #F3F4F6;"><input type="number" value="3" style="width:52px;border:1px solid #2563EB;background:#EFF6FF;border-radius:4px;padding:4px 6px;font-size:12px;text-align:center;font-weight:600;" /></td>
+                <td style="padding:8px 12px;text-align:center;border-bottom:1px solid #F3F4F6;"><input type="number" placeholder="—" style="width:52px;border:1px solid #D1D5DB;border-radius:4px;padding:4px 6px;font-size:12px;text-align:center;" /></td>
+                <td style="padding:8px 12px;text-align:center;border-bottom:1px solid #F3F4F6;"><input type="number" placeholder="—" style="width:52px;border:1px solid #D1D5DB;border-radius:4px;padding:4px 6px;font-size:12px;text-align:center;" /></td>
+                <td style="padding:8px 12px;border-bottom:1px solid #F3F4F6;"><input type="text" placeholder="(use shared reason)" style="width:100%;border:1px solid #D1D5DB;border-radius:4px;padding:4px 8px;font-size:12px;color:#374151;" /></td>
+              </tr>
+              <tr>
+                <td style="padding:8px 12px;font-weight:500;border-bottom:1px solid #F3F4F6;">DGL</td>
+                <td style="padding:8px 12px;text-align:center;border-bottom:1px solid #F3F4F6;"><input type="number" placeholder="—" style="width:52px;border:1px solid #D1D5DB;border-radius:4px;padding:4px 6px;font-size:12px;text-align:center;" /></td>
+                <td style="padding:8px 12px;text-align:center;border-bottom:1px solid #F3F4F6;"><input type="number" value="2" style="width:52px;border:1px solid #2563EB;background:#EFF6FF;border-radius:4px;padding:4px 6px;font-size:12px;text-align:center;font-weight:600;" /></td>
+                <td style="padding:8px 12px;text-align:center;border-bottom:1px solid #F3F4F6;"><input type="number" placeholder="—" style="width:52px;border:1px solid #D1D5DB;border-radius:4px;padding:4px 6px;font-size:12px;text-align:center;" /></td>
+                <td style="padding:8px 12px;text-align:center;border-bottom:1px solid #F3F4F6;"><input type="number" placeholder="—" style="width:52px;border:1px solid #D1D5DB;border-radius:4px;padding:4px 6px;font-size:12px;text-align:center;" /></td>
+                <td style="padding:8px 12px;border-bottom:1px solid #F3F4F6;"><input type="text" placeholder="(use shared reason)" style="width:100%;border:1px solid #D1D5DB;border-radius:4px;padding:4px 8px;font-size:12px;color:#374151;" /></td>
+              </tr>
+              <tr>
+                <td style="padding:8px 12px;font-weight:500;">MY Ocean</td>
+                <td style="padding:8px 12px;text-align:center;"><input type="number" placeholder="—" style="width:52px;border:1px solid #D1D5DB;border-radius:4px;padding:4px 6px;font-size:12px;text-align:center;" /></td>
+                <td style="padding:8px 12px;text-align:center;"><input type="number" value="3" style="width:52px;border:1px solid #2563EB;background:#EFF6FF;border-radius:4px;padding:4px 6px;font-size:12px;text-align:center;font-weight:600;" /></td>
+                <td style="padding:8px 12px;text-align:center;"><input type="number" value="1" style="width:52px;border:1px solid #2563EB;background:#EFF6FF;border-radius:4px;padding:4px 6px;font-size:12px;text-align:center;font-weight:600;" /></td>
+                <td style="padding:8px 12px;text-align:center;"><input type="number" placeholder="—" style="width:52px;border:1px solid #D1D5DB;border-radius:4px;padding:4px 6px;font-size:12px;text-align:center;" /></td>
+                <td style="padding:8px 12px;"><input type="text" placeholder="(use shared reason)" style="width:100%;border:1px solid #D1D5DB;border-radius:4px;padding:4px 8px;font-size:12px;color:#374151;" /></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div id="bsp-step-3" style="display:none;">
+        <div style="font-size:13px;color:#374151;margin-bottom:16px;">Review the Sub Plans before submitting. Each funder generates an independent Sub Plan and enters its own approval flow.</div>
+        <div class="sp-review-card">
+          <div class="sp-review-card-hd">
+            <span style="background:#F3F4F6;color:#374151;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;">SP-2026-019</span>
+            <span>TH_SPL_Starlight_ABS_01</span>
+            <span style="font-size:12px;font-weight:400;color:#6B7280;">Cycle #18 · May 19 – Jun 15</span>
+          </div>
+          <div class="sp-review-row"><span class="sp-review-ms">M4 Sys Cutoff</span><span>May 23</span><span style="color:#9CA3AF;margin:0 6px;">→</span><span class="sp-review-change">May 28 (+3d)</span></div>
+          <div class="sp-review-row"><span class="sp-review-ms">M6 Sys Selling</span><span>May 26</span><span style="color:#9CA3AF;margin:0 6px;">→</span><span class="sp-review-change">May 31 (+3d)</span><span style="font-size:11px;color:#9CA3AF;margin-left:6px;">M4+N cascaded</span></div>
+          <div class="sp-review-row"><span class="sp-review-ms">M5 Sale Date</span><span>May 21</span><span style="color:#9CA3AF;margin:0 6px;">→</span><span class="sp-review-unchanged">May 21 (T+N, unchanged)</span></div>
+          <div style="margin-top:8px;font-size:12px;color:#9CA3AF;">Reason: Bank holiday TH Jun 3</div>
+        </div>
+        <div class="sp-review-card">
+          <div class="sp-review-card-hd">
+            <span style="background:#F3F4F6;color:#374151;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;">SP-2026-020</span>
+            <span>TH_BCL_DGL_ABS_01</span>
+            <span style="font-size:12px;font-weight:400;color:#6B7280;">Cycle #18 · May 26 – Jun 22</span>
+          </div>
+          <div class="sp-review-row"><span class="sp-review-ms">M4 Sys Cutoff</span><span>May 30</span><span style="color:#9CA3AF;margin:0 6px;">→</span><span class="sp-review-change">Jun 2 (+2d)</span></div>
+          <div class="sp-review-row"><span class="sp-review-ms">M6 Sys Selling</span><span>Jun 2</span><span style="color:#9CA3AF;margin:0 6px;">→</span><span class="sp-review-change">Jun 5 (+2d)</span><span style="font-size:11px;color:#9CA3AF;margin-left:6px;">M4+N cascaded</span></div>
+          <div class="sp-review-row"><span class="sp-review-ms">M5 Sale Date</span><span>May 28</span><span style="color:#9CA3AF;margin:0 6px;">→</span><span class="sp-review-unchanged">May 28 (T+N, unchanged)</span></div>
+          <div style="margin-top:8px;font-size:12px;color:#9CA3AF;">Reason: Bank holiday TH Jun 3</div>
+        </div>
+        <div class="sp-review-card">
+          <div class="sp-review-card-hd">
+            <span style="background:#F3F4F6;color:#374151;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;">SP-2026-021</span>
+            <span>MY_BCL_Ocean_ABS_01</span>
+            <span style="font-size:12px;font-weight:400;color:#6B7280;">Cycle #11 · Jun 1 – Jun 30</span>
+          </div>
+          <div class="sp-review-row"><span class="sp-review-ms">M4 Sys Cutoff</span><span>Jun 5</span><span style="color:#9CA3AF;margin:0 6px;">→</span><span class="sp-review-change">Jun 10 (+3d)</span></div>
+          <div class="sp-review-row"><span class="sp-review-ms">M6 Sys Selling</span><span>Jun 8</span><span style="color:#9CA3AF;margin:0 6px;">→</span><span class="sp-review-change">Jun 12 (+3d +1d)</span><span style="font-size:11px;color:#9CA3AF;margin-left:6px;">M4+N cascaded + custom +1d</span></div>
+          <div class="sp-review-row"><span class="sp-review-ms">M5 Sale Date</span><span>Jun 3</span><span style="color:#9CA3AF;margin:0 6px;">→</span><span class="sp-review-unchanged">Jun 3 (T+N, unchanged)</span></div>
+          <div style="margin-top:8px;font-size:12px;color:#9CA3AF;">Reason: Bank holiday TH Jun 3</div>
+        </div>
+        <div style="background:#F0FDF4;border:1px solid #BBF7D0;border-radius:8px;padding:10px 14px;font-size:12px;color:#166534;margin-top:4px;">
+          ℹ️ 3 Sub Plans will be created (SP-2026-019 to SP-2026-021). Each enters its own approval flow independently. Approval chain: TBD.
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer" style="display:flex;justify-content:space-between;align-items:center;padding:12px 24px;">
+      <button class="btn-outline-sm" id="bsp-back-btn" style="padding:8px 20px;visibility:hidden;" onclick="bspPrev()">← Back</button>
+      <div style="display:flex;gap:10px;">
+        <button class="btn-outline-sm" style="padding:8px 18px;" onclick="bspClose()">Cancel</button>
+        <button class="btn-primary-lg" id="bsp-next-btn" style="font-size:13px;padding:8px 24px;" onclick="bspNext()">Next →</button>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
