@@ -2462,9 +2462,9 @@ tr.drag-over { border-top: 2px solid #2563EB; }
               <div id="wft-default-sub" style="font-size:12px;color:#6B7280;margin-top:2px;">Reusable milestone configurations for ABS / ABL programs · region-isolated</div>
             </div>
             <div style="display:flex;gap:10px;align-items:center;">
-              <button id="wft-batch-btn" class="btn-outline-sm" style="padding:9px 16px;font-size:13px;display:none;" onclick="wftBatchEdit()">
-                ✏️ Batch Edit
-              </button>
+              <button id="wft-batch-disable-btn" class="btn-outline-sm" style="padding:9px 14px;font-size:13px;display:none;" onclick="wftBatchAction('disable')">Batch Disable</button>
+              <button id="wft-batch-delete-btn" class="btn-outline-sm" style="padding:9px 14px;font-size:13px;display:none;color:#DC2626;border-color:#FCA5A5;" onclick="wftBatchAction('delete')">Batch Delete</button>
+              <button id="wft-batch-offset-btn" class="btn-outline-sm" style="padding:9px 14px;font-size:13px;display:none;" onclick="wftBatchAction('offset')">Edit Offsets</button>
               <button class="btn-primary-lg" style="font-size:13px;padding:9px 18px;">+ Add New</button>
             </div>
           </div>
@@ -2640,6 +2640,43 @@ tr.drag-over { border-top: 2px solid #2563EB; }
         </div>
       </div>
 
+    </div>
+  </div>
+  <!-- Batch Edit Offsets Modal -->
+  <div class="modal-overlay" id="wft-batch-offset-modal">
+    <div class="modal" style="width:520px;">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">Edit Offsets</div>
+          <div class="modal-sub" id="wft-offset-modal-sub">Apply milestone offset changes to selected templates</div>
+        </div>
+        <button class="modal-close" onclick="document.getElementById('wft-batch-offset-modal').classList.remove('open')">✕</button>
+      </div>
+      <div class="modal-body" style="padding:16px 24px;">
+        <div style="background:#FEF3C7;border:1px solid #FDE68A;border-radius:6px;padding:10px 14px;font-size:12px;color:#92400E;margin-bottom:16px;">
+          ⚠️ Changes apply to all selected templates. This updates milestone offset values only — Ops Flow type and Cycle Segments are not affected.
+        </div>
+        <table style="width:100%;border-collapse:collapse;">
+          <thead>
+            <tr style="background:#F9FAFB;">
+              <th style="padding:8px 12px;font-size:11px;font-weight:600;color:#6B7280;text-align:left;border-bottom:1px solid #E5E7EB;">Milestone</th>
+              <th style="padding:8px 12px;font-size:11px;font-weight:600;color:#6B7280;text-align:left;border-bottom:1px solid #E5E7EB;">Current Offset</th>
+              <th style="padding:8px 12px;font-size:11px;font-weight:600;color:#6B7280;text-align:left;border-bottom:1px solid #E5E7EB;">New Offset (days)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="padding:10px 12px;font-size:13px;color:#374151;border-bottom:1px solid #F3F4F6;">Portfolio Selection / Batch Cutoff</td><td style="padding:10px 12px;font-size:12px;color:#6B7280;border-bottom:1px solid #F3F4F6;">T + 0d</td><td style="padding:10px 12px;border-bottom:1px solid #F3F4F6;"><input type="number" min="0" placeholder="—" style="width:70px;border:1px solid #D1D5DB;border-radius:5px;padding:4px 8px;font-size:13px;text-align:center;" /></td></tr>
+            <tr><td style="padding:10px 12px;font-size:13px;color:#374151;border-bottom:1px solid #F3F4F6;">Sale Notice / System Cutoff</td><td style="padding:10px 12px;font-size:12px;color:#6B7280;border-bottom:1px solid #F3F4F6;">T + 2d</td><td style="padding:10px 12px;border-bottom:1px solid #F3F4F6;"><input type="number" min="0" placeholder="—" style="width:70px;border:1px solid #D1D5DB;border-radius:5px;padding:4px 8px;font-size:13px;text-align:center;" /></td></tr>
+            <tr><td style="padding:10px 12px;font-size:13px;color:#374151;border-bottom:1px solid #F3F4F6;">Collection Deposit</td><td style="padding:10px 12px;font-size:12px;color:#6B7280;border-bottom:1px solid #F3F4F6;">T + 5d</td><td style="padding:10px 12px;border-bottom:1px solid #F3F4F6;"><input type="number" min="0" placeholder="—" style="width:70px;border:1px solid #D1D5DB;border-radius:5px;padding:4px 8px;font-size:13px;text-align:center;" /></td></tr>
+            <tr><td style="padding:10px 12px;font-size:13px;color:#374151;">Servicer Report</td><td style="padding:10px 12px;font-size:12px;color:#6B7280;">T + 7d</td><td style="padding:10px 12px;"><input type="number" min="0" placeholder="—" style="width:70px;border:1px solid #D1D5DB;border-radius:5px;padding:4px 8px;font-size:13px;text-align:center;" /></td></tr>
+          </tbody>
+        </table>
+        <div style="font-size:11px;color:#9CA3AF;margin-top:10px;">Leave blank to keep existing offset. Only filled fields will be updated.</div>
+      </div>
+      <div class="modal-footer" style="display:flex;justify-content:flex-end;gap:10px;padding:12px 24px;">
+        <button class="btn-outline-sm" style="padding:8px 18px;" onclick="document.getElementById('wft-batch-offset-modal').classList.remove('open')">Cancel</button>
+        <button class="btn-primary-lg" style="font-size:13px;padding:8px 18px;" onclick="wftSubmitOffsets()">Apply to Selected Templates</button>
+      </div>
     </div>
   </div>
 </div><!-- /flow-wf-template -->
@@ -3183,34 +3220,74 @@ function wftToggleAll(masterChk) {
   wftUpdateSelection();
 }
 
+// Row data for status lookup
+const WFT_ROW_STATUS = { 0: 'Active', 1: 'Active', 2: 'Draft' }; // index → status
+
 function wftUpdateSelection() {
-  const all = document.querySelectorAll('.wft-row-chk');
-  const checked = document.querySelectorAll('.wft-row-chk:checked');
-  const count = checked.length;
+  const allChk = document.querySelectorAll('.wft-row-chk');
+  const checkedChk = document.querySelectorAll('.wft-row-chk:checked');
+  const count = checkedChk.length;
   const master = document.getElementById('wft-chk-all');
   if (master) {
-    master.checked = count === all.length && all.length > 0;
-    master.indeterminate = count > 0 && count < all.length;
+    master.checked = count === allChk.length && allChk.length > 0;
+    master.indeterminate = count > 0 && count < allChk.length;
   }
-  const hint = document.getElementById('wft-select-hint');
-  const sub  = document.getElementById('wft-default-sub');
-  const btn  = document.getElementById('wft-batch-btn');
+  const hint    = document.getElementById('wft-select-hint');
+  const sub     = document.getElementById('wft-default-sub');
   const countEl = document.getElementById('wft-select-count');
+  const btnDis  = document.getElementById('wft-batch-disable-btn');
+  const btnDel  = document.getElementById('wft-batch-delete-btn');
+  const btnOff  = document.getElementById('wft-batch-offset-btn');
+
   if (count > 0) {
     if (hint) { hint.style.display = 'block'; countEl.textContent = count; }
     if (sub)  sub.style.display = 'none';
-    if (btn)  { btn.style.display = 'flex'; btn.style.color = '#2563EB'; btn.style.borderColor = '#2563EB'; btn.style.background = '#EFF6FF'; }
+
+    // Check if any selected row is Active → show Disable
+    let hasActive = false, hasDraft = false;
+    checkedChk.forEach(chk => {
+      const row = chk.closest('tr');
+      const statusCell = row ? row.querySelector('td:nth-child(7)') : null;
+      const txt = statusCell ? statusCell.textContent.trim() : '';
+      if (txt === 'Active') hasActive = true;
+      if (txt === 'Draft')  hasDraft  = true;
+    });
+    if (btnDis) btnDis.style.display = hasActive ? 'inline-flex' : 'none';
+    if (btnDel) btnDel.style.display = hasDraft  ? 'inline-flex' : 'none';
+    if (btnOff) btnOff.style.display = 'inline-flex';
   } else {
     if (hint) hint.style.display = 'none';
     if (sub)  sub.style.display = 'block';
-    if (btn)  btn.style.display = 'none';
+    [btnDis, btnDel, btnOff].forEach(b => { if (b) b.style.display = 'none'; });
   }
 }
 
-function wftBatchEdit() {
+function wftBatchAction(type) {
   const count = document.querySelectorAll('.wft-row-chk:checked').length;
+  if (type === 'offset') {
+    document.getElementById('wft-batch-offset-modal').classList.add('open');
+    return;
+  }
+  const isDelete = type === 'delete';
+  const popup = document.getElementById('confirm-action-popup');
+  const title = document.getElementById('confirm-action-title');
+  const body  = document.getElementById('confirm-action-body');
+  title.textContent = isDelete
+    ? `Batch delete ${count} Draft template(s)?`
+    : `Batch disable ${count} Active template(s)?`;
+  body.textContent  = isDelete
+    ? 'Deleted templates cannot be recovered.'
+    : 'Disabled templates cannot be selected for new Management Plans.';
+  popup.classList.add('open');
+  popup._action = isDelete ? 'Batch Delete' : 'Batch Disable';
+  popup._funder = `${count} template(s)`;
+}
+
+function wftSubmitOffsets() {
+  const count = document.querySelectorAll('.wft-row-chk:checked').length;
+  document.getElementById('wft-batch-offset-modal').classList.remove('open');
   const toast = document.getElementById('update-toast');
-  toast.textContent = `✏️ Batch Edit — ${count} template(s) selected. (Edit panel coming soon)`;
+  toast.textContent = `✓ Milestone offsets updated across ${count} template(s)`;
   toast.classList.add('visible');
   setTimeout(() => toast.classList.remove('visible'), 2800);
 }
