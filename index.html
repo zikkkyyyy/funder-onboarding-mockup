@@ -2547,7 +2547,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                 <tr>
                   <td style="padding:11px 10px 11px 16px;"><input type="checkbox" class="wft-row-chk" onchange="wftUpdateSelection()" /></td>
                   <td class="num-col" style="cursor:pointer;color:#2563EB;" onclick="wftShowDetail('abs')">WFT-0001</td>
-                  <td style="font-weight:500;cursor:pointer;" onclick="wftShowDetail('abs')">TH_SPL_ABS_Standard</td>
+                  <td style="font-weight:500;cursor:pointer;" onclick="wftShowDetail('abs')">ABS Non-Net</td>
                   <td><span class="status-badge" style="background:#DBEAFE;color:#1D4ED8;">ABS Non-Net</span></td>
                   <td style="font-size:12px;color:#374151;font-family:monospace;letter-spacing:0.02em;">1–5 · 6–15 · 16–25 · 26–EOM</td>
                   <td style="text-align:center;"><span style="background:#EFF6FF;color:#2563EB;font-size:12px;font-weight:600;padding:2px 8px;border-radius:4px;">7</span></td>
@@ -2560,7 +2560,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                 <tr>
                   <td style="padding:11px 10px 11px 16px;"><input type="checkbox" class="wft-row-chk" onchange="wftUpdateSelection()" /></td>
                   <td class="num-col" style="cursor:pointer;color:#2563EB;" onclick="wftShowDetail('abs-net')">WFT-0002</td>
-                  <td style="font-weight:500;cursor:pointer;" onclick="wftShowDetail('abs-net')">TH_BCL_ABS_Net_Monthly</td>
+                  <td style="font-weight:500;cursor:pointer;" onclick="wftShowDetail('abs-net')">ABS Net</td>
                   <td><span class="status-badge" style="background:#F3E8FF;color:#7C3AED;">ABS Net</span></td>
                   <td style="font-size:12px;color:#374151;font-family:monospace;letter-spacing:0.02em;">1–15 · 16–EOM</td>
                   <td style="text-align:center;"><span style="background:#EFF6FF;color:#2563EB;font-size:12px;font-weight:600;padding:2px 8px;border-radius:4px;">9</span></td>
@@ -2573,7 +2573,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                 <tr>
                   <td style="padding:11px 10px 11px 16px;"><input type="checkbox" class="wft-row-chk" onchange="wftUpdateSelection()" /></td>
                   <td class="num-col" style="cursor:pointer;color:#2563EB;" onclick="wftShowDetail('abl')">WFT-0003</td>
-                  <td style="font-weight:500;cursor:pointer;" onclick="wftShowDetail('abl')">MY_BCL_ABL_BiMonthly</td>
+                  <td style="font-weight:500;cursor:pointer;" onclick="wftShowDetail('abl')">ABL</td>
                   <td><span class="status-badge" style="background:#FEF3C7;color:#92400E;">ABL</span></td>
                   <td style="font-size:12px;color:#374151;font-family:monospace;letter-spacing:0.02em;">1–EOM</td>
                   <td style="text-align:center;"><span style="background:#EFF6FF;color:#2563EB;font-size:12px;font-weight:600;padding:2px 8px;border-radius:4px;">5</span></td>
@@ -3276,7 +3276,7 @@ function switchFlow(target) {
 /* ══ Workflow Template logic ══ */
 const WFT_DATA = {
   'abs': {
-    id: 'WFT-0001', name: 'TH_SPL_ABS_Standard', flow: 'ABS Non-Net',
+    id: 'WFT-0001', name: 'ABS Non-Net', flow: 'ABS Non-Net',
     flowBadge: '<span class="badge badge-active" style="background:#DBEAFE;color:#1D4ED8;">ABS Non-Net</span>',
     dayType: 'Calendar Days', region: 'Thailand (TH)',
     segments: [{ from:1,to:5 },{ from:6,to:15 },{ from:16,to:25 },{ from:26,toEOM:true }],
@@ -3289,7 +3289,7 @@ const WFT_DATA = {
     ]
   },
   'abs-net': {
-    id: 'WFT-0002', name: 'TH_BCL_ABS_Net_Monthly', flow: 'ABS Net',
+    id: 'WFT-0002', name: 'ABS Net', flow: 'ABS Net',
     flowBadge: '<span class="badge badge-active" style="background:#F3E8FF;color:#7C3AED;">ABS Net</span>',
     dayType: 'Business Days', region: 'Thailand (TH)',
     segments: [{ from:1,to:15 },{ from:16,toEOM:true }],
@@ -3301,7 +3301,7 @@ const WFT_DATA = {
     ]
   },
   'abl': {
-    id: 'WFT-0003', name: 'MY_BCL_ABL_BiMonthly', flow: 'ABL',
+    id: 'WFT-0003', name: 'ABL', flow: 'ABL',
     flowBadge: '<span class="badge badge-active" style="background:#FEF3C7;color:#92400E;">ABL</span>',
     dayType: 'Calendar Days', region: 'Malaysia (MY)',
     segments: [{ from:1,toEOM:true }],
