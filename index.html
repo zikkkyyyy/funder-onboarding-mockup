@@ -3666,14 +3666,15 @@ function selectPricing(card) {
 
 /* ── Ops Flow milestone definitions ── */
 const OPS_FLOW_MILESTONES = {
+  // ABS Non-Net — per PRD example: M1=T+1d, M2=T+1d, M3=M2+1d, M4=M2+1d, M5=M1+3d, M6=max(M3+3d,M1+4d), M7=max(M4,M3+3d,M1+4d)
   'abs': [
-    { label: 'Servicer Report Date',    short: 'Servicer',    type: 'operation', offset: 0,  offsetFrom: 'T',         offsetRef: null, bg: '#DBEAFE', color: '#1D4ED8' },
-    { label: 'Batch Creation Date',     short: 'Batch',       type: 'operation', offset: 1,  offsetFrom: 'milestone', offsetRef: 1,    bg: '#EDE9FE', color: '#6D28D9' },
-    { label: 'Sale Notice Date',        short: 'Sale Notice', type: 'operation', offset: 1,  offsetFrom: 'milestone', offsetRef: 2,    bg: '#FEF3C7', color: '#92400E' },
-    { label: 'System Cutoff Date',      short: 'Sys Cutoff',  type: 'system',    offset: 3,  offsetFrom: 'milestone', offsetRef: 3,    bg: '#F3F4F6', color: '#6B7280' },
-    { label: 'Sale Date',               short: 'Sale Date',   type: 'operation', offset: 7,  offsetFrom: 'milestone', offsetRef: 4,    bg: '#D1FAE5', color: '#065F46', indicative: true },
-    { label: 'System Selling Date',     short: 'Sys Selling', type: 'system',    offset: 1,  offsetFrom: 'milestone', offsetRef: 5,    bg: '#F3F4F6', color: '#6B7280' },
-    { label: 'Collection Deposit Date', short: 'Collection',  type: 'operation', offset: 0,  offsetFrom: 'milestone', offsetRef: 5,    bg: '#CCFBF1', color: '#0F766E', offsetTbd: true },
+    { label: 'Servicer Report', short: 'Servicer Report', type: 'operation', offset: 1,  offsetFrom: 'T',         offsetRef: null, bg: '#DBEAFE', color: '#1D4ED8' },
+    { label: 'Batch Creation',  short: 'Batch Creation',  type: 'operation', offset: 1,  offsetFrom: 'T',         offsetRef: null, bg: '#EDE9FE', color: '#6D28D9' },
+    { label: 'Sale Notice',     short: 'Sale Notice',     type: 'operation', offset: 1,  offsetFrom: 'milestone', offsetRef: 2,    bg: '#FEF3C7', color: '#92400E' },
+    { label: 'Sys Cutoff',      short: 'Sys Cutoff',      type: 'operation', offset: 1,  offsetFrom: 'milestone', offsetRef: 2,    bg: '#F1F5F9', color: '#475569', note: 'M3 = M4 always' },
+    { label: 'Collection',      short: 'Collection',      type: 'operation', offset: 3,  offsetFrom: 'milestone', offsetRef: 1,    bg: '#CCFBF1', color: '#0F766E' },
+    { label: 'Sale Date',       short: 'Sale Date',       type: 'operation', offset: 0,  offsetFrom: 'formula',   formula: 'max(M3+3d, M1+4d)', bg: '#D1FAE5', color: '#065F46', indicative: true },
+    { label: 'Sys Selling',     short: 'Sys Selling',     type: 'operation', offset: 0,  offsetFrom: 'formula',   formula: 'max(M4, M3+3d, M1+4d)', bg: '#E0E7FF', color: '#4338CA' },
   ],
   'abs-net': [
     { label: 'Servicer Report Date',    short: 'Servicer',    type: 'operation', offset: 0,  bg: '#DBEAFE', color: '#1D4ED8' },
@@ -3718,38 +3719,30 @@ function renderMilestoneTable(type) {
   if (!tbody) return;
   const milestones = OPS_FLOW_MILESTONES[type] || [];
   tbody.innerHTML = milestones.map((m, i) => {
-    const isSystem = m.type === 'system';
-    const rowStyle = isSystem ? 'background:#F9FAFB;' : '';
-    const typeBadge = isSystem
-      ? `<span class="ms-type-tag ms-type-system">System</span>`
-      : `<span class="ms-type-tag ms-type-operation">Operation</span>`;
+    // No greyed-out rows — all milestones same background
+    const typeBadge = `<span class="ms-type-tag ms-type-operation">Operation</span>`;
 
     // Offset from cell
-    const offsetFromOptions = ['<option value="T"' + (m.offsetFrom === 'T' ? ' selected' : '') + '>T</option>']
-      .concat(milestones.slice(0, i).map((_, j) =>
-        `<option value="${j+1}"${m.offsetFrom === 'milestone' && m.offsetRef === j+1 ? ' selected' : ''}>Milestone ${j+1}</option>`
+    const offsetFromOptions = ['<option value="T"' + (m.offsetFrom === 'T' ? ' selected' : '') + '>T (Cycle Start)</option>']
+      .concat(milestones.slice(0, i).map((prev, j) =>
+        `<option value="${j+1}"${m.offsetFrom === 'milestone' && m.offsetRef === j+1 ? ' selected' : ''}>M${j+1} ${prev.short}</option>`
       )).join('');
-    const offsetFromCell = isSystem
-      ? `<div style="display:flex;align-items:center;gap:5px;color:#9CA3AF;font-size:12px;">
-           <span style="font-size:13px;">🔒</span>
-           <span>${m.offsetFrom === 'T' ? 'T' : 'Milestone ' + m.offsetRef}</span>
-         </div>`
-      : (i === 0
-          ? `<span style="font-size:12px;font-weight:600;color:#374151;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:4px;padding:2px 8px;">T</span>`
-          : `<select class="offset-from-sel" onchange="onOffsetFromChange(${i},this)">${offsetFromOptions}</select>`);
+    const offsetFromCell = m.offsetFrom === 'formula'
+      ? `<span style="font-size:12px;color:#6B7280;font-style:italic;">complex formula</span>`
+      : i === 0
+        ? `<span style="font-size:12px;font-weight:600;color:#374151;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:4px;padding:2px 8px;">T</span>`
+        : `<select class="offset-from-sel" onchange="onOffsetFromChange(${i},this)">${offsetFromOptions}</select>`;
 
     // Offset (days) cell
-    const offsetCell = isSystem
-      ? `<div style="display:flex;align-items:center;gap:5px;">
-           <span style="font-size:13px;">🔒</span>
-           <span style="color:#9CA3AF;font-size:13px;">+${m.offset}d <span style="font-size:11px;">auto</span></span>
-         </div>`
+    const offsetCell = m.offsetFrom === 'formula'
+      ? `<code style="font-size:12px;color:#374151;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:4px;padding:3px 8px;">${m.formula}</code>`
       : m.offsetTbd
         ? `<span style="font-size:12px;color:#9CA3AF;font-style:italic;">TBD</span>`
         : `<div style="display:flex;align-items:center;gap:6px;">
              <span style="font-size:12px;color:#9CA3AF;">+</span>
              <input class="ms-offset-input" type="number" value="${m.offset}" min="0" onchange="onOffsetChange(${i},this)" />
-             <span style="font-size:12px;color:#9CA3AF;">days</span>
+             <span style="font-size:12px;color:#9CA3AF;">d</span>
+             ${m.note ? `<span style="font-size:11px;color:#9CA3AF;border:1px solid #E5E7EB;border-radius:3px;padding:1px 5px;">${m.note}</span>` : ''}
            </div>`;
 
     // Holiday checkboxes
@@ -3767,7 +3760,7 @@ function renderMilestoneTable(type) {
       ? `<span class="cal-chip" style="background:${m.bg};color:${m.color};">${m.label}</span><span style="margin-left:6px;font-size:10px;color:#9CA3AF;background:#F3F4F6;border-radius:3px;padding:1px 5px;vertical-align:middle;">indicative</span>`
       : `<span class="cal-chip" style="background:${m.bg};color:${m.color};">${m.label}</span>`;
 
-    return `<tr style="${rowStyle}">
+    return `<tr>
       <td style="color:#9CA3AF;font-size:12px;padding-left:20px;">${i + 1}</td>
       <td style="padding:10px 14px;">${milestoneCell}</td>
       <td style="padding:10px 14px;">${typeBadge}</td>
