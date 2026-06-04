@@ -1570,7 +1570,8 @@ tr.drag-over { border-top: 2px solid #2563EB; }
           <div>
             <div class="list-title">Lender List</div>
             <div id="lib-select-hint" style="font-size:11px;color:#9CA3AF;margin-top:2px;display:none;">
-              ✓ <span id="lib-select-count">0</span> funder(s) selected — click "Batch Adjust Plans" to continue
+              ✓ <span id="lib-select-count">0</span> funder(s) selected
+              <span id="lib-ops-flow-hint"></span>
             </div>
           </div>
           <div style="display:flex;gap:10px;align-items:center;">
@@ -2833,21 +2834,55 @@ function updateBulkBar() {
   document.getElementById('bulk-count').textContent = count;
   document.getElementById('bulk-names').textContent = Object.keys(selectedPlans).join(' · ');
   bar.classList.toggle('visible', count > 0);
-  // update toolbar hint + button state
-  const hint = document.getElementById('lib-select-hint');
+
+  const hint    = document.getElementById('lib-select-hint');
   const btnBatch = document.getElementById('btn-batch-adjust');
   const countEl = document.getElementById('lib-select-count');
+  const opsHint = document.getElementById('lib-ops-flow-hint');
+
   if (hint) hint.style.display = count > 0 ? 'block' : 'none';
   if (countEl) countEl.textContent = count;
+
+  // Check Ops Flow consistency
+  const opsFlows = [...new Set(Object.values(selectedPlans))];
+  const mixed = opsFlows.length > 1;
+
+  if (opsHint) {
+    if (count === 0) { opsHint.textContent = ''; }
+    else if (mixed) {
+      opsHint.innerHTML = ` · <span style="color:#D97706;">⚠️ Mixed Ops Flow (${opsFlows.join(', ')}) — Batch Sub Plan requires the same Ops Flow</span>`;
+    } else {
+      opsHint.innerHTML = ` · Ops Flow: <strong>${opsFlows[0]}</strong> · click "Batch Adjust Plans" to create Sub Plans`;
+    }
+  }
+
   if (btnBatch) {
-    if (count > 0) {
+    if (count > 0 && !mixed) {
       btnBatch.style.color = '#2563EB';
       btnBatch.style.borderColor = '#2563EB';
       btnBatch.style.background = '#EFF6FF';
+      btnBatch.style.opacity = '1';
+      btnBatch.style.cursor = 'pointer';
+      btnBatch.onclick = bspOpen;
+    } else if (count > 0 && mixed) {
+      btnBatch.style.color = '#9CA3AF';
+      btnBatch.style.borderColor = '#E5E7EB';
+      btnBatch.style.background = '#F9FAFB';
+      btnBatch.style.opacity = '0.6';
+      btnBatch.style.cursor = 'not-allowed';
+      btnBatch.onclick = () => {
+        const toast = document.getElementById('update-toast');
+        toast.textContent = '⚠️ Batch Sub Plan requires all selected funders to have the same Ops Flow type';
+        toast.classList.add('visible');
+        setTimeout(() => toast.classList.remove('visible'), 2800);
+      };
     } else {
       btnBatch.style.color = '#374151';
       btnBatch.style.borderColor = '';
       btnBatch.style.background = '';
+      btnBatch.style.opacity = '1';
+      btnBatch.style.cursor = 'pointer';
+      btnBatch.onclick = bspOpen;
     }
   }
 }
@@ -4315,7 +4350,10 @@ function bspSubmit() {
             <div class="form-hint">System uses this date to auto-identify each funder's active cycle.</div>
           </div>
         </div>
-        <div style="font-size:13px;font-weight:600;color:#374151;margin-bottom:10px;">Selected Funders <span style="font-size:12px;font-weight:400;color:#9CA3AF;margin-left:4px;">3 funders · all have active cycles</span></div>
+        <div style="background:#EFF6FF;border:1px solid #BFDBFE;border-radius:6px;padding:9px 14px;font-size:12px;color:#1D4ED8;margin-bottom:14px;">
+          ℹ️ <strong>Ops Flow constraint:</strong> Batch Sub Plan only applies to funders sharing the same Ops Flow type. Only <strong>ABS Non-Net</strong> funders are included below. Funders with a different Ops Flow cannot be selected and are excluded from this batch.
+        </div>
+        <div style="font-size:13px;font-weight:600;color:#374151;margin-bottom:10px;">Selected Funders <span style="font-size:12px;font-weight:400;color:#9CA3AF;margin-left:4px;">3 included · same Ops Flow (ABS Non-Net)</span></div>
         <table style="width:100%;border-collapse:collapse;">
           <thead>
             <tr style="background:#F9FAFB;">
