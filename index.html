@@ -50,18 +50,25 @@ tr.plan-row-selected td { background:#EFF6FF; }
 tr.plan-row-selected:hover td { background:#DBEAFE; }
 
 /* ── Sub Plan Modal ── */
-.sp-modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:500; align-items:center; justify-content:center; }
-.sp-modal-overlay.open { display:flex; }
-.sp-modal { background:#fff; border-radius:12px; width:600px; max-height:85vh; display:flex; flex-direction:column; box-shadow:0 20px 48px rgba(0,0,0,0.2); overflow:hidden; }
-.sp-modal-header { padding:18px 24px 14px; border-bottom:1px solid #F3F4F6; display:flex; align-items:flex-start; justify-content:space-between; }
+/* Sub Plan — side drawer */
+.sp-modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.35); z-index:500; }
+.sp-modal-overlay.open { display:block; }
+.sp-modal { background:#fff; position:fixed; top:0; right:0; bottom:0; width:min(880px,100vw); display:flex; flex-direction:column; box-shadow:-8px 0 32px rgba(0,0,0,0.15); transform:translateX(100%); transition:transform 0.28s cubic-bezier(.4,0,.2,1); }
+.sp-modal-overlay.open .sp-modal { transform:translateX(0); }
+.sp-modal-header { padding:18px 24px 14px; border-bottom:1px solid #F3F4F6; display:flex; align-items:flex-start; justify-content:space-between; flex-shrink:0; }
 .sp-modal-title { font-size:16px; font-weight:700; color:#111827; }
 .sp-modal-sub { font-size:12px; color:#6B7280; margin-top:3px; }
-.sp-modal-steps { display:flex; gap:0; padding:0 24px; background:#FAFAFA; border-bottom:1px solid #F3F4F6; }
+.sp-modal-steps { display:flex; gap:0; padding:0 24px; background:#FAFAFA; border-bottom:1px solid #F3F4F6; flex-shrink:0; }
 .sp-modal-step { padding:10px 0; margin-right:24px; font-size:12px; color:#9CA3AF; border-bottom:2px solid transparent; cursor:default; }
 .sp-modal-step.active { color:#2563EB; font-weight:600; border-bottom-color:#2563EB; }
 .sp-modal-step.done { color:#16A34A; }
 .sp-modal-body { padding:20px 24px; overflow-y:auto; flex:1; }
-.sp-modal-footer { padding:14px 24px; border-top:1px solid #F3F4F6; display:flex; justify-content:flex-end; gap:10px; }
+.sp-modal-footer { padding:14px 24px; border-top:1px solid #F3F4F6; display:flex; justify-content:flex-end; gap:10px; flex-shrink:0; }
+/* Skip holidays country chips */
+.sp-hol-group { display:flex; flex-wrap:wrap; gap:4px; }
+.sp-hol-full-group { display:grid; grid-template-columns:1fr 1fr; gap:4px 12px; }
+.sp-hol-chk { display:inline-flex; align-items:center; gap:5px; font-size:12px; color:#374151; cursor:pointer; user-select:none; white-space:nowrap; }
+.sp-hol-chk input { accent-color:#2563EB; width:14px; height:14px; cursor:pointer; flex-shrink:0; }
 .sp-field-label { font-size:12px; font-weight:500; color:#374151; margin-bottom:4px; display:block; }
 .sp-chips { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px; }
 .sp-chip { background:#EFF6FF; color:#2563EB; border:1px solid #BFDBFE; border-radius:12px; padding:3px 10px; font-size:12px; font-weight:500; }
@@ -2777,65 +2784,78 @@ tr.drag-over { border-top: 2px solid #2563EB; }
           <label class="sp-field-label">Reason</label>
           <textarea class="form-input" id="sp-reason" rows="2" placeholder="e.g. Public holiday adjustment for Songkran" style="font-size:13px;resize:none;"></textarea>
         </div>
-        <div style="font-size:12px;font-weight:600;color:#374151;margin-bottom:8px;">Milestone Adjustments</div>
-        <table class="sp-ms-table">
+        <div style="font-size:13px;font-weight:600;color:#111827;margin-bottom:12px;">Milestone Adjustments</div>
+        <table class="sp-ms-table" style="table-layout:fixed;">
+          <colgroup>
+            <col style="width:32px;">
+            <col style="width:160px;">
+            <col style="width:100px;">
+            <col style="width:160px;">
+            <col style="width:120px;">
+            <col>
+          </colgroup>
           <thead>
             <tr>
+              <th>#</th>
               <th>Milestone</th>
               <th>Type</th>
-              <th>Delay (days)</th>
-              <th>Day Type</th>
-              <th>Skip Holidays</th>
+              <th>Offset from</th>
+              <th>Offset (days)</th>
+              <th>
+                <label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-weight:600;color:#374151;">
+                  <input type="checkbox" id="sp-hol-master" checked style="accent-color:#2563EB;width:14px;height:14px;" onchange="spToggleAllHol(this)" />
+                  Skip Holidays of
+                </label>
+              </th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>Servicer Report</td>
-              <td><span style="font-size:11px;background:#EFF6FF;color:#2563EB;border-radius:3px;padding:1px 6px;">Operation</span></td>
-              <td><input class="sp-ms-input" type="number" min="0" placeholder="—" /></td>
-              <td><div class="sp-td-toggle"><div class="sp-toggle" onclick="this.classList.toggle('on')"></div><span id="sp-td-lbl-0">Calendar</span></div></td>
-              <td><input type="checkbox" checked style="accent-color:#2563EB;" /></td>
+              <td style="color:#9CA3AF;text-align:center;">1</td>
+              <td><span class="cal-chip" style="background:#DBEAFE;color:#1D4ED8;">Servicer Report</span></td>
+              <td><span style="font-size:11px;background:#EFF6FF;color:#2563EB;border-radius:3px;padding:2px 7px;font-weight:500;">Operation</span></td>
+              <td><span style="font-size:12px;font-weight:600;color:#374151;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:4px;padding:3px 10px;">T</span></td>
+              <td><div style="display:flex;align-items:center;gap:4px;font-size:13px;"><span style="color:#9CA3AF;">+</span><input class="sp-ms-input" type="number" min="0" value="1" style="width:60px;" /><span style="color:#6B7280;font-size:12px;">T</span></div></td>
+              <td><div class="sp-hol-full-group"><label class="sp-hol-chk"><input type="checkbox" checked />Thailand (TH)</label><label class="sp-hol-chk"><input type="checkbox" checked />Malaysia (MY)</label><label class="sp-hol-chk"><input type="checkbox" checked />Singapore (SG)</label><label class="sp-hol-chk"><input type="checkbox" checked />Hong Kong (HK)</label><label class="sp-hol-chk" style="grid-column:span 2;"><input type="checkbox" checked />United States (US)</label></div></td>
             </tr>
             <tr>
-              <td>Batch Creation</td>
-              <td><span style="font-size:11px;background:#EFF6FF;color:#2563EB;border-radius:3px;padding:1px 6px;">Operation</span></td>
-              <td><input class="sp-ms-input" type="number" min="0" placeholder="—" /></td>
-              <td><div class="sp-td-toggle"><div class="sp-toggle" onclick="this.classList.toggle('on')"></div><span>Calendar</span></div></td>
-              <td><input type="checkbox" checked style="accent-color:#2563EB;" /></td>
+              <td style="color:#9CA3AF;text-align:center;">2</td>
+              <td><span class="cal-chip" style="background:#EDE9FE;color:#6D28D9;">Batch Creation</span></td>
+              <td><span style="font-size:11px;background:#EFF6FF;color:#2563EB;border-radius:3px;padding:2px 7px;font-weight:500;">Operation</span></td>
+              <td><select class="form-select" style="font-size:12px;padding:4px 8px;height:30px;"><option>T (Cycle Start)</option></select></td>
+              <td><div style="display:flex;align-items:center;gap:4px;font-size:13px;"><span style="color:#9CA3AF;">+</span><input class="sp-ms-input" type="number" min="0" value="1" style="width:60px;" /><span style="color:#6B7280;font-size:12px;">T</span></div></td>
+              <td><div class="sp-hol-full-group"><label class="sp-hol-chk"><input type="checkbox" checked />Thailand (TH)</label><label class="sp-hol-chk"><input type="checkbox" checked />Malaysia (MY)</label><label class="sp-hol-chk"><input type="checkbox" checked />Singapore (SG)</label><label class="sp-hol-chk"><input type="checkbox" checked />Hong Kong (HK)</label><label class="sp-hol-chk" style="grid-column:span 2;"><input type="checkbox" checked />United States (US)</label></div></td>
             </tr>
             <tr>
-              <td>Sale Notice</td>
-              <td><span style="font-size:11px;background:#EFF6FF;color:#2563EB;border-radius:3px;padding:1px 6px;">Operation</span></td>
-              <td><input class="sp-ms-input" type="number" min="0" placeholder="—" /></td>
-              <td><div class="sp-td-toggle"><div class="sp-toggle on" onclick="this.classList.toggle('on')"></div><span>Business</span></div></td>
-              <td><input type="checkbox" style="accent-color:#2563EB;" /></td>
+              <td style="color:#9CA3AF;text-align:center;">3</td>
+              <td><span class="cal-chip" style="background:#FEF3C7;color:#92400E;">Sale Notice</span></td>
+              <td><span style="font-size:11px;background:#EFF6FF;color:#2563EB;border-radius:3px;padding:2px 7px;font-weight:500;">Operation</span></td>
+              <td><select class="form-select" style="font-size:12px;padding:4px 8px;height:30px;"><option>M2 Batch Creation</option><option>T (Cycle Start)</option></select></td>
+              <td><div style="display:flex;align-items:center;gap:4px;font-size:13px;"><span style="color:#9CA3AF;">+</span><input class="sp-ms-input" type="number" min="0" value="1" style="width:60px;" /><span style="color:#6B7280;font-size:12px;">T</span></div></td>
+              <td><div class="sp-hol-full-group"><label class="sp-hol-chk"><input type="checkbox" checked />Thailand (TH)</label><label class="sp-hol-chk"><input type="checkbox" checked />Malaysia (MY)</label><label class="sp-hol-chk"><input type="checkbox" checked />Singapore (SG)</label><label class="sp-hol-chk"><input type="checkbox" checked />Hong Kong (HK)</label><label class="sp-hol-chk" style="grid-column:span 2;"><input type="checkbox" checked />United States (US)</label></div></td>
             </tr>
             <tr>
-              <td>Sale Date</td>
-              <td><span style="font-size:11px;background:#EFF6FF;color:#2563EB;border-radius:3px;padding:1px 6px;">Operation</span></td>
-              <td><input class="sp-ms-input" type="number" min="0" placeholder="—" /></td>
-              <td><div class="sp-td-toggle"><div class="sp-toggle on" onclick="this.classList.toggle('on')"></div><span>Business</span></div></td>
-              <td><input type="checkbox" style="accent-color:#2563EB;" /></td>
+              <td style="color:#9CA3AF;text-align:center;">4</td>
+              <td><span class="cal-chip" style="background:#F3F4F6;color:#374151;">Sys Cutoff</span></td>
+              <td><span style="font-size:11px;background:#EFF6FF;color:#2563EB;border-radius:3px;padding:2px 7px;font-weight:500;">Operation</span></td>
+              <td><select class="form-select" style="font-size:12px;padding:4px 8px;height:30px;"><option>M2 Batch Creation</option><option>T (Cycle Start)</option></select></td>
+              <td><div style="display:flex;align-items:center;gap:4px;font-size:13px;"><span style="color:#9CA3AF;">+</span><input class="sp-ms-input" type="number" min="0" value="1" style="width:60px;" /><span style="color:#6B7280;font-size:12px;">T</span></div></td>
+              <td><div class="sp-hol-full-group"><label class="sp-hol-chk"><input type="checkbox" checked />Thailand (TH)</label><label class="sp-hol-chk"><input type="checkbox" checked />Malaysia (MY)</label><label class="sp-hol-chk"><input type="checkbox" checked />Singapore (SG)</label><label class="sp-hol-chk"><input type="checkbox" checked />Hong Kong (HK)</label><label class="sp-hol-chk" style="grid-column:span 2;"><input type="checkbox" checked />United States (US)</label></div></td>
             </tr>
             <tr>
-              <td>Collection Deposit</td>
-              <td><span style="font-size:11px;background:#EFF6FF;color:#2563EB;border-radius:3px;padding:1px 6px;">Operation</span></td>
-              <td><input class="sp-ms-input" type="number" min="0" placeholder="—" /></td>
-              <td><div class="sp-td-toggle"><div class="sp-toggle" onclick="this.classList.toggle('on')"></div><span>Calendar</span></div></td>
-              <td><input type="checkbox" checked style="accent-color:#2563EB;" /></td>
+              <td style="color:#9CA3AF;text-align:center;">5</td>
+              <td><span class="cal-chip" style="background:#D1FAE5;color:#065F46;">Collection</span></td>
+              <td><span style="font-size:11px;background:#EFF6FF;color:#2563EB;border-radius:3px;padding:2px 7px;font-weight:500;">Operation</span></td>
+              <td><select class="form-select" style="font-size:12px;padding:4px 8px;height:30px;"><option>M1 Servicer Report</option><option>T (Cycle Start)</option></select></td>
+              <td><div style="display:flex;align-items:center;gap:4px;font-size:13px;"><span style="color:#9CA3AF;">+</span><input class="sp-ms-input" type="number" min="0" value="3" style="width:60px;" /><span style="color:#6B7280;font-size:12px;">T</span></div></td>
+              <td><div class="sp-hol-full-group"><label class="sp-hol-chk"><input type="checkbox" checked />Thailand (TH)</label><label class="sp-hol-chk"><input type="checkbox" checked />Malaysia (MY)</label><label class="sp-hol-chk"><input type="checkbox" checked />Singapore (SG)</label><label class="sp-hol-chk"><input type="checkbox" checked />Hong Kong (HK)</label><label class="sp-hol-chk" style="grid-column:span 2;"><input type="checkbox" checked />United States (US)</label></div></td>
             </tr>
             <tr style="background:#F9FAFB;">
-              <td>Portfolio Selection</td>
-              <td><span style="font-size:11px;background:#F3F4F6;color:#6B7280;border-radius:3px;padding:1px 6px;">System</span></td>
+              <td style="color:#9CA3AF;text-align:center;">0</td>
+              <td><span class="cal-chip" style="background:#F3F4F6;color:#6B7280;">Portfolio Selection</span></td>
+              <td><span style="font-size:11px;background:#F3F4F6;color:#6B7280;border-radius:3px;padding:2px 7px;font-weight:500;">System</span></td>
               <td><span class="sp-system-lock">🔒 auto</span></td>
-              <td><span class="sp-system-lock">🔒 —</span></td>
-              <td><span class="sp-system-lock">🔒 —</span></td>
-            </tr>
-            <tr style="background:#F9FAFB;">
-              <td>System Cutoff</td>
-              <td><span style="font-size:11px;background:#F3F4F6;color:#6B7280;border-radius:3px;padding:1px 6px;">System</span></td>
               <td><span class="sp-system-lock">🔒 auto</span></td>
-              <td><span class="sp-system-lock">🔒 —</span></td>
               <td><span class="sp-system-lock">🔒 —</span></td>
             </tr>
           </tbody>
@@ -2893,6 +2913,163 @@ tr.drag-over { border-top: 2px solid #2563EB; }
     </div>
   </div>
 </div><!-- /flow-wf-template -->
+
+<!-- ══ Flow: WFT Create Sub Plan (full page) ══ -->
+<div id="flow-wft-subplan" class="flow">
+  <div class="app-layout">
+    <div class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">S</div>
+        <div><div class="sidebar-logo-text">SEO Money</div><div class="sidebar-logo-sub">Funding · Admin</div></div>
+      </div>
+      <div class="sidebar-nav">
+        <div class="sidebar-group-hd">Routing Management ▾</div>
+        <div class="sidebar-group-hd" style="padding-left:26px;">Lender Management ▾</div>
+        <div class="sidebar-item" onclick="switchFlow('list')">Lender List</div>
+        <div class="sidebar-item active">Workflow Template</div>
+        <div class="sidebar-group-hd" style="margin-top:4px;">Report Management ▾</div>
+        <div class="sidebar-group-hd" style="margin-top:4px;">Whitelist Configuration</div>
+        <div class="sidebar-group-hd" style="margin-top:4px;">Event System</div>
+        <div class="sidebar-group-hd" style="margin-top:4px;">Clone Center</div>
+        <div class="sidebar-group-hd" style="margin-top:4px;">ABS Auto Report Manage ▾</div>
+      </div>
+    </div>
+
+    <div class="sidebar-main" style="overflow-y:auto;">
+      <div class="list-topnav">
+        <div class="list-topnav-crumb">
+          <a href="#" onclick="switchFlow('wf-template');return false;">Lender Management</a><span class="sep">/</span>
+          <a href="#" onclick="switchFlow('wf-template');return false;">Workflow Template</a><span class="sep">/</span>
+          <a href="#" onclick="switchFlow('wf-template');return false;">TH_SPL_ABS_Standard</a><span class="sep">/</span>
+          <span class="current">Create Sub Plan</span>
+        </div>
+        <div class="list-topnav-right">TH Region · Zikky</div>
+      </div>
+
+      <div class="list-main">
+        <!-- Page title -->
+        <div class="list-toolbar" style="margin-bottom:16px;">
+          <div>
+            <div class="list-title">Create Sub Plan</div>
+            <div style="font-size:12px;color:#6B7280;margin-top:2px;">TH_SPL_ABS_Standard &nbsp;·&nbsp; <span id="wft-sp-plan-count">0</span> plan(s) selected</div>
+          </div>
+        </div>
+
+        <!-- Selected Plans chips -->
+        <div class="section-card" style="margin-bottom:16px;">
+          <div class="section-header"><div class="section-title">Selected Plans</div></div>
+          <div class="section-body">
+            <div id="wft-sp-chips" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
+          </div>
+        </div>
+
+        <!-- Date range + Reason -->
+        <div class="section-card" style="margin-bottom:16px;">
+          <div class="section-header"><div class="section-title">Sub Plan Details</div></div>
+          <div class="section-body">
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">From Date <span class="req">*</span></label>
+                <input type="date" class="form-input" id="wft-sp-date-from" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">To Date <span class="req">*</span></label>
+                <input type="date" class="form-input" id="wft-sp-date-to" />
+              </div>
+              <div class="form-group" style="grid-column:1/-1;">
+                <label class="form-label">Reason</label>
+                <textarea class="form-input" id="wft-sp-reason" rows="2" placeholder="e.g. Public holiday adjustment for Songkran" style="resize:none;"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Milestone Adjustments -->
+        <div class="section-card" style="margin-bottom:24px;">
+          <div class="section-header"><div class="section-title">Milestone Adjustments</div></div>
+          <div class="section-body" style="padding:0;">
+            <div style="overflow-x:auto;">
+              <table style="width:100%;border-collapse:collapse;min-width:820px;">
+                <thead>
+                  <tr>
+                    <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;text-align:left;">Milestone</th>
+                    <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;text-align:left;">Type</th>
+                    <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;text-align:left;">Delay (days)</th>
+                    <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;text-align:left;">Day Type</th>
+                    <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;text-align:left;">
+                      <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
+                        <input type="checkbox" id="wft-sp-hol-master" checked style="accent-color:#2563EB;width:14px;height:14px;" onchange="wftSpToggleAllHol(this)" />
+                        <span>Skip Holidays of</span>
+                      </label>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="padding:11px 16px;font-size:13px;">Servicer Report</td>
+                    <td style="padding:11px 16px;"><span style="font-size:11px;background:#EFF6FF;color:#2563EB;border-radius:3px;padding:2px 7px;font-weight:500;">Operation</span></td>
+                    <td style="padding:11px 16px;"><input type="number" min="0" placeholder="—" style="width:70px;border:1px solid #D1D5DB;border-radius:5px;padding:5px 8px;font-size:13px;text-align:center;" /></td>
+                    <td style="padding:11px 16px;"><div style="display:flex;align-items:center;gap:7px;font-size:13px;"><div class="sp-toggle" onclick="this.classList.toggle('on');this.nextElementSibling.textContent=this.classList.contains('on')?'Business':'Calendar'"></div><span>Calendar</span></div></td>
+                    <td style="padding:11px 16px;"><div class="sp-hol-group"><label class="sp-hol-chk"><input type="checkbox" checked />TH</label><label class="sp-hol-chk"><input type="checkbox" checked />SG</label><label class="sp-hol-chk"><input type="checkbox" checked />HK</label><label class="sp-hol-chk"><input type="checkbox" checked />US</label><label class="sp-hol-chk"><input type="checkbox" checked />MY</label></div></td>
+                  </tr>
+                  <tr>
+                    <td style="padding:11px 16px;font-size:13px;">Batch Creation</td>
+                    <td style="padding:11px 16px;"><span style="font-size:11px;background:#EFF6FF;color:#2563EB;border-radius:3px;padding:2px 7px;font-weight:500;">Operation</span></td>
+                    <td style="padding:11px 16px;"><input type="number" min="0" placeholder="—" style="width:70px;border:1px solid #D1D5DB;border-radius:5px;padding:5px 8px;font-size:13px;text-align:center;" /></td>
+                    <td style="padding:11px 16px;"><div style="display:flex;align-items:center;gap:7px;font-size:13px;"><div class="sp-toggle" onclick="this.classList.toggle('on');this.nextElementSibling.textContent=this.classList.contains('on')?'Business':'Calendar'"></div><span>Calendar</span></div></td>
+                    <td style="padding:11px 16px;"><div class="sp-hol-group"><label class="sp-hol-chk"><input type="checkbox" checked />TH</label><label class="sp-hol-chk"><input type="checkbox" checked />SG</label><label class="sp-hol-chk"><input type="checkbox" checked />HK</label><label class="sp-hol-chk"><input type="checkbox" checked />US</label><label class="sp-hol-chk"><input type="checkbox" checked />MY</label></div></td>
+                  </tr>
+                  <tr>
+                    <td style="padding:11px 16px;font-size:13px;">Sale Notice</td>
+                    <td style="padding:11px 16px;"><span style="font-size:11px;background:#EFF6FF;color:#2563EB;border-radius:3px;padding:2px 7px;font-weight:500;">Operation</span></td>
+                    <td style="padding:11px 16px;"><input type="number" min="0" placeholder="—" style="width:70px;border:1px solid #D1D5DB;border-radius:5px;padding:5px 8px;font-size:13px;text-align:center;" /></td>
+                    <td style="padding:11px 16px;"><div style="display:flex;align-items:center;gap:7px;font-size:13px;"><div class="sp-toggle on" onclick="this.classList.toggle('on');this.nextElementSibling.textContent=this.classList.contains('on')?'Business':'Calendar'"></div><span>Business</span></div></td>
+                    <td style="padding:11px 16px;"><div class="sp-hol-group"><label class="sp-hol-chk"><input type="checkbox" checked />TH</label><label class="sp-hol-chk"><input type="checkbox" checked />SG</label><label class="sp-hol-chk"><input type="checkbox" checked />HK</label><label class="sp-hol-chk"><input type="checkbox" checked />US</label><label class="sp-hol-chk"><input type="checkbox" checked />MY</label></div></td>
+                  </tr>
+                  <tr>
+                    <td style="padding:11px 16px;font-size:13px;">Sale Date</td>
+                    <td style="padding:11px 16px;"><span style="font-size:11px;background:#EFF6FF;color:#2563EB;border-radius:3px;padding:2px 7px;font-weight:500;">Operation</span></td>
+                    <td style="padding:11px 16px;"><input type="number" min="0" placeholder="—" style="width:70px;border:1px solid #D1D5DB;border-radius:5px;padding:5px 8px;font-size:13px;text-align:center;" /></td>
+                    <td style="padding:11px 16px;"><div style="display:flex;align-items:center;gap:7px;font-size:13px;"><div class="sp-toggle on" onclick="this.classList.toggle('on');this.nextElementSibling.textContent=this.classList.contains('on')?'Business':'Calendar'"></div><span>Business</span></div></td>
+                    <td style="padding:11px 16px;"><div class="sp-hol-group"><label class="sp-hol-chk"><input type="checkbox" checked />TH</label><label class="sp-hol-chk"><input type="checkbox" checked />SG</label><label class="sp-hol-chk"><input type="checkbox" checked />HK</label><label class="sp-hol-chk"><input type="checkbox" checked />US</label><label class="sp-hol-chk"><input type="checkbox" checked />MY</label></div></td>
+                  </tr>
+                  <tr>
+                    <td style="padding:11px 16px;font-size:13px;">Collection Deposit</td>
+                    <td style="padding:11px 16px;"><span style="font-size:11px;background:#EFF6FF;color:#2563EB;border-radius:3px;padding:2px 7px;font-weight:500;">Operation</span></td>
+                    <td style="padding:11px 16px;"><input type="number" min="0" placeholder="—" style="width:70px;border:1px solid #D1D5DB;border-radius:5px;padding:5px 8px;font-size:13px;text-align:center;" /></td>
+                    <td style="padding:11px 16px;"><div style="display:flex;align-items:center;gap:7px;font-size:13px;"><div class="sp-toggle" onclick="this.classList.toggle('on');this.nextElementSibling.textContent=this.classList.contains('on')?'Business':'Calendar'"></div><span>Calendar</span></div></td>
+                    <td style="padding:11px 16px;"><div class="sp-hol-group"><label class="sp-hol-chk"><input type="checkbox" checked />TH</label><label class="sp-hol-chk"><input type="checkbox" checked />SG</label><label class="sp-hol-chk"><input type="checkbox" checked />HK</label><label class="sp-hol-chk"><input type="checkbox" checked />US</label><label class="sp-hol-chk"><input type="checkbox" checked />MY</label></div></td>
+                  </tr>
+                  <tr>
+                    <td style="padding:11px 16px;font-size:13px;">System Cutoff</td>
+                    <td style="padding:11px 16px;"><span style="font-size:11px;background:#EFF6FF;color:#2563EB;border-radius:3px;padding:2px 7px;font-weight:500;">Operation</span></td>
+                    <td style="padding:11px 16px;"><input type="number" min="0" placeholder="—" style="width:70px;border:1px solid #D1D5DB;border-radius:5px;padding:5px 8px;font-size:13px;text-align:center;" /></td>
+                    <td style="padding:11px 16px;"><div style="display:flex;align-items:center;gap:7px;font-size:13px;"><div class="sp-toggle" onclick="this.classList.toggle('on');this.nextElementSibling.textContent=this.classList.contains('on')?'Business':'Calendar'"></div><span>Calendar</span></div></td>
+                    <td style="padding:11px 16px;"><div class="sp-hol-group"><label class="sp-hol-chk"><input type="checkbox" checked />TH</label><label class="sp-hol-chk"><input type="checkbox" checked />SG</label><label class="sp-hol-chk"><input type="checkbox" checked />HK</label><label class="sp-hol-chk"><input type="checkbox" checked />US</label><label class="sp-hol-chk"><input type="checkbox" checked />MY</label></div></td>
+                  </tr>
+                  <tr style="background:#F9FAFB;">
+                    <td style="padding:11px 16px;font-size:13px;color:#6B7280;">Portfolio Selection</td>
+                    <td style="padding:11px 16px;"><span style="font-size:11px;background:#F3F4F6;color:#6B7280;border-radius:3px;padding:2px 7px;font-weight:500;">System</span></td>
+                    <td style="padding:11px 16px;font-size:12px;color:#9CA3AF;">🔒 auto</td>
+                    <td style="padding:11px 16px;font-size:12px;color:#9CA3AF;">🔒 —</td>
+                    <td style="padding:11px 16px;font-size:12px;color:#9CA3AF;">🔒 —</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="display:flex;justify-content:flex-end;gap:12px;padding-bottom:40px;">
+          <button class="btn-outline-sm" style="padding:10px 24px;font-size:13px;" onclick="switchFlow('wf-template')">Cancel</button>
+          <button class="btn-primary-lg" style="padding:10px 24px;font-size:13px;" onclick="wftSpSubmit()">Submit →</button>
+        </div>
+
+      </div><!-- /list-main -->
+    </div><!-- /sidebar-main -->
+  </div><!-- /app-layout -->
+</div><!-- /flow-wft-subplan -->
 
 <script>
 /* ── Compact radio & checkbox helpers ── */
@@ -4605,6 +4782,10 @@ function ptSubmitTicket() {
   setTimeout(() => toast.classList.remove('visible'), 3500);
 }
 
+function spToggleAllHol(master) {
+  document.querySelectorAll('#sp-modal-overlay .sp-hol-group input[type=checkbox]').forEach(c => c.checked = master.checked);
+}
+
 /* ── Plans table multi-selection ── */
 function wftPlansToggleAll(master) {
   document.querySelectorAll('.plan-row-chk').forEach(chk => {
@@ -4648,17 +4829,41 @@ function openSubPlanModal() {
     return { id: row.dataset.planId, funder: row.dataset.funder };
   });
   if (!selected.length) return;
-  // Populate chips
+  // Populate chips and subtitle
   document.getElementById('sp-plan-chips').innerHTML = selected.map(p =>
     `<span class="sp-chip">${p.id} · ${p.funder}</span>`
   ).join('');
   document.getElementById('sp-modal-sub').textContent = selected.length + ' plan(s) selected';
+  // Reset fields
+  document.getElementById('sp-date-from').value = '';
+  document.getElementById('sp-date-to').value = '';
+  document.getElementById('sp-reason').value = '';
+  document.getElementById('sp-hol-master').checked = true;
+  document.querySelectorAll('#sp-modal-overlay .sp-hol-chk input').forEach(c => c.checked = true);
   // Reset to step 1
   spGoStep(1, true);
+  // Open drawer
   document.getElementById('sp-modal-overlay').classList.add('open');
 }
 function closeSubPlanModal() {
   document.getElementById('sp-modal-overlay').classList.remove('open');
+}
+function spToggleAllHol(master) {
+  document.querySelectorAll('#sp-modal-overlay .sp-hol-chk input').forEach(c => c.checked = master.checked);
+}
+function wftSpSubmit() {
+  const count = document.querySelectorAll('.plan-row-chk:checked').length || parseInt(document.getElementById('wft-sp-plan-count').textContent);
+  const ids = Array.from({length: count}, (_, i) => 'SP-2026-0' + (22 + i)).join(' · ');
+  switchFlow('wf-template');
+  // Deselect plans
+  document.querySelectorAll('.plan-row-chk').forEach(c => { c.checked = false; c.closest('tr').classList.remove('plan-row-selected'); });
+  const master = document.getElementById('wft-plans-chk-all');
+  if (master) { master.checked = false; master.indeterminate = false; }
+  wftPlansUpdateBar();
+  const toast = document.getElementById('toast');
+  toast.textContent = `✓ ${count} Sub Plan(s) submitted to Ticket Center (${ids})`;
+  toast.classList.add('visible');
+  setTimeout(() => toast.classList.remove('visible'), 3500);
 }
 function spGoStep(step, init) {
   document.getElementById('sp-step-1').style.display = step === 1 ? '' : 'none';
