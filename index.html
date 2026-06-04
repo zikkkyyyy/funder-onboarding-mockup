@@ -1227,20 +1227,22 @@ tr.drag-over { border-top: 2px solid #2563EB; }
           <button class="btn-outline-sm" style="white-space:nowrap;padding:7px 14px;" onclick="showSaveTemplateModal()">Save as Template</button>
         </div>
       </div>
-      <!-- Offset Day Type bar -->
-      <div style="padding:12px 20px;border-bottom:1px solid #F3F4F6;background:#FAFAFA;display:flex;align-items:center;gap:24px;">
-        <span style="font-size:13px;font-weight:600;color:#374151;">Offset Day Type <span class="req">*</span></span>
-        <label style="display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:#374151;user-select:none;">
-          <input type="radio" name="daytype" id="daytype-cal" value="cal" checked style="display:none;" onchange="selectDayType('cal')">
-          <span class="std-radio-dot" id="daytype-dot-cal" onclick="document.getElementById('daytype-cal').click()" style="width:18px;height:18px;border-radius:50%;border:2px solid #2563EB;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;"><span style="width:9px;height:9px;border-radius:50%;background:#2563EB;display:block;"></span></span>
-          <span onclick="document.getElementById('daytype-cal').click()">Calendar Days</span>
-        </label>
-        <label style="display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:#374151;user-select:none;">
-          <input type="radio" name="daytype" id="daytype-biz" value="biz" style="display:none;" onchange="selectDayType('biz')">
-          <span class="std-radio-dot" id="daytype-dot-biz" onclick="document.getElementById('daytype-biz').click()" style="width:18px;height:18px;border-radius:50%;border:2px solid #9CA3AF;background:#fff;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;"></span>
-          <span onclick="document.getElementById('daytype-biz').click()">Business Days</span>
-        </label>
-        <span style="font-size:12px;color:#9CA3AF;margin-left:4px;">Applies to all Offset (days) values in this template</span>
+      <!-- Offset Day Type — normal required field -->
+      <div style="padding:16px 20px;border-bottom:1px solid #F3F4F6;">
+        <label class="form-label" style="display:block;margin-bottom:8px;">Offset Day Type <span class="req">*</span></label>
+        <div style="display:flex;align-items:center;gap:24px;">
+          <label style="display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:#374151;user-select:none;">
+            <input type="radio" name="daytype" id="daytype-cal" value="cal" checked style="display:none;" onchange="selectDayType('cal')">
+            <span id="daytype-dot-cal" onclick="document.getElementById('daytype-cal').click()" style="width:18px;height:18px;border-radius:50%;border:2px solid #2563EB;background:#fff;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;"><span style="width:9px;height:9px;border-radius:50%;background:#2563EB;display:block;"></span></span>
+            <span onclick="document.getElementById('daytype-cal').click()">Calendar Days</span>
+          </label>
+          <label style="display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:#374151;user-select:none;">
+            <input type="radio" name="daytype" id="daytype-biz" value="biz" style="display:none;" onchange="selectDayType('biz')">
+            <span id="daytype-dot-biz" onclick="document.getElementById('daytype-biz').click()" style="width:18px;height:18px;border-radius:50%;border:2px solid #9CA3AF;background:#fff;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;"></span>
+            <span onclick="document.getElementById('daytype-biz').click()">Business Days</span>
+          </label>
+        </div>
+        <div class="form-hint" style="margin-top:6px;">Applies to all milestone offset values in this template</div>
       </div>
       <div class="section-body" style="padding:0;">
         <div class="tbl-wrap">
