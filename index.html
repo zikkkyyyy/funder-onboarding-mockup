@@ -3673,8 +3673,8 @@ const OPS_FLOW_MILESTONES = {
     { label: 'Sale Notice',     short: 'Sale Notice',     type: 'operation', offset: 1,  offsetFrom: 'milestone', offsetRef: 2,    bg: '#FEF3C7', color: '#92400E' },
     { label: 'Sys Cutoff',      short: 'Sys Cutoff',      type: 'operation', offset: 1,  offsetFrom: 'milestone', offsetRef: 2,    bg: '#F1F5F9', color: '#475569' },
     { label: 'Collection',      short: 'Collection',      type: 'operation', offset: 3,  offsetFrom: 'milestone', offsetRef: 1,    bg: '#CCFBF1', color: '#0F766E' },
-    { label: 'Sale Date',       short: 'Sale Date',       type: 'operation', offset: 0,  offsetFrom: 'formula',   formula: 'max(M3+3d, M1+4d)', bg: '#D1FAE5', color: '#065F46', indicative: true },
-    { label: 'Sys Selling',     short: 'Sys Selling',     type: 'operation', offset: 0,  offsetFrom: 'formula',   formula: 'max(M4, M3+3d, M1+4d)', bg: '#E0E7FF', color: '#4338CA' },
+    { label: 'Sale Date',   short: 'Sale Date',   type: 'operation', offset: 0, offsetFrom: 'formula', formula: 'max(M3+3d, M1+4d)',      formulaRefs: [3,1], bg: '#D1FAE5', color: '#065F46', indicative: true },
+    { label: 'Sys Selling', short: 'Sys Selling', type: 'operation', offset: 0, offsetFrom: 'formula', formula: 'max(M4, M3+3d, M1+4d)',   formulaRefs: [4,3,1], bg: '#E0E7FF', color: '#4338CA' },
   ],
   'abs-net': [
     { label: 'Servicer Report Date',    short: 'Servicer',    type: 'operation', offset: 0,  bg: '#DBEAFE', color: '#1D4ED8' },
@@ -3728,7 +3728,10 @@ function renderMilestoneTable(type) {
         `<option value="${j+1}"${m.offsetFrom === 'milestone' && m.offsetRef === j+1 ? ' selected' : ''}>M${j+1} ${prev.short}</option>`
       )).join('');
     const offsetFromCell = m.offsetFrom === 'formula'
-      ? `<span style="font-size:12px;color:#6B7280;font-style:italic;">complex formula</span>`
+      ? `<div style="display:flex;flex-wrap:wrap;gap:4px;">${(m.formulaRefs||[]).map(ref => {
+          const r = milestones[ref-1];
+          return r ? `<span style="background:${r.bg};color:${r.color};padding:2px 7px;border-radius:4px;font-size:11px;font-weight:500;white-space:nowrap;">M${ref} ${r.short}</span>` : '';
+        }).join('')}</div>`
       : i === 0
         ? `<span style="font-size:12px;font-weight:600;color:#374151;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:4px;padding:2px 8px;">T</span>`
         : `<select class="offset-from-sel" onchange="onOffsetFromChange(${i},this)">${offsetFromOptions}</select>`;
