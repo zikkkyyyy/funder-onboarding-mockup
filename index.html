@@ -290,6 +290,12 @@ tr.drag-over { border-top: 2px solid #2563EB; }
 .sp-preview-row:last-child { border-bottom:none; }
 .sp-preview-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; margin-right:10px; }
 .sp-preview-line { width:2px; background:#E5E7EB; margin-left:4px; height:20px; margin-right:16px; margin-top:2px; }
+/* ── T / D day-type toggle ── */
+.td-toggle { display:inline-flex; background:#F3F4F6; border-radius:4px; padding:2px; gap:1px; margin-left:5px; vertical-align:middle; flex-shrink:0; }
+.td-btn { padding:2px 8px; border-radius:3px; font-size:11px; font-weight:700; cursor:pointer; border:none; background:transparent; color:#9CA3AF; line-height:1.6; transition:all .12s; }
+.td-btn.active { background:#fff; color:#2563EB; box-shadow:0 1px 2px rgba(0,0,0,.1); }
+.td-btn:hover:not(.active) { color:#374151; }
+
 /* ── Cross-cycle impact row ── */
 .sp-cycle-warn-row td { padding:0 16px 8px 52px !important; }
 .sp-cycle-warn-box { display:flex; align-items:flex-start; gap:8px; background:#FFFBEB; border:1px solid #FDE68A; border-radius:6px; padding:8px 12px; font-size:12px; color:#92400E; line-height:1.5; }
@@ -1802,22 +1808,22 @@ tr.drag-over { border-top: 2px solid #2563EB; }
           <div class="ms-check-row" style="background:#F9FAFB;padding:6px 0;border-radius:4px 4px 0 0;border-bottom:1px solid #E5E7EB;">
             <div style="font-size:11px;font-weight:600;color:#6B7280;width:200px;padding-left:4px;">Milestone</div>
             <div style="font-size:11px;font-weight:600;color:#6B7280;width:80px;">Type</div>
-            <div style="font-size:11px;font-weight:600;color:#6B7280;">Delay (days)</div>
+            <div style="font-size:11px;font-weight:600;color:#6B7280;">Delay &nbsp;<span style="font-weight:400;color:#9CA3AF;">T = Business Day &nbsp;·&nbsp; D = Natural Day (default: T)</span></div>
           </div>
           <div class="ms-check-row">
             <div class="ms-check-left"><span class="cal-chip" style="background:#DBEAFE;color:#1D4ED8;">Servicer Report Date</span></div>
             <div style="width:80px;"><span class="ms-type-tag ms-type-operation">Operation</span></div>
-            <div class="ms-check-delay"><input class="sp-delay-input" type="number" min="0" value="0" style="width:60px;" /><span style="font-size:12px;color:#9CA3AF;">days</span></div>
+            <div class="ms-check-delay"><input class="sp-delay-input" type="number" min="0" value="0" style="width:56px;" /><div class="td-toggle"><button class="td-btn active" onclick="tdToggle(this)">T</button><button class="td-btn" onclick="tdToggle(this)">D</button></div></div>
           </div>
           <div class="ms-check-row">
             <div class="ms-check-left"><span class="cal-chip" style="background:#EDE9FE;color:#6D28D9;">Batch Creation Date</span></div>
             <div style="width:80px;"><span class="ms-type-tag ms-type-operation">Operation</span></div>
-            <div class="ms-check-delay"><input class="sp-delay-input" type="number" min="0" value="3" style="width:60px;" /><span style="font-size:12px;color:#9CA3AF;">days</span></div>
+            <div class="ms-check-delay"><input class="sp-delay-input" type="number" min="0" value="3" style="width:56px;" /><div class="td-toggle"><button class="td-btn active" onclick="tdToggle(this)">T</button><button class="td-btn" onclick="tdToggle(this)">D</button></div></div>
           </div>
           <div class="ms-check-row">
             <div class="ms-check-left"><span class="cal-chip" style="background:#FEF3C7;color:#92400E;">Sale Notice Date</span></div>
             <div style="width:80px;"><span class="ms-type-tag ms-type-operation">Operation</span></div>
-            <div class="ms-check-delay"><input class="sp-delay-input" type="number" min="0" value="3" style="width:60px;" /><span style="font-size:12px;color:#9CA3AF;">days</span></div>
+            <div class="ms-check-delay"><input class="sp-delay-input" type="number" min="0" value="3" style="width:56px;" /><div class="td-toggle"><button class="td-btn active" onclick="tdToggle(this)">T</button><button class="td-btn" onclick="tdToggle(this)">D</button></div></div>
           </div>
           <div class="ms-check-row" style="background:#F9FAFB;">
             <div class="ms-check-left"><span class="cal-chip" style="background:#F3F4F6;color:#6B7280;">System Cutoff Date</span></div>
@@ -1827,7 +1833,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
           <div class="ms-check-row">
             <div class="ms-check-left"><span class="cal-chip" style="background:#D1FAE5;color:#065F46;">Sale Date</span></div>
             <div style="width:80px;"><span class="ms-type-tag ms-type-operation">Operation</span></div>
-            <div class="ms-check-delay"><input class="sp-delay-input" type="number" min="0" value="3" style="width:60px;" /><span style="font-size:12px;color:#9CA3AF;">days</span></div>
+            <div class="ms-check-delay"><input class="sp-delay-input" type="number" min="0" value="3" style="width:56px;" /><div class="td-toggle"><button class="td-btn active" onclick="tdToggle(this)">T</button><button class="td-btn" onclick="tdToggle(this)">D</button></div></div>
           </div>
           <div class="ms-check-row" style="background:#F9FAFB;">
             <div class="ms-check-left"><span class="cal-chip" style="background:#F3F4F6;color:#6B7280;">System Selling Date</span></div>
@@ -1837,7 +1843,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
           <div class="ms-check-row">
             <div class="ms-check-left"><span class="cal-chip" style="background:#CCFBF1;color:#0F766E;">Collection Deposit Date</span></div>
             <div style="width:80px;"><span class="ms-type-tag ms-type-operation">Operation</span></div>
-            <div class="ms-check-delay"><input class="sp-delay-input" type="number" min="0" value="3" style="width:60px;" /><span style="font-size:12px;color:#9CA3AF;">days</span></div>
+            <div class="ms-check-delay"><input class="sp-delay-input" type="number" min="0" value="3" style="width:56px;" /><div class="td-toggle"><button class="td-btn active" onclick="tdToggle(this)">T</button><button class="td-btn" onclick="tdToggle(this)">D</button></div></div>
           </div>
 
           <!-- System milestone note -->
@@ -2393,7 +2399,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                   <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;width:100px;">Type</th>
                   <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;width:130px;">Original Date</th>
                   <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;width:80px;">Mode</th>
-                  <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;width:220px;">Adjustment</th>
+                  <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;width:220px;">Adjustment <span style="font-weight:400;color:#9CA3AF;">(T=Business · D=Natural, default T)</span></th>
                   <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;width:130px;">New Date</th>
                   <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;">
                     <label class="hol-header-chk" aria-label="Select all holiday regions">
@@ -3006,6 +3012,7 @@ function renderSpMilestoneTable(cycleNum) {
              <button class="sp-adj-btn" id="sp-btn-date-${i}" onclick="setSpMode(${i},'date')">Date</button>
            </div>
            <input class="sp-delay-input" id="sp-delay-${i}" type="number" min="0" placeholder="0" oninput="onSpDelayChange(${i},this)" />
+           <div class="td-toggle"><button class="td-btn active" onclick="tdToggle(this)">T</button><button class="td-btn" onclick="tdToggle(this)">D</button></div>
            <input class="sp-date-input" id="sp-date-${i}" type="date" value="${origStr}" style="display:none;" oninput="onSpDateChange(${i},this)" />
          </div>`;
     // Holiday checkboxes per Sub Plan row
@@ -3339,6 +3346,14 @@ function wftBatchAction(type) {
   popup.classList.add('open');
   popup._action = isDelete ? 'Batch Delete' : 'Batch Disable';
   popup._funder = `${count} template(s)`;
+}
+
+/* T / D day-type toggle */
+function tdToggle(btn) {
+  const group = btn.closest('.td-toggle');
+  if (!group) return;
+  group.querySelectorAll('.td-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
 }
 
 function wftSubmitOffsets() {
@@ -4410,7 +4425,8 @@ function bspSubmit() {
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
             <span style="font-size:13px;color:#374151;">Delay all selected milestones by</span>
             <input type="number" value="3" min="0" style="width:60px;border:1px solid #D1D5DB;border-radius:5px;padding:6px 8px;font-size:14px;font-weight:600;text-align:center;" />
-            <span style="font-size:13px;color:#374151;">business days</span>
+            <div class="td-toggle"><button class="td-btn active" onclick="tdToggle(this)">T</button><button class="td-btn" onclick="tdToggle(this)">D</button></div>
+            <span style="font-size:12px;color:#9CA3AF;">T = Business Day &nbsp;·&nbsp; D = Natural Day</span>
           </div>
           <!-- Quick preview -->
           <div style="font-size:12px;font-weight:600;color:#374151;margin-bottom:8px;">Preview — Cascade per funder</div>
@@ -4441,36 +4457,36 @@ function bspSubmit() {
             <thead>
               <tr style="background:#F9FAFB;">
                 <th style="padding:8px 12px;text-align:left;color:#6B7280;font-size:11px;font-weight:600;border-bottom:1px solid #E5E7EB;">Funder</th>
-                <th style="padding:8px 12px;text-align:center;color:#6B7280;font-size:11px;font-weight:600;border-bottom:1px solid #E5E7EB;">M3<br/>Sale Notice</th>
-                <th style="padding:8px 12px;text-align:center;color:#6B7280;font-size:11px;font-weight:600;border-bottom:1px solid #E5E7EB;">M4<br/>Sys Cutoff</th>
-                <th style="padding:8px 12px;text-align:center;color:#6B7280;font-size:11px;font-weight:600;border-bottom:1px solid #E5E7EB;">M6<br/>Sys Selling</th>
-                <th style="padding:8px 12px;text-align:center;color:#6B7280;font-size:11px;font-weight:600;border-bottom:1px solid #E5E7EB;">M7<br/>Collection</th>
+                <th style="padding:8px 12px;text-align:center;color:#6B7280;font-size:11px;font-weight:600;border-bottom:1px solid #E5E7EB;">M3 Sale Notice<br/><span style="font-weight:400;color:#9CA3AF;">T or D</span></th>
+                <th style="padding:8px 12px;text-align:center;color:#6B7280;font-size:11px;font-weight:600;border-bottom:1px solid #E5E7EB;">M4 Sys Cutoff<br/><span style="font-weight:400;color:#9CA3AF;">T or D</span></th>
+                <th style="padding:8px 12px;text-align:center;color:#6B7280;font-size:11px;font-weight:600;border-bottom:1px solid #E5E7EB;">M6 Sys Selling<br/><span style="font-weight:400;color:#9CA3AF;">T or D</span></th>
+                <th style="padding:8px 12px;text-align:center;color:#6B7280;font-size:11px;font-weight:600;border-bottom:1px solid #E5E7EB;">M7 Collection<br/><span style="font-weight:400;color:#9CA3AF;">T or D</span></th>
                 <th style="padding:8px 12px;text-align:left;color:#6B7280;font-size:11px;font-weight:600;border-bottom:1px solid #E5E7EB;">Override Reason</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td style="padding:8px 12px;font-weight:500;border-bottom:1px solid #F3F4F6;">Starlight</td>
-                <td style="padding:8px 12px;text-align:center;border-bottom:1px solid #F3F4F6;"><input type="number" placeholder="—" style="width:52px;border:1px solid #D1D5DB;border-radius:4px;padding:4px 6px;font-size:12px;text-align:center;" /></td>
+                <td style="padding:8px 12px;text-align:center;border-bottom:1px solid #F3F4F6;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><input type="number" placeholder="—" style="width:48px;border:1px solid #D1D5DB;border-radius:4px;padding:4px 6px;font-size:12px;text-align:center;" /><div class="td-toggle" style="margin-left:0;"><button class="td-btn active" onclick="tdToggle(this)">T</button><button class="td-btn" onclick="tdToggle(this)">D</button></div></div></td>
                 <td style="padding:8px 12px;text-align:center;border-bottom:1px solid #F3F4F6;"><input type="number" value="3" style="width:52px;border:1px solid #2563EB;background:#EFF6FF;border-radius:4px;padding:4px 6px;font-size:12px;text-align:center;font-weight:600;" /></td>
-                <td style="padding:8px 12px;text-align:center;border-bottom:1px solid #F3F4F6;"><input type="number" placeholder="—" style="width:52px;border:1px solid #D1D5DB;border-radius:4px;padding:4px 6px;font-size:12px;text-align:center;" /></td>
-                <td style="padding:8px 12px;text-align:center;border-bottom:1px solid #F3F4F6;"><input type="number" placeholder="—" style="width:52px;border:1px solid #D1D5DB;border-radius:4px;padding:4px 6px;font-size:12px;text-align:center;" /></td>
+                <td style="padding:8px 12px;text-align:center;border-bottom:1px solid #F3F4F6;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><input type="number" placeholder="—" style="width:48px;border:1px solid #D1D5DB;border-radius:4px;padding:4px 6px;font-size:12px;text-align:center;" /><div class="td-toggle" style="margin-left:0;"><button class="td-btn active" onclick="tdToggle(this)">T</button><button class="td-btn" onclick="tdToggle(this)">D</button></div></div></td>
+                <td style="padding:8px 12px;text-align:center;border-bottom:1px solid #F3F4F6;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><input type="number" placeholder="—" style="width:48px;border:1px solid #D1D5DB;border-radius:4px;padding:4px 6px;font-size:12px;text-align:center;" /><div class="td-toggle" style="margin-left:0;"><button class="td-btn active" onclick="tdToggle(this)">T</button><button class="td-btn" onclick="tdToggle(this)">D</button></div></div></td>
                 <td style="padding:8px 12px;border-bottom:1px solid #F3F4F6;"><input type="text" placeholder="(use shared reason)" style="width:100%;border:1px solid #D1D5DB;border-radius:4px;padding:4px 8px;font-size:12px;color:#374151;" /></td>
               </tr>
               <tr>
                 <td style="padding:8px 12px;font-weight:500;border-bottom:1px solid #F3F4F6;">DGL</td>
-                <td style="padding:8px 12px;text-align:center;border-bottom:1px solid #F3F4F6;"><input type="number" placeholder="—" style="width:52px;border:1px solid #D1D5DB;border-radius:4px;padding:4px 6px;font-size:12px;text-align:center;" /></td>
+                <td style="padding:8px 12px;text-align:center;border-bottom:1px solid #F3F4F6;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><input type="number" placeholder="—" style="width:48px;border:1px solid #D1D5DB;border-radius:4px;padding:4px 6px;font-size:12px;text-align:center;" /><div class="td-toggle" style="margin-left:0;"><button class="td-btn active" onclick="tdToggle(this)">T</button><button class="td-btn" onclick="tdToggle(this)">D</button></div></div></td>
                 <td style="padding:8px 12px;text-align:center;border-bottom:1px solid #F3F4F6;"><input type="number" value="2" style="width:52px;border:1px solid #2563EB;background:#EFF6FF;border-radius:4px;padding:4px 6px;font-size:12px;text-align:center;font-weight:600;" /></td>
-                <td style="padding:8px 12px;text-align:center;border-bottom:1px solid #F3F4F6;"><input type="number" placeholder="—" style="width:52px;border:1px solid #D1D5DB;border-radius:4px;padding:4px 6px;font-size:12px;text-align:center;" /></td>
-                <td style="padding:8px 12px;text-align:center;border-bottom:1px solid #F3F4F6;"><input type="number" placeholder="—" style="width:52px;border:1px solid #D1D5DB;border-radius:4px;padding:4px 6px;font-size:12px;text-align:center;" /></td>
+                <td style="padding:8px 12px;text-align:center;border-bottom:1px solid #F3F4F6;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><input type="number" placeholder="—" style="width:48px;border:1px solid #D1D5DB;border-radius:4px;padding:4px 6px;font-size:12px;text-align:center;" /><div class="td-toggle" style="margin-left:0;"><button class="td-btn active" onclick="tdToggle(this)">T</button><button class="td-btn" onclick="tdToggle(this)">D</button></div></div></td>
+                <td style="padding:8px 12px;text-align:center;border-bottom:1px solid #F3F4F6;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><input type="number" placeholder="—" style="width:48px;border:1px solid #D1D5DB;border-radius:4px;padding:4px 6px;font-size:12px;text-align:center;" /><div class="td-toggle" style="margin-left:0;"><button class="td-btn active" onclick="tdToggle(this)">T</button><button class="td-btn" onclick="tdToggle(this)">D</button></div></div></td>
                 <td style="padding:8px 12px;border-bottom:1px solid #F3F4F6;"><input type="text" placeholder="(use shared reason)" style="width:100%;border:1px solid #D1D5DB;border-radius:4px;padding:4px 8px;font-size:12px;color:#374151;" /></td>
               </tr>
               <tr>
                 <td style="padding:8px 12px;font-weight:500;">MY Ocean</td>
-                <td style="padding:8px 12px;text-align:center;"><input type="number" placeholder="—" style="width:52px;border:1px solid #D1D5DB;border-radius:4px;padding:4px 6px;font-size:12px;text-align:center;" /></td>
+                <td style="padding:8px 12px;text-align:center;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><input type="number" placeholder="—" style="width:48px;border:1px solid #D1D5DB;border-radius:4px;padding:4px 6px;font-size:12px;text-align:center;" /><div class="td-toggle" style="margin-left:0;"><button class="td-btn active" onclick="tdToggle(this)">T</button><button class="td-btn" onclick="tdToggle(this)">D</button></div></div></td>
                 <td style="padding:8px 12px;text-align:center;"><input type="number" value="3" style="width:52px;border:1px solid #2563EB;background:#EFF6FF;border-radius:4px;padding:4px 6px;font-size:12px;text-align:center;font-weight:600;" /></td>
                 <td style="padding:8px 12px;text-align:center;"><input type="number" value="1" style="width:52px;border:1px solid #2563EB;background:#EFF6FF;border-radius:4px;padding:4px 6px;font-size:12px;text-align:center;font-weight:600;" /></td>
-                <td style="padding:8px 12px;text-align:center;"><input type="number" placeholder="—" style="width:52px;border:1px solid #D1D5DB;border-radius:4px;padding:4px 6px;font-size:12px;text-align:center;" /></td>
+                <td style="padding:8px 12px;text-align:center;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><input type="number" placeholder="—" style="width:48px;border:1px solid #D1D5DB;border-radius:4px;padding:4px 6px;font-size:12px;text-align:center;" /><div class="td-toggle" style="margin-left:0;"><button class="td-btn active" onclick="tdToggle(this)">T</button><button class="td-btn" onclick="tdToggle(this)">D</button></div></div></td>
                 <td style="padding:8px 12px;"><input type="text" placeholder="(use shared reason)" style="width:100%;border:1px solid #D1D5DB;border-radius:4px;padding:4px 8px;font-size:12px;color:#374151;" /></td>
               </tr>
             </tbody>
