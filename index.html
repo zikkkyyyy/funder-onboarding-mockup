@@ -844,22 +844,22 @@ tr.drag-over { border-top: 2px solid #2563EB; }
       <div class="section-body" id="clawback-config">
         <div class="pricing-group-label">Mode &nbsp;ⓘ</div>
         <div class="radio-cards">
-          <div class="radio-card" id="mode1-card" onclick="selectMode(1)">
+          <div class="radio-card selected" id="mode1-card" onclick="selectMode(1)">
             <div class="radio-card-top">
-              <div class="radio-dot" id="mode1-dot"></div>
-              <div class="radio-card-title">Accrued to Pre-Completion</div>
+              <div class="radio-dot on" id="mode1-dot"></div>
+              <div class="radio-card-title">Accrued to Restructure Date</div>
             </div>
             <div class="radio-card-desc">Mode 1</div>
           </div>
-          <div class="radio-card selected" id="mode2-card" onclick="selectMode(2)">
+          <div class="radio-card" id="mode2-card" onclick="selectMode(2)">
             <div class="radio-card-top">
-              <div class="radio-dot on" id="mode2-dot"></div>
-              <div class="radio-card-title">Accrued to Restructure Date</div>
+              <div class="radio-dot" id="mode2-dot"></div>
+              <div class="radio-card-title">Accrued to Pre-Completion</div>
             </div>
             <div class="radio-card-desc">Mode 2</div>
           </div>
         </div>
-        <div class="n-input-row" id="n-input-row" style="margin-top:14px;">
+        <div class="n-input-row" id="n-input-row" style="margin-top:14px;display:none;">
           <div class="n-input-label">N input</div>
           <input class="n-input" id="n-input-field" type="number" value="1" min="1" />
         </div>
@@ -2216,11 +2216,11 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                 <div class="view-label" style="margin-bottom:8px;">Auto Clawback Mode</div>
                 <div style="display:flex;flex-direction:column;gap:8px;">
                   <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:#374151;cursor:pointer;" onclick="ptSelectMode(1)">
-                    <div class="radio-dot" id="pt-mode1-dot" style="flex-shrink:0;"></div>
+                    <div class="radio-dot on" id="pt-mode1-dot" style="flex-shrink:0;"></div>
                     Mode 1 (Accrued to Restructure Date)
                   </label>
                   <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:#374151;cursor:pointer;" onclick="ptSelectMode(2)">
-                    <div class="radio-dot on" id="pt-mode2-dot" style="flex-shrink:0;"></div>
+                    <div class="radio-dot" id="pt-mode2-dot" style="flex-shrink:0;"></div>
                     Mode 2 (Accrued to Pre-Completion)
                   </label>
                 </div>
@@ -5123,7 +5123,7 @@ function s1Next() {
 }
 
 /* ── Pricing & Terms inline edit ── */
-let ptSelectedMode = 2;
+let ptSelectedMode = 1;
 
 function ptStartEdit() {
   document.getElementById('pt-edit-btn').style.display = 'none';
@@ -5132,8 +5132,8 @@ function ptStartEdit() {
   // Sync pricing label into edit panel
   const model = document.getElementById('pt-view-pricing-model').textContent;
   document.getElementById('pt-edit-pricing-label').textContent = model.toUpperCase();
-  // Default: Mode 2 selected, N Input visible (matches reference)
-  ptSelectMode(2);
+  // Default: Mode 1 selected, N Input hidden
+  ptSelectMode(1);
 }
 function ptCancelEdit() {
   document.getElementById('pt-edit-btn').style.display = '';
@@ -5142,7 +5142,7 @@ function ptCancelEdit() {
   // Reset toggle
   const tog = document.getElementById('pt-clawback-toggle');
   tog.classList.remove('off');
-  ptSelectMode(2);
+  ptSelectMode(1);
 }
 function ptToggleClawback() {
   document.getElementById('pt-clawback-toggle').classList.toggle('off');
