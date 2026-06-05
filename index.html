@@ -940,7 +940,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
           <tbody>
             <tr style="border-bottom:1px solid #F3F4F6;">
               <td style="padding:12px 14px;"><div style="display:flex;align-items:center;gap:10px;"><div style="width:32px;height:32px;border-radius:50%;background:#1D4ED8;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;">S</div><div><div style="font-size:13px;font-weight:600;color:#111827;">Senior tranche</div><div style="font-size:11px;color:#9CA3AF;">Priority 1</div></div></div></td>
-              <td style="padding:12px 14px;"><div style="display:flex;gap:0;align-items:center;"><input type="number" id="is-senior" class="form-input" value="107" style="width:90px;border-radius:6px 0 0 6px;border-right:none;" oninput="isRecalc()" /><span style="background:#F9FAFB;border:1px solid #D1D5DB;border-left:none;border-radius:0 6px 6px 0;padding:0 10px;display:flex;align-items:center;font-size:12px;color:#6B7280;height:38px;">USD'm</span></div></td>
+              <td style="padding:12px 14px;"><div style="display:flex;gap:0;align-items:center;"><input type="number" id="is-senior" class="form-input" value="107" style="width:90px;border-radius:6px 0 0 6px;border-right:none;" oninput="isRecalc()" /><span style="background:#F9FAFB;border:1px solid #D1D5DB;border-left:none;border-radius:0 6px 6px 0;padding:0 10px;display:flex;align-items:center;font-size:12px;color:#6B7280;align-self:stretch;">USD'm</span></div></td>
               <td style="padding:12px 14px;font-size:13px;color:#374151;" id="is-senior-pct">73.79%</td>
               <td style="padding:12px 14px;"><div class="toggle" id="is-senior-toggle" onclick="this.classList.toggle('off')"></div></td>
             </tr>
@@ -2427,11 +2427,51 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                   <th style="width:140px;">Updated At</th>
                   <th style="width:160px;">Action</th>
                 </tr></thead>
-                <tbody>
-                  <tr class="report-row"><td style="color:#6B7280;">718634</td><td>Pending Sold Loan Tape</td><td>Pending Sold Loan Tape</td><td style="color:#6B7280;font-size:12px;">TH_SPL_Starlight_ABS_01</td><td style="text-align:center;">42</td><td>zip</td><td><span class="status-live">Live</span></td><td>ABS_SCENARIO</td><td>Cutoff</td><td style="color:#9CA3AF;font-size:12px;">2026-05-12 06:08</td><td><div class="tbl-actions"><button class="tbl-act-link">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">More ▾</button></div></td></tr>
-                  <tr class="report-row"><td style="color:#6B7280;">718117</td><td>Pending Sold Loan Tape v2</td><td>Pending Sold Loan Tape</td><td style="color:#6B7280;font-size:12px;">TH_SPL_Starlight_ABS_01</td><td style="text-align:center;">13</td><td>csv</td><td><span class="status-pending">Pending</span></td><td>FIXED_DATE</td><td>20th</td><td style="color:#9CA3AF;font-size:12px;">2026-05-14 06:08</td><td><div class="tbl-actions"><button class="tbl-act-link">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">More ▾</button></div></td></tr>
-                  <tr class="report-row"><td style="color:#6B7280;">717604</td><td>TH_SPL_Starlight_ABS_T1_Pending_Sold_Loan_Tape</td><td>Pending Sold Loan Tape</td><td style="color:#6B7280;font-size:12px;">TH_SPL_Starlight_ABS_01</td><td style="text-align:center;">46</td><td>csv</td><td><span class="status-pending">Pending</span></td><td>ABS_SCENARIO</td><td>Cutoff</td><td style="color:#9CA3AF;font-size:12px;">2026-05-17 06:08</td><td><div class="tbl-actions"><button class="tbl-act-link">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">More ▾</button></div></td></tr>
-                  <tr class="report-row"><td style="color:#6B7280;">718119</td><td>Copy of Pending Sold Loan Tape v2</td><td>Pending Sold Loan Tape</td><td style="color:#6B7280;font-size:12px;">TH_SPL_Starlight_ABS_01</td><td style="text-align:center;">13</td><td>—</td><td><span class="status-pending">Pending</span></td><td style="color:#9CA3AF;">—</td><td style="color:#9CA3AF;">—</td><td style="color:#9CA3AF;font-size:12px;">2026-05-11 06:08</td><td><div class="tbl-actions"><button class="tbl-act-link">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">More ▾</button></div></td></tr>
+                <tbody id="vt-report-tbody">
+                  <!-- Row 718634 -->
+                  <tr class="report-row" id="vtr-718634">
+                    <td style="color:#6B7280;">718634</td>
+                    <td><span class="vtr-name-view" id="vtr-name-v-718634">Pending Sold Loan Tape</span><input class="form-input vtr-name-edit" id="vtr-name-e-718634" value="Pending Sold Loan Tape" style="display:none;font-size:13px;padding:5px 8px;" /></td>
+                    <td><span class="vtr-type-view" id="vtr-type-v-718634">Pending Sold Loan Tape</span><select class="form-select vtr-type-edit" id="vtr-type-e-718634" style="display:none;font-size:12px;padding:4px 8px;"><option>Pending Sold Loan Tape</option><option>Transferred Loan Tape</option><option>Write-off Loan Tape</option></select></td>
+                    <td style="color:#6B7280;font-size:12px;">TH_SPL_Starlight_ABS_01</td><td style="text-align:center;">42</td><td>zip</td><td><span class="status-live">Live</span></td><td>ABS_SCENARIO</td><td>Cutoff</td><td style="color:#9CA3AF;font-size:12px;">2026-05-12 06:08</td>
+                    <td>
+                      <div class="tbl-actions vtr-view-btns" id="vtr-view-btns-718634"><button class="tbl-act-link">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link" onclick="vtReportStartEdit('718634')">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">More ▾</button></div>
+                      <div class="tbl-actions vtr-edit-btns" id="vtr-edit-btns-718634" style="display:none;gap:4px;"><button class="btn btn-edit btn-sm" onclick="vtReportEditMore('718634')">Edit More</button><button class="btn btn-enable btn-sm" onclick="vtReportSave('718634')">Save</button><button class="btn-outline-sm" style="padding:4px 10px;font-size:12px;" onclick="vtReportCancel('718634')">Cancel</button></div>
+                    </td>
+                  </tr>
+                  <!-- Row 718117 -->
+                  <tr class="report-row" id="vtr-718117">
+                    <td style="color:#6B7280;">718117</td>
+                    <td><span class="vtr-name-view" id="vtr-name-v-718117">Pending Sold Loan Tape v2</span><input class="form-input vtr-name-edit" id="vtr-name-e-718117" value="Pending Sold Loan Tape v2" style="display:none;font-size:13px;padding:5px 8px;" /></td>
+                    <td><span class="vtr-type-view" id="vtr-type-v-718117">Pending Sold Loan Tape</span><select class="form-select vtr-type-edit" id="vtr-type-e-718117" style="display:none;font-size:12px;padding:4px 8px;"><option>Pending Sold Loan Tape</option><option>Transferred Loan Tape</option><option>Write-off Loan Tape</option></select></td>
+                    <td style="color:#6B7280;font-size:12px;">TH_SPL_Starlight_ABS_01</td><td style="text-align:center;">13</td><td>csv</td><td><span class="status-pending">Pending</span></td><td>FIXED_DATE</td><td>20th</td><td style="color:#9CA3AF;font-size:12px;">2026-05-14 06:08</td>
+                    <td>
+                      <div class="tbl-actions vtr-view-btns" id="vtr-view-btns-718117"><button class="tbl-act-link">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link" onclick="vtReportStartEdit('718117')">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">More ▾</button></div>
+                      <div class="tbl-actions vtr-edit-btns" id="vtr-edit-btns-718117" style="display:none;gap:4px;"><button class="btn btn-edit btn-sm" onclick="vtReportEditMore('718117')">Edit More</button><button class="btn btn-enable btn-sm" onclick="vtReportSave('718117')">Save</button><button class="btn-outline-sm" style="padding:4px 10px;font-size:12px;" onclick="vtReportCancel('718117')">Cancel</button></div>
+                    </td>
+                  </tr>
+                  <!-- Row 717604 -->
+                  <tr class="report-row" id="vtr-717604">
+                    <td style="color:#6B7280;">717604</td>
+                    <td><span class="vtr-name-view" id="vtr-name-v-717604">TH_SPL_Starlight_ABS_T1_Pending_Sold_Loan_Tape</span><input class="form-input vtr-name-edit" id="vtr-name-e-717604" value="TH_SPL_Starlight_ABS_T1_Pending_Sold_Loan_Tape" style="display:none;font-size:13px;padding:5px 8px;" /></td>
+                    <td><span class="vtr-type-view" id="vtr-type-v-717604">Pending Sold Loan Tape</span><select class="form-select vtr-type-edit" id="vtr-type-e-717604" style="display:none;font-size:12px;padding:4px 8px;"><option>Pending Sold Loan Tape</option><option>Transferred Loan Tape</option><option>Write-off Loan Tape</option></select></td>
+                    <td style="color:#6B7280;font-size:12px;">TH_SPL_Starlight_ABS_01</td><td style="text-align:center;">46</td><td>csv</td><td><span class="status-pending">Pending</span></td><td>ABS_SCENARIO</td><td>Cutoff</td><td style="color:#9CA3AF;font-size:12px;">2026-05-17 06:08</td>
+                    <td>
+                      <div class="tbl-actions vtr-view-btns" id="vtr-view-btns-717604"><button class="tbl-act-link">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link" onclick="vtReportStartEdit('717604')">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">More ▾</button></div>
+                      <div class="tbl-actions vtr-edit-btns" id="vtr-edit-btns-717604" style="display:none;gap:4px;"><button class="btn btn-edit btn-sm" onclick="vtReportEditMore('717604')">Edit More</button><button class="btn btn-enable btn-sm" onclick="vtReportSave('717604')">Save</button><button class="btn-outline-sm" style="padding:4px 10px;font-size:12px;" onclick="vtReportCancel('717604')">Cancel</button></div>
+                    </td>
+                  </tr>
+                  <!-- Row 718119 -->
+                  <tr class="report-row" id="vtr-718119">
+                    <td style="color:#6B7280;">718119</td>
+                    <td><span class="vtr-name-view" id="vtr-name-v-718119">Copy of Pending Sold Loan Tape v2</span><input class="form-input vtr-name-edit" id="vtr-name-e-718119" value="Copy of Pending Sold Loan Tape v2" style="display:none;font-size:13px;padding:5px 8px;" /></td>
+                    <td><span class="vtr-type-view" id="vtr-type-v-718119">Pending Sold Loan Tape</span><select class="form-select vtr-type-edit" id="vtr-type-e-718119" style="display:none;font-size:12px;padding:4px 8px;"><option>Pending Sold Loan Tape</option><option>Transferred Loan Tape</option><option>Write-off Loan Tape</option></select></td>
+                    <td style="color:#6B7280;font-size:12px;">TH_SPL_Starlight_ABS_01</td><td style="text-align:center;">13</td><td>—</td><td><span class="status-pending">Pending</span></td><td style="color:#9CA3AF;">—</td><td style="color:#9CA3AF;">—</td><td style="color:#9CA3AF;font-size:12px;">2026-05-11 06:08</td>
+                    <td>
+                      <div class="tbl-actions vtr-view-btns" id="vtr-view-btns-718119"><button class="tbl-act-link">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link" onclick="vtReportStartEdit('718119')">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">More ▾</button></div>
+                      <div class="tbl-actions vtr-edit-btns" id="vtr-edit-btns-718119" style="display:none;gap:4px;"><button class="btn btn-edit btn-sm" onclick="vtReportEditMore('718119')">Edit More</button><button class="btn btn-enable btn-sm" onclick="vtReportSave('718119')">Save</button><button class="btn-outline-sm" style="padding:4px 10px;font-size:12px;" onclick="vtReportCancel('718119')">Cancel</button></div>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -4910,6 +4950,85 @@ function bspSubmit() {
   setTimeout(() => toast.classList.remove('visible'), 3500);
 }
 
+/* ── View Funder: Auto Report inline edit ── */
+let vtrCurrentId = null;
+
+function vtReportStartEdit(id) {
+  // Cancel any currently editing row first
+  if (vtrCurrentId && vtrCurrentId !== id) vtReportCancel(vtrCurrentId);
+  vtrCurrentId = id;
+
+  // Highlight row
+  document.getElementById('vtr-' + id).style.background = '#FFFBEB';
+
+  // Show inline inputs, hide text
+  const nameView = document.getElementById('vtr-name-v-' + id);
+  const nameEdit = document.getElementById('vtr-name-e-' + id);
+  const typeView = document.getElementById('vtr-type-v-' + id);
+  const typeEdit = document.getElementById('vtr-type-e-' + id);
+  nameView.style.display = 'none'; nameEdit.style.display = '';
+  typeView.style.display = 'none'; typeEdit.style.display = '';
+
+  // Sync dropdown to current value
+  const curType = typeView.textContent.trim();
+  Array.from(typeEdit.options).forEach(o => { o.selected = o.value === curType; });
+
+  // Swap action buttons
+  document.getElementById('vtr-view-btns-' + id).style.display = 'none';
+  document.getElementById('vtr-edit-btns-' + id).style.display = '';
+
+  nameEdit.focus();
+}
+
+function vtReportSave(id) {
+  const nameEdit = document.getElementById('vtr-name-e-' + id);
+  const typeEdit = document.getElementById('vtr-type-e-' + id);
+  const newName = nameEdit.value.trim() || nameEdit.value;
+  const newType = typeEdit.value;
+
+  // Update displayed values
+  document.getElementById('vtr-name-v-' + id).textContent = newName;
+  document.getElementById('vtr-type-v-' + id).textContent = newType;
+
+  vtReportCancel(id);
+
+  const toast = document.getElementById('toast');
+  toast.textContent = '✓ Report ' + id + ' updated successfully';
+  toast.classList.add('visible');
+  setTimeout(() => toast.classList.remove('visible'), 2500);
+}
+
+function vtReportCancel(id) {
+  vtrCurrentId = null;
+  const row = document.getElementById('vtr-' + id);
+  if (!row) return;
+  row.style.background = '';
+
+  document.getElementById('vtr-name-v-' + id).style.display = '';
+  document.getElementById('vtr-name-e-' + id).style.display = 'none';
+  document.getElementById('vtr-type-v-' + id).style.display = '';
+  document.getElementById('vtr-type-e-' + id).style.display = 'none';
+
+  document.getElementById('vtr-view-btns-' + id).style.display = '';
+  document.getElementById('vtr-edit-btns-' + id).style.display = 'none';
+}
+
+function vtReportEditMore(id) {
+  vtrCurrentId = id;
+  document.getElementById('vtr-goto-modal').classList.add('open');
+}
+
+function vtReportGotoAutoReport() {
+  document.getElementById('vtr-goto-modal').classList.remove('open');
+  if (vtrCurrentId) vtReportCancel(vtrCurrentId);
+  // Navigate to Auto Report Management tab
+  switchViewTab('vt-report', document.getElementById('vtab-report'));
+  const toast = document.getElementById('toast');
+  toast.textContent = '✓ Draft saved — redirected to Auto Report Management';
+  toast.classList.add('visible');
+  setTimeout(() => toast.classList.remove('visible'), 2500);
+}
+
 /* ── Issue Size auto-calc ── */
 function isRecalc() {
   const pool = parseFloat(document.getElementById('is-pool-size')?.value) || 0;
@@ -5380,6 +5499,23 @@ function spSubmit() {
         <button class="btn-outline-sm" style="padding:8px 18px;" onclick="bspClose()">Cancel</button>
         <button class="btn-primary-lg" id="bsp-next-btn" style="font-size:13px;padding:8px 24px;" onclick="bspNext()">Next →</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Go to Auto Report setup popup -->
+<div class="modal-overlay" id="vtr-goto-modal">
+  <div class="modal" style="width:420px;">
+    <div class="modal-header">
+      <div><div class="modal-title">Go to Auto Report setup?</div></div>
+      <button class="modal-close" onclick="document.getElementById('vtr-goto-modal').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body" style="padding:16px 24px 20px;">
+      <div style="font-size:13px;color:#6B7280;line-height:1.6;">Your current progress will be saved as a draft.</div>
+    </div>
+    <div class="modal-footer" style="padding:12px 24px;display:flex;justify-content:flex-end;gap:10px;">
+      <button class="btn-outline-sm" style="padding:8px 20px;font-size:13px;" onclick="document.getElementById('vtr-goto-modal').classList.remove('open')">Cancel</button>
+      <button class="btn-primary-lg" style="font-size:13px;padding:8px 20px;" onclick="vtReportGotoAutoReport()">Save and Continue</button>
     </div>
   </div>
 </div>
