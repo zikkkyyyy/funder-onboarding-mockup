@@ -96,9 +96,41 @@ tr.plan-row-selected:hover td { background:#DBEAFE; }
 /* ── Tooltip ── */
 .tooltip-wrap { position: relative; display: inline-flex; align-items: center; }
 .tooltip-icon { font-size: 13px; color: #9CA3AF; cursor: default; margin-left: 4px; }
-.tooltip-box { display: none; position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: #1F2937; color: #fff; font-size: 12px; font-weight: 400; text-transform: none; letter-spacing: 0; border-radius: 6px; padding: 7px 12px; white-space: nowrap; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 200; pointer-events: none; }
+.tooltip-box { display: none; position: fixed; background: #1F2937; color: #fff; font-size: 12px; font-weight: 400; text-transform: none; letter-spacing: 0; border-radius: 6px; padding: 7px 12px; white-space: nowrap; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 9999; pointer-events: none; transform: translateX(-50%); }
 .tooltip-box::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 5px solid transparent; border-top-color: #1F2937; }
-.tooltip-wrap:hover .tooltip-box { display: block; }
+/* tooltip show/hide handled by JS for fixed positioning */
+</style>
+<script>
+// Position tooltips using fixed coords to escape overflow:hidden containers
+document.addEventListener('mouseover', e => {
+  const icon = e.target.closest('.tooltip-icon');
+  if (!icon) return;
+  const box = icon.parentElement.querySelector('.tooltip-box');
+  if (!box) return;
+  const r = icon.getBoundingClientRect();
+  box.style.top = (r.top - box.offsetHeight - 8) + 'px';
+  box.style.left = (r.left + r.width / 2) + 'px';
+});
+document.addEventListener('DOMContentLoaded', () => {
+  // Re-calc on first hover render (offsetHeight is 0 before display)
+  document.querySelectorAll('.tooltip-wrap').forEach(wrap => {
+    wrap.addEventListener('mouseenter', () => {
+      const icon = wrap.querySelector('.tooltip-icon');
+      const box = wrap.querySelector('.tooltip-box');
+      if (!icon || !box) return;
+      box.style.display = 'block';
+      const r = icon.getBoundingClientRect();
+      box.style.top = (r.top - box.offsetHeight - 8) + 'px';
+      box.style.left = (r.left + r.width / 2) + 'px';
+    });
+    wrap.addEventListener('mouseleave', () => {
+      const box = wrap.querySelector('.tooltip-box');
+      if (box) box.style.display = 'none';
+    });
+  });
+});
+</script>
+<style>
 
 /* ── Pricing model radio cards ── */
 .pricing-group-label { font-size: 11px; font-weight: 700; color: #6B7280; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; display: flex; align-items: center; gap: 4px; }
