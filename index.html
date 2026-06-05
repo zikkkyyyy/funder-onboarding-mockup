@@ -909,6 +909,58 @@ tr.drag-over { border-top: 2px solid #2563EB; }
       </div>
     </div>
 
+    <!-- Issue Size -->
+    <div class="section-card" id="issue-size-card">
+      <div class="section-header">
+        <div class="section-title">Issue size</div>
+      </div>
+      <div class="section-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;">
+          <div>
+            <label class="form-label">Issued pool size <span class="req">*</span></label>
+            <div style="display:flex;gap:0;">
+              <input type="number" class="form-input" id="is-pool-size" value="145" style="border-radius:6px 0 0 6px;border-right:none;" oninput="isRecalc()" />
+              <select class="form-select" id="is-pool-unit" style="width:110px;border-radius:0 6px 6px 0;border-left:1px solid #D1D5DB;" onchange="isRecalc()">
+                <option>Mil USD</option><option>Bil USD</option><option>Mil MYR</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <!-- Tranche Allocation -->
+        <div style="font-size:11px;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px;">Tranche Allocation</div>
+        <table style="width:100%;border-collapse:collapse;margin-bottom:8px;">
+          <thead>
+            <tr style="background:#F9FAFB;">
+              <th style="padding:9px 14px;font-size:11px;font-weight:600;color:#6B7280;text-align:left;border-bottom:1px solid #E5E7EB;">Tranche</th>
+              <th style="padding:9px 14px;font-size:11px;font-weight:600;color:#6B7280;text-align:left;border-bottom:1px solid #E5E7EB;">Size (USD'm) <span class="req">*</span></th>
+              <th style="padding:9px 14px;font-size:11px;font-weight:600;color:#6B7280;text-align:left;border-bottom:1px solid #E5E7EB;">% of Pool</th>
+              <th style="padding:9px 14px;font-size:11px;font-weight:600;color:#6B7280;text-align:left;border-bottom:1px solid #E5E7EB;">Compulsory</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid #F3F4F6;">
+              <td style="padding:12px 14px;"><div style="display:flex;align-items:center;gap:10px;"><div style="width:32px;height:32px;border-radius:50%;background:#1D4ED8;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;">S</div><div><div style="font-size:13px;font-weight:600;color:#111827;">Senior tranche</div><div style="font-size:11px;color:#9CA3AF;">Priority 1</div></div></div></td>
+              <td style="padding:12px 14px;"><div style="display:flex;gap:0;align-items:center;"><input type="number" id="is-senior" class="form-input" value="107" style="width:90px;border-radius:6px 0 0 6px;border-right:none;" oninput="isRecalc()" /><span style="background:#F9FAFB;border:1px solid #D1D5DB;border-left:none;border-radius:0 6px 6px 0;padding:0 10px;display:flex;align-items:center;font-size:12px;color:#6B7280;height:38px;">USD'm</span></div></td>
+              <td style="padding:12px 14px;font-size:13px;color:#374151;" id="is-senior-pct">73.79%</td>
+              <td style="padding:12px 14px;"><div class="toggle" id="is-senior-toggle" onclick="this.classList.toggle('off')"></div></td>
+            </tr>
+            <tr style="border-bottom:1px solid #F3F4F6;background:#FAFAFA;">
+              <td style="padding:12px 14px;"><div style="display:flex;align-items:center;gap:10px;"><div style="width:32px;height:32px;border-radius:50%;background:#16A34A;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;">J</div><div><div style="font-size:13px;font-weight:600;color:#111827;">Junior tranche</div><div style="font-size:11px;color:#9CA3AF;">Priority 2 — residual</div></div></div></td>
+              <td style="padding:12px 14px;font-size:13px;color:#374151;" id="is-junior-val">38.00</td>
+              <td style="padding:12px 14px;font-size:13px;color:#374151;" id="is-junior-pct">26.21%</td>
+              <td style="padding:12px 14px;"><div class="toggle off" id="is-junior-toggle" onclick="this.classList.toggle('off')"></div></td>
+            </tr>
+            <tr>
+              <td style="padding:10px 14px;font-size:13px;font-weight:700;color:#111827;">Total issued pool</td>
+              <td style="padding:10px 14px;font-size:13px;font-weight:700;color:#2563EB;" id="is-total-val">145 USD'm</td>
+              <td style="padding:10px 14px;font-size:13px;font-weight:700;color:#2563EB;">100%</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
     <!-- EC / PC Rules — locked (Phase 2) -->
     <div class="section-card" style="opacity:.6;">
       <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;">
@@ -925,17 +977,6 @@ tr.drag-over { border-top: 2px solid #2563EB; }
       <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;">
         <div style="display:flex;align-items:center;gap:8px;">
           <div class="section-title" style="margin:0;">Loan Selection Strategy</div>
-          <span style="font-size:11px;background:#F3F4F6;color:#6B7280;border:1px solid #E5E7EB;border-radius:4px;padding:2px 7px;font-weight:600;">🔒 Phase 2</span>
-        </div>
-      </div>
-      <div class="section-body" style="color:#9CA3AF;font-size:13px;">Not configurable in this phase. Will be supported in Phase 2.</div>
-    </div>
-
-    <!-- Issue Size — locked (Phase 2) -->
-    <div class="section-card" style="opacity:.6;">
-      <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;">
-        <div style="display:flex;align-items:center;gap:8px;">
-          <div class="section-title" style="margin:0;">Issue Size</div>
           <span style="font-size:11px;background:#F3F4F6;color:#6B7280;border:1px solid #E5E7EB;border-radius:4px;padding:2px 7px;font-weight:600;">🔒 Phase 2</span>
         </div>
       </div>
@@ -1433,6 +1474,25 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                   <tr><td>57</td><td>Daily Disbursement Count For Tenor: 4,100</td><td>5M</td><td><span class="status-enable">Enable</span></td></tr>
                   <tr><td>29</td><td>Daily Disbursement Count For Tenor: 4,100</td><td>6M</td><td><span class="status-enable">Enable</span></td></tr>
                   <tr><td>30</td><td>Daily Disbursement Count For Tenor: 4,100</td><td>12M</td><td><span class="status-enable">Enable</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Issue Size -->
+        <div class="rv-section" style="margin-top:20px;">
+          <div class="rv-section-title">Issue Size</div>
+          <div class="rv-row"><span class="rv-label">Issued pool size</span><span class="rv-value">145 Mil USD</span></div>
+          <div class="rv-row" style="align-items:flex-start;">
+            <span class="rv-label" style="padding-top:2px;">Tranche Allocation</span>
+            <div style="flex:1;">
+              <table class="rv-table">
+                <thead><tr><th>Tranche</th><th style="width:100px;">Size (USD'm)</th><th style="width:90px;">% of Pool</th><th style="width:90px;">Compulsory</th></tr></thead>
+                <tbody>
+                  <tr><td><span style="display:inline-flex;align-items:center;gap:6px;"><span style="width:20px;height:20px;border-radius:50%;background:#1D4ED8;color:#fff;font-size:10px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;">S</span>Senior tranche</span></td><td>107</td><td>73.79%</td><td><span style="color:#16A34A;font-size:12px;">● On</span></td></tr>
+                  <tr><td><span style="display:inline-flex;align-items:center;gap:6px;"><span style="width:20px;height:20px;border-radius:50%;background:#16A34A;color:#fff;font-size:10px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;">J</span>Junior tranche</span></td><td>38.00</td><td>26.21%</td><td><span style="color:#9CA3AF;font-size:12px;">● Off</span></td></tr>
+                  <tr style="font-weight:700;"><td>Total</td><td style="color:#2563EB;">145</td><td style="color:#2563EB;">100%</td><td></td></tr>
                 </tbody>
               </table>
             </div>
@@ -2186,6 +2246,48 @@ tr.drag-over { border-top: 2px solid #2563EB; }
             </table>
           </div>
         </div>
+        <!-- Issue size -->
+        <div class="view-section">
+          <div class="view-section-hd"><span class="view-section-title">Issue size</span></div>
+          <div class="view-section-body">
+            <div style="margin-bottom:16px;">
+              <div class="view-label" style="margin-bottom:4px;">Issued pool size</div>
+              <div style="font-size:13px;font-weight:600;color:#111827;">145 Mil USD</div>
+            </div>
+            <!-- Tranche Allocation -->
+            <div style="font-size:11px;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">Tranche Allocation</div>
+            <table style="width:100%;border-collapse:collapse;">
+              <thead>
+                <tr style="background:#F9FAFB;">
+                  <th style="padding:9px 14px;font-size:11px;font-weight:600;color:#6B7280;text-align:left;border-bottom:1px solid #E5E7EB;">Tranche</th>
+                  <th style="padding:9px 14px;font-size:11px;font-weight:600;color:#6B7280;text-align:left;border-bottom:1px solid #E5E7EB;">Size (USD'm)</th>
+                  <th style="padding:9px 14px;font-size:11px;font-weight:600;color:#6B7280;text-align:left;border-bottom:1px solid #E5E7EB;">% of Pool</th>
+                  <th style="padding:9px 14px;font-size:11px;font-weight:600;color:#6B7280;text-align:left;border-bottom:1px solid #E5E7EB;">Compulsory</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid #F3F4F6;">
+                  <td style="padding:12px 14px;"><div style="display:flex;align-items:center;gap:10px;"><div style="width:30px;height:30px;border-radius:50%;background:#1D4ED8;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">S</div><div><div style="font-size:13px;font-weight:600;color:#111827;">Senior tranche</div><div style="font-size:11px;color:#9CA3AF;">Priority 1</div></div></div></td>
+                  <td style="padding:12px 14px;font-size:13px;color:#374151;">107 USD'm</td>
+                  <td style="padding:12px 14px;font-size:13px;color:#374151;">73.79%</td>
+                  <td style="padding:12px 14px;"><div class="toggle" style="pointer-events:none;"></div></td>
+                </tr>
+                <tr style="border-bottom:1px solid #F3F4F6;background:#FAFAFA;">
+                  <td style="padding:12px 14px;"><div style="display:flex;align-items:center;gap:10px;"><div style="width:30px;height:30px;border-radius:50%;background:#16A34A;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">J</div><div><div style="font-size:13px;font-weight:600;color:#111827;">Junior tranche</div><div style="font-size:11px;color:#9CA3AF;">Priority 2 — residual</div></div></div></td>
+                  <td style="padding:12px 14px;font-size:13px;color:#374151;">38.00 USD'm</td>
+                  <td style="padding:12px 14px;font-size:13px;color:#374151;">26.21%</td>
+                  <td style="padding:12px 14px;"><div class="toggle off" style="pointer-events:none;"></div></td>
+                </tr>
+                <tr>
+                  <td style="padding:10px 14px;font-size:13px;font-weight:700;color:#111827;">Total issued pool</td>
+                  <td style="padding:10px 14px;font-size:13px;font-weight:700;color:#2563EB;">145 USD'm</td>
+                  <td style="padding:10px 14px;font-size:13px;font-weight:700;color:#2563EB;">100%</td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
         <!-- EC / PC Rules -->
         <div class="view-section">
           <div class="view-section-hd"><span class="view-section-title">EC / PC Rules</span></div>
@@ -2195,11 +2297,6 @@ tr.drag-over { border-top: 2px solid #2563EB; }
         <div class="view-section">
           <div class="view-section-hd"><span class="view-section-title">Loan selection strategy</span></div>
           <div class="view-section-body"><div class="empty-state-sm"><div class="ico">🔒</div><div class="txt">Loan selection strategy config</div></div></div>
-        </div>
-        <!-- Issue size -->
-        <div class="view-section">
-          <div class="view-section-hd"><span class="view-section-title">Issue size</span></div>
-          <div class="view-section-body"><div class="empty-state-sm"><div class="ico">🔒</div><div class="txt">Issue size &amp; tranche allocation</div></div></div>
         </div>
         <div class="view-footer">
           <button class="btn-outline-sm" style="padding:9px 20px;font-size:13px;" onclick="switchFlow('list')">← Back to Lender List</button>
@@ -2357,8 +2454,110 @@ tr.drag-over { border-top: 2px solid #2563EB; }
       <!-- Tab: Review -->
       <div class="view-scroll" id="vt-review" style="display:none;">
         <div class="view-section">
-          <div class="view-section-hd"><span class="view-section-title">Review</span></div>
-          <div class="view-section-body"><div class="empty-state-sm"><div class="ico">📋</div><div class="txt">Review &amp; confirm all settings before saving.</div></div></div>
+          <div class="view-section-body">
+
+            <!-- Basic Info -->
+            <div class="rv-section">
+              <div class="rv-section-title">Basic Info</div>
+              <div class="rv-row"><span class="rv-label">Funder Name</span><span class="rv-value">TH_SPL_Starlight_ABS_01</span></div>
+              <div class="rv-row"><span class="rv-label">Funder Scheme</span><span class="rv-value">ABS</span></div>
+              <div class="rv-row"><span class="rv-label">Product</span><span class="rv-value">SPL</span></div>
+              <div class="rv-row"><span class="rv-label">Loan Type</span><span class="rv-value">SLoan, SFinancing-i</span></div>
+              <div class="rv-row"><span class="rv-label">Originator</span><span class="rv-value">Monee</span></div>
+              <div class="rv-row"><span class="rv-label">Investor</span><span class="rv-value">Starlight Capital</span></div>
+              <div class="rv-row"><span class="rv-label">License</span><span class="rv-value">DGL</span></div>
+              <div class="rv-row"><span class="rv-label">SPV Name</span><span class="rv-value">UMI</span></div>
+              <div class="rv-row"><span class="rv-label">Tranche</span><span class="rv-value">01</span></div>
+            </div>
+
+            <!-- Portfolio Setting -->
+            <div class="rv-section" style="margin-top:20px;">
+              <div class="rv-section-title">Portfolio Setting</div>
+              <div class="rv-row"><span class="rv-label">Pricing mode</span><span class="rv-value">Accrued Interest</span></div>
+              <div class="rv-row"><span class="rv-label">Auto Clawback Enabled</span><span class="rv-value">Yes</span></div>
+              <div class="rv-row"><span class="rv-label">Auto Clawback Mode</span><span class="rv-value">Mode 2</span></div>
+              <div class="rv-row"><span class="rv-label">N Input</span><span class="rv-value">1</span></div>
+              <div class="rv-row" style="align-items:flex-start;">
+                <span class="rv-label" style="padding-top:2px;">Rule List</span>
+                <div style="flex:1;">
+                  <table class="rv-table">
+                    <thead><tr><th style="width:80px;">Rule ID</th><th>Rules</th><th style="width:80px;">Status</th></tr></thead>
+                    <tbody>
+                      <tr><td>131</td><td>Outstanding Principal in range [0.01, 150000.00]</td><td><span class="status-enable">Enable</span></td></tr>
+                      <tr><td>132</td><td>LoanCurrentMaxDpd LessEqual 0</td><td><span class="status-enable">Enable</span></td></tr>
+                      <tr><td>133</td><td>User Current Max DPD LessEqual 0</td><td><span class="status-enable">Enable</span></td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="rv-row" style="align-items:flex-start;">
+                <span class="rv-label" style="padding-top:2px;">Traffic Control</span>
+                <div style="flex:1;">
+                  <table class="rv-table">
+                    <thead><tr><th style="width:80px;">Rule ID</th><th>Traffic Description</th><th style="width:60px;">Tenor</th><th style="width:80px;">Status</th></tr></thead>
+                    <tbody>
+                      <tr><td>25</td><td>Daily Disbursement Count: 0</td><td>Default</td><td><span class="status-enable">Enable</span></td></tr>
+                      <tr><td>26</td><td>Daily Disbursement Count For Tenor: 100</td><td>1M</td><td><span class="status-disable">Disable</span></td></tr>
+                      <tr><td>27</td><td>Daily Disbursement Count For Tenor: 100</td><td>2M</td><td><span class="status-disable">Disable</span></td></tr>
+                      <tr><td>28</td><td>Daily Disbursement Count For Tenor: 100</td><td>3M</td><td><span class="status-disable">Disable</span></td></tr>
+                      <tr><td>56</td><td>Daily Disbursement Count For Tenor: 4,100</td><td>4M</td><td><span class="status-enable">Enable</span></td></tr>
+                      <tr><td>57</td><td>Daily Disbursement Count For Tenor: 4,100</td><td>5M</td><td><span class="status-enable">Enable</span></td></tr>
+                      <tr><td>29</td><td>Daily Disbursement Count For Tenor: 4,100</td><td>6M</td><td><span class="status-enable">Enable</span></td></tr>
+                      <tr><td>30</td><td>Daily Disbursement Count For Tenor: 4,100</td><td>12M</td><td><span class="status-enable">Enable</span></td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Issue Size -->
+            <div class="rv-section" style="margin-top:20px;">
+              <div class="rv-section-title">Issue Size</div>
+              <div class="rv-row"><span class="rv-label">Issued pool size</span><span class="rv-value">145 Mil USD</span></div>
+              <div class="rv-row" style="align-items:flex-start;">
+                <span class="rv-label" style="padding-top:2px;">Tranche Allocation</span>
+                <div style="flex:1;">
+                  <table class="rv-table">
+                    <thead><tr><th>Tranche</th><th style="width:100px;">Size (USD'm)</th><th style="width:90px;">% of Pool</th><th style="width:90px;">Compulsory</th></tr></thead>
+                    <tbody>
+                      <tr><td><span style="display:inline-flex;align-items:center;gap:6px;"><span style="width:20px;height:20px;border-radius:50%;background:#1D4ED8;color:#fff;font-size:10px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;">S</span>Senior tranche</span></td><td>107</td><td>73.79%</td><td><span style="color:#16A34A;font-size:12px;">● On</span></td></tr>
+                      <tr><td><span style="display:inline-flex;align-items:center;gap:6px;"><span style="width:20px;height:20px;border-radius:50%;background:#16A34A;color:#fff;font-size:10px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;">J</span>Junior tranche</span></td><td>38.00</td><td>26.21%</td><td><span style="color:#9CA3AF;font-size:12px;">● Off</span></td></tr>
+                      <tr style="font-weight:700;"><td>Total</td><td style="color:#2563EB;">145</td><td style="color:#2563EB;">100%</td><td></td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Management Plan -->
+            <div class="rv-section" style="margin-top:20px;">
+              <div class="rv-section-title">Management Plan</div>
+              <div class="rv-row"><span class="rv-label">Flow Template</span><span class="rv-value">TH_SPL_ABS_Standard_Monthly</span></div>
+              <div class="rv-row"><span class="rv-label">Cycle Frequency</span><span class="rv-value">Every 4 weeks</span></div>
+              <div class="rv-row"><span class="rv-label">Plan Name</span><span class="rv-value">TH_SPL_Starlight_ABS_T1_2026</span></div>
+            </div>
+
+            <!-- Auto Report Management -->
+            <div class="rv-section" style="margin-top:20px;">
+              <div class="rv-section-title">Auto Report Management</div>
+              <div style="margin-top:8px;">
+                <table class="rv-table">
+                  <thead><tr>
+                    <th style="width:80px;">Report ID</th><th>Report Name</th><th>Report Type</th>
+                    <th>Funder Name</th><th style="width:80px;text-align:center;">Field Count</th>
+                    <th style="width:80px;">Status</th><th style="width:130px;">Updated At</th>
+                  </tr></thead>
+                  <tbody>
+                    <tr><td style="color:#6B7280;">718634</td><td>Pending Sold Loan Tape</td><td>Pending Sold Loan Tape</td><td style="color:#6B7280;font-size:12px;">TH_SPL_Starlight_ABS_01</td><td style="text-align:center;">42</td><td><span class="status-live">Live</span></td><td style="color:#9CA3AF;font-size:12px;">2026-05-12 06:08</td></tr>
+                    <tr><td style="color:#6B7280;">718117</td><td>Pending Sold Loan Tape v2</td><td>Pending Sold Loan Tape</td><td style="color:#6B7280;font-size:12px;">TH_SPL_Starlight_ABS_01</td><td style="text-align:center;">13</td><td><span class="status-pending">Pending</span></td><td style="color:#9CA3AF;font-size:12px;">2026-05-14 06:08</td></tr>
+                    <tr><td style="color:#6B7280;">717604</td><td>TH_SPL_Starlight_ABS_T1_Pending_Sold_Loan_Tape</td><td>Pending Sold Loan Tape</td><td style="color:#6B7280;font-size:12px;">TH_SPL_Starlight_ABS_01</td><td style="text-align:center;">46</td><td><span class="status-pending">Pending</span></td><td style="color:#9CA3AF;font-size:12px;">2026-05-17 06:08</td></tr>
+                    <tr><td style="color:#6B7280;">718119</td><td>Copy of Pending Sold Loan Tape v2</td><td>Pending Sold Loan Tape</td><td style="color:#6B7280;font-size:12px;">TH_SPL_Starlight_ABS_01</td><td style="text-align:center;">13</td><td><span class="status-pending">Pending</span></td><td style="color:#9CA3AF;font-size:12px;">2026-05-11 06:08</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
         </div>
         <div class="view-footer">
           <button class="btn-outline-sm" style="padding:9px 20px;font-size:13px;" onclick="switchFlow('list')">← Back to Lender List</button>
@@ -4709,6 +4908,30 @@ function bspSubmit() {
   toast.textContent = '✓ 3 Sub Plans submitted to Ticket Center (SP-2026-019 · SP-2026-020 · SP-2026-021)';
   toast.classList.add('visible');
   setTimeout(() => toast.classList.remove('visible'), 3500);
+}
+
+/* ── Issue Size auto-calc ── */
+function isRecalc() {
+  const pool = parseFloat(document.getElementById('is-pool-size')?.value) || 0;
+  const fx   = parseFloat(document.getElementById('is-fx')?.value) || 1;
+  const ticket = parseFloat(document.getElementById('is-ticket')?.value) || 1;
+  const senior = parseFloat(document.getElementById('is-senior')?.value) || 0;
+  const junior = Math.max(0, pool - senior);
+  const seniorPct = pool > 0 ? (senior / pool * 100).toFixed(2) : '0.00';
+  const juniorPct = pool > 0 ? (junior / pool * 100).toFixed(2) : '0.00';
+  const totalMYR  = (pool * fx).toFixed(1);
+  const ticketUSD = (ticket / fx).toFixed(2);
+  const loanCount = Math.round((pool * fx * 1e6) / ticket).toLocaleString();
+
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  set('is-junior-val',  junior.toFixed(2));
+  set('is-senior-pct',  seniorPct + '%');
+  set('is-junior-pct',  juniorPct + '%');
+  set('is-total-val',   pool + " USD'm");
+  const usdInput = document.getElementById('is-ticket-usd-input');
+  if (usdInput) usdInput.value = ticketUSD;
+  const countInput = document.getElementById('is-loan-count-input');
+  if (countInput) countInput.value = loanCount;
 }
 
 /* ── Basic Info step validation ── */
