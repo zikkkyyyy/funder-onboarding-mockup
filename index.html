@@ -2578,6 +2578,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                 <th style="width:120px;">Ops Flow</th>
                 <th>Cycle Segments</th>
                 <th style="width:90px;text-align:center;">Milestones</th>
+                <th style="width:80px;text-align:center;">Funders</th>
                 <th style="width:80px;">Status</th>
                 <th style="width:180px;">Created By</th>
                 <th style="width:110px;">Last Updated</th>
@@ -2591,6 +2592,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                   <td><span class="status-badge" style="background:#DBEAFE;color:#1D4ED8;">ABS Non-Net</span></td>
                   <td style="font-size:12px;color:#374151;font-family:monospace;letter-spacing:0.02em;">1–5 · 6–15 · 16–25 · 26–EOM</td>
                   <td style="text-align:center;"><span style="background:#EFF6FF;color:#2563EB;font-size:12px;font-weight:600;padding:2px 8px;border-radius:4px;">7</span></td>
+                  <td style="text-align:center;font-size:13px;color:#374151;">2</td>
                   <td><span class="status-badge status-active-badge">Active</span></td>
                   <td style="font-size:12px;color:#6B7280;">ziqi.xu@shopee.com</td>
                   <td style="color:#9CA3AF;font-size:12px;">2026-05-01</td>
@@ -2603,6 +2605,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                   <td><span class="status-badge" style="background:#F3E8FF;color:#7C3AED;">ABS Net</span></td>
                   <td style="font-size:12px;color:#374151;font-family:monospace;letter-spacing:0.02em;">1–15 · 16–EOM</td>
                   <td style="text-align:center;"><span style="background:#EFF6FF;color:#2563EB;font-size:12px;font-weight:600;padding:2px 8px;border-radius:4px;">9</span></td>
+                  <td style="text-align:center;font-size:13px;color:#374151;">1</td>
                   <td><span class="status-badge status-active-badge">Active</span></td>
                   <td style="font-size:12px;color:#6B7280;">pinhan.wang@shopee.com</td>
                   <td style="color:#9CA3AF;font-size:12px;">2026-03-15</td>
@@ -2615,6 +2618,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                   <td><span class="status-badge" style="background:#FEF3C7;color:#92400E;">ABL</span></td>
                   <td style="font-size:12px;color:#374151;font-family:monospace;letter-spacing:0.02em;">1–EOM</td>
                   <td style="text-align:center;"><span style="background:#EFF6FF;color:#2563EB;font-size:12px;font-weight:600;padding:2px 8px;border-radius:4px;">5</span></td>
+                  <td style="text-align:center;font-size:13px;color:#374151;">0</td>
                   <td><span class="status-badge status-draft-badge">Draft</span></td>
                   <td style="font-size:12px;color:#6B7280;">ziqi.xu@shopee.com</td>
                   <td style="color:#9CA3AF;font-size:12px;">2026-06-01</td>
@@ -3607,7 +3611,7 @@ const WFT_DATA = {
   'abs': {
     id: 'WFT-0001', name: 'TH_SPL_ABS_Standard', flow: 'ABS Non-Net',
     flowBadge: '<span class="badge badge-active" style="background:#DBEAFE;color:#1D4ED8;">ABS Non-Net</span>',
-    dayType: 'Calendar Days', region: 'Thailand (TH)',
+    dayType: 'Business Days', region: 'Thailand (TH)',
     segments: [{ from:1,to:5 },{ from:6,to:15 },{ from:16,to:25 },{ from:26,toEOM:true }],
     status: 'Active', statusBadge: '<span class="badge badge-active">Active</span>',
     createdBy: 'ziqi.xu@shopee.com', updated: '2026-05-01', createdAt: '2026-04-15',
@@ -3632,7 +3636,7 @@ const WFT_DATA = {
   'abl': {
     id: 'WFT-0003', name: 'MY_BCL_ABL_BiMonthly', flow: 'ABL',
     flowBadge: '<span class="badge badge-active" style="background:#FEF3C7;color:#92400E;">ABL</span>',
-    dayType: 'Calendar Days', region: 'Malaysia (MY)',
+    dayType: 'Business Days', region: 'Malaysia (MY)',
     segments: [{ from:1,toEOM:true }],
     status: 'Draft', statusBadge: '<span class="badge badge-pending">Draft</span>',
     createdBy: 'ziqi.xu@shopee.com', updated: '2026-06-01', createdAt: '2026-06-01',
@@ -3751,7 +3755,17 @@ function wftShowDetail(type) {
   document.getElementById('wft-info-name').textContent = d.name;
   document.getElementById('wft-info-flow').innerHTML = d.flowBadge;
   const msDaytype = document.getElementById('wft-ms-daytype');
-  if (msDaytype) msDaytype.textContent = d.dayType;
+  if (msDaytype) {
+    const isBiz = d.dayType === 'Business Days';
+    msDaytype.textContent = d.dayType + (isBiz ? ' (T)' : ' (D)');
+    msDaytype.style.background = isBiz ? '#EFF6FF' : '#F0FDF4';
+    msDaytype.style.borderColor = isBiz ? '#BFDBFE' : '#BBF7D0';
+    msDaytype.style.color = isBiz ? '#1D4ED8' : '#16A34A';
+  }
+  const unit = d.dayType === 'Business Days' ? 'T' : 'D';
+  setTimeout(() => {
+    document.querySelectorAll('#wft-milestone-tbody .daytype-unit').forEach(el => { el.textContent = unit; });
+  }, 50);
   document.getElementById('wft-info-status').innerHTML = d.statusBadge;
   document.getElementById('wft-info-region').textContent = d.region;
   document.getElementById('wft-info-created-by').textContent = d.createdBy;
@@ -3787,7 +3801,7 @@ function wftShowDetail(type) {
                  : `<select class="offset-from-sel">${offsetFromOptions}</select>`);
     const offsetCell = isSystem
       ? `<span style="color:#9CA3AF;font-size:13px;">🔒 +${m.offset}d auto</span>`
-      : `<div style="display:flex;align-items:center;gap:6px;"><span style="font-size:12px;color:#9CA3AF;">+</span><input class="ms-offset-input" type="number" value="${m.offset}" min="0" /><span style="font-size:12px;color:#9CA3AF;">days</span></div>`;
+      : `<div style="display:flex;align-items:center;gap:6px;"><span style="font-size:12px;color:#9CA3AF;">+</span><input class="ms-offset-input" type="number" value="${m.offset}" min="0" /><span class="daytype-unit" style="font-size:12px;font-weight:600;color:#374151;min-width:12px;"></span></div>`;
     const uid = 'wft_ms_' + i;
     const holCell = `<div class="hol-chk-group">${holRegions.map((r,ri) =>
       `<label class="hol-chk-label"><input type="checkbox" checked><span class="hol-chk-box"></span>${r.label}</label>`
