@@ -43,11 +43,69 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .section-sub { font-size: 12px; color: #6B7280; margin-top: 2px; }
 .section-body { padding: 20px; }
 
+/* ── Plans table selection ── */
+.plans-selection-bar { display:none; align-items:center; justify-content:space-between; padding:8px 16px; background:#EFF6FF; border-bottom:1px solid #BFDBFE; font-size:13px; color:#1D4ED8; }
+.plans-selection-bar.show { display:flex; }
+tr.plan-row-selected td { background:#EFF6FF; }
+tr.plan-row-selected:hover td { background:#DBEAFE; }
+
+/* ── Sub Plan Modal ── */
+/* Sub Plan — side drawer */
+.sp-modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.35); z-index:500; }
+.sp-modal-overlay.open { display:block; }
+.sp-modal { background:#fff; position:fixed; top:0; right:0; bottom:0; width:min(880px,100vw); display:flex; flex-direction:column; box-shadow:-8px 0 32px rgba(0,0,0,0.15); transform:translateX(100%); transition:transform 0.28s cubic-bezier(.4,0,.2,1); }
+.sp-modal-overlay.open .sp-modal { transform:translateX(0); }
+.sp-modal-header { padding:18px 24px 14px; border-bottom:1px solid #F3F4F6; display:flex; align-items:flex-start; justify-content:space-between; flex-shrink:0; }
+.sp-modal-title { font-size:16px; font-weight:700; color:#111827; }
+.sp-modal-sub { font-size:12px; color:#6B7280; margin-top:3px; }
+.sp-modal-steps { display:flex; gap:0; padding:0 24px; background:#FAFAFA; border-bottom:1px solid #F3F4F6; flex-shrink:0; }
+.sp-modal-step { padding:10px 0; margin-right:24px; font-size:12px; color:#9CA3AF; border-bottom:2px solid transparent; cursor:default; }
+.sp-modal-step.active { color:#2563EB; font-weight:600; border-bottom-color:#2563EB; }
+.sp-modal-step.done { color:#16A34A; }
+.sp-modal-body { padding:20px 24px; overflow-y:auto; flex:1; }
+.sp-modal-footer { padding:14px 24px; border-top:1px solid #F3F4F6; display:flex; justify-content:flex-end; gap:10px; flex-shrink:0; }
+/* Skip holidays country chips */
+.sp-hol-group { display:flex; flex-wrap:wrap; gap:4px; }
+.sp-hol-full-group { display:grid; grid-template-columns:1fr 1fr; gap:4px 12px; }
+.sp-hol-chk { display:inline-flex; align-items:center; gap:5px; font-size:12px; color:#374151; cursor:pointer; user-select:none; white-space:nowrap; }
+.sp-hol-chk input { accent-color:#2563EB; width:14px; height:14px; cursor:pointer; flex-shrink:0; }
+.sp-field-label { font-size:12px; font-weight:500; color:#374151; margin-bottom:4px; display:block; }
+.sp-chips { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px; }
+.sp-chip { background:#EFF6FF; color:#2563EB; border:1px solid #BFDBFE; border-radius:12px; padding:3px 10px; font-size:12px; font-weight:500; }
+.sp-row { display:flex; gap:12px; margin-bottom:14px; }
+.sp-col { flex:1; }
+.sp-ms-table { width:100%; border-collapse:collapse; margin-top:8px; }
+.sp-ms-table th { padding:8px 10px; font-size:11px; font-weight:600; color:#6B7280; background:#F9FAFB; border-bottom:1px solid #E5E7EB; text-align:left; }
+.sp-ms-table td { padding:9px 10px; font-size:12px; color:#374151; border-bottom:1px solid #F3F4F6; vertical-align:middle; }
+.sp-ms-table tr:last-child td { border-bottom:none; }
+.sp-td-toggle { display:flex; align-items:center; gap:6px; font-size:12px; }
+.sp-toggle { width:32px; height:18px; background:#D1D5DB; border-radius:9px; position:relative; cursor:pointer; transition:background 0.2s; flex-shrink:0; }
+.sp-toggle.on { background:#2563EB; }
+.sp-toggle::after { content:''; width:14px; height:14px; background:#fff; border-radius:50%; position:absolute; top:2px; left:2px; transition:left 0.15s; box-shadow:0 1px 2px rgba(0,0,0,0.2); }
+.sp-toggle.on::after { left:16px; }
+.sp-ms-input { width:60px; border:1px solid #D1D5DB; border-radius:5px; padding:4px 8px; font-size:12px; text-align:center; }
+.sp-system-lock { color:#9CA3AF; font-size:11px; }
+.sp-review-card { border:1px solid #E5E7EB; border-radius:8px; padding:14px 16px; margin-bottom:12px; }
+.sp-review-card-title { font-size:13px; font-weight:600; color:#111827; margin-bottom:8px; }
+.sp-review-row { display:flex; justify-content:space-between; font-size:12px; padding:3px 0; border-bottom:1px solid #F9FAFB; }
+.sp-review-row:last-child { border-bottom:none; }
+.sp-review-label { color:#6B7280; }
+.sp-review-val { color:#374151; font-weight:500; }
+.sp-review-val.changed { color:#D97706; }
+
+/* ── Tooltip ── */
+.tooltip-wrap { position: relative; display: inline-flex; align-items: center; }
+.tooltip-icon { font-size: 13px; color: #9CA3AF; cursor: default; margin-left: 4px; }
+.tooltip-box { display: none; position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: #1F2937; color: #fff; font-size: 12px; font-weight: 400; text-transform: none; letter-spacing: 0; border-radius: 6px; padding: 7px 12px; white-space: nowrap; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 200; pointer-events: none; }
+.tooltip-box::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 5px solid transparent; border-top-color: #1F2937; }
+.tooltip-wrap:hover .tooltip-box { display: block; }
+
 /* ── Pricing model radio cards ── */
-.pricing-group-label { font-size: 11px; font-weight: 700; color: #6B7280; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
+.pricing-group-label { font-size: 11px; font-weight: 700; color: #6B7280; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; display: flex; align-items: center; gap: 4px; }
 .radio-cards { display: flex; gap: 14px; flex-wrap: wrap; }
 .radio-card { border: 2px solid #E5E7EB; border-radius: 10px; padding: 14px 18px; cursor: pointer; transition: all 0.15s; flex: 0 0 220px; }
 .radio-card.selected { border-color: #2563EB; background: #EFF6FF; }
+.pricing-group-label { font-size: 11px; font-weight: 700; color: #6B7280; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
 .radio-card:hover:not(.selected) { border-color: #93C5FD; }
 .radio-card-top { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
 .radio-dot { width: 16px; height: 16px; border-radius: 50%; border: 2px solid #D1D5DB; flex-shrink: 0; position: relative; }
@@ -595,29 +653,12 @@ tr.drag-over { border-top: 2px solid #2563EB; }
       <div class="section-body">
         <div class="form-grid">
 
-          <!-- Funder Name -->
-          <div class="form-group" style="grid-column:1/-1;">
-            <label class="form-label">Funder Name <span class="req">*</span></label>
             <input class="form-input" style="max-width:420px;" placeholder="e.g. TH_SPL_Starlight_ABS_01" />
-          </div>
-
-          <!-- Funder Scheme -->
-          <div class="form-group">
-            <label class="form-label">Funder Scheme <span class="req">*</span></label>
             <select class="form-select">
-              <option value="">Select scheme</option>
-              <option>ABS</option>
-              <option>ABL</option>
             </select>
           </div>
 
-          <!-- Product -->
-          <div class="form-group">
-            <label class="form-label">Product <span class="req">*</span></label>
             <select class="form-select">
-              <option value="">Select product</option>
-              <option>BCL</option>
-              <option>SPL</option>
               <option>SCL</option>
               <option>Term loan</option>
             </select>
@@ -640,29 +681,12 @@ tr.drag-over { border-top: 2px solid #2563EB; }
             <div class="field-note">Pulled from BE's sub_biz_type · Multiple selection allowed</div>
           </div>
 
-          <!-- Originator -->
-          <div class="form-group">
-            <label class="form-label">Originator <span class="req">*</span></label>
             <select class="form-select">
-              <option value="">Select originator</option>
-              <option>Monee</option>
-              <option>Unicorn</option>
             </select>
           </div>
 
-          <!-- Investor -->
-          <div class="form-group">
-            <label class="form-label">Investor <span class="req">*</span></label>
             <input class="form-input" placeholder="e.g. JPM" />
-          </div>
-
-          <!-- License (TH only) -->
-          <div class="form-group">
-            <label class="form-label">License <span class="req">*</span> <span style="font-size:11px;color:#9CA3AF;font-weight:400;">(TH only)</span></label>
             <select class="form-select">
-              <option value="">Select license</option>
-              <option>CCC</option>
-              <option>DGL</option>
             </select>
           </div>
 
@@ -699,9 +723,6 @@ tr.drag-over { border-top: 2px solid #2563EB; }
           <div style="font-size:13px;font-weight:500;color:#374151;margin-bottom:2px;">Life cycle</div>
           <div style="font-size:12px;color:#9CA3AF;">TBD</div>
         </div>
-      </div>
-    </div>
-
     <!-- Issue size -->
     <div class="section-card">
       <div class="section-header"><div class="section-title">Issue size</div></div>
@@ -714,14 +735,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
       </div>
     </div>
 
-    <div class="footer-nav">
-      <span style="font-size:13px;color:#374151;cursor:pointer;" onclick="switchFlow('list')">Back</span>
-      <div style="display:flex;gap:10px;">
-        <button class="btn-outline-sm" style="padding:10px 20px;font-size:13px;">Save draft</button>
         <button class="btn-primary-lg" onclick="showPage('s2',document.getElementById('tab-s2'))">Next: Portfolio Setting →</button>
-      </div>
-    </div>
-  </div>
 
   <!-- ══════════════════════════════════════
        PAGE: Step 2 — Portfolio Setting
@@ -729,16 +743,8 @@ tr.drag-over { border-top: 2px solid #2563EB; }
   <div class="page" id="page-s2">
 
     <!-- Pricing & Terms -->
-    <div class="section-card">
-      <div class="section-header">
-        <div class="section-title">Pricing &amp; Terms</div>
         <div class="section-sub">This determines how to calculate the interest split at cutoff.</div>
-      </div>
-      <div class="section-body">
         <div class="pricing-group-label">Pricing Model &nbsp;ⓘ</div>
-        <div class="radio-cards">
-          <div class="radio-card selected" onclick="selectPricing(this)">
-            <div class="radio-card-top">
               <div class="radio-dot on"></div>
               <div class="radio-card-title">Accrued interest</div>
             </div>
@@ -1918,7 +1924,9 @@ tr.drag-over { border-top: 2px solid #2563EB; }
   </div>
 
 <!-- Edit Information Modal (SPV & Tranche) -->
-<div class="modal-overlay" id="spv-edit-modal">
+</div><!-- /flow-list -->
+
+<!-- ══════════════════════════════════════
   <div class="modal" style="width:480px;">
     <div class="modal-header">
       <div>
@@ -1967,9 +1975,6 @@ tr.drag-over { border-top: 2px solid #2563EB; }
   </div>
 </div>
 
-</div><!-- /flow-list -->
-
-<!-- ══════════════════════════════════════
      FLOW: Lender Detail — View Mode
 ══════════════════════════════════════ -->
 <div id="flow-view" class="flow">
@@ -2008,20 +2013,82 @@ tr.drag-over { border-top: 2px solid #2563EB; }
       </div>
       <!-- Tabs -->
       <div class="view-tabs">
+        <div class="view-tab active" id="vtab-basic" onclick="switchViewTab('vt-basic',this)"><span class="view-tab-num">✓</span>Basic Info</div>
+        <div class="view-tab done" id="vtab-portfolio" onclick="switchViewTab('vt-portfolio',this)"><span class="view-tab-num">✓</span>Portfolio Setting</div>
+        <div class="view-tab done" id="vtab-plan" onclick="switchViewTab('vt-plan',this)"><span class="view-tab-num">✓</span>Management Plan</div>
+        <div class="view-tab done" id="vtab-report" onclick="switchViewTab('vt-report',this)"><span class="view-tab-num">✓</span>Auto Report Management</div>
+        <div class="view-tab done" id="vtab-review" onclick="switchViewTab('vt-review',this)"><span class="view-tab-num">✓</span>Review</div>
+      </div>
+
+      <!-- Tab: Basic Info -->
+      <div class="view-scroll" id="vt-basic">
+        <!-- Funder Info -->
+        <div class="view-section">
+          <div class="view-section-hd" style="cursor:pointer;" onclick="toggleAccordion('vi-funder-body');this.querySelector('.vi-chev').classList.toggle('collapsed')">
+            <span class="view-section-title">Funder info</span>
+            <span class="vi-chev" style="font-size:16px;color:#6B7280;transition:transform 0.2s;">▲</span>
+          </div>
+          <div id="vi-funder-body">
+            <div style="padding:18px 20px;">
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px 24px;">
+                <div><div class="view-label" style="margin-bottom:3px;">Funder ID</div><div style="font-size:13px;color:#111827;font-weight:500;">TH-2024-001</div></div>
+                <div><div class="view-label" style="margin-bottom:3px;">Funder Name</div><div style="font-size:13px;color:#111827;font-weight:500;">TH_SPL_Starlight_ABS_01</div></div>
+                <div><div class="view-label" style="margin-bottom:3px;">Funder Scheme</div><div style="font-size:13px;color:#111827;font-weight:500;">ABS</div></div>
+                <div><div class="view-label" style="margin-bottom:3px;">Product</div><div style="font-size:13px;color:#111827;font-weight:500;">SPL</div></div>
+                <div><div class="view-label" style="margin-bottom:3px;">Loan Type</div><div style="font-size:13px;color:#111827;font-weight:500;">SLoan, SFinancing-i</div></div>
+                <div><div class="view-label" style="margin-bottom:3px;">Create Time</div><div style="font-size:13px;color:#111827;font-weight:500;">2024-12-13 09:17:02</div></div>
+                <div><div class="view-label" style="margin-bottom:3px;">Originator</div><div style="font-size:13px;color:#111827;font-weight:500;">Monee</div></div>
+                <div><div class="view-label" style="margin-bottom:3px;">Investor</div><div style="font-size:13px;color:#111827;font-weight:500;">Starlight Capital</div></div>
+                <div><div class="view-label" style="margin-bottom:3px;">License</div><div style="font-size:13px;color:#111827;font-weight:500;">DGL</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SPV & Tranche Info -->
+        <div class="view-section">
+          <div class="view-section-hd" style="cursor:pointer;" onclick="toggleAccordion('vi-spv-body');this.querySelector('.vi-chev').classList.toggle('collapsed')">
+            <span class="view-section-title">SPV &amp; tranche info</span>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <button class="btn-edit" style="padding:6px 18px;font-size:13px;border-radius:6px;" onclick="event.stopPropagation();openSpvEditModal()">Edit</button>
+              <span class="vi-chev" style="font-size:16px;color:#6B7280;transition:transform 0.2s;">▲</span>
+            </div>
+          </div>
+          <div id="vi-spv-body">
+            <div style="padding:18px 20px;">
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px 24px;">
+                <div><div class="view-label" style="margin-bottom:3px;">SPV Name</div><div style="font-size:13px;color:#111827;font-weight:500;">UMI</div></div>
+                <div><div class="view-label" style="margin-bottom:3px;">Tranche</div><div style="font-size:13px;color:#111827;font-weight:500;">01</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Life cycle -->
+        <div class="view-section">
+          <div class="view-section-hd" style="cursor:pointer;" onclick="toggleAccordion('vi-lifecycle-body');this.querySelector('.vi-chev').classList.toggle('collapsed')">
+            <span class="view-section-title">Life cycle</span>
+            <span class="vi-chev" style="font-size:16px;color:#6B7280;transition:transform 0.2s;">▲</span>
+          </div>
+          <div id="vi-lifecycle-body">
+            <div class="view-section-body">
+              <div class="empty-state-sm">
+                <div style="font-size:28px;color:#D1D5DB;margin-bottom:8px;">🔒</div>
+                <div style="font-size:13px;font-weight:500;color:#374151;margin-bottom:2px;">Life cycle</div>
+                <div style="font-size:12px;color:#9CA3AF;">TBD</div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="view-tab done" onclick="switchViewTab('vt-basic',this)"><span class="view-tab-num">✓</span>Basic Info</div>
         <div class="view-tab active" onclick="switchViewTab('vt-portfolio',this)"><span class="view-tab-num">02</span>Portfolio Setting</div>
         <div class="view-tab" onclick="switchViewTab('vt-plan',this)"><span class="view-tab-num">03</span>Management Plan</div>
         <div class="view-tab" onclick="switchViewTab('vt-report',this)"><span class="view-tab-num">04</span>Auto Report Management</div>
         <div class="view-tab" onclick="switchViewTab('vt-review',this)"><span class="view-tab-num">05</span>Review</div>
-      </div>
-
-      <!-- Tab: Basic Info -->
       <div class="view-scroll" id="vt-basic" style="display:none;">
-        <div class="view-section">
           <div class="view-section-hd">
             <span class="view-section-title">Funder Info</span>
             <!-- Funder Info is read-only; no Edit -->
-          </div>
           <div class="view-section-body">
             <div class="view-grid">
               <div class="view-field"><span class="view-label">Funder Name</span><span class="view-value">TH_SPL_Starlight_ABS_01</span></div>
@@ -2030,14 +2097,8 @@ tr.drag-over { border-top: 2px solid #2563EB; }
               <div class="view-field"><span class="view-label">Status</span><span class="view-value"><span class="status-badge status-active-badge">ACTIVE</span></span></div>
               <div class="view-field"><span class="view-label">Create Time</span><span class="view-value" style="color:#9CA3AF;">2024-12-13 09:17:02</span></div>
               <div class="view-field"><span class="view-label">Grade</span><span class="view-value">UNICORN</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="view-section">
           <div class="view-section-hd">
             <span class="view-section-title">SPV &amp; Tranche Info</span>
-            <button class="btn-outline-sm" style="padding:6px 14px;font-size:12px;" onclick="openSpvEditModal()">Edit</button>
-          </div>
           <div class="view-section-body">
             <div class="view-grid">
               <div class="view-field"><span class="view-label">SPV Name</span><span class="view-value">TH_SPL_ABS_01</span></div>
@@ -2045,10 +2106,6 @@ tr.drag-over { border-top: 2px solid #2563EB; }
               <div class="view-field"><span class="view-label">Tranche Name</span><span class="view-value">K_GEN_[TRANCHE]</span></div>
               <div class="view-field"><span class="view-label">Rate</span><span class="view-value">—</span></div>
               <div class="view-field"><span class="view-label">Effective Date</span><span class="view-value" style="color:#9CA3AF;">2026-01-27 07:41:00</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="view-section">
           <div class="view-section-hd"><span class="view-section-title">Life cycle</span></div>
           <div class="view-section-body">
             <div class="empty-state-sm">
@@ -2056,7 +2113,6 @@ tr.drag-over { border-top: 2px solid #2563EB; }
               <div style="font-size:13px;font-weight:500;color:#374151;margin-bottom:2px;">Life cycle</div>
               <div style="font-size:12px;color:#9CA3AF;">TBD</div>
             </div>
-          </div>
         </div>
         <div class="view-section">
           <div class="view-section-hd"><span class="view-section-title">Issue size</span></div>
@@ -2065,9 +2121,6 @@ tr.drag-over { border-top: 2px solid #2563EB; }
               <div style="font-size:28px;color:#D1D5DB;margin-bottom:8px;">🔒</div>
               <div style="font-size:13px;font-weight:500;color:#374151;margin-bottom:2px;">Issue size</div>
               <div style="font-size:12px;color:#9CA3AF;">TBD</div>
-            </div>
-          </div>
-        </div>
         <div class="view-footer">
           <span style="font-size:13px;color:#374151;cursor:pointer;" onclick="switchFlow('list')">Back</span>
           <div style="display:flex;gap:10px;align-items:center;">
@@ -2078,13 +2131,79 @@ tr.drag-over { border-top: 2px solid #2563EB; }
       </div>
 
       <!-- Tab: Portfolio Setting -->
-      <div class="view-scroll" id="vt-portfolio">
+      <div class="view-scroll" id="vt-portfolio" style="display:none;">
         <!-- Pricing & Terms -->
-        <div class="view-section">
+        <div class="view-section" id="pt-section">
           <div class="view-section-hd">
             <span class="view-section-title">Pricing &amp; Terms</span>
-            <button class="btn-outline-sm" style="padding:6px 14px;font-size:12px;" onclick="switchFlow('create')">Edit</button>
+            <button class="btn-outline-sm" id="pt-edit-btn" style="padding:6px 14px;font-size:12px;" onclick="ptStartEdit()">Edit</button>
           </div>
+
+          <!-- VIEW mode body -->
+          <div class="view-section-body" id="pt-view-body">
+            <div style="display:grid;grid-template-columns:repeat(3,auto);gap:24px 40px;align-items:start;">
+              <div>
+                <div class="view-label" style="margin-bottom:4px;">Pricing Mode <span class="tooltip-wrap"><span class="tooltip-icon">ⓘ</span><span class="tooltip-box">This determines how to calculate the interest split at cutoff.</span></span></div>
+                <div style="font-size:13px;font-weight:600;color:#111827;" id="pt-view-pricing-model">Accrued Interest</div>
+              </div>
+              <div>
+                <div class="view-label" style="margin-bottom:6px;">Auto Clawback Enabled</div>
+                <div class="toggle" style="pointer-events:none;" id="pt-view-toggle"></div>
+              </div>
+              <div>
+                <div class="view-label" style="margin-bottom:4px;">Auto Clawback Mode</div>
+                <div style="font-size:13px;color:#374151;" id="pt-view-mode">Mode 1 (Accrued to Restructure Date)</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- EDIT mode body -->
+          <div id="pt-edit-body" style="display:none;">
+            <div style="padding:16px 20px;display:grid;grid-template-columns:auto 1fr 1fr auto;gap:24px 40px;align-items:start;border-bottom:1px solid #F3F4F6;">
+              <!-- Col 1: Pricing Mode (read-only) -->
+              <div>
+                <div class="view-label" style="margin-bottom:4px;">Pricing Mode <span class="tooltip-wrap"><span class="tooltip-icon">ⓘ</span><span class="tooltip-box">This determines how to calculate the interest split at cutoff.</span></span></div>
+                <div style="font-size:13px;font-weight:700;color:#111827;text-transform:uppercase;letter-spacing:0.04em;" id="pt-edit-pricing-label">Accrued Interest</div>
+              </div>
+              <!-- Col 2: Auto Clawback toggle -->
+              <div>
+                <div class="view-label" style="margin-bottom:8px;">Auto Clawback Enabled</div>
+                <div class="toggle" id="pt-clawback-toggle" onclick="ptToggleClawback()"></div>
+              </div>
+              <!-- Col 3: Mode radios -->
+              <div>
+                <div class="view-label" style="margin-bottom:8px;">Auto Clawback Mode</div>
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                  <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:#374151;cursor:pointer;" onclick="ptSelectMode(1)">
+                    <div class="radio-dot" id="pt-mode1-dot" style="flex-shrink:0;"></div>
+                    Mode 1 (Accrued to Restructure Date)
+                  </label>
+                  <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:#374151;cursor:pointer;" onclick="ptSelectMode(2)">
+                    <div class="radio-dot on" id="pt-mode2-dot" style="flex-shrink:0;"></div>
+                    Mode 2 (Accrued to Pre-Completion)
+                  </label>
+                </div>
+              </div>
+              <!-- Col 4: N Input (Mode 2 only) -->
+              <div id="pt-n-input-row">
+                <div class="view-label" style="margin-bottom:6px;">N Input</div>
+                <input type="number" min="1" value="1" id="pt-n-input" class="form-input" style="width:90px;font-size:13px;" />
+              </div>
+            </div>
+            <!-- Footer with Cancel + Save -->
+            <div style="padding:12px 20px;display:flex;justify-content:flex-end;gap:10px;">
+              <button class="btn-outline-sm" style="padding:7px 18px;font-size:13px;" onclick="ptCancelEdit()">Cancel</button>
+              <button class="btn-primary-lg" style="padding:7px 18px;font-size:13px;" onclick="ptOpenSaveModal()">Save</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rule List -->
+        <div class="view-section" style="overflow:visible;">
+          <div class="accordion-hd" onclick="toggleAccordion('vr-rule-body')">
+      <div class="view-scroll" id="vt-portfolio">
+        <div class="view-section">
+            <button class="btn-outline-sm" style="padding:6px 14px;font-size:12px;" onclick="switchFlow('create')">Edit</button>
           <div class="view-section-body">
             <div style="margin-bottom:12px;">
               <div class="view-label" style="margin-bottom:6px;">Pricing Model</div>
@@ -2092,21 +2211,12 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                 <div class="radio-dot on" style="flex-shrink:0;"></div>
                 <span style="font-size:13px;font-weight:600;color:#111827;">Accrued Interest</span>
                 <span style="font-size:12px;color:#6B7280;margin-left:4px;">Interest recognised day by day as it accrues</span>
-              </div>
-            </div>
             <div style="margin-bottom:12px;">
               <div class="view-label" style="margin-bottom:6px;">Auto Clawback</div>
               <div style="display:flex;align-items:center;gap:10px;">
                 <div class="toggle" style="pointer-events:none;"></div>
                 <span style="font-size:13px;color:#374151;">Enabled</span>
                 <span style="font-size:12px;color:#6B7280;">· Mode 1: Discount &amp; Pre-Completion</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Rule List -->
-        <div class="view-section" style="overflow:visible;">
-          <div class="accordion-hd" onclick="toggleAccordion('vr-rule-body')">
             <span class="accordion-chevron" id="chev-vr-rule-body">▾</span>
             <span class="accordion-label">Rule List</span>
           </div>
@@ -2481,14 +2591,8 @@ tr.drag-over { border-top: 2px solid #2563EB; }
         <div><div class="sidebar-logo-text">SEO Money</div><div class="sidebar-logo-sub">Funding · Admin</div></div>
       </div>
       <div class="sidebar-nav">
-        <div class="sidebar-group-hd">Routing Management ▾</div>
-        <div class="sidebar-group-hd" style="padding-left:26px;">Lender Management ▾</div>
-        <div class="sidebar-item" onclick="switchFlow('list')">Lender List</div>
         <div class="sidebar-item">Pricing Configuration</div>
         <div class="sidebar-item">Calendar Management</div>
-        <div class="sidebar-item active">Workflow Template</div>
-        <div class="sidebar-group-hd" style="margin-top:4px;">Report Management ▾</div>
-        <div class="sidebar-group-hd" style="margin-top:4px;">Whitelist Configuration</div>
         <div class="sidebar-group-hd" style="margin-top:4px;">Event System</div>
         <div class="sidebar-group-hd" style="margin-top:4px;">Clone Center</div>
         <div class="sidebar-group-hd" style="margin-top:4px;">ABS Auto Report Manage ▾</div>
@@ -2534,53 +2638,26 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                 <th style="width:40px;padding:11px 10px 11px 16px;"><input type="checkbox" id="wft-chk-all" onchange="wftToggleAll(this)" /></th>
                 <th style="width:100px;">Template ID</th>
                 <th style="min-width:200px;">Template Name</th>
-                <th style="width:120px;">Ops Flow</th>
-                <th>Cycle Segments</th>
-                <th style="width:90px;text-align:center;">Milestones</th>
                 <th style="width:80px;text-align:center;">Funders</th>
-                <th style="width:80px;">Status</th>
-                <th style="width:180px;">Created By</th>
-                <th style="width:110px;">Last Updated</th>
                 <th style="width:180px;">OPERATION</th>
               </tr></thead>
               <tbody>
                 <tr>
                   <td style="padding:11px 10px 11px 16px;"><input type="checkbox" class="wft-row-chk" onchange="wftUpdateSelection()" /></td>
-                  <td class="num-col" style="cursor:pointer;color:#2563EB;" onclick="wftShowDetail('abs')">WFT-0001</td>
-                  <td style="font-weight:500;cursor:pointer;" onclick="wftShowDetail('abs')">TH_SPL_ABS_Standard</td>
-                  <td><span class="status-badge" style="background:#DBEAFE;color:#1D4ED8;">ABS Non-Net</span></td>
                   <td style="font-size:12px;color:#374151;line-height:1.6;">Cycle 1: 1–5<br>Cycle 2: 6–15<br>Cycle 3: 16–25<br>Cycle 4: 26–EOM</td>
-                  <td style="text-align:center;"><span style="background:#EFF6FF;color:#2563EB;font-size:12px;font-weight:600;padding:2px 8px;border-radius:4px;">7</span></td>
                   <td style="text-align:center;"><span style="background:#F0FDF4;color:#16A34A;font-size:12px;font-weight:600;padding:2px 8px;border-radius:4px;">2</span></td>
-                  <td><span class="status-badge status-active-badge">Active</span></td>
-                  <td style="font-size:12px;color:#6B7280;">ziqi.xu@shopee.com</td>
-                  <td style="color:#9CA3AF;font-size:12px;">2026-05-01</td>
                   <td><div class="tbl-actions"><button class="tbl-act-link" onclick="wftShowDetail('abs')">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">Disable</button></div></td>
                 </tr>
                 <tr>
                   <td style="padding:11px 10px 11px 16px;"><input type="checkbox" class="wft-row-chk" onchange="wftUpdateSelection()" /></td>
-                  <td class="num-col" style="cursor:pointer;color:#2563EB;" onclick="wftShowDetail('abs-net')">WFT-0002</td>
-                  <td style="font-weight:500;cursor:pointer;" onclick="wftShowDetail('abs-net')">TH_BCL_ABS_Net_Monthly</td>
-                  <td><span class="status-badge" style="background:#F3E8FF;color:#7C3AED;">ABS Net</span></td>
                   <td style="font-size:12px;color:#374151;line-height:1.6;">Cycle 1: 1–15<br>Cycle 2: 16–EOM</td>
-                  <td style="text-align:center;"><span style="background:#EFF6FF;color:#2563EB;font-size:12px;font-weight:600;padding:2px 8px;border-radius:4px;">9</span></td>
                   <td style="text-align:center;"><span style="background:#F0FDF4;color:#16A34A;font-size:12px;font-weight:600;padding:2px 8px;border-radius:4px;">1</span></td>
-                  <td><span class="status-badge status-active-badge">Active</span></td>
-                  <td style="font-size:12px;color:#6B7280;">pinhan.wang@shopee.com</td>
-                  <td style="color:#9CA3AF;font-size:12px;">2026-03-15</td>
                   <td><div class="tbl-actions"><button class="tbl-act-link" onclick="wftShowDetail('abs-net')">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">Disable</button></div></td>
                 </tr>
                 <tr>
                   <td style="padding:11px 10px 11px 16px;"><input type="checkbox" class="wft-row-chk" onchange="wftUpdateSelection()" /></td>
-                  <td class="num-col" style="cursor:pointer;color:#2563EB;" onclick="wftShowDetail('abl')">WFT-0003</td>
-                  <td style="font-weight:500;cursor:pointer;" onclick="wftShowDetail('abl')">MY_BCL_ABL_BiMonthly</td>
-                  <td><span class="status-badge" style="background:#FEF3C7;color:#92400E;">ABL</span></td>
                   <td style="font-size:12px;color:#374151;line-height:1.6;">Cycle 1: 1–EOM</td>
-                  <td style="text-align:center;"><span style="background:#EFF6FF;color:#2563EB;font-size:12px;font-weight:600;padding:2px 8px;border-radius:4px;">5</span></td>
                   <td style="text-align:center;"><span style="background:#F3F4F6;color:#9CA3AF;font-size:12px;font-weight:600;padding:2px 8px;border-radius:4px;">0</span></td>
-                  <td><span class="status-badge status-draft-badge">Draft</span></td>
-                  <td style="font-size:12px;color:#6B7280;">ziqi.xu@shopee.com</td>
-                  <td style="color:#9CA3AF;font-size:12px;">2026-06-01</td>
                   <td><div class="tbl-actions"><button class="tbl-act-link" onclick="wftShowDetail('abl')">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link" style="color:#DC2626;">Delete</button></div></td>
                 </tr>
               </tbody>
@@ -2620,25 +2697,11 @@ tr.drag-over { border-top: 2px solid #2563EB; }
           </div>
 
           <!-- Basic Information -->
-          <div class="section-card" style="margin-bottom:16px;">
-            <div class="section-header"><div class="section-title">Basic Information</div></div>
-            <div class="section-body">
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px 40px;">
-                <div class="view-field"><span class="view-label">Template ID</span><span class="view-value" id="wft-info-id">—</span></div>
-                <div class="view-field"><span class="view-label">Template Name</span><span class="view-value" id="wft-info-name">—</span></div>
-                <div class="view-field"><span class="view-label">Ops Flow</span><span id="wft-info-flow">—</span></div>
-                <div class="view-field"><span class="view-label">Status</span><span id="wft-info-status">—</span></div>
-                <div class="view-field"><span class="view-label">Region</span><span class="view-value" id="wft-info-region">—</span></div>
-                <div class="view-field"><span class="view-label">Created By</span><span class="view-value" id="wft-info-created-by">—</span></div>
-                <div class="view-field"><span class="view-label">Last Updated</span><span class="view-value" id="wft-info-updated">—</span></div>
-                <div class="view-field"><span class="view-label">Created At</span><span class="view-value" id="wft-info-created-at">—</span></div>
                 <div class="view-field" style="grid-column:1/-1;border-top:1px solid #F3F4F6;padding-top:14px;margin-top:2px;">
                   <span class="view-label">Cycle Segments</span>
                   <div id="wft-info-seg-bar" style="margin-top:6px;"></div>
                 </div>
-              </div>
-            </div>
-          </div>
 
           <!-- Milestone Configuration -->
           <div class="section-card" style="margin-bottom:16px;">
@@ -2681,22 +2744,33 @@ tr.drag-over { border-top: 2px solid #2563EB; }
 
           <!-- Management Plans Using This Template -->
           <div class="section-card">
-            <div class="section-header">
-              <div class="section-title">Management Plans Using This Template</div>
-              <div class="section-sub" id="wft-plans-sub">—</div>
+            <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;">
+              <div>
+                <div class="section-title">Management Plans Using This Template</div>
+                <div class="section-sub" id="wft-plans-sub">—</div>
+              </div>
+              <button id="wft-create-subplan-btn" class="btn-primary-lg" style="font-size:12px;padding:7px 16px;opacity:0.4;cursor:not-allowed;" disabled onclick="openSubPlanModal()">+ Create Sub Plan</button>
+            </div>
+            <div id="wft-plans-sel-bar" class="plans-selection-bar">
+              <span><span id="wft-plans-sel-count">0</span> plan(s) selected</span>
+              <button class="btn-primary-lg" style="font-size:12px;padding:6px 14px;" onclick="openSubPlanModal()">Create Sub Plan for Selected →</button>
             </div>
             <div class="section-body" style="padding:0;">
               <table style="width:100%;border-collapse:collapse;">
                 <thead>
                   <tr>
+                    <th style="width:36px;padding:10px 10px 10px 16px;background:#F9FAFB;border-bottom:1px solid #E5E7EB;"><input type="checkbox" id="wft-plans-chk-all" onchange="wftPlansToggleAll(this)" /></th>
                     <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;text-align:left;">Plan ID</th>
                     <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;text-align:left;">Funder</th>
                     <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;text-align:left;">Plan Version</th>
-                    <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;text-align:left;">First Batch Cutoff Date</th>
-                    <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;text-align:left;">Revolving Start Date</th>
                     <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;text-align:left;">Status</th>
                   </tr>
                 </thead>
+            <div class="section-header">
+              <div class="section-title">Management Plans Using This Template</div>
+              <div class="section-sub" id="wft-plans-sub">—</div>
+                    <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;text-align:left;">First Batch Cutoff Date</th>
+                    <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;text-align:left;">Revolving Start Date</th>
                 <tbody id="wft-plans-tbody"></tbody>
               </table>
             </div>
@@ -2706,6 +2780,132 @@ tr.drag-over { border-top: 2px solid #2563EB; }
 
     </div>
   </div>
+  <!-- Sub Plan Modal -->
+  <div class="sp-modal-overlay" id="sp-modal-overlay">
+    <div class="sp-modal">
+      <div class="sp-modal-header">
+        <div>
+          <div class="sp-modal-title">Create Sub Plan</div>
+          <div class="sp-modal-sub" id="sp-modal-sub">Configure overrides for selected plans</div>
+        </div>
+        <button class="modal-close" onclick="closeSubPlanModal()">✕</button>
+      </div>
+      <div class="sp-modal-steps">
+        <div class="sp-modal-step active" id="sp-step-tab-1">1 · Configure</div>
+        <div class="sp-modal-step" id="sp-step-tab-2">2 · Review</div>
+      </div>
+
+      <!-- Step 1 -->
+      <div id="sp-step-1" class="sp-modal-body">
+        <div style="margin-bottom:14px;">
+          <span class="sp-field-label">Selected Plans</span>
+          <div class="sp-chips" id="sp-plan-chips"></div>
+        </div>
+        <div class="sp-row">
+          <div class="sp-col">
+            <label class="sp-field-label">From Date <span style="color:#DC2626;">*</span></label>
+            <input type="date" class="form-input" id="sp-date-from" style="font-size:13px;" />
+          </div>
+          <div class="sp-col">
+            <label class="sp-field-label">To Date <span style="color:#DC2626;">*</span></label>
+            <input type="date" class="form-input" id="sp-date-to" style="font-size:13px;" />
+          </div>
+        </div>
+        <div style="margin-bottom:16px;">
+          <label class="sp-field-label">Reason</label>
+          <textarea class="form-input" id="sp-reason" rows="2" placeholder="e.g. Public holiday adjustment for Songkran" style="font-size:13px;resize:none;"></textarea>
+        </div>
+        <div style="font-size:13px;font-weight:600;color:#111827;margin-bottom:12px;">Milestone Adjustments</div>
+        <table class="sp-ms-table" style="table-layout:fixed;">
+          <colgroup>
+            <col style="width:32px;">
+            <col style="width:160px;">
+            <col style="width:100px;">
+            <col style="width:160px;">
+            <col style="width:120px;">
+            <col>
+          </colgroup>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Milestone</th>
+              <th>Type</th>
+              <th>Offset from</th>
+              <th>Offset (days)</th>
+              <th>
+                <label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-weight:600;color:#374151;">
+                  <input type="checkbox" id="sp-hol-master" checked style="accent-color:#2563EB;width:14px;height:14px;" onchange="spToggleAllHol(this)" />
+                  Skip Holidays of
+                </label>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="color:#9CA3AF;text-align:center;">1</td>
+              <td><span class="cal-chip" style="background:#DBEAFE;color:#1D4ED8;">Servicer Report</span></td>
+              <td><span style="font-size:11px;background:#EFF6FF;color:#2563EB;border-radius:3px;padding:2px 7px;font-weight:500;">Operation</span></td>
+              <td><span style="font-size:12px;font-weight:600;color:#374151;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:4px;padding:3px 10px;">T</span></td>
+              <td><div style="display:flex;align-items:center;gap:4px;font-size:13px;"><span style="color:#9CA3AF;">+</span><input class="sp-ms-input" type="number" min="0" value="1" style="width:60px;" /><span style="color:#6B7280;font-size:12px;">T</span></div></td>
+              <td><div class="sp-hol-full-group"><label class="sp-hol-chk"><input type="checkbox" checked />Thailand (TH)</label><label class="sp-hol-chk"><input type="checkbox" checked />Malaysia (MY)</label><label class="sp-hol-chk"><input type="checkbox" checked />Singapore (SG)</label><label class="sp-hol-chk"><input type="checkbox" checked />Hong Kong (HK)</label><label class="sp-hol-chk" style="grid-column:span 2;"><input type="checkbox" checked />United States (US)</label></div></td>
+            </tr>
+            <tr>
+              <td style="color:#9CA3AF;text-align:center;">2</td>
+              <td><span class="cal-chip" style="background:#EDE9FE;color:#6D28D9;">Batch Creation</span></td>
+              <td><span style="font-size:11px;background:#EFF6FF;color:#2563EB;border-radius:3px;padding:2px 7px;font-weight:500;">Operation</span></td>
+              <td><select class="form-select" style="font-size:12px;padding:4px 8px;height:30px;"><option>T (Cycle Start)</option></select></td>
+              <td><div style="display:flex;align-items:center;gap:4px;font-size:13px;"><span style="color:#9CA3AF;">+</span><input class="sp-ms-input" type="number" min="0" value="1" style="width:60px;" /><span style="color:#6B7280;font-size:12px;">T</span></div></td>
+              <td><div class="sp-hol-full-group"><label class="sp-hol-chk"><input type="checkbox" checked />Thailand (TH)</label><label class="sp-hol-chk"><input type="checkbox" checked />Malaysia (MY)</label><label class="sp-hol-chk"><input type="checkbox" checked />Singapore (SG)</label><label class="sp-hol-chk"><input type="checkbox" checked />Hong Kong (HK)</label><label class="sp-hol-chk" style="grid-column:span 2;"><input type="checkbox" checked />United States (US)</label></div></td>
+            </tr>
+            <tr>
+              <td style="color:#9CA3AF;text-align:center;">3</td>
+              <td><span class="cal-chip" style="background:#FEF3C7;color:#92400E;">Sale Notice</span></td>
+              <td><span style="font-size:11px;background:#EFF6FF;color:#2563EB;border-radius:3px;padding:2px 7px;font-weight:500;">Operation</span></td>
+              <td><select class="form-select" style="font-size:12px;padding:4px 8px;height:30px;"><option>M2 Batch Creation</option><option>T (Cycle Start)</option></select></td>
+              <td><div style="display:flex;align-items:center;gap:4px;font-size:13px;"><span style="color:#9CA3AF;">+</span><input class="sp-ms-input" type="number" min="0" value="1" style="width:60px;" /><span style="color:#6B7280;font-size:12px;">T</span></div></td>
+              <td><div class="sp-hol-full-group"><label class="sp-hol-chk"><input type="checkbox" checked />Thailand (TH)</label><label class="sp-hol-chk"><input type="checkbox" checked />Malaysia (MY)</label><label class="sp-hol-chk"><input type="checkbox" checked />Singapore (SG)</label><label class="sp-hol-chk"><input type="checkbox" checked />Hong Kong (HK)</label><label class="sp-hol-chk" style="grid-column:span 2;"><input type="checkbox" checked />United States (US)</label></div></td>
+            </tr>
+            <tr>
+              <td style="color:#9CA3AF;text-align:center;">4</td>
+              <td><span class="cal-chip" style="background:#F3F4F6;color:#374151;">Sys Cutoff</span></td>
+              <td><span style="font-size:11px;background:#EFF6FF;color:#2563EB;border-radius:3px;padding:2px 7px;font-weight:500;">Operation</span></td>
+              <td><select class="form-select" style="font-size:12px;padding:4px 8px;height:30px;"><option>M2 Batch Creation</option><option>T (Cycle Start)</option></select></td>
+              <td><div style="display:flex;align-items:center;gap:4px;font-size:13px;"><span style="color:#9CA3AF;">+</span><input class="sp-ms-input" type="number" min="0" value="1" style="width:60px;" /><span style="color:#6B7280;font-size:12px;">T</span></div></td>
+              <td><div class="sp-hol-full-group"><label class="sp-hol-chk"><input type="checkbox" checked />Thailand (TH)</label><label class="sp-hol-chk"><input type="checkbox" checked />Malaysia (MY)</label><label class="sp-hol-chk"><input type="checkbox" checked />Singapore (SG)</label><label class="sp-hol-chk"><input type="checkbox" checked />Hong Kong (HK)</label><label class="sp-hol-chk" style="grid-column:span 2;"><input type="checkbox" checked />United States (US)</label></div></td>
+            </tr>
+            <tr>
+              <td style="color:#9CA3AF;text-align:center;">5</td>
+              <td><span class="cal-chip" style="background:#D1FAE5;color:#065F46;">Collection</span></td>
+              <td><span style="font-size:11px;background:#EFF6FF;color:#2563EB;border-radius:3px;padding:2px 7px;font-weight:500;">Operation</span></td>
+              <td><select class="form-select" style="font-size:12px;padding:4px 8px;height:30px;"><option>M1 Servicer Report</option><option>T (Cycle Start)</option></select></td>
+              <td><div style="display:flex;align-items:center;gap:4px;font-size:13px;"><span style="color:#9CA3AF;">+</span><input class="sp-ms-input" type="number" min="0" value="3" style="width:60px;" /><span style="color:#6B7280;font-size:12px;">T</span></div></td>
+              <td><div class="sp-hol-full-group"><label class="sp-hol-chk"><input type="checkbox" checked />Thailand (TH)</label><label class="sp-hol-chk"><input type="checkbox" checked />Malaysia (MY)</label><label class="sp-hol-chk"><input type="checkbox" checked />Singapore (SG)</label><label class="sp-hol-chk"><input type="checkbox" checked />Hong Kong (HK)</label><label class="sp-hol-chk" style="grid-column:span 2;"><input type="checkbox" checked />United States (US)</label></div></td>
+            </tr>
+            <tr style="background:#F9FAFB;">
+              <td style="color:#9CA3AF;text-align:center;">0</td>
+              <td><span class="cal-chip" style="background:#F3F4F6;color:#6B7280;">Portfolio Selection</span></td>
+              <td><span style="font-size:11px;background:#F3F4F6;color:#6B7280;border-radius:3px;padding:2px 7px;font-weight:500;">System</span></td>
+              <td><span class="sp-system-lock">🔒 auto</span></td>
+              <td><span class="sp-system-lock">🔒 auto</span></td>
+              <td><span class="sp-system-lock">🔒 —</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Step 2: Review -->
+      <div id="sp-step-2" class="sp-modal-body" style="display:none;">
+        <div id="sp-review-cards"></div>
+      </div>
+
+      <div class="sp-modal-footer">
+        <button class="btn-outline-sm" style="padding:8px 18px;" id="sp-btn-back" onclick="spGoStep(1)" style="display:none;">← Back</button>
+        <button class="btn-outline-sm" style="padding:8px 18px;" onclick="closeSubPlanModal()">Cancel</button>
+        <button class="btn-primary-lg" style="font-size:13px;padding:8px 20px;" id="sp-btn-next" onclick="spGoStep(2)">Review →</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Batch Edit Offsets Modal -->
   <div class="modal-overlay" id="wft-batch-offset-modal">
     <div class="modal" style="width:520px;">
@@ -2744,6 +2944,163 @@ tr.drag-over { border-top: 2px solid #2563EB; }
     </div>
   </div>
 </div><!-- /flow-wf-template -->
+
+<!-- ══ Flow: WFT Create Sub Plan (full page) ══ -->
+<div id="flow-wft-subplan" class="flow">
+  <div class="app-layout">
+    <div class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">S</div>
+        <div><div class="sidebar-logo-text">SEO Money</div><div class="sidebar-logo-sub">Funding · Admin</div></div>
+      </div>
+      <div class="sidebar-nav">
+        <div class="sidebar-group-hd">Routing Management ▾</div>
+        <div class="sidebar-group-hd" style="padding-left:26px;">Lender Management ▾</div>
+        <div class="sidebar-item" onclick="switchFlow('list')">Lender List</div>
+        <div class="sidebar-item active">Workflow Template</div>
+        <div class="sidebar-group-hd" style="margin-top:4px;">Report Management ▾</div>
+        <div class="sidebar-group-hd" style="margin-top:4px;">Whitelist Configuration</div>
+        <div class="sidebar-group-hd" style="margin-top:4px;">Event System</div>
+        <div class="sidebar-group-hd" style="margin-top:4px;">Clone Center</div>
+        <div class="sidebar-group-hd" style="margin-top:4px;">ABS Auto Report Manage ▾</div>
+      </div>
+    </div>
+
+    <div class="sidebar-main" style="overflow-y:auto;">
+      <div class="list-topnav">
+        <div class="list-topnav-crumb">
+          <a href="#" onclick="switchFlow('wf-template');return false;">Lender Management</a><span class="sep">/</span>
+          <a href="#" onclick="switchFlow('wf-template');return false;">Workflow Template</a><span class="sep">/</span>
+          <a href="#" onclick="switchFlow('wf-template');return false;">TH_SPL_ABS_Standard</a><span class="sep">/</span>
+          <span class="current">Create Sub Plan</span>
+        </div>
+        <div class="list-topnav-right">TH Region · Zikky</div>
+      </div>
+
+      <div class="list-main">
+        <!-- Page title -->
+        <div class="list-toolbar" style="margin-bottom:16px;">
+          <div>
+            <div class="list-title">Create Sub Plan</div>
+            <div style="font-size:12px;color:#6B7280;margin-top:2px;">TH_SPL_ABS_Standard &nbsp;·&nbsp; <span id="wft-sp-plan-count">0</span> plan(s) selected</div>
+          </div>
+        </div>
+
+        <!-- Selected Plans chips -->
+        <div class="section-card" style="margin-bottom:16px;">
+          <div class="section-header"><div class="section-title">Selected Plans</div></div>
+          <div class="section-body">
+            <div id="wft-sp-chips" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
+          </div>
+        </div>
+
+        <!-- Date range + Reason -->
+        <div class="section-card" style="margin-bottom:16px;">
+          <div class="section-header"><div class="section-title">Sub Plan Details</div></div>
+          <div class="section-body">
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">From Date <span class="req">*</span></label>
+                <input type="date" class="form-input" id="wft-sp-date-from" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">To Date <span class="req">*</span></label>
+                <input type="date" class="form-input" id="wft-sp-date-to" />
+              </div>
+              <div class="form-group" style="grid-column:1/-1;">
+                <label class="form-label">Reason</label>
+                <textarea class="form-input" id="wft-sp-reason" rows="2" placeholder="e.g. Public holiday adjustment for Songkran" style="resize:none;"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Milestone Adjustments -->
+        <div class="section-card" style="margin-bottom:24px;">
+          <div class="section-header"><div class="section-title">Milestone Adjustments</div></div>
+          <div class="section-body" style="padding:0;">
+            <div style="overflow-x:auto;">
+              <table style="width:100%;border-collapse:collapse;min-width:820px;">
+                <thead>
+                  <tr>
+                    <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;text-align:left;">Milestone</th>
+                    <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;text-align:left;">Type</th>
+                    <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;text-align:left;">Delay (days)</th>
+                    <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;text-align:left;">Day Type</th>
+                    <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;text-align:left;">
+                      <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
+                        <input type="checkbox" id="wft-sp-hol-master" checked style="accent-color:#2563EB;width:14px;height:14px;" onchange="wftSpToggleAllHol(this)" />
+                        <span>Skip Holidays of</span>
+                      </label>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="padding:11px 16px;font-size:13px;">Servicer Report</td>
+                    <td style="padding:11px 16px;"><span style="font-size:11px;background:#EFF6FF;color:#2563EB;border-radius:3px;padding:2px 7px;font-weight:500;">Operation</span></td>
+                    <td style="padding:11px 16px;"><input type="number" min="0" placeholder="—" style="width:70px;border:1px solid #D1D5DB;border-radius:5px;padding:5px 8px;font-size:13px;text-align:center;" /></td>
+                    <td style="padding:11px 16px;"><div style="display:flex;align-items:center;gap:7px;font-size:13px;"><div class="sp-toggle" onclick="this.classList.toggle('on');this.nextElementSibling.textContent=this.classList.contains('on')?'Business':'Calendar'"></div><span>Calendar</span></div></td>
+                    <td style="padding:11px 16px;"><div class="sp-hol-group"><label class="sp-hol-chk"><input type="checkbox" checked />TH</label><label class="sp-hol-chk"><input type="checkbox" checked />SG</label><label class="sp-hol-chk"><input type="checkbox" checked />HK</label><label class="sp-hol-chk"><input type="checkbox" checked />US</label><label class="sp-hol-chk"><input type="checkbox" checked />MY</label></div></td>
+                  </tr>
+                  <tr>
+                    <td style="padding:11px 16px;font-size:13px;">Batch Creation</td>
+                    <td style="padding:11px 16px;"><span style="font-size:11px;background:#EFF6FF;color:#2563EB;border-radius:3px;padding:2px 7px;font-weight:500;">Operation</span></td>
+                    <td style="padding:11px 16px;"><input type="number" min="0" placeholder="—" style="width:70px;border:1px solid #D1D5DB;border-radius:5px;padding:5px 8px;font-size:13px;text-align:center;" /></td>
+                    <td style="padding:11px 16px;"><div style="display:flex;align-items:center;gap:7px;font-size:13px;"><div class="sp-toggle" onclick="this.classList.toggle('on');this.nextElementSibling.textContent=this.classList.contains('on')?'Business':'Calendar'"></div><span>Calendar</span></div></td>
+                    <td style="padding:11px 16px;"><div class="sp-hol-group"><label class="sp-hol-chk"><input type="checkbox" checked />TH</label><label class="sp-hol-chk"><input type="checkbox" checked />SG</label><label class="sp-hol-chk"><input type="checkbox" checked />HK</label><label class="sp-hol-chk"><input type="checkbox" checked />US</label><label class="sp-hol-chk"><input type="checkbox" checked />MY</label></div></td>
+                  </tr>
+                  <tr>
+                    <td style="padding:11px 16px;font-size:13px;">Sale Notice</td>
+                    <td style="padding:11px 16px;"><span style="font-size:11px;background:#EFF6FF;color:#2563EB;border-radius:3px;padding:2px 7px;font-weight:500;">Operation</span></td>
+                    <td style="padding:11px 16px;"><input type="number" min="0" placeholder="—" style="width:70px;border:1px solid #D1D5DB;border-radius:5px;padding:5px 8px;font-size:13px;text-align:center;" /></td>
+                    <td style="padding:11px 16px;"><div style="display:flex;align-items:center;gap:7px;font-size:13px;"><div class="sp-toggle on" onclick="this.classList.toggle('on');this.nextElementSibling.textContent=this.classList.contains('on')?'Business':'Calendar'"></div><span>Business</span></div></td>
+                    <td style="padding:11px 16px;"><div class="sp-hol-group"><label class="sp-hol-chk"><input type="checkbox" checked />TH</label><label class="sp-hol-chk"><input type="checkbox" checked />SG</label><label class="sp-hol-chk"><input type="checkbox" checked />HK</label><label class="sp-hol-chk"><input type="checkbox" checked />US</label><label class="sp-hol-chk"><input type="checkbox" checked />MY</label></div></td>
+                  </tr>
+                  <tr>
+                    <td style="padding:11px 16px;font-size:13px;">Sale Date</td>
+                    <td style="padding:11px 16px;"><span style="font-size:11px;background:#EFF6FF;color:#2563EB;border-radius:3px;padding:2px 7px;font-weight:500;">Operation</span></td>
+                    <td style="padding:11px 16px;"><input type="number" min="0" placeholder="—" style="width:70px;border:1px solid #D1D5DB;border-radius:5px;padding:5px 8px;font-size:13px;text-align:center;" /></td>
+                    <td style="padding:11px 16px;"><div style="display:flex;align-items:center;gap:7px;font-size:13px;"><div class="sp-toggle on" onclick="this.classList.toggle('on');this.nextElementSibling.textContent=this.classList.contains('on')?'Business':'Calendar'"></div><span>Business</span></div></td>
+                    <td style="padding:11px 16px;"><div class="sp-hol-group"><label class="sp-hol-chk"><input type="checkbox" checked />TH</label><label class="sp-hol-chk"><input type="checkbox" checked />SG</label><label class="sp-hol-chk"><input type="checkbox" checked />HK</label><label class="sp-hol-chk"><input type="checkbox" checked />US</label><label class="sp-hol-chk"><input type="checkbox" checked />MY</label></div></td>
+                  </tr>
+                  <tr>
+                    <td style="padding:11px 16px;font-size:13px;">Collection Deposit</td>
+                    <td style="padding:11px 16px;"><span style="font-size:11px;background:#EFF6FF;color:#2563EB;border-radius:3px;padding:2px 7px;font-weight:500;">Operation</span></td>
+                    <td style="padding:11px 16px;"><input type="number" min="0" placeholder="—" style="width:70px;border:1px solid #D1D5DB;border-radius:5px;padding:5px 8px;font-size:13px;text-align:center;" /></td>
+                    <td style="padding:11px 16px;"><div style="display:flex;align-items:center;gap:7px;font-size:13px;"><div class="sp-toggle" onclick="this.classList.toggle('on');this.nextElementSibling.textContent=this.classList.contains('on')?'Business':'Calendar'"></div><span>Calendar</span></div></td>
+                    <td style="padding:11px 16px;"><div class="sp-hol-group"><label class="sp-hol-chk"><input type="checkbox" checked />TH</label><label class="sp-hol-chk"><input type="checkbox" checked />SG</label><label class="sp-hol-chk"><input type="checkbox" checked />HK</label><label class="sp-hol-chk"><input type="checkbox" checked />US</label><label class="sp-hol-chk"><input type="checkbox" checked />MY</label></div></td>
+                  </tr>
+                  <tr>
+                    <td style="padding:11px 16px;font-size:13px;">System Cutoff</td>
+                    <td style="padding:11px 16px;"><span style="font-size:11px;background:#EFF6FF;color:#2563EB;border-radius:3px;padding:2px 7px;font-weight:500;">Operation</span></td>
+                    <td style="padding:11px 16px;"><input type="number" min="0" placeholder="—" style="width:70px;border:1px solid #D1D5DB;border-radius:5px;padding:5px 8px;font-size:13px;text-align:center;" /></td>
+                    <td style="padding:11px 16px;"><div style="display:flex;align-items:center;gap:7px;font-size:13px;"><div class="sp-toggle" onclick="this.classList.toggle('on');this.nextElementSibling.textContent=this.classList.contains('on')?'Business':'Calendar'"></div><span>Calendar</span></div></td>
+                    <td style="padding:11px 16px;"><div class="sp-hol-group"><label class="sp-hol-chk"><input type="checkbox" checked />TH</label><label class="sp-hol-chk"><input type="checkbox" checked />SG</label><label class="sp-hol-chk"><input type="checkbox" checked />HK</label><label class="sp-hol-chk"><input type="checkbox" checked />US</label><label class="sp-hol-chk"><input type="checkbox" checked />MY</label></div></td>
+                  </tr>
+                  <tr style="background:#F9FAFB;">
+                    <td style="padding:11px 16px;font-size:13px;color:#6B7280;">Portfolio Selection</td>
+                    <td style="padding:11px 16px;"><span style="font-size:11px;background:#F3F4F6;color:#6B7280;border-radius:3px;padding:2px 7px;font-weight:500;">System</span></td>
+                    <td style="padding:11px 16px;font-size:12px;color:#9CA3AF;">🔒 auto</td>
+                    <td style="padding:11px 16px;font-size:12px;color:#9CA3AF;">🔒 —</td>
+                    <td style="padding:11px 16px;font-size:12px;color:#9CA3AF;">🔒 —</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="display:flex;justify-content:flex-end;gap:12px;padding-bottom:40px;">
+          <button class="btn-outline-sm" style="padding:10px 24px;font-size:13px;" onclick="switchFlow('wf-template')">Cancel</button>
+          <button class="btn-primary-lg" style="padding:10px 24px;font-size:13px;" onclick="wftSpSubmit()">Submit →</button>
+        </div>
+
+      </div><!-- /list-main -->
+    </div><!-- /sidebar-main -->
+  </div><!-- /app-layout -->
+</div><!-- /flow-wft-subplan -->
 
 <script>
 /* ── Compact radio & checkbox helpers ── */
@@ -3262,53 +3619,26 @@ function switchFlow(target) {
     document.getElementById('flow-list').classList.add('active');
   } else if (target === 'view') {
     document.getElementById('flow-view').classList.add('active');
-    switchViewTab('vt-plan', document.querySelectorAll('.view-tab')[2]);
+    switchViewTab('vt-basic', document.getElementById('vtab-basic'));
   } else if (target === 'sub-plan') {
     document.getElementById('flow-sub-plan').classList.add('active');
     initSubPlan();
+    switchViewTab('vt-plan', document.querySelectorAll('.view-tab')[2]);
   } else if (target === 'wf-template') {
     document.getElementById('flow-wf-template').classList.add('active');
-    wftShowList();
-  } else {
-    document.getElementById('flow-create').classList.add('active');
-  }
-  window.scrollTo(0, 0);
-}
 
 /* ══ Workflow Template logic ══ */
 const WFT_DATA = {
-  'abs': {
-    id: 'WFT-0001', name: 'TH_SPL_ABS_Standard', flow: 'ABS Non-Net',
-    flowBadge: '<span class="badge badge-active" style="background:#DBEAFE;color:#1D4ED8;">ABS Non-Net</span>',
     dayType: 'Business Days', region: 'Thailand (TH)',
-    segments: [{ from:1,to:5 },{ from:6,to:15 },{ from:16,to:25 },{ from:26,toEOM:true }],
-    status: 'Active', statusBadge: '<span class="badge badge-active">Active</span>',
-    createdBy: 'ziqi.xu@shopee.com', updated: '2026-05-01', createdAt: '2026-04-15',
-    milestoneType: 'abs',
-    plans: [
       { id:'PLN-TH-0012', funder:'TH_SPL_Starlight_ABS_01', version:'v1', firstBatch:'2026-01-05', revolving:'2026-02-05', status:'Active' },
       { id:'PLN-TH-0018', funder:'TH_SPL_Moonrise_ABS_01',  version:'v2', firstBatch:'2026-03-10', revolving:'2026-04-10', status:'Active' },
-    ]
-  },
-  'abs-net': {
     id: 'WFT-0002', name: 'TH_BCL_ABS_Net_Monthly', flow: 'ABS Net',
     flowBadge: '<span class="badge badge-active" style="background:#F3E8FF;color:#7C3AED;">ABS Net</span>',
     dayType: 'Business Days', region: 'Thailand (TH)',
     segments: [{ from:1,to:15 },{ from:16,toEOM:true }],
     status: 'Active', statusBadge: '<span class="badge badge-active">Active</span>',
-    createdBy: 'pinhan.wang@shopee.com', updated: '2026-03-15', createdAt: '2026-03-01',
-    milestoneType: 'abs-net',
-    plans: [
       { id:'PLN-TH-0021', funder:'TH_BCL_Capital_ABS_Net_01', version:'v1', firstBatch:'2026-02-16', revolving:'—', status:'Active' },
-    ]
-  },
-  'abl': {
-    id: 'WFT-0003', name: 'MY_BCL_ABL_BiMonthly', flow: 'ABL',
-    flowBadge: '<span class="badge badge-active" style="background:#FEF3C7;color:#92400E;">ABL</span>',
     dayType: 'Business Days', region: 'Malaysia (MY)',
-    segments: [{ from:1,toEOM:true }],
-    status: 'Draft', statusBadge: '<span class="badge badge-pending">Draft</span>',
-    createdBy: 'ziqi.xu@shopee.com', updated: '2026-06-01', createdAt: '2026-06-01',
     milestoneType: 'abl',
     plans: []
   }
@@ -3421,9 +3751,6 @@ function wftShowDetail(type) {
 
   // Basic Info
   document.getElementById('wft-info-id').textContent = d.id;
-  document.getElementById('wft-info-name').textContent = d.name;
-  document.getElementById('wft-info-flow').innerHTML = d.flowBadge;
-  const msDaytype = document.getElementById('wft-ms-daytype');
   if (msDaytype) {
     const isBiz = d.dayType === 'Business Days';
     msDaytype.textContent = d.dayType + (isBiz ? ' (T)' : ' (D)');
@@ -3436,22 +3763,11 @@ function wftShowDetail(type) {
   setTimeout(() => {
     document.querySelectorAll('#wft-milestone-tbody .daytype-unit').forEach(el => { el.textContent = unit; });
   }, 50);
-  document.getElementById('wft-info-status').innerHTML = d.statusBadge;
-  document.getElementById('wft-info-region').textContent = d.region;
-  document.getElementById('wft-info-created-by').textContent = d.createdBy;
-  document.getElementById('wft-info-updated').textContent = d.updated;
-  document.getElementById('wft-info-created-at').textContent = d.createdAt;
-
   // Cycle Segments plain text
-  const bar = document.getElementById('wft-info-seg-bar');
-  const segs = d.segments;
   bar.innerHTML = segs.map((s, i) => {
     const label = s.toEOM ? s.from + '–EOM' : s.from + '–' + s.to;
     return `<div style="font-size:13px;color:#374151;">Cycle ${i+1}: ${label}</div>`;
   }).join('') + `<div style="font-size:11px;color:#9CA3AF;margin-top:4px;">Each segment = one cycle. Pattern repeats every month.</div>`;
-
-  // Milestone table — reuse renderMilestoneTable logic
-  const milestones = OPS_FLOW_MILESTONES[d.milestoneType] || [];
   const holRegions = [
     { code:'TH', label:'Thailand (TH)' }, { code:'MY', label:'Malaysia (MY)' },
     { code:'SG', label:'Singapore (SG)' }, { code:'HK', label:'Hong Kong (HK)' },
@@ -3466,13 +3782,7 @@ function wftShowDetail(type) {
     const offsetFromCell = isSystem
       ? `<span style="font-size:12px;color:#9CA3AF;">🔒 ${m.offsetFrom === 'T' ? 'T' : 'Milestone ' + m.offsetRef}</span>`
       : (i === 0 ? `<span style="font-size:12px;font-weight:600;color:#374151;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:4px;padding:2px 8px;">T</span>`
-                 : `<select class="offset-from-sel">${offsetFromOptions}</select>`);
-    const offsetCell = isSystem
-      ? `<span style="color:#9CA3AF;font-size:13px;">🔒 +${m.offset}d auto</span>`
       : `<div style="display:flex;align-items:center;gap:6px;"><span style="font-size:12px;color:#9CA3AF;">+</span><input class="ms-offset-input" type="number" value="${m.offset}" min="0" /><span class="daytype-unit" style="font-size:12px;font-weight:600;color:#374151;min-width:12px;"></span></div>`;
-    const uid = 'wft_ms_' + i;
-    const holCell = `<div class="hol-chk-group">${holRegions.map((r,ri) =>
-      `<label class="hol-chk-label"><input type="checkbox" checked><span class="hol-chk-box"></span>${r.label}</label>`
     ).join('')}</div>`;
     const nameCell = m.indicative
       ? `<span class="cal-chip" style="background:${m.bg};color:${m.color};border:1.5px dashed ${m.color};">${m.label}</span><span style="font-size:10px;color:#9CA3AF;margin-left:6px;vertical-align:middle;">indicative</span>`
@@ -3490,18 +3800,27 @@ function wftShowDetail(type) {
   // Plans table
   const plansTbody = document.getElementById('wft-plans-tbody');
   document.getElementById('wft-plans-sub').textContent = d.plans.length + ' plan(s) using this template';
+  // Reset selection state
+  const masterChkEl = document.getElementById('wft-plans-chk-all');
+  if (masterChkEl) { masterChkEl.checked = false; masterChkEl.indeterminate = false; }
+  document.getElementById('wft-plans-sel-bar').classList.remove('show');
+  const subPlanBtn = document.getElementById('wft-create-subplan-btn');
+  subPlanBtn.disabled = true; subPlanBtn.style.opacity = '0.4'; subPlanBtn.style.cursor = 'not-allowed';
   if (d.plans.length === 0) {
-    plansTbody.innerHTML = `<tr><td colspan="4" style="padding:20px 16px;text-align:center;color:#9CA3AF;font-size:13px;">No management plans linked yet</td></tr>`;
+    plansTbody.innerHTML = `<tr><td colspan="5" style="padding:20px 16px;text-align:center;color:#9CA3AF;font-size:13px;">No management plans linked yet</td></tr>`;
   } else {
-    plansTbody.innerHTML = d.plans.map(p => `<tr>
+    plansTbody.innerHTML = d.plans.map(p => `<tr class="plan-row" data-plan-id="${p.id}" data-funder="${p.funder}">
+      <td style="padding:11px 10px 11px 16px;"><input type="checkbox" class="plan-row-chk" onchange="wftPlansRowCheck()" /></td>
       <td style="padding:11px 16px;font-size:13px;color:#2563EB;font-weight:500;cursor:pointer;">${p.id}</td>
       <td style="padding:11px 16px;font-size:13px;color:#374151;">${p.funder}</td>
       <td style="padding:11px 16px;font-size:13px;color:#374151;">${p.version}</td>
-      <td style="padding:11px 16px;font-size:12px;color:${p.firstBatch && p.firstBatch !== '—' ? '#374151' : '#9CA3AF'};">${p.firstBatch || '<span style="color:#9CA3AF;">Not set</span>'}</td>
-      <td style="padding:11px 16px;font-size:12px;color:${p.revolving && p.revolving !== '—' ? '#374151' : '#9CA3AF'};">${p.revolving === '—' ? '<span style="color:#9CA3AF;">Not set</span>' : (p.revolving || '<span style="color:#9CA3AF;">Not set</span>')}</td>
       <td style="padding:11px 16px;"><span class="badge badge-active">${p.status}</span></td>
     </tr>`).join('');
   }
+    plansTbody.innerHTML = `<tr><td colspan="4" style="padding:20px 16px;text-align:center;color:#9CA3AF;font-size:13px;">No management plans linked yet</td></tr>`;
+    plansTbody.innerHTML = d.plans.map(p => `<tr>
+      <td style="padding:11px 16px;font-size:12px;color:${p.firstBatch && p.firstBatch !== '—' ? '#374151' : '#9CA3AF'};">${p.firstBatch || '<span style="color:#9CA3AF;">Not set</span>'}</td>
+      <td style="padding:11px 16px;font-size:12px;color:${p.revolving && p.revolving !== '—' ? '#374151' : '#9CA3AF'};">${p.revolving === '—' ? '<span style="color:#9CA3AF;">Not set</span>' : (p.revolving || '<span style="color:#9CA3AF;">Not set</span>')}</td>
 
   window.scrollTo(0, 0);
 }
@@ -4373,6 +4692,231 @@ function bspSubmit() {
   toast.classList.add('visible');
   setTimeout(() => toast.classList.remove('visible'), 3500);
 }
+
+/* ── Basic Info step validation ── */
+function s1Next() {
+  const fields = [
+    document.getElementById('s1-funder-name'),
+    document.getElementById('s1-funder-scheme'),
+    document.getElementById('s1-product'),
+    document.getElementById('s1-originator'),
+    document.getElementById('s1-investor'),
+    document.getElementById('s1-license'),
+  ];
+  // Loan Type multi-select: check at least one checkbox checked
+  const loanChecked = document.querySelectorAll('#loanTypeDDMenu input[type=checkbox]:checked').length > 0;
+
+  let allFilled = loanChecked;
+  fields.forEach(f => {
+    const ok = f && f.value.trim() !== '';
+    if (!ok) allFilled = false;
+    if (f) f.style.borderColor = ok ? '' : '#DC2626';
+  });
+  if (!loanChecked) {
+    const trigger = document.querySelector('#loanTypeDD .multi-dd-trigger');
+    if (trigger) trigger.style.borderColor = '#DC2626';
+  } else {
+    const trigger = document.querySelector('#loanTypeDD .multi-dd-trigger');
+    if (trigger) trigger.style.borderColor = '';
+  }
+
+  if (allFilled) {
+    // Tick step 1
+    const tab = document.getElementById('tab-s1');
+    tab.classList.remove('active');
+    tab.classList.add('done');
+    tab.querySelector('.step-num').textContent = '✓';
+    showPage('s2', document.getElementById('tab-s2'));
+  }
+}
+
+/* ── Pricing & Terms inline edit ── */
+let ptSelectedMode = 2;
+
+function ptStartEdit() {
+  document.getElementById('pt-edit-btn').style.display = 'none';
+  document.getElementById('pt-view-body').style.display = 'none';
+  document.getElementById('pt-edit-body').style.display = '';
+  // Sync pricing label into edit panel
+  const model = document.getElementById('pt-view-pricing-model').textContent;
+  document.getElementById('pt-edit-pricing-label').textContent = model.toUpperCase();
+  // Default: Mode 2 selected, N Input visible (matches reference)
+  ptSelectMode(2);
+}
+function ptCancelEdit() {
+  document.getElementById('pt-edit-btn').style.display = '';
+  document.getElementById('pt-view-body').style.display = '';
+  document.getElementById('pt-edit-body').style.display = 'none';
+  // Reset toggle
+  const tog = document.getElementById('pt-clawback-toggle');
+  tog.classList.remove('off');
+  ptSelectMode(2);
+}
+function ptToggleClawback() {
+  document.getElementById('pt-clawback-toggle').classList.toggle('off');
+}
+function ptSelectMode(mode) {
+  ptSelectedMode = mode;
+  document.getElementById('pt-mode1-dot').className = 'radio-dot' + (mode === 1 ? ' on' : '');
+  document.getElementById('pt-mode2-dot').className = 'radio-dot' + (mode === 2 ? ' on' : '');
+  document.getElementById('pt-n-input-row').style.display = mode === 2 ? '' : 'none';
+}
+function ptOpenSaveModal() {
+  document.getElementById('pt-save-modal').classList.add('open');
+}
+function ptSubmitTicket() {
+  document.getElementById('pt-save-modal').classList.remove('open');
+  // Update view mode to reflect saved values
+  const tog = document.getElementById('pt-clawback-toggle');
+  document.getElementById('pt-view-toggle').className = tog.classList.contains('off') ? 'toggle off' : 'toggle';
+  document.getElementById('pt-view-mode').textContent = ptSelectedMode === 1
+    ? 'Mode 1 (Accrued to Restructure Date)' : 'Mode 2 (Accrued to Pre-Completion)';
+  ptCancelEdit();
+  const toast = document.getElementById('toast');
+  toast.textContent = '✓ Ticket created for Pricing & Terms update — pending maker-checker approval';
+  toast.classList.add('visible');
+  setTimeout(() => toast.classList.remove('visible'), 3500);
+}
+
+function spToggleAllHol(master) {
+  document.querySelectorAll('#sp-modal-overlay .sp-hol-group input[type=checkbox]').forEach(c => c.checked = master.checked);
+}
+
+/* ── Plans table multi-selection ── */
+function wftPlansToggleAll(master) {
+  document.querySelectorAll('.plan-row-chk').forEach(chk => {
+    chk.checked = master.checked;
+    chk.closest('tr').classList.toggle('plan-row-selected', master.checked);
+  });
+  wftPlansUpdateBar();
+}
+function wftPlansRowCheck() {
+  const all = document.querySelectorAll('.plan-row-chk');
+  const checked = [...all].filter(c => c.checked);
+  const master = document.getElementById('wft-plans-chk-all');
+  if (master) {
+    master.checked = checked.length === all.length && all.length > 0;
+    master.indeterminate = checked.length > 0 && checked.length < all.length;
+  }
+  document.querySelectorAll('.plan-row').forEach(row => {
+    row.classList.toggle('plan-row-selected', row.querySelector('.plan-row-chk').checked);
+  });
+  wftPlansUpdateBar();
+}
+function wftPlansUpdateBar() {
+  const checked = document.querySelectorAll('.plan-row-chk:checked');
+  const bar = document.getElementById('wft-plans-sel-bar');
+  const btn = document.getElementById('wft-create-subplan-btn');
+  const countEl = document.getElementById('wft-plans-sel-count');
+  if (checked.length > 0) {
+    bar.classList.add('show');
+    if (countEl) countEl.textContent = checked.length;
+    btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer';
+  } else {
+    bar.classList.remove('show');
+    btn.disabled = true; btn.style.opacity = '0.4'; btn.style.cursor = 'not-allowed';
+  }
+}
+
+/* ── Sub Plan Modal ── */
+function openSubPlanModal() {
+  const selected = [...document.querySelectorAll('.plan-row-chk:checked')].map(chk => {
+    const row = chk.closest('tr');
+    return { id: row.dataset.planId, funder: row.dataset.funder };
+  });
+  if (!selected.length) return;
+  // Populate chips and subtitle
+  document.getElementById('sp-plan-chips').innerHTML = selected.map(p =>
+    `<span class="sp-chip">${p.id} · ${p.funder}</span>`
+  ).join('');
+  document.getElementById('sp-modal-sub').textContent = selected.length + ' plan(s) selected';
+  // Reset fields
+  document.getElementById('sp-date-from').value = '';
+  document.getElementById('sp-date-to').value = '';
+  document.getElementById('sp-reason').value = '';
+  document.getElementById('sp-hol-master').checked = true;
+  document.querySelectorAll('#sp-modal-overlay .sp-hol-chk input').forEach(c => c.checked = true);
+  // Reset to step 1
+  spGoStep(1, true);
+  // Open drawer
+  document.getElementById('sp-modal-overlay').classList.add('open');
+}
+function closeSubPlanModal() {
+  document.getElementById('sp-modal-overlay').classList.remove('open');
+}
+function spToggleAllHol(master) {
+  document.querySelectorAll('#sp-modal-overlay .sp-hol-chk input').forEach(c => c.checked = master.checked);
+}
+function wftSpSubmit() {
+  const count = document.querySelectorAll('.plan-row-chk:checked').length || parseInt(document.getElementById('wft-sp-plan-count').textContent);
+  const ids = Array.from({length: count}, (_, i) => 'SP-2026-0' + (22 + i)).join(' · ');
+  switchFlow('wf-template');
+  // Deselect plans
+  document.querySelectorAll('.plan-row-chk').forEach(c => { c.checked = false; c.closest('tr').classList.remove('plan-row-selected'); });
+  const master = document.getElementById('wft-plans-chk-all');
+  if (master) { master.checked = false; master.indeterminate = false; }
+  wftPlansUpdateBar();
+  const toast = document.getElementById('toast');
+  toast.textContent = `✓ ${count} Sub Plan(s) submitted to Ticket Center (${ids})`;
+  toast.classList.add('visible');
+  setTimeout(() => toast.classList.remove('visible'), 3500);
+}
+function spGoStep(step, init) {
+  document.getElementById('sp-step-1').style.display = step === 1 ? '' : 'none';
+  document.getElementById('sp-step-2').style.display = step === 2 ? '' : 'none';
+  document.getElementById('sp-step-tab-1').className = 'sp-modal-step' + (step === 1 ? ' active' : ' done');
+  document.getElementById('sp-step-tab-2').className = 'sp-modal-step' + (step === 2 ? ' active' : '');
+  document.getElementById('sp-btn-back').style.display = step === 2 ? '' : 'none';
+  const nextBtn = document.getElementById('sp-btn-next');
+  if (step === 2) {
+    nextBtn.textContent = 'Submit';
+    nextBtn.style.background = '#16A34A';
+    nextBtn.onclick = spSubmit;
+    // Build review cards
+    const selected = [...document.querySelectorAll('.plan-row-chk:checked')].map(chk => {
+      const row = chk.closest('tr');
+      return { id: row.dataset.planId, funder: row.dataset.funder };
+    });
+    const from = document.getElementById('sp-date-from').value || '—';
+    const to = document.getElementById('sp-date-to').value || '—';
+    const reason = document.getElementById('sp-reason').value || '—';
+    const msInputs = document.querySelectorAll('.sp-ms-input');
+    const msNames = ['Servicer Report','Batch Creation','Sale Notice','Sale Date','Collection Deposit'];
+    document.getElementById('sp-review-cards').innerHTML = selected.map((p, i) => {
+      const spId = 'SP-2026-0' + (22 + i);
+      const msRows = msNames.map((name, j) => {
+        const val = msInputs[j] && msInputs[j].value ? '+' + msInputs[j].value + 'd' : 'unchanged';
+        return `<div class="sp-review-row"><span class="sp-review-label">${name}</span><span class="sp-review-val ${val !== 'unchanged' ? 'changed' : ''}">${val}</span></div>`;
+      }).join('');
+      return `<div class="sp-review-card">
+        <div class="sp-review-card-title">${spId} · ${p.id} <span style="font-weight:400;color:#6B7280;font-size:12px;">${p.funder}</span></div>
+        <div class="sp-review-row"><span class="sp-review-label">Date Range</span><span class="sp-review-val">${from} → ${to}</span></div>
+        <div class="sp-review-row"><span class="sp-review-label">Reason</span><span class="sp-review-val">${reason}</span></div>
+        ${msRows}
+      </div>`;
+    }).join('');
+  } else {
+    nextBtn.textContent = 'Review →';
+    nextBtn.style.background = '';
+    nextBtn.onclick = () => spGoStep(2);
+  }
+}
+function spSubmit() {
+  closeSubPlanModal();
+  const checked = document.querySelectorAll('.plan-row-chk:checked');
+  const count = checked.length;
+  const ids = [...checked].map((_, i) => 'SP-2026-0' + (22 + i)).join(' · ');
+  // Deselect all
+  document.querySelectorAll('.plan-row-chk').forEach(c => { c.checked = false; c.closest('tr').classList.remove('plan-row-selected'); });
+  const master = document.getElementById('wft-plans-chk-all');
+  if (master) { master.checked = false; master.indeterminate = false; }
+  wftPlansUpdateBar();
+  // Toast
+  const toast = document.getElementById('toast');
+  toast.textContent = `✓ ${count} Sub Plan(s) submitted to Ticket Center (${ids})`;
+  toast.classList.add('visible');
+  setTimeout(() => toast.classList.remove('visible'), 3500);
+}
 </script>
 
 <!-- Batch Sub Plan Wizard -->
@@ -4595,6 +5139,55 @@ function bspSubmit() {
         <button class="btn-outline-sm" style="padding:8px 18px;" onclick="bspClose()">Cancel</button>
         <button class="btn-primary-lg" id="bsp-next-btn" style="font-size:13px;padding:8px 24px;" onclick="bspNext()">Next →</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- SPV Edit Modal (global) -->
+<div class="modal-overlay" id="spv-edit-modal">
+  <div class="modal" style="width:480px;">
+    <div class="modal-header">
+      <div><div class="modal-title">Edit Information</div></div>
+      <button class="modal-close" onclick="closeSpvEditModal()">✕</button>
+    </div>
+    <div class="modal-body" style="padding:20px 24px 8px;">
+      <div class="form-group" style="margin-bottom:20px;">
+        <label class="form-label" style="font-size:13px;margin-bottom:6px;display:block;"><span style="color:#DC2626;">*</span> Select Field</label>
+        <select class="form-select" id="spv-edit-field" style="width:100%;padding:10px 14px;font-size:13px;border:1px solid #D1D5DB;border-radius:8px;color:#374151;background:#fff;appearance:none;-webkit-appearance:none;background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E&quot;);background-repeat:no-repeat;background-position:right 12px center;">
+          <option value="" disabled selected>Please select Field</option>
+          <option value="spv_name">SPV Name</option>
+          <option value="tranche">Tranche</option>
+        </select>
+      </div>
+      <div class="form-group" style="margin-bottom:20px;">
+        <label class="form-label" style="font-size:13px;margin-bottom:6px;display:block;"><span style="color:#DC2626;">*</span> Effective Time</label>
+        <div style="position:relative;">
+          <input type="datetime-local" id="spv-edit-effective" class="form-input" style="width:100%;padding:10px 40px 10px 14px;font-size:13px;border:1px solid #D1D5DB;border-radius:8px;color:#374151;" />
+          <span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:#9CA3AF;pointer-events:none;">📅</span>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer" style="padding:12px 24px;display:flex;justify-content:flex-end;gap:10px;">
+      <button class="btn-outline-sm" style="padding:8px 24px;font-size:13px;" onclick="closeSpvEditModal()">Cancel</button>
+      <button class="btn-primary-lg" style="font-size:13px;padding:8px 24px;" onclick="submitSpvEdit()">OK</button>
+    </div>
+  </div>
+</div>
+
+<!-- Effective Time Modal (global — outside all flows to avoid overflow:hidden clipping) -->
+<div class="modal-overlay" id="pt-save-modal">
+  <div class="modal" style="width:420px;">
+    <div class="modal-header">
+      <div><div class="modal-title">Edit Information</div></div>
+      <button class="modal-close" onclick="document.getElementById('pt-save-modal').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body" style="padding:20px 24px;">
+      <label class="form-label">* Effective Time</label>
+      <input type="datetime-local" class="form-input" id="pt-effective-time" style="font-size:13px;" />
+    </div>
+    <div class="modal-footer" style="display:flex;justify-content:flex-end;gap:10px;padding:12px 24px;">
+      <button class="btn-outline-sm" style="padding:8px 20px;" onclick="document.getElementById('pt-save-modal').classList.remove('open')">Cancel</button>
+      <button class="btn-primary-lg" style="font-size:13px;padding:8px 20px;" onclick="ptSubmitTicket()">OK</button>
     </div>
   </div>
 </div>
