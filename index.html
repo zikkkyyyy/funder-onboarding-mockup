@@ -5970,6 +5970,9 @@ function renderFfcTable(tableEl) {
     <th style="width:80px;">Operation</th>
   </tr></thead><tbody>`;
   FFC_DATA.forEach(entry => {
+    // Skip tenor groups where no row has been configured by a real user
+    const hasRealConfig = entry.rows.some(r => r.updatedBy && r.updatedBy !== 'default');
+    if (!hasRealConfig) return;
     const n = entry.rows.length;
     entry.rows.forEach((row, i) => {
       html += `<tr class="${i===0 ? 'ffc-group-first' : ''}">`;
