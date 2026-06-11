@@ -900,7 +900,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
       <div class="accordion-hd" onclick="toggleAccordion('rule-body')">
         <span class="accordion-chevron" id="chev-rule-body">▾</span>
         <span class="accordion-label">Rule List</span>
-        <button class="btn-outline-sm" style="margin-left:auto;" onclick="event.stopPropagation()">+ Add Rule</button>
+        <button class="btn-outline-sm" style="margin-left:auto;" onclick="event.stopPropagation(); openAddRuleModal()">+ Add Rule</button>
       </div>
       <div id="rule-body">
         <table class="accordion-table">
@@ -910,19 +910,19 @@ tr.drag-over { border-top: 2px solid #2563EB; }
               <td class="td-id">86</td>
               <td>Outstanding Principal in range [0.01,150000.00]</td>
               <td><span class="status-enable">Enable</span></td>
-              <td><div class="btn-ops"><button class="btn btn-edit">Edit</button><button class="btn btn-disable">Disable</button></div></td>
+              <td><div class="btn-ops"><button class="btn btn-edit" onclick="rlOpenEdit(86)">Edit</button><button class="btn btn-disable">Disable</button></div></td>
             </tr>
             <tr>
               <td class="td-id">87</td>
               <td>LoanCurrentMaxDpd LessEqual 0</td>
               <td><span class="status-enable">Enable</span></td>
-              <td><div class="btn-ops"><button class="btn btn-edit">Edit</button><button class="btn btn-disable">Disable</button></div></td>
+              <td><div class="btn-ops"><button class="btn btn-edit" onclick="rlOpenEdit(87)">Edit</button><button class="btn btn-disable">Disable</button></div></td>
             </tr>
             <tr>
               <td class="td-id">88</td>
               <td>User Current Max DPD LessEqual 0</td>
               <td><span class="status-enable">Enable</span></td>
-              <td><div class="btn-ops"><button class="btn btn-edit">Edit</button><button class="btn btn-disable">Disable</button></div></td>
+              <td><div class="btn-ops"><button class="btn btn-edit" onclick="rlOpenEdit(88)">Edit</button><button class="btn btn-disable">Disable</button></div></td>
             </tr>
           </tbody>
         </table>
@@ -2317,14 +2317,15 @@ tr.drag-over { border-top: 2px solid #2563EB; }
           <div class="accordion-hd" onclick="toggleAccordion('vr-rule-body')">
             <span class="accordion-chevron" id="chev-vr-rule-body">▾</span>
             <span class="accordion-label">Rule List</span>
+            <button class="btn-outline-sm" style="margin-left:auto;font-size:11px;padding:4px 10px;" onclick="event.stopPropagation(); openAddRuleModal()">+ Add Rule</button>
           </div>
           <div id="vr-rule-body">
             <table class="accordion-table">
               <thead><tr><th style="width:80px;">Rule ID</th><th>Rules</th><th style="width:100px;">Status</th><th style="width:160px;">Operation</th></tr></thead>
               <tbody>
-                <tr><td>65</td><td>Outstanding Principal in range [0.01, 99999999]</td><td><span class="status-enable">Enable</span></td><td><div class="btn-ops"><button class="btn btn-edit btn-sm">Edit</button><button class="btn btn-disable btn-sm">Disable</button></div></td></tr>
-                <tr><td>100</td><td>LoanCommittedStatus LoanStatus</td><td><span class="status-enable">Enable</span></td><td><div class="btn-ops"><button class="btn btn-edit btn-sm">Edit</button><button class="btn btn-disable btn-sm">Disable</button></div></td></tr>
-                <tr><td>100</td><td>User Current Max FPR LoanStatus</td><td><span class="status-enable">Enable</span></td><td><div class="btn-ops"><button class="btn btn-edit btn-sm">Edit</button><button class="btn btn-disable btn-sm">Disable</button></div></td></tr>
+                <tr><td>65</td><td>Outstanding Principal in range [0.01, 99999999]</td><td><span class="status-enable">Enable</span></td><td><div class="btn-ops"><button class="btn btn-edit btn-sm" onclick="rlOpenEdit(65)">Edit</button><button class="btn btn-disable btn-sm">Disable</button></div></td></tr>
+                <tr><td>100</td><td>LoanCommittedStatus LoanStatus</td><td><span class="status-enable">Enable</span></td><td><div class="btn-ops"><button class="btn btn-edit btn-sm" onclick="rlOpenEdit(100)">Edit</button><button class="btn btn-disable btn-sm">Disable</button></div></td></tr>
+                <tr><td>101</td><td>User Current Max FPR LoanStatus</td><td><span class="status-enable">Enable</span></td><td><div class="btn-ops"><button class="btn btn-edit btn-sm" onclick="rlOpenEdit(101)">Edit</button><button class="btn btn-disable btn-sm">Disable</button></div></td></tr>
               </tbody>
             </table>
           </div>
@@ -5690,6 +5691,238 @@ function spSubmit() {
     </div>
   </div>
 </div>
+
+<!-- Add Rule Modal (Rule Library) -->
+<div class="modal-overlay" id="add-rule-modal">
+  <div class="modal" style="width:780px;max-width:96vw;">
+    <div class="modal-header">
+      <div class="modal-title">Rule Library</div>
+      <button class="modal-close" onclick="document.getElementById('add-rule-modal').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body" style="padding:0;max-height:480px;overflow-y:auto;">
+      <!-- Search bar -->
+      <div style="padding:14px 20px 10px;border-bottom:1px solid #F3F4F6;">
+        <input type="text" id="rl-search" class="form-input" placeholder="Search rules..." style="font-size:13px;" oninput="rlFilterRules()" />
+      </div>
+      <table style="width:100%;border-collapse:collapse;" id="rl-library-table">
+        <thead>
+          <tr style="background:#F9FAFB;position:sticky;top:0;z-index:1;">
+            <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;text-align:left;border-bottom:1px solid #E5E7EB;width:80px;">Rule ID</th>
+            <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;text-align:left;border-bottom:1px solid #E5E7EB;">Rules</th>
+            <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;text-align:center;border-bottom:1px solid #E5E7EB;width:110px;">Status</th>
+            <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;text-align:center;border-bottom:1px solid #E5E7EB;width:90px;">Edit Values</th>
+          </tr>
+        </thead>
+        <tbody id="rl-library-tbody"></tbody>
+      </table>
+    </div>
+    <div class="modal-footer" style="display:flex;justify-content:flex-end;gap:10px;padding:14px 20px;">
+      <button class="btn-outline-sm" style="padding:8px 22px;font-size:13px;" onclick="document.getElementById('add-rule-modal').classList.remove('open')">Cancel</button>
+      <button class="btn-primary-lg" style="font-size:13px;padding:8px 22px;" onclick="rlConfirmAdd()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Rule Modal -->
+<div class="modal-overlay" id="edit-rule-modal">
+  <div class="modal" style="width:520px;">
+    <div class="modal-header">
+      <div class="modal-title">Edit Rule</div>
+      <button class="modal-close" onclick="document.getElementById('edit-rule-modal').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body" style="padding:24px 28px 12px;display:flex;flex-direction:column;gap:20px;">
+      <!-- Rule ID -->
+      <div>
+        <div style="font-size:13px;font-weight:500;color:#374151;margin-bottom:8px;"><span style="color:#DC2626;">*</span> Rule ID</div>
+        <input type="text" id="er-rule-id" class="form-input" readonly style="font-size:13px;background:#F3F4F6;color:#9CA3AF;cursor:default;" />
+      </div>
+      <!-- Rules -->
+      <div>
+        <div style="font-size:13px;font-weight:500;color:#374151;margin-bottom:8px;"><span style="color:#DC2626;">*</span> Rules</div>
+        <input type="text" id="er-rule-desc" class="form-input" readonly style="font-size:13px;background:#F3F4F6;color:#9CA3AF;cursor:default;" />
+      </div>
+      <!-- Values -->
+      <div id="er-values-section">
+        <div style="font-size:13px;font-weight:500;color:#374151;margin-bottom:8px;"><span style="color:#DC2626;">*</span> Values</div>
+        <!-- range type -->
+        <div id="er-range-row" style="display:none;align-items:center;gap:10px;">
+          <input type="number" id="er-val1" class="form-input" style="font-size:13px;width:200px;" placeholder="0.01" />
+          <span style="font-size:14px;color:#9CA3AF;">~</span>
+          <input type="number" id="er-val2" class="form-input" style="font-size:13px;width:200px;" placeholder="150000" />
+        </div>
+        <!-- single type -->
+        <div id="er-single-row" style="display:none;">
+          <input type="number" id="er-val-single" class="form-input" style="font-size:13px;width:200px;" placeholder="0" />
+        </div>
+        <!-- text type -->
+        <div id="er-text-row" style="display:none;">
+          <input type="text" id="er-val-text" class="form-input" style="font-size:13px;" placeholder="value" />
+        </div>
+        <!-- none type -->
+        <div id="er-none-row" style="display:none;">
+          <span style="font-size:13px;color:#9CA3AF;">No configurable values for this rule.</span>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer" style="display:flex;justify-content:flex-end;gap:10px;padding:14px 28px;">
+      <button class="btn-outline-sm" style="padding:8px 22px;font-size:13px;" onclick="document.getElementById('edit-rule-modal').classList.remove('open')">Cancel</button>
+      <button class="btn-primary-lg" style="font-size:13px;padding:8px 22px;" onclick="rlSaveEdit()">OK</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── Rule Library ── */
+// label = what shows in the library list (no value)
+// desc  = full rule string including value (used in Edit Rule modal + saved to table)
+const RL_RULES = [
+  { id: 51,  label: 'Outstanding Principal in range',                  desc: 'Outstanding Principal in range [0.01,150000.00]',                status: 'enable',  type: 'range',  v1: '0.01',          v2: '150000' },
+  { id: 52,  label: 'Reject Loan With Refund Request',                 desc: 'Reject Loan With Refund Request CHECK_LOAN_WITH_REFUND_REQUEST', status: 'disable', type: 'none',   v1: '',              v2: '' },
+  { id: 53,  label: 'Loan Current Max DPD LessEqual',                  desc: 'Loan Current Max DPD LessEqual 0',                               status: 'enable',  type: 'single', v1: '0',             v2: '' },
+  { id: 54,  label: 'User Current Max DPD LessEqual',                  desc: 'User Current Max DPD LessEqual 0',                               status: 'enable',  type: 'single', v1: '0',             v2: '' },
+  { id: 55,  label: 'IdCardType not in',                               desc: 'IdCardType not in [MyTentera]',                                  status: 'enable',  type: 'text',   v1: 'MyTentera',     v2: '' },
+  { id: 56,  label: 'LoanCurrentMaxDpd LessEqual',                     desc: 'LoanCurrentMaxDpd LessEqual 300',                                status: 'disable', type: 'single', v1: '300',           v2: '' },
+  { id: 65,  label: 'Outstanding Principal in range',                  desc: 'Outstanding Principal in range [0.01,99999999]',                  status: 'enable',  type: 'range',  v1: '0.01',          v2: '99999999' },
+  { id: 86,  label: 'Outstanding Principal in range',                  desc: 'Outstanding Principal in range [0.01,150000.00]',                status: 'enable',  type: 'range',  v1: '0.01',          v2: '150000' },
+  { id: 87,  label: 'LoanCurrentMaxDpd LessEqual',                     desc: 'LoanCurrentMaxDpd LessEqual 0',                                  status: 'enable',  type: 'single', v1: '0',             v2: '' },
+  { id: 88,  label: 'User Current Max DPD LessEqual',                  desc: 'User Current Max DPD LessEqual 0',                               status: 'enable',  type: 'single', v1: '0',             v2: '' },
+  { id: 100, label: 'LoanCommittedStatus LoanStatus',                  desc: 'LoanCommittedStatus LoanStatus',                                 status: 'enable',  type: 'none',   v1: '',              v2: '' },
+  { id: 101, label: 'User Current Max FPR LoanStatus',                 desc: 'User Current Max FPR LoanStatus',                                status: 'enable',  type: 'none',   v1: '',              v2: '' },
+  { id: 110, label: 'DisbursementDate GreaterEqual CutoffDate',        desc: 'DisbursementDate GreaterEqual CutoffDate',                       status: 'disable', type: 'none',   v1: '',              v2: '' },
+  { id: 111, label: 'LoanStatus not in',                               desc: 'LoanStatus not in [CLOSED, WRITTEN_OFF]',                        status: 'enable',  type: 'text',   v1: 'CLOSED, WRITTEN_OFF', v2: '' },
+  { id: 120, label: 'Loan Current Max FPR LessEqual',                  desc: 'Loan Current Max FPR LessEqual 0',                               status: 'disable', type: 'single', v1: '0',             v2: '' },
+  { id: 131, label: 'Outstanding Principal in range',                  desc: 'Outstanding Principal in range [0.01,150000.00]',                status: 'enable',  type: 'range',  v1: '0.01',          v2: '150000' },
+  { id: 132, label: 'LoanCurrentMaxDpd LessEqual',                     desc: 'LoanCurrentMaxDpd LessEqual 0',                                  status: 'enable',  type: 'single', v1: '0',             v2: '' },
+  { id: 133, label: 'User Current Max DPD LessEqual',                  desc: 'User Current Max DPD LessEqual 0',                               status: 'enable',  type: 'single', v1: '0',             v2: '' },
+];
+
+// Tracks status changes made in the Add Rule modal
+let rlModalStatus = {};
+// Tracks which rule is being edited (by index in RL_RULES)
+let rlEditingId = null;
+// Whether edit was triggered from the Add Rule modal
+let rlEditFromModal = false;
+
+function openAddRuleModal() {
+  // Reset modal state
+  rlModalStatus = {};
+  RL_RULES.forEach(r => { rlModalStatus[r.id] = r.status; });
+  renderRlLibrary(RL_RULES);
+  document.getElementById('rl-search').value = '';
+  document.getElementById('add-rule-modal').classList.add('open');
+}
+
+function renderRlLibrary(rules) {
+  const tbody = document.getElementById('rl-library-tbody');
+  tbody.innerHTML = rules.map(r => {
+    const isEnable = rlModalStatus[r.id] === 'enable';
+    return `<tr id="rl-lib-row-${r.id}" style="border-bottom:1px solid #F3F4F6;">
+      <td style="padding:12px 16px;font-size:13px;color:#6B7280;">${r.id}</td>
+      <td style="padding:12px 16px;font-size:13px;color:#111827;">${r.label}</td>
+      <td style="padding:12px 16px;text-align:center;">
+        <button onclick="rlToggleStatus(${r.id})" id="rl-status-btn-${r.id}"
+          class="btn btn-sm ${isEnable ? 'btn-disable' : 'btn-enable'}"
+          style="min-width:70px;">
+          ${isEnable ? 'Disable' : 'Enable'}
+        </button>
+      </td>
+      <td style="padding:12px 16px;text-align:center;">
+        ${r.type !== 'none'
+          ? `<button onclick="rlOpenEditFromModal(${r.id})" class="btn btn-edit btn-sm">Edit</button>`
+          : `<span style="font-size:12px;color:#D1D5DB;">—</span>`
+        }
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function rlToggleStatus(id) {
+  rlModalStatus[id] = rlModalStatus[id] === 'enable' ? 'disable' : 'enable';
+  const isEnable = rlModalStatus[id] === 'enable';
+  const btn = document.getElementById(`rl-status-btn-${id}`);
+  btn.className = `btn btn-sm ${isEnable ? 'btn-disable' : 'btn-enable'}`;
+  btn.textContent = isEnable ? 'Disable' : 'Enable';
+}
+
+function rlFilterRules() {
+  const q = document.getElementById('rl-search').value.toLowerCase();
+  const filtered = RL_RULES.filter(r =>
+    r.label.toLowerCase().includes(q) || String(r.id).includes(q)
+  );
+  renderRlLibrary(filtered);
+}
+
+function rlOpenEditFromModal(id) {
+  rlEditFromModal = true;
+  rlOpenEdit(id);
+}
+
+function rlOpenEdit(id) {
+  rlEditingId = id;
+  const rule = RL_RULES.find(r => r.id === id);
+  if (!rule) return;
+  document.getElementById('er-rule-id').value = rule.id;
+  document.getElementById('er-rule-desc').value = rule.desc;
+  // Show correct value inputs
+  ['range','single','text','none'].forEach(t => {
+    document.getElementById(`er-${t}-row`).style.display = 'none';
+  });
+  if (rule.type === 'range') {
+    document.getElementById('er-range-row').style.display = 'flex';
+    document.getElementById('er-val1').value = rule.v1;
+    document.getElementById('er-val2').value = rule.v2;
+    document.getElementById('er-values-section').style.display = '';
+  } else if (rule.type === 'single') {
+    document.getElementById('er-single-row').style.display = '';
+    document.getElementById('er-val-single').value = rule.v1;
+    document.getElementById('er-values-section').style.display = '';
+  } else if (rule.type === 'text') {
+    document.getElementById('er-text-row').style.display = '';
+    document.getElementById('er-val-text').value = rule.v1;
+    document.getElementById('er-values-section').style.display = '';
+  } else {
+    document.getElementById('er-none-row').style.display = '';
+    document.getElementById('er-values-section').style.display = '';
+  }
+  document.getElementById('edit-rule-modal').classList.add('open');
+}
+
+function rlSaveEdit() {
+  const rule = RL_RULES.find(r => r.id === rlEditingId);
+  if (rule) {
+    if (rule.type === 'range') {
+      rule.v1 = document.getElementById('er-val1').value;
+      rule.v2 = document.getElementById('er-val2').value;
+      rule.desc = rule.desc.replace(/\[.*?\]/, `[${rule.v1},${rule.v2}]`);
+    } else if (rule.type === 'single') {
+      rule.v1 = document.getElementById('er-val-single').value;
+      rule.desc = rule.desc.replace(/\d+$/, rule.v1);
+    } else if (rule.type === 'text') {
+      rule.v1 = document.getElementById('er-val-text').value;
+    }
+  }
+  document.getElementById('edit-rule-modal').classList.remove('open');
+  // If came from add-rule modal, re-render the library table
+  if (rlEditFromModal) {
+    rlFilterRules();
+    rlEditFromModal = false;
+  } else {
+    // Came from inline table edit — show toast
+    const toast = document.getElementById('toast');
+    toast.textContent = '✓ Rule updated — pending maker-checker approval';
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+  }
+}
+
+function rlConfirmAdd() {
+  document.getElementById('add-rule-modal').classList.remove('open');
+  const toast = document.getElementById('toast');
+  toast.textContent = '✓ Rule selection saved — pending maker-checker approval';
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+</script>
 
 <!-- Funder Fee Config Edit Modal -->
 <div class="modal-overlay" id="ffc-edit-modal">
