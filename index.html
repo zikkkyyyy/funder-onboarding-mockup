@@ -2171,7 +2171,6 @@ tr.drag-over { border-top: 2px solid #2563EB; }
         <div class="view-tab done" id="vtab-portfolio" onclick="switchViewTab('vt-portfolio',this)"><span class="view-tab-num">✓</span>Portfolio Setting</div>
         <div class="view-tab done" id="vtab-plan" onclick="switchViewTab('vt-plan',this)"><span class="view-tab-num">✓</span>Management Plan</div>
         <div class="view-tab done" id="vtab-report" onclick="switchViewTab('vt-report',this)"><span class="view-tab-num">✓</span>Auto Report Management</div>
-        <div class="view-tab done" id="vtab-review" onclick="switchViewTab('vt-review',this)"><span class="view-tab-num">✓</span>Review</div>
       </div>
 
       <!-- Tab: Basic Info -->
@@ -2612,140 +2611,6 @@ tr.drag-over { border-top: 2px solid #2563EB; }
           <div style="display:flex;gap:10px;">
             <button class="btn-outline-sm" style="padding:9px 20px;font-size:13px;">Cancel</button>
             <button class="btn-primary-lg" style="font-size:13px;padding:9px 20px;">Submit →</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Tab: Review -->
-      <div class="view-scroll" id="vt-review" style="display:none;">
-        <div class="view-section">
-          <div class="view-section-body">
-
-            <!-- Basic Info -->
-            <div class="rv-section">
-              <div class="rv-section-title">Basic Info</div>
-              <div class="rv-row"><span class="rv-label">Funder Name</span><span class="rv-value">TH_SPL_Starlight_ABS_01</span></div>
-              <div class="rv-row"><span class="rv-label">Funder Scheme</span><span class="rv-value">ABS</span></div>
-              <div class="rv-row"><span class="rv-label">Product</span><span class="rv-value">SPL</span></div>
-              <div class="rv-row"><span class="rv-label">Loan Type</span><span class="rv-value">SLoan, SFinancing-i</span></div>
-              <div class="rv-row"><span class="rv-label">Originator</span><span class="rv-value">Monee</span></div>
-              <div class="rv-row"><span class="rv-label">Investor</span><span class="rv-value">Starlight Capital</span></div>
-              <div class="rv-row"><span class="rv-label">License</span><span class="rv-value">DGL</span></div>
-              <div class="rv-row"><span class="rv-label">SPV Name</span><span class="rv-value">UMI</span></div>
-              <div class="rv-row"><span class="rv-label">Tranche</span><span class="rv-value">01</span></div>
-            </div>
-
-            <!-- Portfolio Setting -->
-            <div class="rv-section" style="margin-top:20px;">
-              <div class="rv-section-title">Portfolio Setting</div>
-              <div class="rv-row"><span class="rv-label">Pricing mode</span><span class="rv-value">Accrued Interest</span></div>
-              <div class="rv-row"><span class="rv-label">Auto Clawback Enabled</span><span class="rv-value">Yes</span></div>
-              <div class="rv-row"><span class="rv-label">Auto Clawback Mode</span><span class="rv-value">Mode 2</span></div>
-              <div class="rv-row"><span class="rv-label">N Input</span><span class="rv-value">1</span></div>
-              <div class="rv-row" style="align-items:flex-start;">
-                <span class="rv-label" style="padding-top:2px;">Funder Fee Config</span>
-                <div style="flex:1;">
-                  <table class="rv-table">
-                    <thead><tr><th>Config Type</th><th style="width:50px;">Tenor</th><th style="width:90px;">User Group</th><th style="width:75px;">Rate</th><th style="width:145px;">Effective Date</th></tr></thead>
-                    <tbody>
-                      <tr><td>Interest Discounted Rate</td><td>1M</td><td>Normal User</td><td>0.0000%</td><td style="font-size:11px;color:#9CA3AF;">1970-01-01 07:30:00</td></tr>
-                      <tr><td>Interest Discounted Rate</td><td>2M</td><td>Normal User</td><td>0.0000%</td><td style="font-size:11px;color:#9CA3AF;">1970-01-01 07:30:00</td></tr>
-                      <tr><td>Interest Discounted Rate</td><td>3M</td><td>Normal User</td><td>0.0000%</td><td style="font-size:11px;color:#9CA3AF;">1970-01-01 07:30:00</td></tr>
-                      <tr><td>Interest Discounted Rate</td><td>6M</td><td>Normal User</td><td>0.0000%</td><td style="font-size:11px;color:#9CA3AF;">1970-01-01 07:30:00</td></tr>
-                      <tr><td>Interest Discounted Rate</td><td>12M</td><td>Normal User</td><td>0.0000%</td><td style="font-size:11px;color:#9CA3AF;">1970-01-01 07:30:00</td></tr>
-                      <tr><td>Interest Discounted Rate</td><td>18M</td><td>Normal User</td><td>0.0000%</td><td style="font-size:11px;color:#9CA3AF;">1970-01-01 07:30:00</td></tr>
-                      <tr><td>Interest Discounted Rate</td><td>24M</td><td>Normal User</td><td>0.0000%</td><td style="font-size:11px;color:#9CA3AF;">1970-01-01 07:30:00</td></tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              <div class="rv-row" style="align-items:flex-start;">
-                <span class="rv-label" style="padding-top:2px;">Rule List</span>
-                <div style="flex:1;">
-                  <table class="rv-table">
-                    <thead><tr><th style="width:80px;">Rule ID</th><th>Rules</th><th style="width:80px;">Status</th></tr></thead>
-                    <tbody>
-                      <tr><td>131</td><td>Outstanding Principal in range [0.01, 150000.00]</td><td><span class="status-enable">Enable</span></td></tr>
-                      <tr><td>132</td><td>LoanCurrentMaxDpd LessEqual 0</td><td><span class="status-enable">Enable</span></td></tr>
-                      <tr><td>133</td><td>User Current Max DPD LessEqual 0</td><td><span class="status-enable">Enable</span></td></tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              <div class="rv-row" style="align-items:flex-start;">
-                <span class="rv-label" style="padding-top:2px;">Traffic Control</span>
-                <div style="flex:1;">
-                  <table class="rv-table">
-                    <thead><tr><th style="width:80px;">Rule ID</th><th>Traffic Description</th><th style="width:60px;">Tenor</th><th style="width:80px;">Status</th></tr></thead>
-                    <tbody>
-                      <tr><td>25</td><td>Daily Disbursement Count: 0</td><td>Default</td><td><span class="status-enable">Enable</span></td></tr>
-                      <tr><td>26</td><td>Daily Disbursement Count For Tenor: 100</td><td>1M</td><td><span class="status-disable">Disable</span></td></tr>
-                      <tr><td>27</td><td>Daily Disbursement Count For Tenor: 100</td><td>2M</td><td><span class="status-disable">Disable</span></td></tr>
-                      <tr><td>28</td><td>Daily Disbursement Count For Tenor: 100</td><td>3M</td><td><span class="status-disable">Disable</span></td></tr>
-                      <tr><td>56</td><td>Daily Disbursement Count For Tenor: 4,100</td><td>4M</td><td><span class="status-enable">Enable</span></td></tr>
-                      <tr><td>57</td><td>Daily Disbursement Count For Tenor: 4,100</td><td>5M</td><td><span class="status-enable">Enable</span></td></tr>
-                      <tr><td>29</td><td>Daily Disbursement Count For Tenor: 4,100</td><td>6M</td><td><span class="status-enable">Enable</span></td></tr>
-                      <tr><td>30</td><td>Daily Disbursement Count For Tenor: 4,100</td><td>12M</td><td><span class="status-enable">Enable</span></td></tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-
-            <!-- Issue Size -->
-            <div class="rv-section" style="margin-top:20px;">
-              <div class="rv-section-title">Issue Size</div>
-              <div class="rv-row"><span class="rv-label">Issued pool size</span><span class="rv-value">145 Mil USD</span></div>
-              <div class="rv-row" style="align-items:flex-start;">
-                <span class="rv-label" style="padding-top:2px;">Tranche Allocation</span>
-                <div style="flex:1;">
-                  <table class="rv-table">
-                    <thead><tr><th>Tranche</th><th style="width:100px;">Size (USD'm)</th><th style="width:90px;">% of Pool</th><th style="width:90px;">Compulsory</th></tr></thead>
-                    <tbody>
-                      <tr><td><span style="display:inline-flex;align-items:center;gap:6px;"><span style="width:20px;height:20px;border-radius:50%;background:#1D4ED8;color:#fff;font-size:10px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;">S</span>Senior tranche</span></td><td>107</td><td>73.79%</td><td><span style="color:#16A34A;font-size:12px;">● On</span></td></tr>
-                      <tr><td><span style="display:inline-flex;align-items:center;gap:6px;"><span style="width:20px;height:20px;border-radius:50%;background:#16A34A;color:#fff;font-size:10px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;">J</span>Junior tranche</span></td><td>38.00</td><td>26.21%</td><td><span style="color:#9CA3AF;font-size:12px;">● Off</span></td></tr>
-                      <tr style="font-weight:700;"><td>Total</td><td style="color:#2563EB;">145</td><td style="color:#2563EB;">100%</td><td></td></tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-
-            <!-- Management Plan -->
-            <div class="rv-section" style="margin-top:20px;">
-              <div class="rv-section-title">Management Plan</div>
-              <div class="rv-row"><span class="rv-label">Flow Template</span><span class="rv-value">TH_SPL_ABS_Standard_Monthly</span></div>
-              <div class="rv-row"><span class="rv-label">Cycle Frequency</span><span class="rv-value">Every 4 weeks</span></div>
-              <div class="rv-row"><span class="rv-label">Plan Name</span><span class="rv-value">TH_SPL_Starlight_ABS_T1_2026</span></div>
-            </div>
-
-            <!-- Auto Report Management -->
-            <div class="rv-section" style="margin-top:20px;">
-              <div class="rv-section-title">Auto Report Management</div>
-              <div style="margin-top:8px;">
-                <table class="rv-table">
-                  <thead><tr>
-                    <th style="width:80px;">Report ID</th><th>Report Name</th><th>Report Type</th>
-                    <th>Funder Name</th><th style="width:80px;text-align:center;">Field Count</th>
-                    <th style="width:80px;">Status</th><th style="width:130px;">Updated At</th>
-                  </tr></thead>
-                  <tbody>
-                    <tr><td style="color:#6B7280;">718634</td><td>Pending Sold Loan Tape</td><td>Pending Sold Loan Tape</td><td style="color:#6B7280;font-size:12px;">TH_SPL_Starlight_ABS_01</td><td style="text-align:center;">42</td><td><span class="status-live">Live</span></td><td style="color:#9CA3AF;font-size:12px;">2026-05-12 06:08</td></tr>
-                    <tr><td style="color:#6B7280;">718117</td><td>Pending Sold Loan Tape v2</td><td>Pending Sold Loan Tape</td><td style="color:#6B7280;font-size:12px;">TH_SPL_Starlight_ABS_01</td><td style="text-align:center;">13</td><td><span class="status-pending">Pending</span></td><td style="color:#9CA3AF;font-size:12px;">2026-05-14 06:08</td></tr>
-                    <tr><td style="color:#6B7280;">717604</td><td>TH_SPL_Starlight_ABS_T1_Pending_Sold_Loan_Tape</td><td>Pending Sold Loan Tape</td><td style="color:#6B7280;font-size:12px;">TH_SPL_Starlight_ABS_01</td><td style="text-align:center;">46</td><td><span class="status-pending">Pending</span></td><td style="color:#9CA3AF;font-size:12px;">2026-05-17 06:08</td></tr>
-                    <tr><td style="color:#6B7280;">718119</td><td>Copy of Pending Sold Loan Tape v2</td><td>Pending Sold Loan Tape</td><td style="color:#6B7280;font-size:12px;">TH_SPL_Starlight_ABS_01</td><td style="text-align:center;">13</td><td><span class="status-pending">Pending</span></td><td style="color:#9CA3AF;font-size:12px;">2026-05-11 06:08</td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-          </div>
-        </div>
-        <div class="view-footer">
-          <button class="btn-outline-sm" style="padding:9px 20px;font-size:13px;" onclick="switchFlow('list')">← Back to Lender List</button>
-          <div style="display:flex;gap:10px;">
-            <button class="btn-outline-sm" style="padding:9px 20px;font-size:13px;">Cancel</button>
-            <button class="btn-primary-lg" style="font-size:13px;padding:9px 20px;">Save</button>
           </div>
         </div>
       </div>
@@ -4227,7 +4092,7 @@ function wftShowDetail(type) {
 /* ── View tab switching ── */
 function switchViewTab(tabId, tabEl) {
   // hide all scroll panels
-  ['vt-basic','vt-portfolio','vt-plan','vt-report','vt-review'].forEach(id => {
+  ['vt-basic','vt-portfolio','vt-plan','vt-report'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.style.display = 'none';
   });
