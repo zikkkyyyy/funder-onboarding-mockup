@@ -69,6 +69,18 @@ tr.plan-row-selected:hover td { background:#DBEAFE; }
 .sp-hol-full-group { display:grid; grid-template-columns:1fr 1fr; gap:4px 12px; }
 .sp-hol-chk { display:inline-flex; align-items:center; gap:5px; font-size:12px; color:#374151; cursor:pointer; user-select:none; white-space:nowrap; }
 .sp-hol-chk input { accent-color:#2563EB; width:14px; height:14px; cursor:pointer; flex-shrink:0; }
+/* Tenor chip toggle */
+.tenor-chip { display:inline-flex; align-items:center; cursor:pointer; user-select:none; }
+.tenor-chip input { display:none; }
+.tenor-chip span { padding:5px 14px; font-size:12px; font-weight:500; border:1.5px solid #D1D5DB; border-radius:20px; color:#6B7280; background:#fff; transition:all .15s; }
+.tenor-chip input:checked + span { background:#EFF6FF; border-color:#2563EB; color:#2563EB; font-weight:600; }
+/* FFC grouped table */
+.ffc-table { width:100%; border-collapse:collapse; }
+.ffc-table th { padding:9px 14px; font-size:11px; font-weight:600; color:#6B7280; text-align:left; background:#F9FAFB; border-bottom:1px solid #E5E7EB; }
+.ffc-table td { padding:8px 14px; font-size:13px; color:#374151; vertical-align:middle; border-bottom:1px solid #F3F4F6; }
+.ffc-table tr.ffc-group-first td { border-top:1px solid #E5E7EB; }
+.ffc-table td.ffc-meta { font-weight:500; color:#111827; background:#FAFAFA; }
+.ffc-table td.ffc-sub { color:#9CA3AF; font-size:12px; }
 .sp-field-label { font-size:12px; font-weight:500; color:#374151; margin-bottom:4px; display:block; }
 .sp-chips { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px; }
 .sp-chip { background:#EFF6FF; color:#2563EB; border:1px solid #BFDBFE; border-radius:12px; padding:3px 10px; font-size:12px; font-weight:500; }
@@ -755,6 +767,26 @@ tr.drag-over { border-top: 2px solid #2563EB; }
             </select>
           </div>
 
+          <!-- Supported Tenors -->
+          <div class="form-group" style="grid-column:1/-1;">
+            <label class="form-label">Supported Tenors <span class="req">*</span></label>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:2px;" id="tenor-chips">
+              <label class="tenor-chip"><input type="checkbox" value="1M" checked onchange="updateTenorChips()"><span>1M</span></label>
+              <label class="tenor-chip"><input type="checkbox" value="2M" checked onchange="updateTenorChips()"><span>2M</span></label>
+              <label class="tenor-chip"><input type="checkbox" value="3M" checked onchange="updateTenorChips()"><span>3M</span></label>
+              <label class="tenor-chip"><input type="checkbox" value="4M" onchange="updateTenorChips()"><span>4M</span></label>
+              <label class="tenor-chip"><input type="checkbox" value="5M" onchange="updateTenorChips()"><span>5M</span></label>
+              <label class="tenor-chip"><input type="checkbox" value="6M" checked onchange="updateTenorChips()"><span>6M</span></label>
+              <label class="tenor-chip"><input type="checkbox" value="12M" checked onchange="updateTenorChips()"><span>12M</span></label>
+              <label class="tenor-chip"><input type="checkbox" value="18M" checked onchange="updateTenorChips()"><span>18M</span></label>
+              <label class="tenor-chip"><input type="checkbox" value="24M" checked onchange="updateTenorChips()"><span>24M</span></label>
+              <label class="tenor-chip"><input type="checkbox" value="36M" onchange="updateTenorChips()"><span>36M</span></label>
+              <label class="tenor-chip"><input type="checkbox" value="48M" onchange="updateTenorChips()"><span>48M</span></label>
+              <label class="tenor-chip"><input type="checkbox" value="60M" onchange="updateTenorChips()"><span>60M</span></label>
+            </div>
+            <div class="field-note">Determines which tenors appear in Funder Fee Config · Multiple selection allowed</div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -868,30 +900,12 @@ tr.drag-over { border-top: 2px solid #2563EB; }
 
     <!-- Funder Fee Config -->
     <div class="section-card" style="overflow:visible;">
-      <div class="section-header">
+      <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;">
         <div class="section-title">Funder Fee Config</div>
+        <button class="btn-outline-sm" style="padding:6px 14px;font-size:12px;" onclick="ffcOpenAddConfig()">+ Add Config</button>
       </div>
-      <div style="padding:0;">
-        <table class="accordion-table">
-          <thead><tr>
-            <th>Config Type</th>
-            <th style="width:60px;">Tenor</th>
-            <th style="width:100px;">User Group</th>
-            <th style="width:90px;">Rate</th>
-            <th style="width:160px;">Effective Date</th>
-            <th style="width:190px;">Assignee</th>
-            <th style="width:80px;">Operation</th>
-          </tr></thead>
-          <tbody>
-            <tr><td>Interest Discounted Rate</td><td>1M</td><td>Normal User</td><td>0.0000%</td><td style="font-size:12px;color:#9CA3AF;">1970-01-01 07:30:00</td><td style="font-size:12px;color:#9CA3AF;">default</td><td><button class="btn btn-edit btn-sm" onclick="ffcOpenModal('1M')">Edit</button></td></tr>
-            <tr><td>Interest Discounted Rate</td><td>2M</td><td>Normal User</td><td>0.0000%</td><td style="font-size:12px;color:#9CA3AF;">1970-01-01 07:30:00</td><td style="font-size:12px;color:#9CA3AF;">default</td><td><button class="btn btn-edit btn-sm" onclick="ffcOpenModal('2M')">Edit</button></td></tr>
-            <tr><td>Interest Discounted Rate</td><td>3M</td><td>Normal User</td><td><div>0.0000%</div><div>2.2336%</div></td><td style="font-size:12px;color:#9CA3AF;"><div>1970-01-01 07:30:00</div><div>2025-01-16 16:10:00</div></td><td style="font-size:12px;"><div style="color:#9CA3AF;">default</div><div>rucheng.wang@seamoney.com</div></td><td><button class="btn btn-edit btn-sm" onclick="ffcOpenModal('3M')">Edit</button></td></tr>
-            <tr><td>Interest Discounted Rate</td><td>6M</td><td>Normal User</td><td>0.0000%</td><td style="font-size:12px;color:#9CA3AF;">1970-01-01 07:30:00</td><td style="font-size:12px;color:#9CA3AF;">default</td><td><button class="btn btn-edit btn-sm" onclick="ffcOpenModal('6M')">Edit</button></td></tr>
-            <tr><td>Interest Discounted Rate</td><td>12M</td><td>Normal User</td><td>0.0000%</td><td style="font-size:12px;color:#9CA3AF;">1970-01-01 07:30:00</td><td style="font-size:12px;color:#9CA3AF;">default</td><td><button class="btn btn-edit btn-sm" style="opacity:.45;pointer-events:none;">Edit</button></td></tr>
-            <tr><td>Interest Discounted Rate</td><td>18M</td><td>Normal User</td><td>0.0000%</td><td style="font-size:12px;color:#9CA3AF;">1970-01-01 07:30:00</td><td style="font-size:12px;color:#9CA3AF;">default</td><td><button class="btn btn-edit btn-sm" onclick="ffcOpenModal('18M')">Edit</button></td></tr>
-            <tr><td>Interest Discounted Rate</td><td>24M</td><td>Normal User</td><td>0.0000%</td><td style="font-size:12px;color:#9CA3AF;">1970-01-01 07:30:00</td><td style="font-size:12px;color:#9CA3AF;">default</td><td><button class="btn btn-edit btn-sm" onclick="ffcOpenModal('24M')">Edit</button></td></tr>
-          </tbody>
-        </table>
+      <div style="padding:0;" id="ffc-create-wrap">
+        <table class="ffc-table" id="ffc-create-table"></table>
       </div>
     </div>
 
@@ -1499,6 +1513,18 @@ tr.drag-over { border-top: 2px solid #2563EB; }
           <div class="rv-row"><span class="rv-label">Licensee</span><span class="rv-value">CCC</span></div>
           <div class="rv-row"><span class="rv-label">SPV Name</span><span class="rv-value">Stellar</span></div>
           <div class="rv-row"><span class="rv-label">Tranche</span><span class="rv-value">01</span></div>
+          <div class="rv-row" style="align-items:flex-start;">
+            <span class="rv-label" style="padding-top:4px;">Supported Tenors</span>
+            <div style="display:flex;flex-wrap:wrap;gap:5px;">
+              <span style="padding:2px 10px;font-size:11px;font-weight:600;background:#EFF6FF;color:#2563EB;border:1.5px solid #BFDBFE;border-radius:20px;">1M</span>
+              <span style="padding:2px 10px;font-size:11px;font-weight:600;background:#EFF6FF;color:#2563EB;border:1.5px solid #BFDBFE;border-radius:20px;">2M</span>
+              <span style="padding:2px 10px;font-size:11px;font-weight:600;background:#EFF6FF;color:#2563EB;border:1.5px solid #BFDBFE;border-radius:20px;">3M</span>
+              <span style="padding:2px 10px;font-size:11px;font-weight:600;background:#EFF6FF;color:#2563EB;border:1.5px solid #BFDBFE;border-radius:20px;">6M</span>
+              <span style="padding:2px 10px;font-size:11px;font-weight:600;background:#EFF6FF;color:#2563EB;border:1.5px solid #BFDBFE;border-radius:20px;">12M</span>
+              <span style="padding:2px 10px;font-size:11px;font-weight:600;background:#EFF6FF;color:#2563EB;border:1.5px solid #BFDBFE;border-radius:20px;">18M</span>
+              <span style="padding:2px 10px;font-size:11px;font-weight:600;background:#EFF6FF;color:#2563EB;border:1.5px solid #BFDBFE;border-radius:20px;">24M</span>
+            </div>
+          </div>
         </div>
 
         <!-- Portfolio Setting -->
@@ -2168,6 +2194,15 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                 <div><div class="view-label" style="margin-bottom:3px;">Originator</div><div style="font-size:13px;color:#111827;font-weight:500;">Monee</div></div>
                 <div><div class="view-label" style="margin-bottom:3px;">Investor</div><div style="font-size:13px;color:#111827;font-weight:500;">Starlight Capital</div></div>
                 <div><div class="view-label" style="margin-bottom:3px;">License</div><div style="font-size:13px;color:#111827;font-weight:500;">DGL</div></div>
+                <div style="grid-column:1/-1;"><div class="view-label" style="margin-bottom:6px;">Supported Tenors</div><div style="display:flex;flex-wrap:wrap;gap:6px;">
+                  <span style="padding:3px 12px;font-size:12px;font-weight:600;background:#EFF6FF;color:#2563EB;border:1.5px solid #BFDBFE;border-radius:20px;">1M</span>
+                  <span style="padding:3px 12px;font-size:12px;font-weight:600;background:#EFF6FF;color:#2563EB;border:1.5px solid #BFDBFE;border-radius:20px;">2M</span>
+                  <span style="padding:3px 12px;font-size:12px;font-weight:600;background:#EFF6FF;color:#2563EB;border:1.5px solid #BFDBFE;border-radius:20px;">3M</span>
+                  <span style="padding:3px 12px;font-size:12px;font-weight:600;background:#EFF6FF;color:#2563EB;border:1.5px solid #BFDBFE;border-radius:20px;">6M</span>
+                  <span style="padding:3px 12px;font-size:12px;font-weight:600;background:#EFF6FF;color:#2563EB;border:1.5px solid #BFDBFE;border-radius:20px;">12M</span>
+                  <span style="padding:3px 12px;font-size:12px;font-weight:600;background:#EFF6FF;color:#2563EB;border:1.5px solid #BFDBFE;border-radius:20px;">18M</span>
+                  <span style="padding:3px 12px;font-size:12px;font-weight:600;background:#EFF6FF;color:#2563EB;border:1.5px solid #BFDBFE;border-radius:20px;">24M</span>
+                </div></div>
               </div>
             </div>
           </div>
@@ -2287,28 +2322,12 @@ tr.drag-over { border-top: 2px solid #2563EB; }
 
         <!-- Funder Fee Config -->
         <div class="view-section" style="overflow:visible;">
-          <div class="view-section-hd"><span class="view-section-title">Funder Fee Config</span></div>
-          <div style="padding:0 0 4px;">
-            <table class="accordion-table">
-              <thead><tr>
-                <th>Config Type</th>
-                <th style="width:55px;">Tenor</th>
-                <th style="width:100px;">User Group</th>
-                <th style="width:85px;">Rate</th>
-                <th style="width:155px;">Effective Date</th>
-                <th style="width:185px;">Assignee</th>
-                <th style="width:75px;">Operation</th>
-              </tr></thead>
-              <tbody>
-                <tr><td>Interest Discounted Rate</td><td>1M</td><td>Normal User</td><td>0.0000%</td><td style="font-size:12px;color:#9CA3AF;">1970-01-01 07:30:00</td><td style="font-size:12px;color:#9CA3AF;">default</td><td><button class="btn btn-edit btn-sm" onclick="ffcOpenModal('1M')">Edit</button></td></tr>
-                <tr><td>Interest Discounted Rate</td><td>2M</td><td>Normal User</td><td>0.0000%</td><td style="font-size:12px;color:#9CA3AF;">1970-01-01 07:30:00</td><td style="font-size:12px;color:#9CA3AF;">default</td><td><button class="btn btn-edit btn-sm" onclick="ffcOpenModal('2M')">Edit</button></td></tr>
-                <tr><td>Interest Discounted Rate</td><td>3M</td><td>Normal User</td><td><div>0.0000%</div><div>2.2336%</div></td><td style="font-size:12px;color:#9CA3AF;"><div>1970-01-01 07:30:00</div><div>2025-01-16 16:10:00</div></td><td style="font-size:12px;"><div style="color:#9CA3AF;">default</div><div>rucheng.wang@seamoney.com</div></td><td><button class="btn btn-edit btn-sm" onclick="ffcOpenModal('3M')">Edit</button></td></tr>
-                <tr><td>Interest Discounted Rate</td><td>6M</td><td>Normal User</td><td>0.0000%</td><td style="font-size:12px;color:#9CA3AF;">1970-01-01 07:30:00</td><td style="font-size:12px;color:#9CA3AF;">default</td><td><button class="btn btn-edit btn-sm" onclick="ffcOpenModal('6M')">Edit</button></td></tr>
-                <tr><td>Interest Discounted Rate</td><td>12M</td><td>Normal User</td><td>0.0000%</td><td style="font-size:12px;color:#9CA3AF;">1970-01-01 07:30:00</td><td style="font-size:12px;color:#9CA3AF;">default</td><td><button class="btn btn-edit btn-sm" style="opacity:.45;pointer-events:none;">Edit</button></td></tr>
-                <tr><td>Interest Discounted Rate</td><td>18M</td><td>Normal User</td><td>0.0000%</td><td style="font-size:12px;color:#9CA3AF;">1970-01-01 07:30:00</td><td style="font-size:12px;color:#9CA3AF;">default</td><td><button class="btn btn-edit btn-sm" onclick="ffcOpenModal('18M')">Edit</button></td></tr>
-                <tr><td>Interest Discounted Rate</td><td>24M</td><td>Normal User</td><td>0.0000%</td><td style="font-size:12px;color:#9CA3AF;">1970-01-01 07:30:00</td><td style="font-size:12px;color:#9CA3AF;">default</td><td><button class="btn btn-edit btn-sm" onclick="ffcOpenModal('24M')">Edit</button></td></tr>
-              </tbody>
-            </table>
+          <div class="view-section-hd">
+            <span class="view-section-title">Funder Fee Config</span>
+            <button class="btn-outline-sm" style="padding:5px 12px;font-size:12px;" onclick="ffcOpenAddConfig()">+ Add Config</button>
+          </div>
+          <div style="padding:0;" id="ffc-view-wrap">
+            <table class="ffc-table" id="ffc-view-table"></table>
           </div>
         </div>
 
@@ -5924,55 +5943,233 @@ function rlConfirmAdd() {
 }
 </script>
 
+<!-- Add Funder Fee Config Modal -->
+<div class="modal-overlay" id="ffc-add-modal">
+  <div class="modal" style="width:560px;">
+    <div class="modal-header">
+      <div class="modal-title">Add Funder Fee Config</div>
+      <button class="modal-close" onclick="document.getElementById('ffc-add-modal').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body" style="padding:20px 24px 8px;display:flex;flex-direction:column;gap:16px;">
+
+      <!-- Fee Type -->
+      <div style="display:grid;grid-template-columns:110px 1fr;align-items:center;gap:12px;">
+        <label style="font-size:13px;color:#374151;text-align:right;"><span style="color:#DC2626;">*</span> Fee Type :</label>
+        <select class="form-select" id="ffc-add-feetype" style="font-size:13px;">
+          <option>Daily Interest Discounted Rate</option>
+          <option>Monthly Interest Discounted Rate</option>
+          <option>Annual Interest Discounted Rate</option>
+        </select>
+      </div>
+
+      <!-- Tenor (chips from supported tenors) -->
+      <div style="display:grid;grid-template-columns:110px 1fr;align-items:flex-start;gap:12px;">
+        <label style="font-size:13px;color:#374151;text-align:right;padding-top:6px;"><span style="color:#DC2626;">*</span> Tenor :</label>
+        <div style="display:flex;flex-wrap:wrap;gap:7px;" id="ffc-add-tenor-chips">
+          <label class="tenor-chip"><input type="checkbox" value="1M"><span>1M</span></label>
+          <label class="tenor-chip"><input type="checkbox" value="2M"><span>2M</span></label>
+          <label class="tenor-chip"><input type="checkbox" value="3M"><span>3M</span></label>
+          <label class="tenor-chip"><input type="checkbox" value="4M"><span>4M</span></label>
+          <label class="tenor-chip"><input type="checkbox" value="5M"><span>5M</span></label>
+          <label class="tenor-chip"><input type="checkbox" value="6M"><span>6M</span></label>
+          <label class="tenor-chip"><input type="checkbox" value="12M"><span>12M</span></label>
+          <label class="tenor-chip"><input type="checkbox" value="18M"><span>18M</span></label>
+          <label class="tenor-chip"><input type="checkbox" value="24M"><span>24M</span></label>
+          <label class="tenor-chip"><input type="checkbox" value="36M"><span>36M</span></label>
+          <label class="tenor-chip"><input type="checkbox" value="48M"><span>48M</span></label>
+          <label class="tenor-chip"><input type="checkbox" value="60M"><span>60M</span></label>
+        </div>
+      </div>
+
+      <!-- Target Group -->
+      <div style="display:grid;grid-template-columns:110px 1fr;align-items:center;gap:12px;">
+        <label style="font-size:13px;color:#374151;text-align:right;"><span style="color:#DC2626;">*</span> Target Group :</label>
+        <select class="form-select" id="ffc-add-group" style="font-size:13px;">
+          <option>Normal User</option>
+          <option>Premium User</option>
+          <option>VIP User</option>
+        </select>
+      </div>
+
+      <!-- Value / Effective Time rows -->
+      <div style="display:grid;grid-template-columns:110px 1fr;align-items:flex-start;gap:12px;">
+        <label style="font-size:13px;color:#374151;text-align:right;padding-top:8px;"><span style="color:#DC2626;">*</span> Values :</label>
+        <div>
+          <div id="ffc-add-rows" style="display:flex;flex-direction:column;gap:10px;margin-bottom:10px;"></div>
+          <button onclick="ffcAddConfigRow()" style="width:100%;padding:8px;border:1.5px dashed #D1D5DB;border-radius:8px;background:#fff;color:#6B7280;font-size:13px;cursor:pointer;">+ Add value / time</button>
+        </div>
+      </div>
+
+
+    </div>
+    <div class="modal-footer" style="display:flex;justify-content:flex-end;gap:10px;padding:14px 24px;">
+      <button class="btn-outline-sm" style="padding:8px 22px;font-size:13px;" onclick="document.getElementById('ffc-add-modal').classList.remove('open')">Cancel</button>
+      <button class="btn-primary-lg" style="font-size:13px;padding:8px 22px;" onclick="ffcSaveAddConfig()">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── Funder Fee Config Data + Table Renderer ── */
+const FFC_DATA = [
+  { feeType: 'Daily Interest Discounted Rate', tenor: '1M',  group: 'Normal User', rows: [
+    { value: '0.0000%', time: '1970-01-01 07:30:00', updatedBy: '' },
+    { value: '0.0411%', time: '2025-06-20 16:00:00', updatedBy: 'jerlyn.chua@seamoney.com' },
+    { value: '0.0000%', time: '2025-11-20 18:30:00', updatedBy: '' },
+  ]},
+  { feeType: 'Daily Interest Discounted Rate', tenor: '2M',  group: 'Normal User', rows: [
+    { value: '0.0000%', time: '1970-01-01 07:30:00', updatedBy: '' },
+    { value: '0.0411%', time: '2025-06-20 16:00:00', updatedBy: 'jerlyn.chua@seamoney.com' },
+    { value: '0.0000%', time: '2025-11-13 18:30:00', updatedBy: '' },
+  ]},
+  { feeType: 'Daily Interest Discounted Rate', tenor: '3M',  group: 'Normal User', rows: [
+    { value: '0.0000%', time: '1970-01-01 07:30:00', updatedBy: '' },
+    { value: '0.0411%', time: '2025-06-20 16:00:00', updatedBy: 'jerlyn.chua@seamoney.com' },
+    { value: '0.0000%', time: '2025-11-13 18:30:00', updatedBy: '' },
+  ]},
+  { feeType: 'Daily Interest Discounted Rate', tenor: '4M',  group: 'Normal User', rows: [
+    { value: '0.0000%', time: '1970-01-01 07:30:00', updatedBy: 'default' },
+  ]},
+  { feeType: 'Daily Interest Discounted Rate', tenor: '5M',  group: 'Normal User', rows: [
+    { value: '0.0000%', time: '1970-01-01 07:30:00', updatedBy: '' },
+    { value: '0.0411%', time: '2025-06-20 16:00:00', updatedBy: 'jerlyn.chua@seamoney.com' },
+    { value: '0.0000%', time: '2025-11-13 18:30:00', updatedBy: '' },
+  ]},
+  { feeType: 'Daily Interest Discounted Rate', tenor: '6M',  group: 'Normal User', rows: [
+    { value: '0.0000%', time: '1970-01-01 07:30:00', updatedBy: '' },
+    { value: '0.0411%', time: '2025-06-20 16:00:00', updatedBy: 'jerlyn.chua@seamoney.com' },
+    { value: '0.0000%', time: '2025-11-13 18:30:00', updatedBy: '' },
+  ]},
+  { feeType: 'Daily Interest Discounted Rate', tenor: '12M', group: 'Normal User', rows: [
+    { value: '0.0411%', time: '2025-06-20 16:00:00', updatedBy: 'jerlyn.chua@seamoney.com' },
+    { value: '0.0000%', time: '2025-11-13 18:30:00', updatedBy: '' },
+  ]},
+  { feeType: 'Daily Interest Discounted Rate', tenor: '18M', group: 'Normal User', rows: [
+    { value: '0.0000%', time: '1970-01-01 07:30:00', updatedBy: 'default' },
+  ]},
+  { feeType: 'Daily Interest Discounted Rate', tenor: '24M', group: 'Normal User', rows: [
+    { value: '0.0000%', time: '1970-01-01 07:30:00', updatedBy: 'default' },
+  ]},
+  { feeType: 'Daily Interest Discounted Rate', tenor: '36M', group: 'Normal User', rows: [
+    { value: '0.0000%', time: '1970-01-01 07:30:00', updatedBy: 'default' },
+  ]},
+  { feeType: 'Daily Interest Discounted Rate', tenor: '48M', group: 'Normal User', rows: [
+    { value: '0.0000%', time: '1970-01-01 07:30:00', updatedBy: 'default' },
+  ]},
+  { feeType: 'Daily Interest Discounted Rate', tenor: '60M', group: 'Normal User', rows: [
+    { value: '0.0000%', time: '1970-01-01 07:30:00', updatedBy: 'default' },
+  ]},
+];
+
+function renderFfcTable(tableEl) {
+  if (!tableEl) return;
+  let html = `<thead><tr>
+    <th style="width:200px;">Fee Type</th>
+    <th style="width:55px;">Tenor</th>
+    <th style="width:100px;">Target Group</th>
+    <th style="width:85px;">Value</th>
+    <th style="width:160px;">Effective Time</th>
+    <th style="width:175px;">Update By</th>
+    <th style="width:80px;">Operation</th>
+  </tr></thead><tbody>`;
+  FFC_DATA.forEach(entry => {
+    const n = entry.rows.length;
+    entry.rows.forEach((row, i) => {
+      html += `<tr class="${i===0 ? 'ffc-group-first' : ''}">`;
+      if (i === 0) {
+        html += `<td class="ffc-meta" rowspan="${n}">${entry.feeType}</td>
+                 <td class="ffc-meta" rowspan="${n}">${entry.tenor}</td>
+                 <td class="ffc-meta" rowspan="${n}">${entry.group}</td>`;
+      }
+      html += `<td>${row.value}</td>
+               <td class="ffc-sub">${row.time}</td>
+               <td class="ffc-sub" style="color:${row.updatedBy && row.updatedBy !== 'default' ? '#374151' : '#9CA3AF'};">${row.updatedBy || ''}</td>`;
+      if (i === 0) {
+        html += `<td rowspan="${n}"><button class="btn btn-edit btn-sm" onclick="ffcOpenModal('${entry.tenor}')">Edit</button></td>`;
+      }
+      html += `</tr>`;
+    });
+  });
+  html += `</tbody>`;
+  tableEl.innerHTML = html;
+}
+
+function updateTenorChips() { /* updates are visual only via CSS */ }
+
+function ffcOpenAddConfig() {
+  // Reset
+  document.querySelectorAll('#ffc-add-tenor-chips input').forEach(c => c.checked = false);
+  document.getElementById('ffc-add-rows').innerHTML = '';
+  ffcAddConfigRow(); // start with one empty row
+  document.getElementById('ffc-add-modal').classList.add('open');
+}
+
+let ffcAddRowCount = 0;
+function ffcAddConfigRow(timeVal, valVal) {
+  ffcAddRowCount++;
+  const n = ffcAddRowCount;
+  const container = document.getElementById('ffc-add-rows');
+  const div = document.createElement('div');
+  div.id = 'ffc-add-row-' + n;
+  div.style.cssText = 'display:grid;grid-template-columns:1fr 1fr 32px;gap:8px;align-items:center;';
+  div.innerHTML = `
+    <input type="text" class="form-input" style="font-size:12px;" placeholder="Value (e.g. 0.0411%)" value="${valVal||''}"/>
+    <input type="datetime-local" class="form-input" style="font-size:12px;" value="${timeVal||''}"/>
+    <button onclick="document.getElementById('ffc-add-row-${n}').remove()" style="width:28px;height:28px;border-radius:50%;border:1.5px solid #D1D5DB;background:#fff;color:#9CA3AF;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;">−</button>
+  `;
+  container.appendChild(div);
+}
+
+function ffcSaveAddConfig() {
+  document.getElementById('ffc-add-modal').classList.remove('open');
+  const toast = document.getElementById('toast');
+  toast.textContent = '✓ Funder Fee Config added — pending maker-checker approval';
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderFfcTable(document.getElementById('ffc-create-table'));
+  renderFfcTable(document.getElementById('ffc-view-table'));
+});
+</script>
+
 <!-- Funder Fee Config Edit Modal -->
 <div class="modal-overlay" id="ffc-edit-modal">
-  <div class="modal" style="width:540px;">
+  <div class="modal" style="width:560px;">
     <div class="modal-header">
       <div class="modal-title">Edit Funder Fee Config</div>
       <button class="modal-close" onclick="ffcCloseModal()">✕</button>
     </div>
-    <div class="modal-body" style="padding:20px 24px 8px;">
+    <div class="modal-body" style="padding:20px 24px 8px;display:flex;flex-direction:column;gap:16px;">
 
-      <!-- FeeType -->
-      <div style="display:grid;grid-template-columns:110px 1fr;align-items:center;gap:12px;margin-bottom:18px;">
-        <label style="font-size:13px;color:#374151;text-align:right;">FeeType :</label>
-        <select class="form-select" id="ffc-feetype" style="font-size:13px;" disabled>
-          <option>Interest Discounted Rate</option>
-        </select>
+      <!-- FeeType (read-only) -->
+      <div style="display:grid;grid-template-columns:110px 1fr;align-items:center;gap:12px;">
+        <label style="font-size:13px;color:#374151;text-align:right;">Fee Type :</label>
+        <input class="form-input" id="ffc-feetype-display" style="font-size:13px;background:#F3F4F6;color:#9CA3AF;" readonly />
       </div>
 
-      <!-- Tenor -->
-      <div style="display:grid;grid-template-columns:110px 1fr;align-items:center;gap:12px;margin-bottom:18px;">
+      <!-- Tenor (read-only) -->
+      <div style="display:grid;grid-template-columns:110px 1fr;align-items:center;gap:12px;">
         <label style="font-size:13px;color:#374151;text-align:right;">Tenor :</label>
-        <select class="form-select" id="ffc-tenor" style="font-size:13px;" disabled>
-          <option>1M</option><option>2M</option><option>3M</option><option>6M</option>
-          <option>12M</option><option>18M</option><option>24M</option>
-        </select>
+        <input class="form-input" id="ffc-tenor-display" style="font-size:13px;background:#F3F4F6;color:#9CA3AF;" readonly />
       </div>
 
-      <!-- Target Group -->
-      <div style="display:grid;grid-template-columns:110px 1fr;align-items:center;gap:12px;margin-bottom:18px;">
+      <!-- Target Group (read-only) -->
+      <div style="display:grid;grid-template-columns:110px 1fr;align-items:center;gap:12px;">
         <label style="font-size:13px;color:#374151;text-align:right;">Target Group :</label>
-        <select class="form-select" id="ffc-group" style="font-size:13px;" disabled>
-          <option>Normal User</option>
-        </select>
+        <input class="form-input" id="ffc-group-display" style="font-size:13px;background:#F3F4F6;color:#9CA3AF;" readonly />
       </div>
 
-      <!-- Config rows -->
-      <div id="ffc-rows" style="display:flex;flex-direction:column;gap:14px;margin-bottom:14px;"></div>
-
-      <!-- Add config -->
-      <button onclick="ffcAddRow()" style="width:100%;padding:9px;border:1.5px dashed #D1D5DB;border-radius:8px;background:#fff;color:#6B7280;font-size:13px;cursor:pointer;margin-bottom:18px;">+ Add config</button>
-
-      <!-- Checker -->
-      <div style="display:grid;grid-template-columns:110px 1fr;align-items:center;gap:12px;margin-bottom:8px;">
-        <label style="font-size:13px;color:#374151;text-align:right;">Checker :</label>
-        <select class="form-select" id="ffc-checker" style="font-size:13px;">
-          <option value=""></option>
-          <option>rucheng.wang@seamoney.com</option>
-          <option>jamie.hopy@monee.com</option>
-        </select>
+      <!-- Value / Effective Time rows -->
+      <div style="display:grid;grid-template-columns:110px 1fr;align-items:flex-start;gap:12px;">
+        <label style="font-size:13px;color:#374151;text-align:right;padding-top:8px;"><span style="color:#DC2626;">*</span> Values :</label>
+        <div>
+          <div id="ffc-rows" style="display:flex;flex-direction:column;gap:10px;margin-bottom:10px;"></div>
+          <button onclick="ffcAddRow()" style="width:100%;padding:8px;border:1.5px dashed #D1D5DB;border-radius:8px;background:#fff;color:#6B7280;font-size:13px;cursor:pointer;">+ Add config</button>
+        </div>
       </div>
+
 
     </div>
     <div class="modal-footer" style="display:flex;justify-content:flex-end;gap:10px;padding:14px 24px;">
@@ -5988,13 +6185,17 @@ let ffcRowCount = 0;
 
 function ffcOpenModal(tenor) {
   ffcRowCount = 0;
-  document.getElementById('ffc-tenor').value = tenor || '3M';
-  document.getElementById('ffc-checker').value = '';
-  // Pre-populate with 2 rows matching reference data
+  const entry = FFC_DATA.find(e => e.tenor === tenor);
+  document.getElementById('ffc-feetype-display').value = entry ? entry.feeType : 'Daily Interest Discounted Rate';
+  document.getElementById('ffc-tenor-display').value = tenor;
+  document.getElementById('ffc-group-display').value = entry ? entry.group : 'Normal User';
   const rows = document.getElementById('ffc-rows');
   rows.innerHTML = '';
-  ffcAddRow('1970-01-01T07:30', '0.0245');
-  ffcAddRow('2025-01-10T17:30', '0.022336');
+  if (entry) {
+    entry.rows.forEach(r => ffcAddRow(r.time.replace(' ','T').substring(0,16), r.value));
+  } else {
+    ffcAddRow('', '');
+  }
   document.getElementById('ffc-edit-modal').classList.add('open');
 }
 
@@ -6008,13 +6209,11 @@ function ffcAddRow(timeVal, valVal) {
   const rows = document.getElementById('ffc-rows');
   const div = document.createElement('div');
   div.id = 'ffc-row-' + n;
-  div.style.cssText = 'display:grid;grid-template-columns:110px 1fr 90px 1fr 36px;align-items:center;gap:10px;';
+  div.style.cssText = 'display:grid;grid-template-columns:1fr 1fr 32px;gap:8px;align-items:center;';
   div.innerHTML = `
-    <label style="font-size:13px;color:#374151;text-align:right;">Effective Time ${n} :</label>
+    <input type="text" class="form-input" style="font-size:12px;" placeholder="Value (e.g. 0.0411%)" value="${valVal||''}" />
     <input type="datetime-local" class="form-input" style="font-size:12px;" value="${timeVal||''}" />
-    <label style="font-size:13px;color:#374151;text-align:right;">Value ${n} :</label>
-    <input type="number" step="any" class="form-input" style="font-size:12px;" value="${valVal||''}" />
-    <button onclick="ffcRemoveRow(${n})" style="width:32px;height:32px;border-radius:50%;border:1.5px solid #D1D5DB;background:#fff;color:#9CA3AF;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;">−</button>
+    <button onclick="ffcRemoveRow(${n})" style="width:28px;height:28px;border-radius:50%;border:1.5px solid #D1D5DB;background:#fff;color:#9CA3AF;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;">−</button>
   `;
   rows.appendChild(div);
 }
