@@ -920,23 +920,23 @@ tr.drag-over { border-top: 2px solid #2563EB; }
         <table class="accordion-table">
           <thead><tr><th style="width:100px;">Rule ID</th><th>Rules</th><th style="width:120px;">Status</th><th style="width:180px;">Operation</th></tr></thead>
           <tbody>
-            <tr>
+            <tr id="rl-row-86">
               <td class="td-id">86</td>
               <td>Outstanding Principal in range [0.01,150000.00]</td>
               <td><span class="status-enable">Enable</span></td>
-              <td><div class="btn-ops"><button class="btn btn-edit" onclick="rlOpenEdit(86)">Edit</button><button class="btn btn-disable">Disable</button></div></td>
+              <td><div class="btn-ops"><button class="btn btn-edit" onclick="rlOpenEdit(86)">Edit</button><button class="btn btn-disable" onclick="rlDisableRow('rl-row-86')">Disable</button></div></td>
             </tr>
-            <tr>
+            <tr id="rl-row-87">
               <td class="td-id">87</td>
               <td>LoanCurrentMaxDpd LessEqual 0</td>
               <td><span class="status-enable">Enable</span></td>
-              <td><div class="btn-ops"><button class="btn btn-edit" onclick="rlOpenEdit(87)">Edit</button><button class="btn btn-disable">Disable</button></div></td>
+              <td><div class="btn-ops"><button class="btn btn-edit" onclick="rlOpenEdit(87)">Edit</button><button class="btn btn-disable" onclick="rlDisableRow('rl-row-87')">Disable</button></div></td>
             </tr>
-            <tr>
+            <tr id="rl-row-88">
               <td class="td-id">88</td>
               <td>User Current Max DPD LessEqual 0</td>
               <td><span class="status-enable">Enable</span></td>
-              <td><div class="btn-ops"><button class="btn btn-edit" onclick="rlOpenEdit(88)">Edit</button><button class="btn btn-disable">Disable</button></div></td>
+              <td><div class="btn-ops"><button class="btn btn-edit" onclick="rlOpenEdit(88)">Edit</button><button class="btn btn-disable" onclick="rlDisableRow('rl-row-88')">Disable</button></div></td>
             </tr>
           </tbody>
         </table>
@@ -2341,9 +2341,9 @@ tr.drag-over { border-top: 2px solid #2563EB; }
             <table class="accordion-table">
               <thead><tr><th style="width:80px;">Rule ID</th><th>Rules</th><th style="width:100px;">Status</th><th style="width:160px;">Operation</th></tr></thead>
               <tbody>
-                <tr><td>65</td><td>Outstanding Principal in range [0.01, 99999999]</td><td><span class="status-enable">Enable</span></td><td><div class="btn-ops"><button class="btn btn-edit btn-sm" onclick="rlOpenEdit(65)">Edit</button><button class="btn btn-disable btn-sm">Disable</button></div></td></tr>
-                <tr><td>100</td><td>LoanCommittedStatus LoanStatus</td><td><span class="status-enable">Enable</span></td><td><div class="btn-ops"><button class="btn btn-edit btn-sm" onclick="rlOpenEdit(100)">Edit</button><button class="btn btn-disable btn-sm">Disable</button></div></td></tr>
-                <tr><td>101</td><td>User Current Max FPR LoanStatus</td><td><span class="status-enable">Enable</span></td><td><div class="btn-ops"><button class="btn btn-edit btn-sm" onclick="rlOpenEdit(101)">Edit</button><button class="btn btn-disable btn-sm">Disable</button></div></td></tr>
+                <tr id="rl-row-65"><td>65</td><td>Outstanding Principal in range [0.01, 99999999]</td><td><span class="status-enable">Enable</span></td><td><div class="btn-ops"><button class="btn btn-edit btn-sm" onclick="rlOpenEdit(65)">Edit</button><button class="btn btn-disable btn-sm" onclick="rlDisableRow('rl-row-65')">Disable</button></div></td></tr>
+                <tr id="rl-row-100"><td>100</td><td>LoanCommittedStatus LoanStatus</td><td><span class="status-enable">Enable</span></td><td><div class="btn-ops"><button class="btn btn-edit btn-sm" onclick="rlOpenEdit(100)">Edit</button><button class="btn btn-disable btn-sm" onclick="rlDisableRow('rl-row-100')">Disable</button></div></td></tr>
+                <tr id="rl-row-101"><td>101</td><td>User Current Max FPR LoanStatus</td><td><span class="status-enable">Enable</span></td><td><div class="btn-ops"><button class="btn btn-edit btn-sm" onclick="rlOpenEdit(101)">Edit</button><button class="btn btn-disable btn-sm" onclick="rlDisableRow('rl-row-101')">Disable</button></div></td></tr>
               </tbody>
             </table>
           </div>
@@ -5576,6 +5576,29 @@ function spSubmit() {
   </div>
 </div>
 
+<!-- Disable Rule Confirmation Modal -->
+<div class="modal-overlay" id="disable-rule-modal">
+  <div class="modal" style="width:420px;">
+    <div class="modal-header">
+      <div class="modal-title">Disable Rule</div>
+      <button class="modal-close" onclick="document.getElementById('disable-rule-modal').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body" style="padding:20px 24px;">
+      <div style="display:flex;align-items:flex-start;gap:14px;">
+        <div style="font-size:22px;margin-top:2px;">⚠️</div>
+        <div>
+          <div style="font-size:14px;font-weight:600;color:#111827;margin-bottom:6px;">Are you sure you want to disable this rule?</div>
+          <div style="font-size:13px;color:#6B7280;line-height:1.6;">This rule will be removed from the active Rule List. You can re-add it via <strong>+ Add Rule</strong> at any time.</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer" style="display:flex;justify-content:flex-end;gap:10px;padding:12px 24px;">
+      <button class="btn-outline-sm" style="padding:8px 20px;font-size:13px;" onclick="document.getElementById('disable-rule-modal').classList.remove('open')">Cancel</button>
+      <button class="btn-primary-lg" style="font-size:13px;padding:8px 20px;background:#DC2626;" id="disable-rule-confirm-btn">Disable</button>
+    </div>
+  </div>
+</div>
+
 <!-- Add Rule Modal (Rule Library) -->
 <div class="modal-overlay" id="add-rule-modal">
   <div class="modal" style="width:780px;max-width:96vw;">
@@ -5721,11 +5744,17 @@ function renderRlLibrary(rules) {
 }
 
 function rlToggleStatus(id) {
-  rlModalStatus[id] = rlModalStatus[id] === 'enable' ? 'disable' : 'enable';
+  const wasEnabled = rlModalStatus[id] === 'enable';
+  rlModalStatus[id] = wasEnabled ? 'disable' : 'enable';
   const isEnable = rlModalStatus[id] === 'enable';
   const btn = document.getElementById(`rl-status-btn-${id}`);
   btn.className = `btn btn-sm ${isEnable ? 'btn-disable' : 'btn-enable'}`;
   btn.textContent = isEnable ? 'Disable' : 'Enable';
+  // If just disabled and rule has configurable values, auto-open edit modal
+  const rule = RL_RULES.find(r => r.id === id);
+  if (wasEnabled && rule && rule.type !== 'none') {
+    rlOpenEditFromModal(id);
+  }
 }
 
 function rlFilterRules() {
@@ -5797,6 +5826,16 @@ function rlSaveEdit() {
     toast.classList.add('show');
     setTimeout(() => toast.classList.remove('show'), 3000);
   }
+}
+
+function rlDisableRow(rowId) {
+  const confirmBtn = document.getElementById('disable-rule-confirm-btn');
+  confirmBtn.onclick = () => {
+    const row = document.getElementById(rowId);
+    if (row) row.remove();
+    document.getElementById('disable-rule-modal').classList.remove('open');
+  };
+  document.getElementById('disable-rule-modal').classList.add('open');
 }
 
 function rlConfirmAdd() {
