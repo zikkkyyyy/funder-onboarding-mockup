@@ -225,7 +225,7 @@ tbody tr:hover { background: #FAFAFA; }
 .form-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
 .form-group { display: flex; flex-direction: column; gap: 5px; }
 .form-label { font-size: 12px; font-weight: 500; color: #374151; }
-.form-label .req { color: #DC2626; }
+.req { color: #DC2626; }
 .form-hint { font-size: 11px; color: #9CA3AF; }
 .badge { display: inline-flex; align-items: center; padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
 .badge-active { background: #DCFCE7; color: #16A34A; }
@@ -849,7 +849,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
         <div class="section-title">Pricing &amp; Terms</div>
       </div>
       <div class="section-body">
-        <div class="pricing-group-label">Pricing Model <span class="tooltip-wrap"><span class="tooltip-icon">ⓘ</span><span class="tooltip-box">This determines how to calculate the interest split at cutoff.</span></span></div>
+        <div class="pricing-group-label">Pricing Model <span class="req">*</span> <span class="tooltip-wrap"><span class="tooltip-icon">ⓘ</span><span class="tooltip-box">This determines how to calculate the interest split at cutoff.</span></span></div>
         <div class="radio-cards">
           <div class="radio-card selected" onclick="selectPricing(this)">
             <div class="radio-card-top">
@@ -874,13 +874,13 @@ tr.drag-over { border-top: 2px solid #2563EB; }
     <div class="section-card">
       <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;">
         <div>
-          <div class="section-title">Auto Clawback</div>
+          <div class="section-title">Auto Clawback <span class="req">*</span></div>
           <div class="section-sub">Configure clawback calculation method applied at cutoff.</div>
         </div>
         <div class="toggle" id="clawback-toggle" onclick="toggleClawback(this)"></div>
       </div>
       <div class="section-body" id="clawback-config">
-        <div class="pricing-group-label">Mode &nbsp;ⓘ</div>
+        <div class="pricing-group-label">Mode &nbsp;ⓘ <span class="req" id="clawback-mode-req">*</span></div>
         <div class="radio-cards">
           <div class="radio-card selected" id="mode1-card" onclick="selectMode(1)">
             <div class="radio-card-top">
@@ -898,7 +898,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
           </div>
         </div>
         <div class="n-input-row" id="n-input-row" style="margin-top:14px;display:none;">
-          <div class="n-input-label">N input</div>
+          <div class="n-input-label">N input <span class="req">*</span></div>
           <input class="n-input" id="n-input-field" type="number" value="1" min="1" />
         </div>
       </div>
@@ -1008,7 +1008,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
           <thead>
             <tr style="background:#F9FAFB;">
               <th style="padding:9px 14px;font-size:11px;font-weight:600;color:#6B7280;text-align:left;border-bottom:1px solid #E5E7EB;">Tranche</th>
-              <th style="padding:9px 14px;font-size:11px;font-weight:600;color:#6B7280;text-align:left;border-bottom:1px solid #E5E7EB;">Size (USD'm) <span class="req">*</span></th>
+              <th style="padding:9px 14px;font-size:11px;font-weight:600;color:#6B7280;text-align:left;border-bottom:1px solid #E5E7EB;">Size (USD'm)</th>
               <th style="padding:9px 14px;font-size:11px;font-weight:600;color:#6B7280;text-align:left;border-bottom:1px solid #E5E7EB;">% of Pool</th>
               <th style="padding:9px 14px;font-size:11px;font-weight:600;color:#6B7280;text-align:left;border-bottom:1px solid #E5E7EB;">Compulsory</th>
             </tr>
@@ -1016,7 +1016,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
           <tbody>
             <tr style="border-bottom:1px solid #F3F4F6;">
               <td style="padding:12px 14px;"><div style="display:flex;align-items:center;gap:10px;"><div style="width:32px;height:32px;border-radius:50%;background:#1D4ED8;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;">S</div><div><div style="font-size:13px;font-weight:600;color:#111827;">Senior tranche</div><div style="font-size:11px;color:#9CA3AF;">Priority 1</div></div></div></td>
-              <td style="padding:12px 14px;"><div style="display:flex;gap:0;align-items:center;"><input type="number" id="is-senior" class="form-input" value="107" style="width:90px;border-radius:6px 0 0 6px;border-right:none;" oninput="isRecalc()" /><span style="background:#F9FAFB;border:1px solid #D1D5DB;border-left:none;border-radius:0 6px 6px 0;padding:0 10px;display:flex;align-items:center;font-size:12px;color:#6B7280;align-self:stretch;">USD'm</span></div></td>
+              <td style="padding:12px 14px;"><div style="display:flex;gap:0;align-items:center;"><input type="number" id="is-senior" class="form-input" value="107" style="width:90px;border-radius:6px 0 0 6px;border-right:none;" oninput="isRecalc()" /><span style="background:#F9FAFB;border:1px solid #D1D5DB;border-left:none;border-radius:0 6px 6px 0;padding:0 10px;display:flex;align-items:center;font-size:12px;color:#6B7280;align-self:stretch;">USD'm</span><span class="req" style="margin-left:6px;">*</span></div></td>
               <td style="padding:12px 14px;font-size:13px;color:#374151;" id="is-senior-pct">73.79%</td>
               <td style="padding:12px 14px;"><div class="toggle" id="is-senior-toggle" onclick="this.classList.toggle('off')"></div></td>
             </tr>
@@ -4270,6 +4270,7 @@ function toggleClawback(el) {
   const enabled = !el.classList.contains('off');
   document.getElementById('clawback-config').classList.toggle('dimmed', !enabled);
   document.getElementById('n-input-row').classList.toggle('dimmed', !enabled);
+  document.getElementById('clawback-mode-req').style.display = enabled ? '' : 'none';
 }
 
 function selectMode(n) {
