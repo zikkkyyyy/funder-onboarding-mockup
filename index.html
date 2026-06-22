@@ -870,6 +870,33 @@ tr.drag-over { border-top: 2px solid #2563EB; }
       </div>
     </div>
 
+    <!-- Manual Clawback -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-title">Manual Clawback</div>
+        <div class="section-sub">Select which clawback modes are enabled for this funder.</div>
+      </div>
+      <div class="section-body">
+        <div class="form-group">
+          <label class="form-label">Clawback Mode <span class="req">*</span></label>
+          <div style="display:flex;flex-direction:column;gap:12px;margin-top:8px;">
+            <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:#374151;cursor:pointer;">
+              <input type="checkbox" id="mc-mode-a" checked style="accent-color:#2563EB;width:15px;height:15px;flex-shrink:0;" />
+              <span><strong>Mode A:</strong> Standard osp + accrued i</span>
+            </label>
+            <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:#374151;cursor:pointer;">
+              <input type="checkbox" id="mc-mode-b" checked style="accent-color:#2563EB;width:15px;height:15px;flex-shrink:0;" />
+              <span><strong>Mode B:</strong> Standard osp only</span>
+            </label>
+            <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:#374151;cursor:pointer;">
+              <input type="checkbox" id="mc-mode-c" style="accent-color:#2563EB;width:15px;height:15px;flex-shrink:0;" />
+              <span><strong>Mode C:</strong> Custom effective date</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Auto Clawback -->
     <div class="section-card">
       <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;">
@@ -1532,6 +1559,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
         <div class="rv-section" style="margin-top:20px;">
           <div class="rv-section-title">Portfolio Setting</div>
           <div class="rv-row"><span class="rv-label">Pricing mode</span><span class="rv-value">Accrued Interest</span></div>
+          <div class="rv-row"><span class="rv-label">Manual Clawback Mode</span><span class="rv-value">Mode A: Standard osp + accrued i · Mode B: Standard osp only</span></div>
           <div class="rv-row"><span class="rv-label">Auto Clawback Enabled</span><span class="rv-value">Yes</span></div>
           <div class="rv-row"><span class="rv-label">Auto Clawback Mode</span><span class="rv-value">Mode 2</span></div>
           <div class="rv-row"><span class="rv-label">N Input</span><span class="rv-value">1</span></div>
@@ -2324,6 +2352,46 @@ tr.drag-over { border-top: 2px solid #2563EB; }
             <div style="padding:12px 20px;display:flex;justify-content:flex-end;gap:10px;">
               <button class="btn-outline-sm" style="padding:7px 18px;font-size:13px;" onclick="ptCancelEdit()">Cancel</button>
               <button class="btn-primary-lg" style="padding:7px 18px;font-size:13px;" onclick="ptOpenSaveModal()">Save</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Manual Clawback -->
+        <div class="view-section" id="mc-section">
+          <div class="view-section-hd">
+            <span class="view-section-title">Manual Clawback</span>
+            <button class="btn-outline-sm" id="mc-edit-btn" style="padding:6px 14px;font-size:12px;" onclick="mcStartEdit()">Edit</button>
+          </div>
+          <!-- View mode -->
+          <div class="view-section-body" id="mc-view-body">
+            <div class="view-label" style="margin-bottom:8px;">Clawback Mode</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;" id="mc-view-badges">
+              <span style="background:#DBEAFE;color:#1D4ED8;font-size:12px;font-weight:600;padding:3px 10px;border-radius:4px;">Mode A: Standard osp + accrued i</span>
+              <span style="background:#DBEAFE;color:#1D4ED8;font-size:12px;font-weight:600;padding:3px 10px;border-radius:4px;">Mode B: Standard osp only</span>
+            </div>
+          </div>
+          <!-- Edit mode -->
+          <div id="mc-edit-body" style="display:none;">
+            <div style="padding:16px 20px;border-bottom:1px solid #F3F4F6;">
+              <div class="view-label" style="margin-bottom:10px;">Clawback Mode <span class="req">*</span></div>
+              <div style="display:flex;flex-direction:column;gap:12px;">
+                <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:#374151;cursor:pointer;">
+                  <input type="checkbox" id="mc-edit-mode-a" checked style="accent-color:#2563EB;width:15px;height:15px;flex-shrink:0;" />
+                  <span><strong>Mode A:</strong> Standard osp + accrued i</span>
+                </label>
+                <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:#374151;cursor:pointer;">
+                  <input type="checkbox" id="mc-edit-mode-b" checked style="accent-color:#2563EB;width:15px;height:15px;flex-shrink:0;" />
+                  <span><strong>Mode B:</strong> Standard osp only</span>
+                </label>
+                <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:#374151;cursor:pointer;">
+                  <input type="checkbox" id="mc-edit-mode-c" style="accent-color:#2563EB;width:15px;height:15px;flex-shrink:0;" />
+                  <span><strong>Mode C:</strong> Custom effective date</span>
+                </label>
+              </div>
+            </div>
+            <div style="padding:12px 20px;display:flex;justify-content:flex-end;gap:10px;">
+              <button class="btn-outline-sm" style="padding:7px 18px;font-size:13px;" onclick="mcCancelEdit()">Cancel</button>
+              <button class="btn-primary-lg" style="padding:7px 18px;font-size:13px;" onclick="mcSaveEdit()">Save</button>
             </div>
           </div>
         </div>
@@ -6396,6 +6464,35 @@ function ffcSubmit() {
 </script>
 
 <script>
+/* ── Manual Clawback (view funder) ── */
+function mcStartEdit() {
+  document.getElementById('mc-view-body').style.display = 'none';
+  document.getElementById('mc-edit-body').style.display = 'block';
+  document.getElementById('mc-edit-btn').style.display = 'none';
+}
+function mcCancelEdit() {
+  document.getElementById('mc-view-body').style.display = 'block';
+  document.getElementById('mc-edit-body').style.display = 'none';
+  document.getElementById('mc-edit-btn').style.display = '';
+}
+function mcSaveEdit() {
+  const modes = [
+    { id: 'mc-edit-mode-a', label: 'Mode A: Standard osp + accrued i' },
+    { id: 'mc-edit-mode-b', label: 'Mode B: Standard osp only' },
+    { id: 'mc-edit-mode-c', label: 'Mode C: Custom effective date' },
+  ];
+  const selected = modes.filter(m => document.getElementById(m.id).checked);
+  const badges = document.getElementById('mc-view-badges');
+  badges.innerHTML = selected.length
+    ? selected.map(m => `<span style="background:#DBEAFE;color:#1D4ED8;font-size:12px;font-weight:600;padding:3px 10px;border-radius:4px;">${m.label}</span>`).join('')
+    : '<span style="font-size:13px;color:#9CA3AF;">None selected</span>';
+  mcCancelEdit();
+  const toast = document.getElementById('toast');
+  toast.textContent = '✓ Manual Clawback updated';
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
 /* ── Traffic Control Modals ── */
 
 function tcOpenAdd() {
