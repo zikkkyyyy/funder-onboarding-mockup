@@ -1421,7 +1421,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
           <div class="section-title">Milestone Configuration</div>
           <div class="section-sub">Configure milestone offset values and holiday skip per milestone. <span style="background:#F3F4F6;color:#6B7280;padding:1px 6px;border-radius:3px;font-size:11px;font-weight:600;">System</span> milestones are auto-triggered and cannot be adjusted.</div>
         </div>
-        <div style="display:flex;gap:8px;align-items:center;">
+        <div style="display:none;gap:8px;align-items:center;">
           <div class="template-dropdown" id="load-tpl-dd">
             <button class="btn-outline-sm" style="white-space:nowrap;padding:7px 14px;" onclick="toggleTplDropdown(event)">Load Template ▾</button>
             <div class="tpl-dd-menu" id="tpl-dd-menu">
@@ -1810,7 +1810,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
         <div class="sidebar-group-hd">Routing Management ▾</div>
         <div class="sidebar-group-hd" style="padding-left:26px;">Lender Management ▾</div>
         <div class="sidebar-item active" onclick="switchFlow('list')">Lender List</div>
-        <div class="sidebar-item" onclick="switchFlow('wf-template')">Workflow Template</div>
+        <div class="sidebar-item" onclick="switchFlow('wf-template')" style="display:none;">Workflow Template</div>
         <div class="sidebar-group-hd" style="margin-top:4px;">Report Management ▾</div>
         <div class="sidebar-group-hd" style="margin-top:4px;">Whitelist Configuration</div>
         <div class="sidebar-group-hd" style="margin-top:4px;">Event System</div>
@@ -1843,7 +1843,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
           <div style="display:flex;gap:10px;align-items:center;">
             <button id="btn-batch-adjust" class="btn-outline-sm" style="padding:9px 16px;font-size:13px;color:#374151;display:flex;align-items:center;gap:6px;" onclick="bspOpen()">
               <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h6"/><circle cx="19" cy="18" r="3"/><path d="M19 15v3m0 0v3m0-3h3m-3 0h-3" stroke-width="1.8"/></svg>
-              Batch Adjust Plans
+              Create Sub Plan (Batch)
             </button>
             <button class="btn-outline-sm" style="padding:9px 16px;font-size:13px;color:#374151;display:flex;align-items:center;gap:6px;" onclick="openImportJsonModal()">
               <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
@@ -2176,7 +2176,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
         <div class="sidebar-group-hd">Routing Management ▾</div>
         <div class="sidebar-group-hd" style="padding-left:26px;">Lender Management ▾</div>
         <div class="sidebar-item active">Lender List</div>
-        <div class="sidebar-item" onclick="switchFlow('wf-template')">Workflow Template</div>
+        <div class="sidebar-item" onclick="switchFlow('wf-template')" style="display:none;">Workflow Template</div>
         <div class="sidebar-group-hd" style="margin-top:4px;">Report Management ▾</div>
         <div class="sidebar-group-hd" style="margin-top:4px;">Whitelist Configuration</div>
         <div class="sidebar-group-hd" style="margin-top:4px;">Event System</div>
