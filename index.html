@@ -364,6 +364,8 @@ tr.drag-over { border-top: 2px solid #2563EB; }
 /* ── Row checkbox ── */
 .row-chk { width:16px; height:16px; accent-color:#2563EB; cursor:pointer; }
 .lender-table tbody tr.selected td { background:#EFF6FF !important; }
+.lender-table tbody tr.ops-locked td { opacity:0.4; }
+.row-chk:disabled { cursor:not-allowed; opacity:0.45; }
 
 /* ── Batch Adjust modal ── */
 .batch-modal { width:640px; }
@@ -1876,7 +1878,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
             </tr></thead>
             <tbody>
               <tr id="lrow-1">
-                <td style="padding:11px 10px 11px 16px;"><input type="checkbox" class="row-chk" onchange="onRowCheck(this,'TH_SPC_UNICORN','ABS Net')" /></td>
+                <td style="padding:11px 10px 11px 16px;"><input type="checkbox" class="row-chk" data-ops="ABS Net" onchange="onRowCheck(this,'TH_SPC_UNICORN','ABS Net')" /></td>
                 <td class="num-col">1</td><td class="num-col">1240037</td>
                 <td style="font-weight:500;">TH_SPC_UNICORN</td>
                 <td><span class="status-badge status-active-badge">ACTIVE</span></td>
@@ -1888,7 +1890,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                 </div></div></td>
               </tr>
               <tr id="lrow-2">
-                <td style="padding:11px 10px 11px 16px;"><input type="checkbox" class="row-chk" onchange="onRowCheck(this,'TH_SPL_Pioneer_01','ABS')" /></td>
+                <td style="padding:11px 10px 11px 16px;"><input type="checkbox" class="row-chk" data-ops="ABS" onchange="onRowCheck(this,'TH_SPL_Pioneer_01','ABS')" /></td>
                 <td class="num-col">2</td><td class="num-col">194191</td>
                 <td style="font-weight:500;">TH_SPL_Pioneer_01</td>
                 <td><span class="status-badge status-active-badge">ACTIVE</span></td>
@@ -1900,7 +1902,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                 </div></div></td>
               </tr>
               <tr id="lrow-3">
-                <td style="padding:11px 10px 11px 16px;"><input type="checkbox" class="row-chk" onchange="onRowCheck(this,'BCL_SEABANK01','ABS')" /></td>
+                <td style="padding:11px 10px 11px 16px;"><input type="checkbox" class="row-chk" data-ops="ABS" onchange="onRowCheck(this,'BCL_SEABANK01','ABS')" /></td>
                 <td class="num-col">3</td><td class="num-col">199530</td>
                 <td style="font-weight:500;">BCL_SEABANK01</td>
                 <td><span class="status-badge status-draft-badge">DRAFT</span></td>
@@ -1912,7 +1914,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                 </div></div></td>
               </tr>
               <tr id="lrow-4">
-                <td style="padding:11px 10px 11px 16px;"><input type="checkbox" class="row-chk" onchange="onRowCheck(this,'USD4_SPL_ABS_01','ABL')" /></td>
+                <td style="padding:11px 10px 11px 16px;"><input type="checkbox" class="row-chk" data-ops="ABL" onchange="onRowCheck(this,'USD4_SPL_ABS_01','ABL')" /></td>
                 <td class="num-col">4</td><td class="num-col">1040011</td>
                 <td style="font-weight:500;">USD4_SPL_ABS_01</td>
                 <td><span class="status-badge status-inactive-badge">INACTIVE</span></td>
@@ -1922,7 +1924,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                 <td><div class="tbl-actions"><button class="tbl-act-link">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">Edit</button><span class="tbl-act-sep">|</span><div class="more-dd-wrap" id="more-4"><button class="tbl-act-link" onclick="toggleMoreDD('more-4',event)">More ▾</button><div class="more-dd-menu"><button class="more-dd-item disabled">Export JSON</button></div></div></div></td>
               </tr>
               <tr id="lrow-5">
-                <td style="padding:11px 10px 11px 16px;"><input type="checkbox" class="row-chk" onchange="onRowCheck(this,'TH_MAD_SPL_ABS_01','ABS')" /></td>
+                <td style="padding:11px 10px 11px 16px;"><input type="checkbox" class="row-chk" data-ops="ABS" onchange="onRowCheck(this,'TH_MAD_SPL_ABS_01','ABS')" /></td>
                 <td class="num-col">5</td><td class="num-col">1000527</td>
                 <td style="font-weight:500;">TH_MAD_SPL_ABS_01</td>
                 <td><span class="status-badge" style="background:#FEF3C7;color:#92400E;border:1px solid #FDE68A;">PENDING</span></td>
@@ -1934,7 +1936,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                 </div></div></td>
               </tr>
               <tr id="lrow-6">
-                <td style="padding:11px 10px 11px 16px;"><input type="checkbox" class="row-chk" onchange="onRowCheck(this,'TH_SPL_Allstar_ABS_01','ABS Net')" /></td>
+                <td style="padding:11px 10px 11px 16px;"><input type="checkbox" class="row-chk" data-ops="ABS Net" onchange="onRowCheck(this,'TH_SPL_Allstar_ABS_01','ABS Net')" /></td>
                 <td class="num-col">6</td><td class="num-col">1040641</td>
                 <td style="font-weight:500;">TH_SPL_Allstar_ABS_01</td>
                 <td><span class="status-badge" style="background:#FEF3C7;color:#92400E;border:1px solid #FDE68A;">PENDING</span></td>
@@ -1946,7 +1948,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                 </div></div></td>
               </tr>
               <tr id="lrow-7">
-                <td style="padding:11px 10px 11px 16px;"><input type="checkbox" class="row-chk" onchange="onRowCheck(this,'TH_MND_SPL_ABS_01_2024','ABL')" /></td>
+                <td style="padding:11px 10px 11px 16px;"><input type="checkbox" class="row-chk" data-ops="ABL" onchange="onRowCheck(this,'TH_MND_SPL_ABS_01_2024','ABL')" /></td>
                 <td class="num-col">7</td><td class="num-col">1061001</td>
                 <td style="font-weight:500;">TH_MND_SPL_ABS_01_2024</td>
                 <td><span class="status-badge" style="background:#FEF3C7;color:#92400E;border:1px solid #FDE68A;">DRAFT</span></td>
@@ -1960,7 +1962,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                 </div></td>
               </tr>
               <tr id="lrow-8">
-                <td style="padding:11px 10px 11px 16px;"><input type="checkbox" class="row-chk" onchange="onRowCheck(this,'TH_SPL_SPL_01','ABL')" /></td>
+                <td style="padding:11px 10px 11px 16px;"><input type="checkbox" class="row-chk" data-ops="ABL" onchange="onRowCheck(this,'TH_SPL_SPL_01','ABL')" /></td>
                 <td class="num-col">8</td><td class="num-col">1085111</td>
                 <td style="font-weight:500;">TH_SPL_SPL_01</td>
                 <td><span class="status-badge" style="background:#FEF3C7;color:#92400E;border:1px solid #FDE68A;">DRAFT</span></td>
@@ -1975,7 +1977,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
               </tr>
               <!-- Starlight -->
               <tr id="lrow-9" style="background:#FFFBEB;">
-                <td style="padding:11px 10px 11px 16px;"><input type="checkbox" class="row-chk" onchange="onRowCheck(this,'TH_SPL_Starlight_ABS_01','ABS')" /></td>
+                <td style="padding:11px 10px 11px 16px;"><input type="checkbox" class="row-chk" data-ops="ABS" onchange="onRowCheck(this,'TH_SPL_Starlight_ABS_01','ABS')" /></td>
                 <td class="num-col">9</td><td class="num-col">1051002</td>
                 <td style="font-weight:600;color:#111827;">TH_SPL_Starlight_ABS_01</td>
                 <td><span class="status-badge status-active-badge">ACTIVE</span></td>
@@ -3428,19 +3430,48 @@ function onRowCheck(chk, name, opsFlow) {
     delete selectedPlans[name];
     row.classList.remove('selected');
   }
+  applyOpsFlowLock();
   updateSelectAll();
   updateBulkBar();
 }
 
-function toggleSelectAll(masterChk) {
+// v0.6: once a funder is selected, lock the batch to its Ops Flow.
+// Rows of a different Ops Flow become unselectable (greyed out) —
+// this replaces the old structural guarantee from the per-template plan list.
+function applyOpsFlowLock() {
+  const vals = Object.values(selectedPlans);
+  const locked = vals.length ? vals[0] : null;
   document.querySelectorAll('#flow-list .row-chk:not(#chk-all)').forEach(chk => {
-    chk.checked = masterChk.checked;
+    const ops = chk.getAttribute('data-ops');
+    const lock = !!(locked && ops !== locked);
+    chk.disabled = lock;
+    if (lock) chk.title = 'Different Ops Flow — clear selection to switch';
+    else chk.removeAttribute('title');
     const row = chk.closest('tr');
-    const name = chk.getAttribute('onchange').match(/'([^']+)'/)?.[1] || '';
-    const flow = chk.getAttribute('onchange').match(/'([^']+)'/g)?.[1]?.replace(/'/g,'') || '';
-    if (masterChk.checked) { selectedPlans[name] = flow; row.classList.add('selected'); }
-    else { delete selectedPlans[name]; row.classList.remove('selected'); }
+    if (row) row.classList.toggle('ops-locked', lock);
   });
+  const master = document.getElementById('chk-all');
+  if (master) master.disabled = !!locked;
+}
+
+function toggleSelectAll(masterChk) {
+  const rows = document.querySelectorAll('#flow-list .row-chk:not(#chk-all)');
+  let vals = Object.values(selectedPlans);
+  let locked = vals.length ? vals[0] : null;
+  if (masterChk.checked && !locked && rows.length) {
+    locked = rows[0].getAttribute('data-ops');
+  }
+  rows.forEach(chk => {
+    const ops = chk.getAttribute('data-ops');
+    const name = chk.getAttribute('onchange').match(/'([^']+)'/)?.[1] || '';
+    const row = chk.closest('tr');
+    if (masterChk.checked && (!locked || ops === locked)) {
+      chk.checked = true; selectedPlans[name] = ops; row.classList.add('selected');
+    } else {
+      chk.checked = false; delete selectedPlans[name]; row.classList.remove('selected');
+    }
+  });
+  applyOpsFlowLock();
   updateBulkBar();
 }
 
@@ -3543,7 +3574,7 @@ function updateBulkBar() {
     else if (mixed) {
       opsHint.innerHTML = ` · <span style="color:#D97706;">⚠️ Mixed Ops Flow (${opsFlows.join(', ')}) — Batch Sub Plan requires the same Ops Flow</span>`;
     } else {
-      opsHint.innerHTML = ` · Ops Flow: <strong>${opsFlows[0]}</strong> · click "Batch Adjust Plans" to create Sub Plans`;
+      opsHint.innerHTML = ` · Ops Flow: <strong>${opsFlows[0]}</strong> · click "Create Sub Plan (Batch)" to create Sub Plans`;
     }
   }
 
@@ -3589,7 +3620,7 @@ function onBatchAdjustClick() {
       hint.innerHTML = '← Check the boxes in the table to select funders first';
       setTimeout(() => {
         hint.style.color = '#9CA3AF';
-        hint.innerHTML = '✓ <span id="lib-select-count">0</span> funder(s) selected — click "Batch Adjust Plans" to continue';
+        hint.innerHTML = '✓ <span id="lib-select-count">0</span> funder(s) selected — click "Create Sub Plan (Batch)" to continue';
         hint.style.display = 'none';
       }, 2200);
     }
@@ -3602,6 +3633,7 @@ function clearAllSelections() {
   selectedPlans = {};
   document.querySelectorAll('#flow-list .row-chk').forEach(c => { c.checked = false; c.indeterminate = false; });
   document.querySelectorAll('#flow-list tbody tr').forEach(r => r.classList.remove('selected'));
+  applyOpsFlowLock();
   updateBulkBar();
 }
 
