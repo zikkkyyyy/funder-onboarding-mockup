@@ -322,6 +322,22 @@ tbody tr:hover { background: #FAFAFA; }
 .tbl-act-sep { color: #D1D5DB; font-size: 12px; }
 .status-live { color: #16A34A; font-size: 12px; font-weight: 500; }
 .status-pending { color: #D97706; font-size: 12px; font-weight: 500; }
+
+/* ── Data Files & Reports table ── */
+.datafile-table tbody td { font-size: 12px; color: #374151; vertical-align: top; }
+.datafile-table .fname { font-family: 'SF Mono', 'Roboto Mono', Menlo, Consolas, monospace; font-size: 11.5px; color: #1F2937; word-break: break-all; }
+.datafile-table .ftiming { color: #6B7280; font-size: 11.5px; line-height: 1.5; }
+.datafile-table .ftype { display: inline-block; padding: 1px 8px; border-radius: 4px; background: #F3F4F6; color: #4B5563; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+.cat-badge { display: inline-block; padding: 3px 9px; border-radius: 6px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+.cat-loan-tape { background: #DBEAFE; color: #1D4ED8; }
+.cat-report { background: #FEF3C7; color: #92400E; }
+.cat-sale-notice { background: #EDE9FE; color: #6D28D9; }
+.datafile-table .path-input { font-family: 'SF Mono', 'Roboto Mono', Menlo, Consolas, monospace; font-size: 11.5px; min-width: 100%; }
+/* Highlight the Investor Portal File Path column */
+.datafile-table th.col-portal { background: #EFF6FF; color: #1D4ED8; border-bottom-color: #BFDBFE; }
+.datafile-table td.col-portal { background: #F5F9FF; }
+.datafile-table td.col-portal .path-input:hover { border-color: #93C5FD; background: #fff; }
+.datafile-table td.col-portal .path-input:focus { border-color: #2563EB; background: #fff; }
 /* ── Pagination ── */
 .tbl-pagination { display: flex; align-items: center; justify-content: flex-end; gap: 8px; padding: 12px 16px; border-top: 1px solid #F3F4F6; font-size: 13px; color: #6B7280; }
 .pg-btn { width: 30px; height: 30px; border-radius: 6px; border: 1px solid #E5E7EB; background: #fff; cursor: pointer; font-size: 13px; color: #374151; display: flex; align-items: center; justify-content: center; }
@@ -684,7 +700,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
   <div class="step-item active" id="tab-s1" onclick="showPage('s1',this)"><div class="step-num">01</div><div class="step-text">Basic Info</div></div>
   <div class="step-item" id="tab-s2" onclick="showPage('s2',this)"><div class="step-num">02</div><div class="step-text">Portfolio Setting</div></div>
   <div class="step-item" id="tab-s4" onclick="showPage('s4',this)"><div class="step-num">03</div><div class="step-text">ABS Plan</div></div>
-  <div class="step-item" id="tab-s3" onclick="showPage('s3',this)"><div class="step-num">04</div><div class="step-text">Auto Report Management</div></div>
+  <div class="step-item" id="tab-s3" onclick="showPage('s3',this)"><div class="step-num">04</div><div class="step-text">Report Management</div></div>
   <div class="step-item" id="tab-s5" onclick="showPage('s5',this)"><div class="step-num">05</div><div class="step-text">Review</div></div>
 </div>
 
@@ -1102,10 +1118,10 @@ tr.drag-over { border-top: 2px solid #2563EB; }
   ══════════════════════════════════════ -->
   <div class="page" id="page-s3">
 
-    <!-- toolbar -->
+    <!-- sub-section: Auto Report Management -->
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
       <div>
-        <div style="font-size:18px;font-weight:700;color:#111827;">Auto Report Management</div>
+        <div style="font-size:16px;font-weight:700;color:#111827;">Auto Report Management</div>
         <div style="font-size:13px;color:#6B7280;margin-top:2px;">Configure report templates linked to this funder. Supports inline editing after import.</div>
       </div>
       <div style="display:flex;gap:10px;">
@@ -1265,9 +1281,140 @@ tr.drag-over { border-top: 2px solid #2563EB; }
       </div>
     </div>
 
+    <!-- ── Data Files & Reports (file paths provided by BD) ── -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin:22px 0 14px;">
+      <div>
+        <div style="font-size:16px;font-weight:700;color:#111827;">Data Files &amp; Reports</div>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn btn-edit" style="padding:8px 18px;font-size:13px;" onclick="openAddFile()">+ Add File</button>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-body" style="padding:0;">
+        <div class="tbl-wrap">
+          <table class="report-table datafile-table" style="width:100%;min-width:1720px;">
+            <thead><tr>
+              <th style="width:130px;">File Cat</th>
+              <th style="min-width:300px;">Name</th>
+              <th style="width:70px;">File Type</th>
+              <th style="min-width:220px;">Timing</th>
+              <th style="min-width:170px;">File Generation</th>
+              <th style="width:130px;">File Transfer Method</th>
+              <th style="min-width:190px;">BD Ceph File Path</th>
+              <th style="min-width:190px;">DE Ceph File Path</th>
+              <th class="col-portal" style="min-width:230px;">Investor Portal File Path</th>
+              <th style="width:120px;text-align:center;">If Sync by Funding</th>
+              <th style="width:120px;">Action</th>
+            </tr></thead>
+            <tbody id="datafile-tbody">
+              <tr>
+                <td><span class="cat-badge cat-loan-tape">Loan_Tape</span></td>
+                <td class="fname">{project_name}_Additional_Receivables_Loan_Tape_YYYY-MM-DD_[Pending-Sold]</td>
+                <td><span class="ftype">zip</span></td>
+                <td class="ftiming">by SGT 14:00 PM on Cut-off Date</td>
+                <td>Funding System (BE)</td>
+                <td>Investor Portal</td>
+                <td><input class="inline-edit path-input" value="/" /></td>
+                <td><input class="inline-edit path-input" value="/" /></td>
+                <td class="col-portal"><input class="inline-edit path-input" value="Loan_Tape/Pending_Sold_Loan_Tape/%cutoff_date/" /></td>
+                <td style="text-align:center;"><span class="badge badge-active">Yes</span></td><td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDataFile(this)">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" onclick="deleteDataFile(this)">Delete</button></div></td>
+              </tr>
+              <tr>
+                <td><span class="cat-badge cat-sale-notice">Sale_Notice</span></td>
+                <td class="fname">{project_name}_Revolving_Period_Sale_Notice_YYYYMMDD</td>
+                <td><span class="ftype">pdf</span></td>
+                <td class="ftiming">by SGT 14:00 PM on Cut-off Date</td>
+                <td>Offline (BD)</td>
+                <td>Investor Portal</td>
+                <td><input class="inline-edit path-input" value="/" /></td>
+                <td><input class="inline-edit path-input" value="/" /></td>
+                <td class="col-portal"><input class="inline-edit path-input" value="Sale_Notice%cutoff_date/" /></td>
+                <td style="text-align:center;"><span class="badge badge-active">Yes</span></td><td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDataFile(this)">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" onclick="deleteDataFile(this)">Delete</button></div></td>
+              </tr>
+              <tr>
+                <td><span class="cat-badge cat-sale-notice">Sale_Notice</span></td>
+                <td class="fname">{project_name}_Originator_Certificate_of_Solvency_YYYYMMDD</td>
+                <td><span class="ftype">pdf</span></td>
+                <td class="ftiming">by SGT 14:00 PM on Cut-off Date</td>
+                <td>Offline (BD)</td>
+                <td>Investor Portal</td>
+                <td><input class="inline-edit path-input" value="/" /></td>
+                <td><input class="inline-edit path-input" value="/" /></td>
+                <td class="col-portal"><input class="inline-edit path-input" value="Sale_Notice%cutoff_date/" /></td>
+                <td style="text-align:center;"><span class="badge badge-active">Yes</span></td><td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDataFile(this)">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" onclick="deleteDataFile(this)">Delete</button></div></td>
+              </tr>
+              <tr>
+                <td><span class="cat-badge cat-sale-notice">Sale_Notice</span></td>
+                <td class="fname">{project_name}_Revolving_Period_Sale_and_Purchase_Agreement_YYYYMMDD</td>
+                <td><span class="ftype">pdf</span></td>
+                <td class="ftiming">by SGT 14:00 PM on Cut-off Date</td>
+                <td>Offline (BD)</td>
+                <td>Investor Portal</td>
+                <td><input class="inline-edit path-input" value="/" /></td>
+                <td><input class="inline-edit path-input" value="/" /></td>
+                <td class="col-portal"><input class="inline-edit path-input" value="Sale_Notice%cutoff_date/" /></td>
+                <td style="text-align:center;"><span class="badge badge-active">Yes</span></td><td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDataFile(this)">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" onclick="deleteDataFile(this)">Delete</button></div></td>
+              </tr>
+              <tr>
+                <td><span class="cat-badge cat-loan-tape">Loan_Tape</span></td>
+                <td class="fname">{project_name}_Transferred_Loan_Tape_YYYY-MM-DD</td>
+                <td><span class="ftype">gz</span></td>
+                <td class="ftiming">by SGT 9:00 AM on 20th of each month + 1D</td>
+                <td>Data Suite Pipeline (DE)</td>
+                <td>Investor Portal</td>
+                <td><input class="inline-edit path-input" value="/" /></td>
+                <td><input class="inline-edit path-input" value="" placeholder="To be filled by DE" /></td>
+                <td class="col-portal"><input class="inline-edit path-input" value="Loan_Tape/Transferred_Loan_Tape/" /></td>
+                <td style="text-align:center;"><span class="badge badge-active">Yes</span></td><td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDataFile(this)">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" onclick="deleteDataFile(this)">Delete</button></div></td>
+              </tr>
+              <tr>
+                <td><span class="cat-badge cat-loan-tape">Loan_Tape</span></td>
+                <td class="fname">{project_name}_Repurchased_Loan_Tape_YYYY-MM-DD</td>
+                <td><span class="ftype">gz</span></td>
+                <td class="ftiming">by SGT 9:00 AM on Batch Repurchase/Clawback Cut-off Date / by SGT 9:00 AM on end of each reporting period + 1D<br/><span style="color:#DC2626;font-weight:600;">**Determined by Investor later</span></td>
+                <td>Data Suite Pipeline (DE)</td>
+                <td>Investor Portal</td>
+                <td><input class="inline-edit path-input" value="/" /></td>
+                <td><input class="inline-edit path-input" value="" placeholder="To be filled by DE" /></td>
+                <td class="col-portal"><input class="inline-edit path-input" value="Loan_Tape/Repurchased_Loan_Tape/" /></td>
+                <td style="text-align:center;"><span class="badge badge-active">Yes</span></td><td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDataFile(this)">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" onclick="deleteDataFile(this)">Delete</button></div></td>
+              </tr>
+              <tr>
+                <td><span class="cat-badge cat-report">Report</span></td>
+                <td class="fname">{project_name}_Monthly_Transferred_Loan_Tape_Summary_YYYYMMDD</td>
+                <td><span class="ftype">xlsx</span></td>
+                <td class="ftiming">by SGT 9:00 AM on 20th of each month + 1D</td>
+                <td>Data Suite Pipeline (BD)</td>
+                <td>Investor Portal</td>
+                <td><input class="inline-edit path-input" value="live/{project_name}/Report/Monthly_Portfolio_Summary/" /></td>
+                <td><input class="inline-edit path-input" value="/" /></td>
+                <td class="col-portal"><input class="inline-edit path-input" value="Report/Monthly_Portfolio_Summary/" /></td>
+                <td style="text-align:center;"><span class="badge badge-active">Yes</span></td><td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDataFile(this)">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" onclick="deleteDataFile(this)">Delete</button></div></td>
+              </tr>
+              <tr>
+                <td><span class="cat-badge cat-report">Report</span></td>
+                <td class="fname">{project_name}_Servicer_Report_YYYYMMDD</td>
+                <td><span class="ftype">xlsx</span></td>
+                <td class="ftiming">by SGT 9:00 AM on end of each reporting period + 1BD</td>
+                <td>Data Suite Pipeline (BD)</td>
+                <td>Investor Portal</td>
+                <td><input class="inline-edit path-input" value="live/{project_name}/Report/Servicer_Report/" /></td>
+                <td><input class="inline-edit path-input" value="/" /></td>
+                <td class="col-portal"><input class="inline-edit path-input" value="Report/Servicer_Report/" /></td>
+                <td style="text-align:center;"><span class="badge badge-active">Yes</span></td><td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDataFile(this)">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" onclick="deleteDataFile(this)">Delete</button></div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
     <div class="footer-nav">
       <button class="btn-outline-sm" style="padding:10px 20px;font-size:13px;" onclick="showPage('s4',null)">← Back: Management Plan</button>
       <div style="display:flex;gap:10px;">
+        <button class="btn-outline-sm" style="padding:10px 20px;font-size:13px;" onclick="showPage('s5',document.getElementById('tab-s5'))">Skip</button>
         <button class="btn-outline-sm" style="padding:10px 20px;font-size:13px;">Save draft</button>
         <button class="btn-primary-lg" onclick="showPage('s5',document.getElementById('tab-s5'))">Next: Review →</button>
       </div>
@@ -1519,7 +1666,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
       <button class="btn-outline-sm" style="padding:10px 20px;font-size:13px;" onclick="showPage('s2',null)">← Back: Portfolio Setting</button>
       <div style="display:flex;gap:10px;">
         <button class="btn-outline-sm" style="padding:10px 20px;font-size:13px;">Save Draft</button>
-        <button class="btn-primary-lg" onclick="showPage('s3',null)">Next: Auto Report Management →</button>
+        <button class="btn-primary-lg" onclick="showPage('s3',null)">Next: Report Management →</button>
       </div>
     </div>
   </div>
@@ -1662,11 +1809,121 @@ tr.drag-over { border-top: 2px solid #2563EB; }
           </div>
         </div>
 
+        <!-- Data Files & Reports -->
+        <div class="rv-section" style="margin-top:20px;">
+          <div class="rv-section-title">Data Files &amp; Reports</div>
+          <div style="margin-top:8px;overflow-x:auto;">
+            <table class="rv-table" style="min-width:1500px;">
+              <thead><tr>
+                <th style="width:120px;">File Cat</th>
+                <th style="min-width:280px;">Name</th>
+                <th style="width:70px;">File Type</th>
+                <th style="min-width:200px;">Timing</th>
+                <th style="min-width:160px;">File Generation</th>
+                <th style="min-width:160px;">BD Ceph File Path</th>
+                <th style="min-width:160px;">DE Ceph File Path</th>
+                <th style="min-width:200px;background:#EFF6FF;color:#1D4ED8;">Investor Portal File Path</th>
+                <th style="width:70px;text-align:center;">Sync</th>
+              </tr></thead>
+              <tbody>
+                <tr>
+                  <td><span class="cat-badge cat-loan-tape">Loan_Tape</span></td>
+                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">{project_name}_Additional_Receivables_Loan_Tape_YYYY-MM-DD_[Pending-Sold]</td>
+                  <td><span class="ftype">zip</span></td>
+                  <td style="color:#6B7280;font-size:12px;">by SGT 14:00 PM on Cut-off Date</td>
+                  <td>Funding System (BE)</td>
+                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">/</td>
+                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">/</td>
+                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;background:#F5F9FF;">Loan_Tape/Pending_Sold_Loan_Tape/%cutoff_date/</td>
+                  <td style="text-align:center;"><span class="badge badge-active">Yes</span></td>
+                </tr>
+                <tr>
+                  <td><span class="cat-badge cat-sale-notice">Sale_Notice</span></td>
+                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">{project_name}_Revolving_Period_Sale_Notice_YYYYMMDD</td>
+                  <td><span class="ftype">pdf</span></td>
+                  <td style="color:#6B7280;font-size:12px;">by SGT 14:00 PM on Cut-off Date</td>
+                  <td>Offline (BD)</td>
+                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">/</td>
+                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">/</td>
+                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;background:#F5F9FF;">Sale_Notice%cutoff_date/</td>
+                  <td style="text-align:center;"><span class="badge badge-active">Yes</span></td>
+                </tr>
+                <tr>
+                  <td><span class="cat-badge cat-sale-notice">Sale_Notice</span></td>
+                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">{project_name}_Originator_Certificate_of_Solvency_YYYYMMDD</td>
+                  <td><span class="ftype">pdf</span></td>
+                  <td style="color:#6B7280;font-size:12px;">by SGT 14:00 PM on Cut-off Date</td>
+                  <td>Offline (BD)</td>
+                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">/</td>
+                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">/</td>
+                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;background:#F5F9FF;">Sale_Notice%cutoff_date/</td>
+                  <td style="text-align:center;"><span class="badge badge-active">Yes</span></td>
+                </tr>
+                <tr>
+                  <td><span class="cat-badge cat-sale-notice">Sale_Notice</span></td>
+                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">{project_name}_Revolving_Period_Sale_and_Purchase_Agreement_YYYYMMDD</td>
+                  <td><span class="ftype">pdf</span></td>
+                  <td style="color:#6B7280;font-size:12px;">by SGT 14:00 PM on Cut-off Date</td>
+                  <td>Offline (BD)</td>
+                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">/</td>
+                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">/</td>
+                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;background:#F5F9FF;">Sale_Notice%cutoff_date/</td>
+                  <td style="text-align:center;"><span class="badge badge-active">Yes</span></td>
+                </tr>
+                <tr>
+                  <td><span class="cat-badge cat-loan-tape">Loan_Tape</span></td>
+                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">{project_name}_Transferred_Loan_Tape_YYYY-MM-DD</td>
+                  <td><span class="ftype">gz</span></td>
+                  <td style="color:#6B7280;font-size:12px;">by SGT 9:00 AM on 20th of each month + 1D</td>
+                  <td>Data Suite Pipeline (DE)</td>
+                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">/</td>
+                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;color:#9CA3AF;font-style:italic;">To be filled by DE</td>
+                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;background:#F5F9FF;">Loan_Tape/Transferred_Loan_Tape/</td>
+                  <td style="text-align:center;"><span class="badge badge-active">Yes</span></td>
+                </tr>
+                <tr>
+                  <td><span class="cat-badge cat-loan-tape">Loan_Tape</span></td>
+                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">{project_name}_Repurchased_Loan_Tape_YYYY-MM-DD</td>
+                  <td><span class="ftype">gz</span></td>
+                  <td style="color:#6B7280;font-size:12px;">by SGT 9:00 AM on Batch Repurchase/Clawback Cut-off Date / by SGT 9:00 AM on end of each reporting period + 1D</td>
+                  <td>Data Suite Pipeline (DE)</td>
+                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">/</td>
+                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;color:#9CA3AF;font-style:italic;">To be filled by DE</td>
+                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;background:#F5F9FF;">Loan_Tape/Repurchased_Loan_Tape/</td>
+                  <td style="text-align:center;"><span class="badge badge-active">Yes</span></td>
+                </tr>
+                <tr>
+                  <td><span class="cat-badge cat-report">Report</span></td>
+                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">{project_name}_Monthly_Transferred_Loan_Tape_Summary_YYYYMMDD</td>
+                  <td><span class="ftype">xlsx</span></td>
+                  <td style="color:#6B7280;font-size:12px;">by SGT 9:00 AM on 20th of each month + 1D</td>
+                  <td>Data Suite Pipeline (BD)</td>
+                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">live/{project_name}/Report/Monthly_Portfolio_Summary/</td>
+                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">/</td>
+                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;background:#F5F9FF;">Report/Monthly_Portfolio_Summary/</td>
+                  <td style="text-align:center;"><span class="badge badge-active">Yes</span></td>
+                </tr>
+                <tr>
+                  <td><span class="cat-badge cat-report">Report</span></td>
+                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">{project_name}_Servicer_Report_YYYYMMDD</td>
+                  <td><span class="ftype">xlsx</span></td>
+                  <td style="color:#6B7280;font-size:12px;">by SGT 9:00 AM on end of each reporting period + 1BD</td>
+                  <td>Data Suite Pipeline (BD)</td>
+                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">live/{project_name}/Report/Servicer_Report/</td>
+                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">/</td>
+                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;background:#F5F9FF;">Report/Servicer_Report/</td>
+                  <td style="text-align:center;"><span class="badge badge-active">Yes</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
       </div>
     </div>
 
     <div class="footer-nav">
-      <button class="btn-outline-sm" style="padding:10px 20px;font-size:13px;" onclick="showPage('s3',null)">← Back: Auto Report Management</button>
+      <button class="btn-outline-sm" style="padding:10px 20px;font-size:13px;" onclick="showPage('s3',null)">← Back: Report Management</button>
       <div style="display:flex;gap:10px;">
         <button class="btn-outline-sm" style="padding:10px 20px;font-size:13px;">Save draft</button>
         <button class="btn-primary-lg" style="padding:10px 24px;">Submit</button>
@@ -1755,6 +2012,119 @@ tr.drag-over { border-top: 2px solid #2563EB; }
     <div class="modal-footer">
       <button class="btn-outline-sm" style="padding:9px 20px;font-size:13px;" onclick="document.getElementById('import-modal').classList.remove('open')">Cancel</button>
       <button class="btn btn-edit" style="padding:9px 20px;font-size:13px;" id="confirm-import-btn" disabled onclick="confirmImport()">Confirm Import</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ Add Data File modal ══ -->
+<div class="modal-overlay" id="addfile-modal">
+  <div class="modal" style="width:660px;">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="addfile-title">Add Data File</div>
+        <div class="modal-sub">Pick a standard file to auto-fill its naming convention &amp; defaults, then adjust the paths as needed.</div>
+      </div>
+      <button class="modal-close" onclick="closeAddFile()">✕</button>
+    </div>
+    <div class="modal-body" style="padding:20px 24px;">
+      <div style="margin-bottom:18px;">
+        <label class="form-label">Standard File</label>
+        <select class="form-select" id="af-template" style="width:100%;" onchange="applyFilePreset(this.value)">
+          <option value="">Select...</option>
+          <option value="pending_sold">Pending Sold Loan Tape</option>
+          <option value="sale_notice">Revolving Period Sale Notice</option>
+          <option value="cert_solvency">Originator Certificate of Solvency</option>
+          <option value="spa">Revolving Period Sale and Purchase Agreement</option>
+          <option value="transferred">Transferred Loan Tape</option>
+          <option value="repurchased">Repurchased Loan Tape</option>
+          <option value="monthly_summary">Monthly Transferred Loan Tape Summary</option>
+          <option value="servicer">Servicer Report</option>
+        </select>
+        <div class="form-hint" style="margin-top:5px;color:#6B7280;font-size:12px;">Standard files use a fixed naming convention — selecting one pre-fills the fields below. <code>{project_name}</code> is substituted automatically at generation time.</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px 16px;">
+        <div>
+          <label class="form-label">File Category</label>
+          <select class="form-select" id="af-cat" style="width:100%;">
+            <option>Loan_Tape</option>
+            <option>Report</option>
+            <option>Sale_Notice</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">File Type</label>
+          <select class="form-select" id="af-type" style="width:100%;">
+            <option value="">Select…</option>
+            <option>zip</option>
+            <option>gz</option>
+            <option>pdf</option>
+            <option>xlsx</option>
+            <option>csv</option>
+            <option>txt</option>
+            <option>json</option>
+          </select>
+        </div>
+        <div style="grid-column:1/3;">
+          <label class="form-label">Name</label>
+          <input class="form-input" id="af-name" style="width:100%;font-family:'SF Mono',Menlo,monospace;font-size:12px;" placeholder="{project_name}_..." />
+        </div>
+        <div style="grid-column:1/3;">
+          <label class="form-label">Timing</label>
+          <div style="display:flex;gap:7px;align-items:center;flex-wrap:nowrap;margin-bottom:8px;font-size:13px;color:#374151;">
+            <span>by SGT</span>
+            <select class="form-select" id="af-t-time" style="width:100px;flex-shrink:0;" onchange="composeTiming()">
+              <option>9:00 AM</option><option>10:00 AM</option><option>12:00 PM</option><option>14:00 PM</option><option>18:00 PM</option>
+            </select>
+            <span>on</span>
+            <select class="form-select" id="af-t-anchor" style="width:190px;flex-shrink:1;min-width:110px;" onchange="composeTiming()">
+              <option>Cut-off Date</option>
+              <option>20th of each month</option>
+              <option>end of each reporting period</option>
+              <option>Batch Repurchase/Clawback Cut-off Date</option>
+            </select>
+            <span>+</span>
+            <input class="form-input" id="af-t-offset" type="number" min="0" style="width:56px;flex-shrink:0;" placeholder="0" oninput="composeTiming()" onchange="composeTiming()" />
+            <select class="form-select" id="af-t-unit" style="width:74px;flex-shrink:0;" onchange="composeTiming()">
+              <option value="">—</option><option>D</option><option>BD</option>
+            </select>
+          </div>
+          <input type="hidden" id="af-timing" />
+        </div>
+        <div>
+          <label class="form-label">File Generation</label>
+          <select class="form-select" id="af-gen" style="width:100%;">
+            <option value="">Select…</option>
+            <option>Funding System (BE)</option>
+            <option>Offline (BD)</option>
+            <option>Data Suite Pipeline (DE)</option>
+            <option>Data Suite Pipeline (BD)</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">File Transfer Method</label>
+          <input class="form-input" id="af-transfer" style="width:100%;" value="Investor Portal" />
+        </div>
+        <div>
+          <label class="form-label">BD Ceph File Path</label>
+          <input class="form-input" id="af-bd" style="width:100%;font-family:'SF Mono',Menlo,monospace;font-size:12px;" value="/" />
+        </div>
+        <div>
+          <label class="form-label">DE Ceph File Path</label>
+          <input class="form-input" id="af-de" style="width:100%;font-family:'SF Mono',Menlo,monospace;font-size:12px;" value="/" />
+        </div>
+        <div style="grid-column:1/3;background:#F5F9FF;border:1px solid #BFDBFE;border-radius:8px;padding:10px 12px;">
+          <label class="form-label" style="color:#1D4ED8;">Investor Portal File Path <span style="color:#DC2626;">*</span></label>
+          <input class="form-input" id="af-portal" style="width:100%;font-family:'SF Mono',Menlo,monospace;font-size:12px;" placeholder="e.g. Loan_Tape/Pending_Sold_Loan_Tape/%cutoff_date/" />
+        </div>
+        <div>
+          <label class="form-label">If Sync by Funding</label>
+          <select class="form-select" id="af-sync" style="width:100%;"><option>Yes</option><option>No</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-outline-sm" style="padding:9px 20px;font-size:13px;" onclick="closeAddFile()">Cancel</button>
+      <button class="btn btn-edit" id="addfile-submit" style="padding:9px 20px;font-size:13px;" onclick="confirmAddFile()">Add File</button>
     </div>
   </div>
 </div>
@@ -4219,6 +4589,173 @@ function showPage(id, btn) {
   if (tab) tab.classList.add('active');
   document.querySelectorAll('.demo-btn').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
+}
+
+/* ── Data Files & Reports: Add File modal ── */
+// timing is structured: { time, anchor, offset, unit } — composed into a string via composeTiming().
+// ttext (optional) overrides the composed string for compound/special cases.
+const FILE_PRESETS = {
+  pending_sold: { cat:'Loan_Tape', name:'{project_name}_Additional_Receivables_Loan_Tape_YYYY-MM-DD_[Pending-Sold]', type:'zip', timing:{time:'14:00 PM',anchor:'Cut-off Date',offset:'',unit:''}, gen:'Funding System (BE)', transfer:'Investor Portal', bd:'/', de:'/', portal:'Loan_Tape/Pending_Sold_Loan_Tape/%cutoff_date/', sync:'Yes' },
+  sale_notice: { cat:'Sale_Notice', name:'{project_name}_Revolving_Period_Sale_Notice_YYYYMMDD', type:'pdf', timing:{time:'14:00 PM',anchor:'Cut-off Date',offset:'',unit:''}, gen:'Offline (BD)', transfer:'Investor Portal', bd:'/', de:'/', portal:'Sale_Notice%cutoff_date/', sync:'Yes' },
+  cert_solvency: { cat:'Sale_Notice', name:'{project_name}_Originator_Certificate_of_Solvency_YYYYMMDD', type:'pdf', timing:{time:'14:00 PM',anchor:'Cut-off Date',offset:'',unit:''}, gen:'Offline (BD)', transfer:'Investor Portal', bd:'/', de:'/', portal:'Sale_Notice%cutoff_date/', sync:'Yes' },
+  spa: { cat:'Sale_Notice', name:'{project_name}_Revolving_Period_Sale_and_Purchase_Agreement_YYYYMMDD', type:'pdf', timing:{time:'14:00 PM',anchor:'Cut-off Date',offset:'',unit:''}, gen:'Offline (BD)', transfer:'Investor Portal', bd:'/', de:'/', portal:'Sale_Notice%cutoff_date/', sync:'Yes' },
+  transferred: { cat:'Loan_Tape', name:'{project_name}_Transferred_Loan_Tape_YYYY-MM-DD', type:'gz', timing:{time:'9:00 AM',anchor:'20th of each month',offset:'1',unit:'D'}, gen:'Data Suite Pipeline (DE)', transfer:'Investor Portal', bd:'/', de:'', portal:'Loan_Tape/Transferred_Loan_Tape/', sync:'Yes' },
+  repurchased: { cat:'Loan_Tape', name:'{project_name}_Repurchased_Loan_Tape_YYYY-MM-DD', type:'gz', timing:{time:'9:00 AM',anchor:'Batch Repurchase/Clawback Cut-off Date',offset:'',unit:''}, ttext:'by SGT 9:00 AM on Batch Repurchase/Clawback Cut-off Date / by SGT 9:00 AM on end of each reporting period + 1D', gen:'Data Suite Pipeline (DE)', transfer:'Investor Portal', bd:'/', de:'', portal:'Loan_Tape/Repurchased_Loan_Tape/', sync:'Yes' },
+  monthly_summary: { cat:'Report', name:'{project_name}_Monthly_Transferred_Loan_Tape_Summary_YYYYMMDD', type:'xlsx', timing:{time:'9:00 AM',anchor:'20th of each month',offset:'1',unit:'D'}, gen:'Data Suite Pipeline (BD)', transfer:'Investor Portal', bd:'live/{project_name}/Report/Monthly_Portfolio_Summary/', de:'/', portal:'Report/Monthly_Portfolio_Summary/', sync:'Yes' },
+  servicer: { cat:'Report', name:'{project_name}_Servicer_Report_YYYYMMDD', type:'xlsx', timing:{time:'9:00 AM',anchor:'end of each reporting period',offset:'1',unit:'BD'}, gen:'Data Suite Pipeline (BD)', transfer:'Investor Portal', bd:'live/{project_name}/Report/Servicer_Report/', de:'/', portal:'Report/Servicer_Report/', sync:'Yes' }
+};
+const CAT_CLASS = { 'Loan_Tape':'cat-loan-tape', 'Report':'cat-report', 'Sale_Notice':'cat-sale-notice' };
+
+let editingRow = null; // the <tr> being edited, or null when adding
+
+function openAddFile() {
+  editingRow = null;
+  document.getElementById('af-template').value = '';
+  applyFilePreset('');
+  document.getElementById('af-template').closest('div').style.display = ''; // show template picker when adding
+  document.getElementById('addfile-title').textContent = 'Add Data File';
+  document.getElementById('addfile-submit').textContent = 'Add File';
+  document.getElementById('addfile-modal').classList.add('open');
+}
+function closeAddFile() { document.getElementById('addfile-modal').classList.remove('open'); editingRow = null; }
+
+// Set a <select> value, adding the option first if it isn't already present.
+function setSelect(id, val) {
+  const el = document.getElementById(id);
+  if (![...el.options].some(o => o.value === val)) {
+    const opt = document.createElement('option'); opt.value = val; opt.textContent = val; el.appendChild(opt);
+  }
+  el.value = val;
+}
+
+// Parse a timing string back into the builder controls (best-effort; compound strings kept as-is).
+function applyTimingString(str) {
+  const m = /^by SGT (.+?) on (.+?)(?: \+ (\d+)\s*(BD|D))?$/.exec(str || '');
+  if (m) {
+    setSelect('af-t-time', m[1]); setSelect('af-t-anchor', m[2]);
+    document.getElementById('af-t-offset').value = m[3] || '';
+    document.getElementById('af-t-unit').value = m[4] || '';
+    composeTiming();
+  } else { // unparseable (e.g. compound) → keep controls at defaults but preserve the original text
+    document.getElementById('af-t-offset').value = ''; document.getElementById('af-t-unit').value = '';
+    composeTiming();
+    setTiming(str || '');
+  }
+}
+
+// Extract the primary timing line from a row's timing cell (excludes any note after <br>).
+function getRowTiming(cell) {
+  for (const n of cell.childNodes) { if (n.nodeType === 3 && n.nodeValue.trim()) return n.nodeValue.trim(); }
+  return cell.textContent.trim();
+}
+
+function cellPath(cell) { const inp = cell.querySelector('input'); return inp ? inp.value : cell.textContent.trim(); }
+
+// Open the modal pre-populated from an existing row.
+function editDataFile(btn) {
+  const tr = btn.closest('tr');
+  editingRow = tr;
+  const c = tr.cells;
+  setSelect('af-cat', tr.querySelector('.cat-badge').textContent.trim());
+  const ft = tr.querySelector('.ftype');
+  setSelect('af-type', ft ? ft.textContent.trim() : '');
+  document.getElementById('af-name').value = c[1].textContent.trim();
+  document.getElementById('af-gen').value = c[4].textContent.trim();
+  document.getElementById('af-transfer').value = c[5].textContent.trim();
+  document.getElementById('af-bd').value = cellPath(c[6]);
+  document.getElementById('af-de').value = cellPath(c[7]);
+  document.getElementById('af-portal').value = cellPath(c[8]);
+  setSelect('af-sync', c[9].textContent.trim() === 'No' ? 'No' : 'Yes');
+  applyTimingString(getRowTiming(c[3]));
+  // hide the standard-file template picker in edit mode
+  document.getElementById('af-template').value = '';
+  document.getElementById('af-template').closest('div').style.display = 'none';
+  document.getElementById('addfile-title').textContent = 'Edit Data File';
+  document.getElementById('addfile-submit').textContent = 'Save Changes';
+  document.getElementById('addfile-modal').classList.add('open');
+}
+
+function deleteDataFile(btn) {
+  const tr = btn.closest('tr');
+  if (confirm('Delete this data file?')) tr.remove();
+}
+
+// Store the timing string in the hidden field and show it in the read-only preview.
+function setTiming(str) {
+  document.getElementById('af-timing').value = str;
+  const pv = document.getElementById('af-timing-preview');
+  if (pv) pv.textContent = str;
+}
+// Compose the timing controls into a string.
+function composeTiming() {
+  const g = id => document.getElementById(id).value;
+  const time = g('af-t-time'), anchor = g('af-t-anchor'), off = g('af-t-offset').trim(), unit = g('af-t-unit');
+  let s = 'by SGT ' + time + ' on ' + anchor;
+  if (off && Number(off) > 0) s += ' + ' + off + (unit || 'D');
+  setTiming(s);
+}
+
+function applyFilePreset(key) {
+  const p = FILE_PRESETS[key];
+  const set = (id, v) => { document.getElementById(id).value = v; };
+  const t = (p && p.timing) ? p.timing : { time:'14:00 PM', anchor:'Cut-off Date', offset:'', unit:'' };
+  set('af-t-time', t.time); set('af-t-anchor', t.anchor); set('af-t-offset', t.offset || ''); set('af-t-unit', t.unit || '');
+  composeTiming();
+  if (!p) { // Custom → reset to sensible blanks
+    set('af-cat','Loan_Tape'); set('af-type',''); set('af-name','');
+    set('af-gen',''); set('af-transfer','Investor Portal'); set('af-bd','/'); set('af-de','/');
+    set('af-portal',''); set('af-sync','Yes');
+    return;
+  }
+  set('af-cat',p.cat); set('af-type',p.type); set('af-name',p.name);
+  set('af-gen',p.gen); set('af-transfer',p.transfer); set('af-bd',p.bd); set('af-de',p.de);
+  set('af-portal',p.portal); set('af-sync',p.sync);
+  if (p.ttext) setTiming(p.ttext); // override composed string for compound timings
+}
+
+function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function dataFileActionCell() {
+  return '<td><div class="tbl-actions">' +
+    '<button class="tbl-act-link" onclick="editDataFile(this)">Edit</button>' +
+    '<span class="tbl-act-sep">|</span>' +
+    '<button class="tbl-act-link danger" onclick="deleteDataFile(this)">Delete</button>' +
+    '</div></td>';
+}
+
+function confirmAddFile() {
+  const val = id => document.getElementById(id).value.trim();
+  const cat = val('af-cat'), name = val('af-name'), portal = val('af-portal');
+  if (!name) { alert('Please enter a file Name.'); return; }
+  if (!portal) { alert('Investor Portal File Path is required.'); return; }
+  const catClass = CAT_CLASS[cat] || 'cat-loan-tape';
+  const de = document.getElementById('af-de').value.trim();
+  const deCell = de ? '<input class="inline-edit path-input" value="'+esc(de)+'" />'
+                    : '<input class="inline-edit path-input" value="" placeholder="To be filled by DE" />';
+  const sync = val('af-sync');
+  const syncBadge = sync === 'No' ? '<span class="badge badge-draft">No</span>' : '<span class="badge badge-active">Yes</span>';
+  const html =
+    '<td><span class="cat-badge '+catClass+'">'+esc(cat)+'</span></td>' +
+    '<td class="fname">'+esc(name)+'</td>' +
+    '<td><span class="ftype">'+esc(val('af-type'))+'</span></td>' +
+    '<td class="ftiming">'+esc(val('af-timing'))+'</td>' +
+    '<td>'+esc(val('af-gen'))+'</td>' +
+    '<td>'+esc(val('af-transfer'))+'</td>' +
+    '<td><input class="inline-edit path-input" value="'+esc(val('af-bd'))+'" /></td>' +
+    '<td>'+deCell+'</td>' +
+    '<td class="col-portal"><input class="inline-edit path-input" value="'+esc(portal)+'" /></td>' +
+    '<td style="text-align:center;">'+syncBadge+'</td>' +
+    dataFileActionCell();
+  if (editingRow) {
+    editingRow.innerHTML = html;
+    editingRow = null;
+  } else {
+    const tr = document.createElement('tr');
+    tr.innerHTML = html;
+    document.getElementById('datafile-tbody').appendChild(tr);
+  }
+  closeAddFile();
+  if (typeof showToast === 'function') showToast('✓ Saved');
 }
 
 /* ── Report row inline edit ── */
