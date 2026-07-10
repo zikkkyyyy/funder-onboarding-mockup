@@ -2102,7 +2102,12 @@ tr.drag-over { border-top: 2px solid #2563EB; }
         </div>
         <div>
           <label class="form-label">File Transfer Method</label>
-          <input class="form-input" id="af-transfer" style="width:100%;" value="Investor Portal" />
+          <select class="form-select" id="af-transfer" style="width:100%;">
+            <option>Investor Portal</option>
+            <option>SFTP</option>
+            <option>Email</option>
+            <option>API</option>
+          </select>
         </div>
         <div>
           <label class="form-label">BD Ceph File Path</label>
@@ -4661,7 +4666,7 @@ function editDataFile(btn) {
   setSelect('af-type', ft ? ft.textContent.trim() : '');
   document.getElementById('af-name').value = c[1].textContent.trim();
   document.getElementById('af-gen').value = c[4].textContent.trim();
-  document.getElementById('af-transfer').value = c[5].textContent.trim();
+  setSelect('af-transfer', c[5].textContent.trim());
   document.getElementById('af-bd').value = cellPath(c[6]);
   document.getElementById('af-de').value = cellPath(c[7]);
   document.getElementById('af-portal').value = cellPath(c[8]);
