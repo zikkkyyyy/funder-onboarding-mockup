@@ -2132,6 +2132,23 @@ tr.drag-over { border-top: 2px solid #2563EB; }
   </div>
 </div>
 
+<!-- ══ Delete Data File Confirm ══ -->
+<div class="confirm-overlay" id="delfile-confirm">
+  <div class="confirm-box">
+    <div style="display:flex;align-items:flex-start;gap:14px;">
+      <div style="width:40px;height:40px;border-radius:50%;background:#FEE2E2;color:#DC2626;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">⚠</div>
+      <div>
+        <div class="confirm-title" style="margin-bottom:6px;">Delete this data file?</div>
+        <div class="confirm-body" id="delfile-body" style="margin-bottom:0;">This file and its configured paths will be removed. This action cannot be undone.</div>
+      </div>
+    </div>
+    <div class="confirm-actions" style="margin-top:22px;">
+      <button class="btn-outline-sm" style="padding:9px 18px;font-size:13px;" onclick="closeDelFile()">Cancel</button>
+      <button style="background:#DC2626;color:#fff;border:none;border-radius:6px;padding:9px 20px;font-size:13px;font-weight:600;cursor:pointer;" onclick="confirmDeleteFile()">Delete</button>
+    </div>
+  </div>
+</div>
+
 <!-- ══ + Add New Confirm Popup ══ -->
 <!-- Save as Template modal -->
 <div class="confirm-overlay" id="save-tpl-modal">
@@ -2582,7 +2599,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
         <div class="view-tab active" id="vtab-basic" onclick="switchViewTab('vt-basic',this)"><span class="view-tab-num">✓</span>Basic Info</div>
         <div class="view-tab done" id="vtab-portfolio" onclick="switchViewTab('vt-portfolio',this)"><span class="view-tab-num">✓</span>Portfolio Setting</div>
         <div class="view-tab done" id="vtab-plan" onclick="switchViewTab('vt-plan',this)"><span class="view-tab-num">✓</span>Management Plan</div>
-        <div class="view-tab done" id="vtab-report" onclick="switchViewTab('vt-report',this)"><span class="view-tab-num">✓</span>Auto Report Management</div>
+        <div class="view-tab done" id="vtab-report" onclick="switchViewTab('vt-report',this)"><span class="view-tab-num">✓</span>Report Management</div>
       </div>
 
       <!-- Tab: Basic Info -->
@@ -2963,6 +2980,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
 
       <!-- Tab: Auto Report Management -->
       <div class="view-scroll" id="vt-report" style="display:none;">
+        <div style="font-size:16px;font-weight:700;color:#111827;margin-bottom:12px;">Auto Report Management</div>
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
           <div>
             <div style="font-size:13px;color:#6B7280;">Number of Reports: <strong style="color:#111827;">4</strong> &nbsp;·&nbsp; Last Edit Time: <strong style="color:#111827;">2026-05-19 09:00:00</strong></div>
@@ -3056,6 +3074,136 @@ tr.drag-over { border-top: 2px solid #2563EB; }
             </div>
           </div>
         </div>
+            <!-- ── Data Files & Reports (View Funder) ── -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin:22px 0 14px;">
+      <div>
+        <div style="font-size:16px;font-weight:700;color:#111827;">Data Files &amp; Reports</div>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn btn-edit" style="padding:8px 18px;font-size:13px;" onclick="openAddFile('vt-datafile-tbody')">+ Add File</button>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-body" style="padding:0;">
+        <div class="tbl-wrap">
+          <table class="report-table datafile-table" style="width:100%;min-width:1720px;">
+            <thead><tr>
+              <th style="width:130px;">File Cat</th>
+              <th style="min-width:300px;">Name</th>
+              <th style="width:70px;">File Type</th>
+              <th style="min-width:220px;">Timing</th>
+              <th style="min-width:170px;">File Generation</th>
+              <th style="width:130px;">File Transfer Method</th>
+              <th style="min-width:190px;">BD Ceph File Path</th>
+              <th style="min-width:190px;">DE Ceph File Path</th>
+              <th class="col-portal" style="min-width:230px;">Investor Portal File Path</th>
+              <th style="width:120px;text-align:center;">If Sync by Funding</th>
+              <th style="width:120px;">Action</th>
+            </tr></thead>
+            <tbody id="vt-datafile-tbody">
+              <tr>
+                <td><span class="cat-badge cat-loan-tape">Loan_Tape</span></td>
+                <td class="fname">{project_name}_Additional_Receivables_Loan_Tape_YYYY-MM-DD_[Pending-Sold]</td>
+                <td><span class="ftype">zip</span></td>
+                <td class="ftiming">by SGT 14:00 on Cut-off Date</td>
+                <td>Funding System (BE)</td>
+                <td>Investor Portal</td>
+                <td><input class="inline-edit path-input" value="/" /></td>
+                <td><input class="inline-edit path-input" value="/" /></td>
+                <td class="col-portal"><input class="inline-edit path-input" value="Loan_Tape/Pending_Sold_Loan_Tape/%cutoff_date/" /></td>
+                <td style="text-align:center;"><span class="badge badge-active">Yes</span></td><td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDataFile(this)">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" onclick="deleteDataFile(this)">Delete</button></div></td>
+              </tr>
+              <tr>
+                <td><span class="cat-badge cat-sale-notice">Sale_Notice</span></td>
+                <td class="fname">{project_name}_Revolving_Period_Sale_Notice_YYYYMMDD</td>
+                <td><span class="ftype">pdf</span></td>
+                <td class="ftiming">by SGT 14:00 on Cut-off Date</td>
+                <td>Offline (BD)</td>
+                <td>Investor Portal</td>
+                <td><input class="inline-edit path-input" value="/" /></td>
+                <td><input class="inline-edit path-input" value="/" /></td>
+                <td class="col-portal"><input class="inline-edit path-input" value="Sale_Notice%cutoff_date/" /></td>
+                <td style="text-align:center;"><span class="badge badge-active">Yes</span></td><td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDataFile(this)">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" onclick="deleteDataFile(this)">Delete</button></div></td>
+              </tr>
+              <tr>
+                <td><span class="cat-badge cat-sale-notice">Sale_Notice</span></td>
+                <td class="fname">{project_name}_Originator_Certificate_of_Solvency_YYYYMMDD</td>
+                <td><span class="ftype">pdf</span></td>
+                <td class="ftiming">by SGT 14:00 on Cut-off Date</td>
+                <td>Offline (BD)</td>
+                <td>Investor Portal</td>
+                <td><input class="inline-edit path-input" value="/" /></td>
+                <td><input class="inline-edit path-input" value="/" /></td>
+                <td class="col-portal"><input class="inline-edit path-input" value="Sale_Notice%cutoff_date/" /></td>
+                <td style="text-align:center;"><span class="badge badge-active">Yes</span></td><td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDataFile(this)">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" onclick="deleteDataFile(this)">Delete</button></div></td>
+              </tr>
+              <tr>
+                <td><span class="cat-badge cat-sale-notice">Sale_Notice</span></td>
+                <td class="fname">{project_name}_Revolving_Period_Sale_and_Purchase_Agreement_YYYYMMDD</td>
+                <td><span class="ftype">pdf</span></td>
+                <td class="ftiming">by SGT 14:00 on Cut-off Date</td>
+                <td>Offline (BD)</td>
+                <td>Investor Portal</td>
+                <td><input class="inline-edit path-input" value="/" /></td>
+                <td><input class="inline-edit path-input" value="/" /></td>
+                <td class="col-portal"><input class="inline-edit path-input" value="Sale_Notice%cutoff_date/" /></td>
+                <td style="text-align:center;"><span class="badge badge-active">Yes</span></td><td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDataFile(this)">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" onclick="deleteDataFile(this)">Delete</button></div></td>
+              </tr>
+              <tr>
+                <td><span class="cat-badge cat-loan-tape">Loan_Tape</span></td>
+                <td class="fname">{project_name}_Transferred_Loan_Tape_YYYY-MM-DD</td>
+                <td><span class="ftype">gz</span></td>
+                <td class="ftiming">by SGT 09:00 on 20th of each month + 1D</td>
+                <td>Data Suite Pipeline (DE)</td>
+                <td>Investor Portal</td>
+                <td><input class="inline-edit path-input" value="/" /></td>
+                <td><input class="inline-edit path-input" value="" placeholder="To be filled by DE" /></td>
+                <td class="col-portal"><input class="inline-edit path-input" value="Loan_Tape/Transferred_Loan_Tape/" /></td>
+                <td style="text-align:center;"><span class="badge badge-active">Yes</span></td><td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDataFile(this)">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" onclick="deleteDataFile(this)">Delete</button></div></td>
+              </tr>
+              <tr>
+                <td><span class="cat-badge cat-loan-tape">Loan_Tape</span></td>
+                <td class="fname">{project_name}_Repurchased_Loan_Tape_YYYY-MM-DD</td>
+                <td><span class="ftype">gz</span></td>
+                <td class="ftiming">by SGT 09:00 on Batch Repurchase/Clawback Cut-off Date / by SGT 09:00 on end of each reporting period + 1D<br/><span style="color:#DC2626;font-weight:600;">**Determined by Investor later</span></td>
+                <td>Data Suite Pipeline (DE)</td>
+                <td>Investor Portal</td>
+                <td><input class="inline-edit path-input" value="/" /></td>
+                <td><input class="inline-edit path-input" value="" placeholder="To be filled by DE" /></td>
+                <td class="col-portal"><input class="inline-edit path-input" value="Loan_Tape/Repurchased_Loan_Tape/" /></td>
+                <td style="text-align:center;"><span class="badge badge-active">Yes</span></td><td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDataFile(this)">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" onclick="deleteDataFile(this)">Delete</button></div></td>
+              </tr>
+              <tr>
+                <td><span class="cat-badge cat-report">Report</span></td>
+                <td class="fname">{project_name}_Monthly_Transferred_Loan_Tape_Summary_YYYYMMDD</td>
+                <td><span class="ftype">xlsx</span></td>
+                <td class="ftiming">by SGT 09:00 on 20th of each month + 1D</td>
+                <td>Data Suite Pipeline (BD)</td>
+                <td>Investor Portal</td>
+                <td><input class="inline-edit path-input" value="live/{project_name}/Report/Monthly_Portfolio_Summary/" /></td>
+                <td><input class="inline-edit path-input" value="/" /></td>
+                <td class="col-portal"><input class="inline-edit path-input" value="Report/Monthly_Portfolio_Summary/" /></td>
+                <td style="text-align:center;"><span class="badge badge-active">Yes</span></td><td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDataFile(this)">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" onclick="deleteDataFile(this)">Delete</button></div></td>
+              </tr>
+              <tr>
+                <td><span class="cat-badge cat-report">Report</span></td>
+                <td class="fname">{project_name}_Servicer_Report_YYYYMMDD</td>
+                <td><span class="ftype">xlsx</span></td>
+                <td class="ftiming">by SGT 09:00 on end of each reporting period + 1BD</td>
+                <td>Data Suite Pipeline (BD)</td>
+                <td>Investor Portal</td>
+                <td><input class="inline-edit path-input" value="live/{project_name}/Report/Servicer_Report/" /></td>
+                <td><input class="inline-edit path-input" value="/" /></td>
+                <td class="col-portal"><input class="inline-edit path-input" value="Report/Servicer_Report/" /></td>
+                <td style="text-align:center;"><span class="badge badge-active">Yes</span></td><td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDataFile(this)">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" onclick="deleteDataFile(this)">Delete</button></div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
         <div class="view-footer">
           <button class="btn-outline-sm" style="padding:9px 20px;font-size:13px;" onclick="switchFlow('list')">← Back to Lender List</button>
           <div style="display:flex;gap:10px;">
@@ -4610,9 +4758,11 @@ const FILE_PRESETS = {
 const CAT_CLASS = { 'Loan_Tape':'cat-loan-tape', 'Report':'cat-report', 'Sale_Notice':'cat-sale-notice' };
 
 let editingRow = null; // the <tr> being edited, or null when adding
+let addTargetTbody = 'datafile-tbody'; // which file table a new row is appended to
 
-function openAddFile() {
+function openAddFile(tbodyId) {
   editingRow = null;
+  addTargetTbody = tbodyId || 'datafile-tbody';
   document.getElementById('af-template').value = '';
   applyFilePreset('');
   document.getElementById('af-template').closest('div').style.display = ''; // show template picker when adding
@@ -4678,9 +4828,22 @@ function editDataFile(btn) {
   document.getElementById('addfile-modal').classList.add('open');
 }
 
+let pendingDeleteRow = null;
 function deleteDataFile(btn) {
-  const tr = btn.closest('tr');
-  if (confirm('Delete this data file?')) tr.remove();
+  pendingDeleteRow = btn.closest('tr');
+  const nameEl = pendingDeleteRow.querySelector('.fname');
+  const name = nameEl ? nameEl.textContent.trim() : 'this data file';
+  document.getElementById('delfile-body').innerHTML =
+    '<strong style="color:#374151;word-break:break-all;">' + esc(name) + '</strong> and its configured paths will be removed. This action cannot be undone.';
+  document.getElementById('delfile-confirm').classList.add('open');
+}
+function closeDelFile() {
+  document.getElementById('delfile-confirm').classList.remove('open');
+  pendingDeleteRow = null;
+}
+function confirmDeleteFile() {
+  if (pendingDeleteRow) pendingDeleteRow.remove();
+  closeDelFile();
 }
 
 // Store the timing string in the hidden field and show it in the read-only preview.
@@ -4755,7 +4918,7 @@ function confirmAddFile() {
   } else {
     const tr = document.createElement('tr');
     tr.innerHTML = html;
-    document.getElementById('datafile-tbody').appendChild(tr);
+    document.getElementById(addTargetTbody || 'datafile-tbody').appendChild(tr);
   }
   closeAddFile();
   if (typeof showToast === 'function') showToast('✓ Saved');
