@@ -835,6 +835,22 @@ tr.drag-over { border-top: 2px solid #2563EB; }
       </div>
     </div>
 
+    <!-- AR Task -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-title">AR Task</div>
+        <div class="section-sub">Set the AR Task ID for this funder.</div>
+      </div>
+      <div class="section-body">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">AR Task ID</label>
+            <input class="form-input" id="s1-artask-input" placeholder="e.g. AR-2024-00123" />
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Life cycle -->
     <div class="section-card">
       <div class="section-header"><div class="section-title">Life cycle</div></div>
@@ -1690,6 +1706,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
           <div class="rv-row"><span class="rv-label">Licensee</span><span class="rv-value">CCC</span></div>
           <div class="rv-row"><span class="rv-label">SPV Name</span><span class="rv-value">Stellar</span></div>
           <div class="rv-row"><span class="rv-label">Tranche</span><span class="rv-value">01</span></div>
+          <div class="rv-row"><span class="rv-label">AR Task ID</span><span class="rv-value">AR-2024-00123</span></div>
           <div class="rv-row" style="align-items:flex-start;">
             <span class="rv-label" style="padding-top:4px;">Supported Tenors</span>
             <div style="display:flex;flex-wrap:wrap;gap:5px;">
@@ -2650,6 +2667,28 @@ tr.drag-over { border-top: 2px solid #2563EB; }
               <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px 24px;">
                 <div><div class="view-label" style="margin-bottom:3px;">SPV Name</div><div style="font-size:13px;color:#111827;font-weight:500;">UMI</div></div>
                 <div><div class="view-label" style="margin-bottom:3px;">Tranche</div><div style="font-size:13px;color:#111827;font-weight:500;">01</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AR Task -->
+        <div class="view-section">
+          <div class="view-section-hd" style="cursor:pointer;" onclick="toggleAccordion('vi-artask-body');this.querySelector('.vi-chev').classList.toggle('collapsed')">
+            <span class="view-section-title">AR Task</span>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <button class="btn-edit" id="artask-edit-btn" style="padding:6px 18px;font-size:13px;border-radius:6px;" onclick="event.stopPropagation();toggleArTaskEdit()">Edit</button>
+              <span class="vi-chev" style="font-size:16px;color:#6B7280;transition:transform 0.2s;">▲</span>
+            </div>
+          </div>
+          <div id="vi-artask-body">
+            <div style="padding:18px 20px;">
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px 24px;">
+                <div>
+                  <div class="view-label" style="margin-bottom:3px;">AR Task ID</div>
+                  <div id="artask-view" style="font-size:13px;color:#9CA3AF;font-weight:500;">Not set</div>
+                  <input id="artask-input" class="form-input" placeholder="e.g. AR-2024-00123" style="display:none;width:100%;max-width:260px;font-size:13px;" />
+                </div>
               </div>
             </div>
           </div>
@@ -4844,6 +4883,27 @@ function closeDelFile() {
 function confirmDeleteFile() {
   if (pendingDeleteRow) pendingDeleteRow.remove();
   closeDelFile();
+}
+
+// AR Task ID — inline edit/save toggle (View Funder > Basic Info)
+function toggleArTaskEdit() {
+  const btn = document.getElementById('artask-edit-btn');
+  const view = document.getElementById('artask-view');
+  const input = document.getElementById('artask-input');
+  const editing = input.style.display !== 'none';
+  if (editing) { // Save
+    const v = input.value.trim();
+    view.textContent = v || 'Not set';
+    view.style.color = v ? '#111827' : '#9CA3AF';
+    input.style.display = 'none'; view.style.display = '';
+    btn.textContent = 'Edit';
+  } else { // Enter edit
+    const cur = view.textContent.trim();
+    input.value = cur === 'Not set' ? '' : cur;
+    input.style.display = ''; view.style.display = 'none';
+    btn.textContent = 'Save';
+    input.focus();
+  }
 }
 
 // Store the timing string in the hidden field and show it in the read-only preview.
