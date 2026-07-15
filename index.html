@@ -3023,9 +3023,7 @@ function renderSpMilestoneTable(cycleNum) {
     const typeBadge = isSystem
       ? `<span class="ms-type-tag ms-type-system">System</span>`
       : `<span class="ms-type-tag ms-type-operation">Operation</span>`;
-    const nameCell = m.indicative
-      ? `<span class="cal-chip" style="background:${m.bg};color:${m.color};border:1.5px dashed ${m.color};">${m.label}</span><span style="font-size:10px;color:#9CA3AF;margin-left:5px;vertical-align:middle;">indicative</span>`
-      : `<span class="cal-chip" style="background:${m.bg};color:${m.color};">${m.label}</span>`;
+    const nameCell = `<span class="cal-chip" style="background:${m.bg};color:${m.color};">${m.label}</span>`;
     const isDisplayOnly = m.indicative; // Sale Date = manual / display-only
     const adjCell = isDisplayOnly
       ? `<div style="display:flex;align-items:center;gap:6px;"><span class="sp-display-only-tag">📌 display only · set manually</span></div>`
@@ -3465,9 +3463,7 @@ function wftShowDetail(type) {
     const holCell = `<div class="hol-chk-group">${holRegions.map((r,ri) =>
       `<label class="hol-chk-label"><input type="checkbox" checked><span class="hol-chk-box"></span>${r.label}</label>`
     ).join('')}</div>`;
-    const nameCell = m.indicative
-      ? `<span class="cal-chip" style="background:${m.bg};color:${m.color};border:1.5px dashed ${m.color};">${m.label}</span><span style="font-size:10px;color:#9CA3AF;margin-left:6px;vertical-align:middle;">indicative</span>`
-      : `<span class="cal-chip" style="background:${m.bg};color:${m.color};">${m.label}</span>`;
+    const nameCell = `<span class="cal-chip" style="background:${m.bg};color:${m.color};">${m.label}</span>`;
     return `<tr style="${isSystem?'background:#F9FAFB;':''}">
       <td style="color:#9CA3AF;font-size:12px;padding-left:20px;">${i+1}</td>
       <td style="padding:10px 14px;">${nameCell}</td>
@@ -3794,7 +3790,7 @@ function renderMilestoneTable(type) {
           return r ? `<span style="background:${r.bg};color:${r.color};padding:2px 7px;border-radius:4px;font-size:11px;font-weight:500;white-space:nowrap;">M${ref} ${r.short}</span>` : '';
         }).join('')}</div>`;
     } else if (i === 0 || m.rule === 'anchor') {
-      offsetFromCell = `<span style="font-size:12px;font-weight:600;color:#374151;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:4px;padding:2px 8px;">T</span>`;
+      offsetFromCell = `<select class="offset-from-sel" style="background:#F0FDF4;border-color:#BBF7D0;color:#166534;font-weight:600;" onchange="onOffsetFromChange(${i},this)">${offsetFromOptions}</select>`;
     } else {
       offsetFromCell = `<select class="offset-from-sel" onchange="onOffsetFromChange(${i},this)">${offsetFromOptions}</select>`;
     }
@@ -3827,9 +3823,7 @@ function renderMilestoneTable(type) {
         `<label class="hol-chk-label"><input type="checkbox" id="${uid}_${ri}" name="hol-all" checked onchange="updateHolHeaderAll()"><span class="hol-chk-box"></span>${r.label}</label>`
       ).join('')}</div>`;
 
-    const milestoneCell = m.indicative
-      ? `<span class="cal-chip" style="background:${m.bg};color:${m.color};">${m.label}</span><span style="margin-left:6px;font-size:10px;color:#9CA3AF;background:#F3F4F6;border-radius:3px;padding:1px 5px;vertical-align:middle;">indicative</span>`
-      : `<span class="cal-chip" style="background:${m.bg};color:${m.color};">${m.label}</span>`;
+    const milestoneCell = `<span class="cal-chip" style="background:${m.bg};color:${m.color};">${m.label}</span>`;
 
     return `<tr>
       <td style="color:#9CA3AF;font-size:12px;padding-left:20px;">${i + 1}</td>
@@ -4228,7 +4222,7 @@ function renderCalendar() {
     { dot: '#CECBF6', dotBorder: '',                              label: 'Batch Creation',    meta: '' },
     { dot: '#FAC775', dotBorder: '',                              label: 'Sale Notice',       meta: '' },
     { dot: '#D3D1C7', dotBorder: '',                              label: 'Sys Cutoff',        meta: '· auto', lock: true },
-    { dot: '#CCFBF1', dotBorder: '1.5px dashed #1D9E75',         label: 'Sale Date',         meta: '· indicative' },
+    { dot: '#CCFBF1', dotBorder: '',                             label: 'Sale Date',         meta: '' },
     { dot: '#C0DD97', dotBorder: '',                              label: 'Sys Selling',       meta: '· auto', lock: true },
     { dot: '#9FE1CB', dotBorder: '',                              label: 'Collection',        meta: '' },
   ];
