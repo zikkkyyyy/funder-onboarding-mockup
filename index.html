@@ -1193,20 +1193,10 @@ tr.drag-over { border-top: 2px solid #2563EB; }
     <div class="section-card">
       <div class="section-header">
         <div class="section-title">Plan Anchor Dates</div>
-        <div class="section-sub">Both dates are optional at onboarding — fill in after Close Date and first Sale are confirmed.</div>
+        <div class="section-sub">Optional at onboarding — fill in after the first Sale is confirmed. The first batch is not tracked in the system.</div>
       </div>
       <div class="section-body">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px 32px;">
-
-          <!-- First Batch Cutoff Date -->
-          <div>
-            <label class="form-label" style="display:flex;align-items:center;gap:6px;">
-              First Batch Cutoff Date
-              <span style="font-size:10px;background:#EFF6FF;color:#2563EB;padding:1px 6px;border-radius:3px;font-weight:600;">Phase 1</span>
-            </label>
-            <input class="form-input" type="date" id="first-batch-cutoff" oninput="recomputeSchedule()" style="width:180px;margin-top:4px;" />
-            <div style="font-size:11px;color:#9CA3AF;margin-top:4px;">T for cycle 1. Milestone dates are calculated from this anchor.</div>
-          </div>
+        <div>
 
           <!-- Revolving Start Date -->
           <div>
@@ -1214,8 +1204,8 @@ tr.drag-over { border-top: 2px solid #2563EB; }
               Revolving Start Date
               <span style="font-size:10px;background:#F0FDF4;color:#15803D;padding:1px 6px;border-radius:3px;font-weight:600;">After first Sale</span>
             </label>
-            <input class="form-input" type="date" id="revolving-start" style="width:180px;margin-top:4px;" />
-            <div style="font-size:11px;color:#9CA3AF;margin-top:4px;">Start of revolving cycles. Auto-shifts one cycle forward if First Batch Sale Date slips into the next cycle segment.</div>
+            <input class="form-input" type="date" id="revolving-start" oninput="recomputeSchedule()" style="width:180px;margin-top:4px;" />
+            <div style="font-size:11px;color:#9CA3AF;margin-top:4px;">T for cycle 1 — milestone dates are calculated from this anchor.</div>
           </div>
 
         </div>
@@ -1223,7 +1213,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
         <!-- Dependency note -->
         <div style="margin-top:16px;padding:10px 14px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:6px;font-size:12px;color:#92400E;display:flex;gap:8px;">
           <span>⚠</span>
-          <span>If a delay in First Batch pushes <strong>Sale Date</strong> into the next cycle segment, Revolving Start will automatically shift one further cycle. Within revolving cycles, each cycle's delays are isolated — they do not affect subsequent cycles.</span>
+          <span>Within revolving cycles, each cycle's delays are isolated — a delay in one cycle does not affect subsequent cycles.</span>
         </div>
       </div>
     </div>
@@ -1312,7 +1302,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
           <span style="font-size:12px;color:#374151;font-weight:500;">Preview anchored to:</span>
           <span id="preview-anchor-label" style="font-size:12px;color:#2563EB;font-weight:600;"></span>
-          <span style="font-size:11px;color:#9CA3AF;" id="preview-anchor-hint">Set "First Batch Cutoff Date" above to anchor the preview</span>
+          <span style="font-size:11px;color:#9CA3AF;" id="preview-anchor-hint">Set "Revolving Start Date" above to anchor the preview</span>
         </div>
         <div id="cal-legend"></div>
         <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:#E5E7EB;border:1px solid #E5E7EB;border-top:none;border-radius:0 0 8px 8px;overflow:hidden;">
@@ -2186,7 +2176,6 @@ tr.drag-over { border-top: 2px solid #2563EB; }
               <div class="view-field"><span class="view-label">Cycle Length</span><span class="view-value">Every 4 weeks · Calendar Days</span></div>
               <div class="view-field"><span class="view-label">Plan Name</span><span class="view-value">TH_SPL_Starlight_ABS_T1_2026</span></div>
               <div class="view-field"><span class="view-label">Close Date</span><span class="view-value" style="color:#9CA3AF;">Not set</span></div>
-              <div class="view-field"><span class="view-label">First Batch Cutoff Date</span><span class="view-value" style="color:#9CA3AF;">Not set</span></div>
               <div class="view-field"><span class="view-label">Revolving Start Date</span><span class="view-value" style="color:#9CA3AF;">Not set</span></div>
               <div class="view-field"><span class="view-label">Status</span><span class="view-value"><span class="badge badge-pending">Pending TC Approval</span></span></div>
             </div>
@@ -2695,7 +2684,6 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                     <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;text-align:left;">Plan ID</th>
                     <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;text-align:left;">Funder</th>
                     <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;text-align:left;">Plan Version</th>
-                    <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;text-align:left;">First Batch Cutoff Date</th>
                     <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;text-align:left;">Revolving Start Date</th>
                     <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;text-align:left;">Status</th>
                   </tr>
@@ -3494,13 +3482,12 @@ function wftShowDetail(type) {
   const plansTbody = document.getElementById('wft-plans-tbody');
   document.getElementById('wft-plans-sub').textContent = d.plans.length + ' plan(s) using this template';
   if (d.plans.length === 0) {
-    plansTbody.innerHTML = `<tr><td colspan="4" style="padding:20px 16px;text-align:center;color:#9CA3AF;font-size:13px;">No management plans linked yet</td></tr>`;
+    plansTbody.innerHTML = `<tr><td colspan="5" style="padding:20px 16px;text-align:center;color:#9CA3AF;font-size:13px;">No management plans linked yet</td></tr>`;
   } else {
     plansTbody.innerHTML = d.plans.map(p => `<tr>
       <td style="padding:11px 16px;font-size:13px;color:#2563EB;font-weight:500;cursor:pointer;">${p.id}</td>
       <td style="padding:11px 16px;font-size:13px;color:#374151;">${p.funder}</td>
       <td style="padding:11px 16px;font-size:13px;color:#374151;">${p.version}</td>
-      <td style="padding:11px 16px;font-size:12px;color:${p.firstBatch && p.firstBatch !== '—' ? '#374151' : '#9CA3AF'};">${p.firstBatch || '<span style="color:#9CA3AF;">Not set</span>'}</td>
       <td style="padding:11px 16px;font-size:12px;color:${p.revolving && p.revolving !== '—' ? '#374151' : '#9CA3AF'};">${p.revolving === '—' ? '<span style="color:#9CA3AF;">Not set</span>' : (p.revolving || '<span style="color:#9CA3AF;">Not set</span>')}</td>
       <td style="padding:11px 16px;"><span class="badge badge-active">${p.status}</span></td>
     </tr>`).join('');
@@ -4159,9 +4146,9 @@ document.addEventListener('click', () => {
 let calViewYear, calViewMonth; // currently displayed month
 
 function getAnchorDate() {
-  // Prefer First Batch Cutoff Date; fallback to legacy plan-start; then today
-  const cutoff = document.getElementById('first-batch-cutoff');
-  if (cutoff && cutoff.value) return new Date(cutoff.value + 'T00:00:00');
+  // Anchor on Revolving Start Date (first batch is not tracked in the system)
+  const rev = document.getElementById('revolving-start');
+  if (rev && rev.value) return new Date(rev.value + 'T00:00:00');
   const legacy = document.getElementById('plan-start');
   if (legacy && legacy.value) return new Date(legacy.value + 'T00:00:00');
   const now = new Date();
@@ -4186,11 +4173,11 @@ function recomputeSchedule() {
   // update anchor label in preview header
   const lbl = document.getElementById('preview-anchor-label');
   const hint = document.getElementById('preview-anchor-hint');
-  const cutoffEl = document.getElementById('first-batch-cutoff');
+  const revEl = document.getElementById('revolving-start');
   if (lbl && hint) {
-    const cutoffVal = cutoffEl && cutoffEl.value;
+    const cutoffVal = revEl && revEl.value;
     if (cutoffVal) {
-      lbl.textContent = 'First Batch Cutoff Date · ' + cutoffVal;
+      lbl.textContent = 'Revolving Start Date · ' + cutoffVal;
       hint.style.display = 'none';
     } else {
       lbl.textContent = '';
