@@ -4453,8 +4453,9 @@ function renderLdSchedule(){
     const isToday = dk===todayKey;
     const bg = other?'#FAFAFA':(inCycle?'#F8FAFF':'#fff');
     const chipHtml = chips.map(m=>`<span class="cal-chip" style="background:${sp?'#EDE9FE':m.bg};color:${sp?'#5B21B6':m.fg};${sp?'border:1px solid #C4B5FD;':''}">${m.label}</span>`).join('');
+    const spTag = (isAnchor && sp) ? `<span class="cal-chip" style="background:#7C3AED;color:#fff;" title="${sp.reason}">${sp.id}</span>` : '';
     const numStyle = isAnchor?'background:#2563EB;color:#fff;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;':(isToday?'color:#DC2626;font-weight:700;':(other?'color:#D1D5DB;':'color:#374151;'));
-    html+=`<div class="cal-day" style="background:${bg};min-height:76px;"><div style="font-size:12px;font-weight:600;margin-bottom:2px;${numStyle}">${dayNum}</div>${chipHtml}</div>`;
+    html+=`<div class="cal-day" style="background:${bg};min-height:76px;"><div style="font-size:12px;font-weight:600;margin-bottom:2px;${numStyle}">${dayNum}</div>${spTag}${chipHtml}</div>`;
   }
   grid.innerHTML=html;
 }
