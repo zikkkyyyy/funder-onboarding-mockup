@@ -682,6 +682,11 @@ tr.drag-over { border-top: 2px solid #2563EB; }
 
 /* ── View footer nav ── */
 .view-footer { background: #fff; border-top: 1px solid #E5E7EB; padding: 14px 28px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; position: sticky; bottom: 0; z-index: 50; }
+/* Footer sink fix: a scroll tab that ends in a footer becomes a flex column so the
+   footer is pushed to the true bottom (margin-top:auto) whether content is short or
+   long, killing the 80px "floating" gap the bottom padding used to leave under it. */
+.view-scroll:has(> .view-footer) { padding-bottom: 0; display: flex; flex-direction: column; }
+.view-scroll:has(> .view-footer) > .view-footer { margin-top: auto; }
 </style>
 </head>
 <body>
