@@ -3790,10 +3790,8 @@ function renderMilestoneTable(type) {
       ? `<span class="ms-type-tag ms-type-system">System</span>`
       : `<span class="ms-type-tag ms-type-operation">Operation</span>`;
 
-    // Rule selector — first milestone is locked to Anchor
-    const ruleCell = i === 0
-      ? `<span class="ms-type-tag" style="background:#F0FDF4;color:#166534;">Fixed <span style="font-size:10px;">🔒</span></span>`
-      : `<select class="ms-rule-sel" onchange="onRuleChange(${i},this)">${
+    // Rule selector — every row selectable; Fixed is the default for the first milestone
+    const ruleCell = `<select class="ms-rule-sel" onchange="onRuleChange(${i},this)">${
           ['anchor', 'relative', 'max', 'min'].map(r => `<option value="${r}"${m.rule === r ? ' selected' : ''}>${RULE_LABEL[r]}</option>`).join('')
         }</select>`;
 
