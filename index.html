@@ -319,6 +319,15 @@ tbody tr:hover { background: #FAFAFA; }
 .more-dd-item.danger { color:#DC2626; }
 .more-dd-item.danger:hover { background:#FEF2F2; }
 .more-dd-item.disabled { color:#D1D5DB; cursor:not-allowed; pointer-events:none; }
+/* ── Investor Portal path picker (cascading / miller columns) ── */
+.portal-picker { display:none; position:fixed; z-index:1300; background:#fff; border:1px solid #E5E7EB; border-radius:8px; box-shadow:0 8px 28px rgba(0,0,0,.14); overflow:hidden; }
+.portal-picker.open { display:flex; }
+.portal-col { min-width:158px; max-height:220px; overflow-y:auto; border-right:1px solid #F3F4F6; padding:4px 0; }
+.portal-col:last-child { border-right:none; }
+.portal-item { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:7px 12px; font-size:13px; color:#374151; cursor:pointer; white-space:nowrap; font-family:'SF Mono',Menlo,monospace; }
+.portal-item:hover { background:#F9FAFB; }
+.portal-item.selected { background:#EFF6FF; color:#1D4ED8; font-weight:700; }
+.portal-item .p-caret { color:#9CA3AF; font-size:11px; font-family:sans-serif; }
 .tbl-act-sep { color: #D1D5DB; font-size: 12px; }
 .status-live { color: #16A34A; font-size: 12px; font-weight: 500; }
 .status-pending { color: #D97706; font-size: 12px; font-weight: 500; }
@@ -2132,7 +2141,11 @@ tr.drag-over { border-top: 2px solid #2563EB; }
         </div>
         <div style="grid-column:1/3;background:#F5F9FF;border:1px solid #BFDBFE;border-radius:8px;padding:10px 12px;">
           <label class="form-label" style="color:#1D4ED8;">Investor Portal File Path <span style="color:#DC2626;">*</span></label>
-          <input class="form-input" id="af-portal" style="width:100%;font-family:'SF Mono',Menlo,monospace;font-size:12px;" placeholder="e.g. Loan_Tape/Pending_Sold_Loan_Tape/%cutoff_date/" />
+          <div style="position:relative;">
+            <input class="form-input" id="af-portal" readonly onclick="togglePortalPicker(event)" style="width:100%;font-family:'SF Mono',Menlo,monospace;font-size:12px;cursor:pointer;padding-right:30px;" placeholder="Select investor portal path…" />
+            <span style="position:absolute;right:10px;top:50%;transform:translateY(-50%);color:#9CA3AF;font-size:13px;pointer-events:none;">🔍</span>
+            <div class="portal-picker" id="portal-picker"></div>
+          </div>
         </div>
         <div>
           <label class="form-label">If Sync by Funding</label>
@@ -2261,7 +2274,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
         </div>
         <!-- filter bar -->
         <div class="list-filter">
-          <select class="form-select" style="width:160px;"><option>Status: All</option><option>DRAFT</option><option>PENDING</option><option>ACTIVE</option><option>INACTIVE</option></select>
+          <select class="form-select" style="width:160px;"><option>Status: All</option><option>Draft</option><option>Live</option><option>Ready</option><option>Inactive</option></select>
           <select class="form-select" style="width:160px;"><option>Scheme: All</option><option>ABS</option><option>ABL</option><option>YBL</option><option>Channeling</option></select>
           <input class="form-input" style="width:220px;" placeholder="🔍  Search funder name…" />
           <button class="btn-outline-sm" style="padding:7px 14px;">Reset</button>
@@ -2291,7 +2304,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                 <td><span class="scheme-badge">ABS</span></td>
                 <td style="color:#9CA3AF;font-size:12px;">2023-08-19 15:01:35</td>
                 <td><div class="tbl-actions"><button class="tbl-act-link">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">Edit</button><span class="tbl-act-sep">|</span><div class="more-dd-wrap" id="more-1"><button class="tbl-act-link" onclick="toggleMoreDD('more-1',event)">More ▾</button>
-                  <div class="more-dd-menu"><button class="more-dd-item" onclick="openExportJsonModal('TH_SPC_UNICORN')">Export JSON</button><button class="more-dd-item" onclick="showConfirmPopup('Mark Ready','TH_SPC_UNICORN')">Mark Ready</button><button class="more-dd-item danger" onclick="showConfirmPopup('Revert to Draft','TH_SPC_UNICORN')">Revert to Draft</button></div>
+                  <div class="more-dd-menu"><button class="more-dd-item" onclick="openExportJsonModal('TH_SPC_UNICORN')">Export JSON</button><button class="more-dd-item" onclick="showConfirmPopup('Mark Ready','TH_SPC_UNICORN')">Mark Ready</button></div>
                 </div></div></td>
               </tr>
               <tr id="lrow-2">
@@ -2315,7 +2328,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                 <td><span class="scheme-badge">ABS</span></td>
                 <td style="color:#9CA3AF;font-size:12px;">2023-08-11 08:35:09</td>
                 <td><div class="tbl-actions"><button class="tbl-act-link">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">Edit</button><span class="tbl-act-sep">|</span><div class="more-dd-wrap" id="more-3"><button class="tbl-act-link" onclick="toggleMoreDD('more-3',event)">More ▾</button>
-                  <div class="more-dd-menu"><button class="more-dd-item disabled">Export JSON</button><button class="more-dd-item" onclick="showConfirmPopup('Move to Pending','BCL_SEABANK01')">Move to Pending</button></div>
+                  <div class="more-dd-menu"><button class="more-dd-item disabled">Export JSON</button><button class="more-dd-item" onclick="showConfirmPopup('Mark Live','BCL_SEABANK01')">Mark Live</button></div>
                 </div></div></td>
               </tr>
               <tr id="lrow-4">
@@ -2332,24 +2345,24 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                 <td style="padding:11px 10px 11px 16px;"><input type="checkbox" class="row-chk" data-ops="ABS" onchange="onRowCheck(this,'TH_MAD_SPL_ABS_01','ABS')" /></td>
                 <td class="num-col">5</td><td class="num-col">1000527</td>
                 <td style="font-weight:500;">TH_MAD_SPL_ABS_01</td>
-                <td><span class="status-badge" style="background:#FEF3C7;color:#92400E;border:1px solid #FDE68A;">PENDING</span></td>
+                <td><span class="status-badge" style="background:#DBEAFE;color:#1D4ED8;">LIVE</span></td>
                 <td><span style="font-size:11px;font-weight:600;color:#1D4ED8;background:#DBEAFE;padding:2px 7px;border-radius:4px;">ABS</span></td>
                 <td><span class="scheme-badge" style="background:#FEF3C7;color:#D97706;">YBL</span></td>
                 <td style="color:#9CA3AF;font-size:12px;">2024-07-19 17:09:53</td>
                 <td><div class="tbl-actions"><button class="tbl-act-link">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">Edit</button><span class="tbl-act-sep">|</span><div class="more-dd-wrap" id="more-5"><button class="tbl-act-link" onclick="toggleMoreDD('more-5',event)">More ▾</button>
-                  <div class="more-dd-menu"><button class="more-dd-item" onclick="openExportJsonModal('TH_MAD_SPL_ABS_01')">Export JSON</button></div>
+                  <div class="more-dd-menu"><button class="more-dd-item" onclick="openExportJsonModal('TH_MAD_SPL_ABS_01')">Export JSON</button><button class="more-dd-item" onclick="showConfirmPopup('Mark Ready','TH_MAD_SPL_ABS_01')">Mark Ready</button></div>
                 </div></div></td>
               </tr>
               <tr id="lrow-6">
                 <td style="padding:11px 10px 11px 16px;"><input type="checkbox" class="row-chk" data-ops="ABS Net" onchange="onRowCheck(this,'TH_SPL_Allstar_ABS_01','ABS Net')" /></td>
                 <td class="num-col">6</td><td class="num-col">1040641</td>
                 <td style="font-weight:500;">TH_SPL_Allstar_ABS_01</td>
-                <td><span class="status-badge" style="background:#FEF3C7;color:#92400E;border:1px solid #FDE68A;">PENDING</span></td>
+                <td><span class="status-badge" style="background:#DCFCE7;color:#16A34A;">READY</span></td>
                 <td><span style="font-size:11px;font-weight:600;color:#065F46;background:#D1FAE5;padding:2px 7px;border-radius:4px;">ABS Net</span></td>
                 <td><span class="scheme-badge">ABS</span></td>
                 <td style="color:#9CA3AF;font-size:12px;">2024-08-09 14:38:12</td>
                 <td><div class="tbl-actions"><button class="tbl-act-link">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">Edit</button><span class="tbl-act-sep">|</span><div class="more-dd-wrap" id="more-6"><button class="tbl-act-link" onclick="toggleMoreDD('more-6',event)">More ▾</button>
-                  <div class="more-dd-menu"><button class="more-dd-item" onclick="openExportJsonModal('TH_SPL_Allstar_ABS_01')">Export JSON</button></div>
+                  <div class="more-dd-menu"><button class="more-dd-item" onclick="openExportJsonModal('TH_SPL_Allstar_ABS_01')">Export JSON</button><button class="more-dd-item danger" onclick="showConfirmPopup('Revert to Draft','TH_SPL_Allstar_ABS_01')">Revert to Draft</button><button class="more-dd-item" onclick="showConfirmPopup('Set Inactive','TH_SPL_Allstar_ABS_01')">Set Inactive</button></div>
                 </div></div></td>
               </tr>
               <tr id="lrow-7">
@@ -2362,7 +2375,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                 <td style="color:#9CA3AF;font-size:12px;">2024-11-18 16:41:53</td>
                 <td><div class="tbl-actions"><button class="tbl-act-link">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">Edit</button><span class="tbl-act-sep">|</span>
                   <div class="more-dd-wrap" id="more-7"><button class="tbl-act-link" onclick="toggleMoreDD('more-7',event)">More ▾</button>
-                    <div class="more-dd-menu"><button class="more-dd-item disabled">Export JSON</button><button class="more-dd-item" onclick="showConfirmPopup('Move to Pending','TH_MND_SPL_ABS_01_2024')">Move to Pending</button></div>
+                    <div class="more-dd-menu"><button class="more-dd-item disabled">Export JSON</button><button class="more-dd-item" onclick="showConfirmPopup('Mark Live','TH_MND_SPL_ABS_01_2024')">Mark Live</button></div>
                   </div>
                 </div></td>
               </tr>
@@ -2376,7 +2389,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                 <td style="color:#9CA3AF;font-size:12px;">2024-11-19 17:40:48</td>
                 <td><div class="tbl-actions"><button class="tbl-act-link">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">Edit</button><span class="tbl-act-sep">|</span>
                   <div class="more-dd-wrap" id="more-8"><button class="tbl-act-link" onclick="toggleMoreDD('more-8',event)">More ▾</button>
-                    <div class="more-dd-menu"><button class="more-dd-item disabled">Export JSON</button><button class="more-dd-item" onclick="showConfirmPopup('Move to Pending','TH_SPL_SPL_01')">Move to Pending</button></div>
+                    <div class="more-dd-menu"><button class="more-dd-item disabled">Export JSON</button><button class="more-dd-item" onclick="showConfirmPopup('Mark Live','TH_SPL_SPL_01')">Mark Live</button></div>
                   </div>
                 </div></td>
               </tr>
@@ -2393,7 +2406,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                   <button class="tbl-act-link" style="font-weight:700;text-decoration:underline;" title="Open Lender Detail" onclick="switchFlow('view')">View</button><span class="tbl-act-sep">|</span>
                   <button class="tbl-act-link" onclick="switchFlow('create')">Edit</button><span class="tbl-act-sep">|</span>
                   <div class="more-dd-wrap" id="more-9"><button class="tbl-act-link" onclick="toggleMoreDD('more-9',event)">More ▾</button>
-                    <div class="more-dd-menu"><button class="more-dd-item" onclick="openExportJsonModal('TH_SPL_Starlight_ABS_01')">Export JSON</button><button class="more-dd-item" onclick="showConfirmPopup('Mark Ready','TH_SPL_Starlight_ABS_01')">Mark Ready</button><button class="more-dd-item danger" onclick="showConfirmPopup('Revert to Draft','TH_SPL_Starlight_ABS_01')">Revert to Draft</button></div>
+                    <div class="more-dd-menu"><button class="more-dd-item" onclick="openExportJsonModal('TH_SPL_Starlight_ABS_01')">Export JSON</button><button class="more-dd-item" onclick="showConfirmPopup('Mark Ready','TH_SPL_Starlight_ABS_01')">Mark Ready</button></div>
                   </div>
                 </div></td>
               </tr>
@@ -4087,6 +4100,7 @@ function showConfirmPopup(action, funderName) {
   // Title per status-transition action
   const TITLES = {
     'Move to Pending': 'Move this funder to Pending?',
+    'Mark Live': 'Mark this funder as Live?',
     'Set Live': 'Set this funder to Live?',
     'Mark Ready': 'Mark this funder as Ready?',
     'Set Inactive': 'Set this funder to Inactive?',
@@ -4838,7 +4852,94 @@ function openAddFile(tbodyId) {
   document.getElementById('addfile-submit').textContent = 'Add File';
   document.getElementById('addfile-modal').classList.add('open');
 }
-function closeAddFile() { document.getElementById('addfile-modal').classList.remove('open'); editingRow = null; }
+function closeAddFile() { document.getElementById('addfile-modal').classList.remove('open'); editingRow = null; closePortalPicker(); }
+
+/* ── Investor Portal File Path — cascading path picker ── */
+const PORTAL_DATES = { '20251204': null, '20251211': null, '20251212': null };
+const PORTAL_TREE = {
+  'None': null,
+  'TH_SPL_Pacific_ABS_01': {
+    'Loan_Tape': {
+      'Pending_Sold_Loan_Tape': PORTAL_DATES,
+      'Transferred_Loan_Tape': PORTAL_DATES,
+      'Repurchased_Loan_Tape': PORTAL_DATES
+    },
+    'System_File': {
+      'Sale_Notice': PORTAL_DATES,
+      'Originator_Certificate_of_Solvency': PORTAL_DATES
+    },
+    'Report': {
+      'Monthly_Portfolio_Summary': PORTAL_DATES,
+      'Servicer_Report': PORTAL_DATES
+    }
+  }
+};
+let portalSelection = []; // selected key per column level
+
+function togglePortalPicker(e) {
+  if (e) e.stopPropagation();
+  const picker = document.getElementById('portal-picker');
+  if (picker.classList.contains('open')) { closePortalPicker(); return; }
+  renderPortalPicker();
+  picker.classList.add('open');
+  // position (fixed) just below the input
+  const r = document.getElementById('af-portal').getBoundingClientRect();
+  picker.style.top = (r.bottom + 4) + 'px';
+  picker.style.left = r.left + 'px';
+  picker.style.minWidth = Math.max(r.width, 520) + 'px';
+}
+function closePortalPicker() {
+  const p = document.getElementById('portal-picker');
+  if (p) p.classList.remove('open');
+}
+
+function renderPortalPicker() {
+  const picker = document.getElementById('portal-picker');
+  picker.innerHTML = '';
+  let node = PORTAL_TREE;
+  let level = 0;
+  // render root column + a column for each made selection that has children
+  while (node && typeof node === 'object') {
+    const col = document.createElement('div');
+    col.className = 'portal-col';
+    const keys = Object.keys(node);
+    keys.forEach(function (key) {
+      const item = document.createElement('div');
+      item.className = 'portal-item' + (portalSelection[level] === key ? ' selected' : '');
+      const hasChildren = node[key] && typeof node[key] === 'object';
+      item.innerHTML = '<span>' + key + '</span>' + (hasChildren ? '<span class="p-caret">›</span>' : '');
+      const lv = level;
+      item.onclick = function (ev) { ev.stopPropagation(); selectPortalItem(lv, key); };
+      col.appendChild(item);
+    });
+    picker.appendChild(col);
+    const sel = portalSelection[level];
+    node = (sel && node[sel] && typeof node[sel] === 'object') ? node[sel] : null;
+    level++;
+  }
+}
+
+function selectPortalItem(level, key) {
+  portalSelection = portalSelection.slice(0, level);
+  portalSelection[level] = key;
+  renderPortalPicker();
+  composePortalPath();
+}
+
+function composePortalPath() {
+  // drop leading "None" (means no funder root)
+  let parts = portalSelection.slice();
+  if (parts[0] === 'None') parts = parts.slice(1);
+  document.getElementById('af-portal').value = parts.length ? '/' + parts.join('/') : '';
+}
+
+// close picker on outside click
+document.addEventListener('click', function (e) {
+  const picker = document.getElementById('portal-picker');
+  if (!picker || !picker.classList.contains('open')) return;
+  if (picker.contains(e.target) || e.target.id === 'af-portal') return;
+  closePortalPicker();
+});
 
 // Set a <select> value, adding the option first if it isn't already present.
 function setSelect(id, val) {
