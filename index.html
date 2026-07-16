@@ -2046,112 +2046,32 @@ tr.drag-over { border-top: 2px solid #2563EB; }
     <div class="modal-header">
       <div>
         <div class="modal-title" id="addfile-title">Add Data File</div>
-        <div class="modal-sub">Pick a standard file to auto-fill its naming convention &amp; defaults, then adjust the paths as needed.</div>
+        <div class="modal-sub">BD selects the file type and whether Funding should sync it. Everything else is auto-resolved by the backend from a maintained file-type mapping.</div>
       </div>
       <button class="modal-close" onclick="closeAddFile()">✕</button>
     </div>
     <div class="modal-body" style="padding:20px 24px;">
-      <div style="margin-bottom:18px;">
-        <label class="form-label">Standard File</label>
-        <select class="form-select" id="af-template" style="width:100%;" onchange="applyFilePreset(this.value)">
-          <option value="">Select...</option>
-          <option value="pending_sold">Pending Sold Loan Tape</option>
-          <option value="sale_notice">Revolving Period Sale Notice</option>
-          <option value="cert_solvency">Originator Certificate of Solvency</option>
-          <option value="spa">Revolving Period Sale and Purchase Agreement</option>
-          <option value="transferred">Transferred Loan Tape</option>
-          <option value="repurchased">Repurchased Loan Tape</option>
-          <option value="monthly_summary">Monthly Transferred Loan Tape Summary</option>
-          <option value="servicer">Servicer Report</option>
-        </select>
-        <div class="form-hint" style="margin-top:5px;color:#6B7280;font-size:12px;">Standard files use a fixed naming convention — selecting one pre-fills the fields below. <code>{project_name}</code> is substituted automatically at generation time.</div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px 16px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
         <div>
-          <label class="form-label">File Category</label>
-          <select class="form-select" id="af-cat" style="width:100%;">
-            <option>Loan_Tape</option>
-            <option>Report</option>
-            <option>Sale_Notice</option>
+          <label class="form-label">File Type (文件类型) <span style="color:#DC2626;">*</span></label>
+          <select class="form-select" id="af-filetype" style="width:100%;">
+            <option value="">Select file type…</option>
+            <option value="pending_sold">Pending Sold Loan Tape</option>
+            <option value="sale_notice">Revolving Period Sale Notice</option>
+            <option value="cert_solvency">Originator Certificate of Solvency</option>
+            <option value="spa">Revolving Period Sale and Purchase Agreement</option>
+            <option value="transferred">Transferred Loan Tape</option>
+            <option value="repurchased">Repurchased Loan Tape</option>
+            <option value="monthly_summary">Monthly Transferred Loan Tape Summary</option>
+            <option value="servicer">Servicer Report</option>
           </select>
         </div>
         <div>
-          <label class="form-label">File Type</label>
-          <select class="form-select" id="af-type" style="width:100%;">
-            <option value="">Select…</option>
-            <option>zip</option>
-            <option>gz</option>
-            <option>pdf</option>
-            <option>xlsx</option>
-            <option>csv</option>
-            <option>txt</option>
-            <option>json</option>
-          </select>
-        </div>
-        <div style="grid-column:1/3;">
-          <label class="form-label">Name</label>
-          <input class="form-input" id="af-name" style="width:100%;font-family:'SF Mono',Menlo,monospace;font-size:12px;" placeholder="{project_name}_..." />
-        </div>
-        <div style="grid-column:1/3;">
-          <label class="form-label">Timing</label>
-          <div style="display:flex;gap:7px;align-items:center;flex-wrap:nowrap;margin-bottom:8px;font-size:13px;color:#374151;">
-            <span>by SGT</span>
-            <input class="form-input" id="af-t-time" type="text" inputmode="numeric" maxlength="5" placeholder="HH:MM" style="width:80px;flex-shrink:0;text-align:center;" oninput="composeTiming()" onchange="composeTiming()" />
-            <span>on</span>
-            <select class="form-select" id="af-t-anchor" style="width:190px;flex-shrink:1;min-width:110px;" onchange="composeTiming()">
-              <option>Cut-off Date</option>
-              <option>20th of each month</option>
-              <option>end of each reporting period</option>
-              <option>Batch Repurchase/Clawback Cut-off Date</option>
-            </select>
-            <span>+</span>
-            <input class="form-input" id="af-t-offset" type="number" min="0" style="width:56px;flex-shrink:0;" placeholder="0" oninput="composeTiming()" onchange="composeTiming()" />
-            <select class="form-select" id="af-t-unit" style="width:74px;flex-shrink:0;" onchange="composeTiming()">
-              <option value="">—</option><option>D</option><option>BD</option>
-            </select>
-          </div>
-          <input type="hidden" id="af-timing" />
-        </div>
-        <div>
-          <label class="form-label">File Generation</label>
-          <select class="form-select" id="af-gen" style="width:100%;">
-            <option value="">Select…</option>
-            <option>Funding System (BE)</option>
-            <option>Offline (BD)</option>
-            <option>Data Suite Pipeline (DE)</option>
-            <option>Data Suite Pipeline (BD)</option>
-          </select>
-        </div>
-        <div>
-          <label class="form-label">File Transfer Method</label>
-          <select class="form-select" id="af-transfer" style="width:100%;">
-            <option>Investor Portal</option>
-            <option>SFTP</option>
-            <option>Email</option>
-            <option>API</option>
-          </select>
-        </div>
-        <div>
-          <label class="form-label">BD Ceph File Path</label>
-          <input class="form-input" id="af-bd" style="width:100%;font-family:'SF Mono',Menlo,monospace;font-size:12px;" value="/" />
-        </div>
-        <div>
-          <label class="form-label">DE Ceph File Path</label>
-          <input class="form-input" id="af-de" style="width:100%;font-family:'SF Mono',Menlo,monospace;font-size:12px;" value="/" />
-        </div>
-        <div style="grid-column:1/3;background:#F5F9FF;border:1px solid #BFDBFE;border-radius:8px;padding:10px 12px;">
-          <label class="form-label" style="color:#1D4ED8;">Investor Portal File Path <span style="color:#DC2626;">*</span></label>
-          <div style="position:relative;">
-            <input class="form-input" id="af-portal" readonly onclick="togglePortalPicker(event)" style="width:100%;font-family:'SF Mono',Menlo,monospace;font-size:12px;cursor:pointer;padding-right:30px;" placeholder="Select investor portal path…" />
-            <span style="position:absolute;right:10px;top:50%;transform:translateY(-50%);color:#9CA3AF;font-size:13px;pointer-events:none;">🔍</span>
-            <div class="portal-picker" id="portal-picker"></div>
-          </div>
-        </div>
-        <div>
-          <label class="form-label">If Sync by Funding</label>
+          <label class="form-label">If Sync by Funding (是否要文件同步) <span style="color:#DC2626;">*</span></label>
           <select class="form-select" id="af-sync" style="width:100%;"><option>Yes</option><option>No</option></select>
         </div>
       </div>
+      <div class="form-hint" style="margin-top:10px;color:#6B7280;font-size:12px;">BD only selects the file type &amp; whether Funding should sync it. The file name, timing, S3 owner, bucket ID and Investor Portal path are all resolved automatically by the backend from a maintained file-type mapping.</div>
     </div>
     <div class="modal-footer">
       <button class="btn-outline-sm" style="padding:9px 20px;font-size:13px;" onclick="closeAddFile()">Cancel</button>
@@ -4845,14 +4765,34 @@ let addTargetTbody = 'datafile-tbody'; // which file table a new row is appended
 function openAddFile(tbodyId) {
   editingRow = null;
   addTargetTbody = tbodyId || 'datafile-tbody';
-  document.getElementById('af-template').value = '';
-  applyFilePreset('');
-  document.getElementById('af-template').closest('div').style.display = ''; // show template picker when adding
+  document.getElementById('af-filetype').value = '';
+  document.getElementById('af-sync').value = 'Yes';
   document.getElementById('addfile-title').textContent = 'Add Data File';
   document.getElementById('addfile-submit').textContent = 'Add File';
   document.getElementById('addfile-modal').classList.add('open');
 }
-function closeAddFile() { document.getElementById('addfile-modal').classList.remove('open'); editingRow = null; closePortalPicker(); }
+function closeAddFile() { document.getElementById('addfile-modal').classList.remove('open'); editingRow = null; }
+
+// Backend file-type mapping (derived from FILE_PRESETS): file type → owner S3, bucket, paths, name, timing.
+function deriveMapping(key) {
+  const p = FILE_PRESETS[key];
+  if (!p) return null;
+  const S3 = { 'Funding System (BE)':'Funding (BE)', 'Offline (BD)':'BD (Offline)', 'Data Suite Pipeline (DE)':'DE (Data Suite)', 'Data Suite Pipeline (BD)':'BD (Data Suite)' };
+  const OWNER_CODE = { 'Funding (BE)':'funding', 'BD (Offline)':'bd', 'DE (Data Suite)':'de', 'BD (Data Suite)':'bd' };
+  const CAT_SLUG = { 'Loan_Tape':'loan-tape', 'Sale_Notice':'sale-notice', 'Report':'report' };
+  const s3 = S3[p.gen] || 'BD (Offline)';
+  const bucket = (OWNER_CODE[s3] || 'bd') + '-abs-' + (CAT_SLUG[p.cat] || 'misc');
+  return { cat:p.cat, name:p.name, type:p.type, gen:p.gen, transfer:p.transfer, bd:p.bd, de:p.de, portal:p.portal, sync:p.sync, timing:presetTiming(p), s3:s3, bucket:bucket };
+}
+
+function presetTiming(p) {
+  if (p.ttext) return p.ttext;
+  const t = p.timing || {};
+  let s = 'by SGT ' + (t.time||'') + ' on ' + (t.anchor||'');
+  if (t.offset && Number(t.offset) > 0) s += ' + ' + t.offset + (t.unit || 'D');
+  return s;
+}
+
 
 /* ── Investor Portal File Path — cascading path picker ── */
 const PORTAL_DATES = { '20251204': null, '20251211': null, '20251212': null };
@@ -4978,20 +4918,12 @@ function editDataFile(btn) {
   const tr = btn.closest('tr');
   editingRow = tr;
   const c = tr.cells;
-  setSelect('af-cat', tr.querySelector('.cat-badge').textContent.trim());
-  const ft = tr.querySelector('.ftype');
-  setSelect('af-type', ft ? ft.textContent.trim() : '');
-  document.getElementById('af-name').value = c[1].textContent.trim();
-  document.getElementById('af-gen').value = c[4].textContent.trim();
-  setSelect('af-transfer', c[5].textContent.trim());
-  document.getElementById('af-bd').value = cellPath(c[6]);
-  document.getElementById('af-de').value = cellPath(c[7]);
-  document.getElementById('af-portal').value = cellPath(c[8]);
-  setSelect('af-sync', c[9].textContent.trim() === 'No' ? 'No' : 'Yes');
-  applyTimingString(getRowTiming(c[3]));
-  // hide the standard-file template picker in edit mode
-  document.getElementById('af-template').value = '';
-  document.getElementById('af-template').closest('div').style.display = 'none';
+  // reverse-map the row's file name back to a file-type key
+  const name = c[1].textContent.trim();
+  let key = '';
+  for (const k in FILE_PRESETS) { if (FILE_PRESETS[k].name === name) { key = k; break; } }
+  document.getElementById('af-filetype').value = key;
+  document.getElementById('af-sync').value = (c[9].textContent.trim() === 'No') ? 'No' : 'Yes';
   document.getElementById('addfile-title').textContent = 'Edit Data File';
   document.getElementById('addfile-submit').textContent = 'Save Changes';
   document.getElementById('addfile-modal').classList.add('open');
@@ -5080,26 +5012,24 @@ function dataFileActionCell() {
 }
 
 function confirmAddFile() {
-  const val = id => document.getElementById(id).value.trim();
-  const cat = val('af-cat'), name = val('af-name'), portal = val('af-portal');
-  if (!name) { alert('Please enter a file Name.'); return; }
-  if (!portal) { alert('Investor Portal File Path is required.'); return; }
-  const catClass = CAT_CLASS[cat] || 'cat-loan-tape';
-  const de = document.getElementById('af-de').value.trim();
-  const deCell = de ? '<input class="inline-edit path-input" value="'+esc(de)+'" />'
-                    : '<input class="inline-edit path-input" value="" placeholder="To be filled by DE" />';
-  const sync = val('af-sync');
+  const key = document.getElementById('af-filetype').value;
+  if (!key) { alert('Please select a file type.'); return; }
+  const m = deriveMapping(key);
+  const sync = document.getElementById('af-sync').value;
+  const catClass = CAT_CLASS[m.cat] || 'cat-loan-tape';
+  const deCell = m.de ? '<input class="inline-edit path-input" value="'+esc(m.de)+'" />'
+                      : '<input class="inline-edit path-input" value="" placeholder="To be filled by DE" />';
   const syncBadge = sync === 'No' ? '<span class="badge badge-draft">No</span>' : '<span class="badge badge-active">Yes</span>';
   const html =
-    '<td><span class="cat-badge '+catClass+'">'+esc(cat)+'</span></td>' +
-    '<td class="fname">'+esc(name)+'</td>' +
-    '<td><span class="ftype">'+esc(val('af-type'))+'</span></td>' +
-    '<td class="ftiming">'+esc(val('af-timing'))+'</td>' +
-    '<td>'+esc(val('af-gen'))+'</td>' +
-    '<td>'+esc(val('af-transfer'))+'</td>' +
-    '<td><input class="inline-edit path-input" value="'+esc(val('af-bd'))+'" /></td>' +
+    '<td><span class="cat-badge '+catClass+'">'+esc(m.cat)+'</span></td>' +
+    '<td class="fname">'+esc(m.name)+'</td>' +
+    '<td><span class="ftype">'+esc(m.type)+'</span></td>' +
+    '<td class="ftiming">'+esc(m.timing)+'</td>' +
+    '<td>'+esc(m.gen)+'</td>' +
+    '<td>'+esc(m.transfer)+'</td>' +
+    '<td><input class="inline-edit path-input" value="'+esc(m.bd)+'" /></td>' +
     '<td>'+deCell+'</td>' +
-    '<td class="col-portal"><input class="inline-edit path-input" value="'+esc(portal)+'" /></td>' +
+    '<td class="col-portal"><input class="inline-edit path-input" value="'+esc(m.portal)+'" /></td>' +
     '<td style="text-align:center;">'+syncBadge+'</td>' +
     dataFileActionCell();
   if (editingRow) {
