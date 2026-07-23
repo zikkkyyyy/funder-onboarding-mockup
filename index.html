@@ -4037,14 +4037,26 @@ function showConfirmPopup(action, funderName) {
 
 /* ── Mark Live · Pre-flight Checklist ── */
 let liveChkFunder = '';
+// Mock: which funders have had their Accounting config pushed as ready by the system.
+// Pioneer = Accounting ready (system pre-checked); Allstar = not ready (Submit gated).
+const ACCOUNTING_READY = ['TH_SPL_Pioneer_01'];
 function openLiveChecklist(funderName) {
   liveChkFunder = funderName;
   document.querySelectorAll('.more-dd-wrap.open').forEach(w => w.classList.remove('open'));
-  // reset all checkboxes (including the system Accounting one)
-  document.querySelectorAll('#live-checklist-modal .live-chk').forEach(c => { c.checked = false; });
+  // reset the 4 manual boxes
+  document.querySelectorAll('#live-checklist-modal .live-chk:not(#chk-accounting)').forEach(c => { c.checked = false; });
+  // Accounting is system-driven — pre-set per funder (mock of whether the push arrived)
+  const acctReady = ACCOUNTING_READY.includes(funderName);
+  const acct = document.getElementById('chk-accounting');
   const s = document.getElementById('lc-acct-status');
-  s.className = 'lc-acct-status waiting';
-  s.textContent = 'Awaiting Accounting confirmation…';
+  acct.checked = acctReady;
+  if (acctReady) {
+    s.className = 'lc-acct-status done';
+    s.textContent = '✓ Confirmed by Accounting (system-checked)';
+  } else {
+    s.className = 'lc-acct-status waiting';
+    s.textContent = 'Awaiting Accounting confirmation — cannot go Live yet';
+  }
   document.getElementById('live-chk-funder').textContent = funderName;
   updateLiveSubmit();
   document.getElementById('live-checklist-modal').classList.add('open');
@@ -4053,16 +4065,9 @@ function closeLiveChecklist() { document.getElementById('live-checklist-modal').
 function onLiveChkToggle() { updateLiveSubmit(); }
 function updateLiveSubmit() {
   // Submit stays disabled until EVERY box is ticked — including Accounting,
-  // which only the system (simulated push) can tick, never the BD manually.
+  // which only the system can set (never the BD manually).
   const boxes = [...document.querySelectorAll('#live-checklist-modal .live-chk')];
   document.getElementById('live-submit-btn').disabled = !boxes.every(c => c.checked);
-}
-function simulateAccountingPush() {
-  document.getElementById('chk-accounting').checked = true;
-  const s = document.getElementById('lc-acct-status');
-  s.className = 'lc-acct-status done';
-  s.textContent = '✓ Confirmed by Accounting (system-checked)';
-  updateLiveSubmit();
 }
 function submitLiveChecklist() {
   closeLiveChecklist();
@@ -6765,8 +6770,6 @@ function spSubmit() {
   .lc-acct-status { font-size:11.5px; font-weight:500; margin-top:4px; }
   .lc-acct-status.waiting { color:#B45309; }
   .lc-acct-status.done { color:#16A34A; }
-  .lc-demo { margin-top:8px; font-size:11px; color:#2563EB; background:none; border:1px dashed #93C5FD; border-radius:5px; padding:3px 9px; cursor:pointer; font-family:inherit; }
-  .lc-demo:hover { background:#EFF6FF; }
   #live-submit-btn:disabled { background:#C7D2FE; cursor:not-allowed; }
 </style>
 <div class="modal-overlay" id="live-checklist-modal">
@@ -6790,7 +6793,6 @@ function spSubmit() {
           <div style="flex:1;">
             <div class="lc-title">Accounting configured <span class="lc-sys-tag">System</span></div>
             <div id="lc-acct-status" class="lc-acct-status waiting">Awaiting Accounting confirmation…</div>
-            <button class="lc-demo" onclick="simulateAccountingPush()">Simulate Accounting push</button>
           </div>
         </div>
       </div>
