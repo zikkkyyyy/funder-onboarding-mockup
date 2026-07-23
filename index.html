@@ -4044,7 +4044,7 @@ function openLiveChecklist(funderName) {
   document.querySelectorAll('#live-checklist-modal .live-chk').forEach(c => { c.checked = false; });
   const s = document.getElementById('lc-acct-status');
   s.className = 'lc-acct-status waiting';
-  s.textContent = '⏳ 等待 Accounting 推送消息…';
+  s.textContent = 'Awaiting Accounting confirmation…';
   document.getElementById('live-chk-funder').textContent = funderName;
   updateLiveSubmit();
   document.getElementById('live-checklist-modal').classList.add('open');
@@ -4061,13 +4061,13 @@ function simulateAccountingPush() {
   document.getElementById('chk-accounting').checked = true;
   const s = document.getElementById('lc-acct-status');
   s.className = 'lc-acct-status done';
-  s.textContent = '✓ 已收到 Accounting 推送消息 · 系统已自动勾选';
+  s.textContent = '✓ Confirmed by Accounting (system-checked)';
   updateLiveSubmit();
 }
 function submitLiveChecklist() {
   closeLiveChecklist();
   const toast = document.getElementById('update-toast');
-  toast.textContent = `✓ ${liveChkFunder} 兜底校验通过,已发起 Live 流程(转 Live · 走 Ticket)`;
+  toast.textContent = `✓ ${liveChkFunder}: pre-flight check passed — Live request submitted (via Ticket)`;
   toast.classList.add('visible');
   setTimeout(() => toast.classList.remove('visible'), 2800);
 }
@@ -6754,52 +6754,50 @@ function spSubmit() {
 
 <!-- Mark Live · Pre-flight Checklist Modal (global, outside flows to avoid clipping) -->
 <style>
-  .live-chk-list { display:flex; flex-direction:column; gap:10px; }
-  .live-chk-row { display:flex; align-items:flex-start; gap:12px; padding:13px 16px; border:1px solid #E5E7EB; border-radius:9px; cursor:pointer; transition:background .12s,border-color .12s; }
+  .live-chk-list { display:flex; flex-direction:column; gap:8px; }
+  .live-chk-row { display:flex; align-items:center; gap:12px; padding:14px 16px; border:1px solid #E5E7EB; border-radius:8px; cursor:pointer; transition:background .12s,border-color .12s; }
   .live-chk-row:not(.sys):hover { background:#F9FAFB; border-color:#D1D5DB; }
-  .live-chk-row input[type=checkbox] { width:17px; height:17px; margin-top:1px; accent-color:#2563EB; cursor:pointer; flex-shrink:0; }
-  .live-chk-row .lc-title { font-size:13.5px; color:#111827; font-weight:500; }
-  .live-chk-row.sys { background:#F8FAFC; border-style:dashed; cursor:default; }
-  .live-chk-row.sys input[type=checkbox] { accent-color:#64748B; cursor:not-allowed; }
-  .lc-sys-tag { display:inline-block; margin-left:8px; font-size:10px; font-weight:700; color:#475569; background:#E2E8F0; padding:1px 7px; border-radius:9px; vertical-align:middle; }
-  .lc-hint { font-size:11.5px; color:#94A3B8; margin-top:3px; line-height:1.5; }
-  .lc-acct-status { font-size:11.5px; font-weight:600; margin-top:5px; }
+  .live-chk-row input[type=checkbox] { width:16px; height:16px; accent-color:#2563EB; cursor:pointer; flex-shrink:0; }
+  .live-chk-row .lc-title { font-size:13px; color:#111827; font-weight:500; }
+  .live-chk-row.sys { align-items:flex-start; background:#F8FAFC; border-style:dashed; cursor:default; }
+  .live-chk-row.sys input[type=checkbox] { margin-top:2px; accent-color:#94A3B8; cursor:not-allowed; }
+  .lc-sys-tag { display:inline-flex; align-items:center; gap:3px; margin-left:8px; font-size:10px; font-weight:600; color:#475569; background:#E2E8F0; padding:2px 7px; border-radius:4px; vertical-align:middle; }
+  .lc-acct-status { font-size:11.5px; font-weight:500; margin-top:4px; }
   .lc-acct-status.waiting { color:#B45309; }
   .lc-acct-status.done { color:#16A34A; }
-  .lc-demo { margin-top:7px; font-size:11.5px; color:#2563EB; background:none; border:1px dashed #93C5FD; border-radius:6px; padding:4px 10px; cursor:pointer; font-family:inherit; }
+  .lc-demo { margin-top:8px; font-size:11px; color:#2563EB; background:none; border:1px dashed #93C5FD; border-radius:5px; padding:3px 9px; cursor:pointer; font-family:inherit; }
   .lc-demo:hover { background:#EFF6FF; }
   #live-submit-btn:disabled { background:#C7D2FE; cursor:not-allowed; }
 </style>
 <div class="modal-overlay" id="live-checklist-modal">
-  <div class="modal" style="width:520px;">
+  <div class="modal" style="width:500px;">
     <div class="modal-header">
       <div>
         <div class="modal-title">Mark Live · Pre-flight Checklist</div>
-        <div class="modal-sub"><b id="live-chk-funder">—</b> · 兜底校验:确认所有下游配置就绪后方可转为 Live</div>
+        <div class="modal-sub"><b id="live-chk-funder">—</b> · Confirm all downstream systems are configured before going Live</div>
       </div>
       <button class="modal-close" onclick="closeLiveChecklist()">✕</button>
     </div>
     <div class="modal-body" style="padding:18px 24px;">
-      <div style="font-size:12.5px;color:#6B7280;margin-bottom:14px;line-height:1.6;">BD 请逐项确认以下系统已完成配置。<b>Accounting</b> 项由系统在收到 Accounting 推送消息后自动勾选,不可人工勾选;未勾选无法 Submit。</div>
+      <div style="font-size:12.5px;color:#6B7280;margin-bottom:14px;line-height:1.6;">Tick each item to confirm it is configured. Accounting is verified automatically by the system and cannot be ticked manually — Submit stays disabled until every item is checked.</div>
       <div class="live-chk-list">
-        <label class="live-chk-row"><input type="checkbox" class="live-chk" onchange="onLiveChkToggle()"><span class="lc-title">Settlement 已完成配置</span></label>
-        <label class="live-chk-row"><input type="checkbox" class="live-chk" onchange="onLiveChkToggle()"><span class="lc-title">Investor Portal 已完成配置</span></label>
-        <label class="live-chk-row"><input type="checkbox" class="live-chk" onchange="onLiveChkToggle()"><span class="lc-title">Funding 已完成配置</span></label>
-        <label class="live-chk-row"><input type="checkbox" class="live-chk" onchange="onLiveChkToggle()"><span class="lc-title">AR 已完成配置</span></label>
+        <label class="live-chk-row"><input type="checkbox" class="live-chk" onchange="onLiveChkToggle()"><span class="lc-title">Settlement configured</span></label>
+        <label class="live-chk-row"><input type="checkbox" class="live-chk" onchange="onLiveChkToggle()"><span class="lc-title">Investor Portal configured</span></label>
+        <label class="live-chk-row"><input type="checkbox" class="live-chk" onchange="onLiveChkToggle()"><span class="lc-title">Funding configured</span></label>
+        <label class="live-chk-row"><input type="checkbox" class="live-chk" onchange="onLiveChkToggle()"><span class="lc-title">AR configured</span></label>
         <div class="live-chk-row sys">
           <input type="checkbox" id="chk-accounting" class="live-chk" disabled onclick="return false;">
           <div style="flex:1;">
-            <div class="lc-title">Accounting 已完成配置 <span class="lc-sys-tag">系统勾选</span></div>
-            <div class="lc-hint">由 Accounting 系统推送消息自动勾选 · 不可人工操作 · 未勾选无法 Submit</div>
-            <div id="lc-acct-status" class="lc-acct-status waiting">⏳ 等待 Accounting 推送消息…</div>
-            <button class="lc-demo" onclick="simulateAccountingPush()">🔧 Demo:模拟 Accounting 推送消息</button>
+            <div class="lc-title">Accounting configured <span class="lc-sys-tag">🔒 System</span></div>
+            <div id="lc-acct-status" class="lc-acct-status waiting">Awaiting Accounting confirmation…</div>
+            <button class="lc-demo" onclick="simulateAccountingPush()">Simulate Accounting push</button>
           </div>
         </div>
       </div>
     </div>
     <div class="modal-footer" style="padding:14px 24px;">
       <button class="btn-outline-sm" style="padding:8px 22px;font-size:13px;" onclick="closeLiveChecklist()">Cancel</button>
-      <button class="btn-primary-lg" id="live-submit-btn" style="font-size:13px;padding:8px 22px;" disabled onclick="submitLiveChecklist()">Submit · 发起 Live</button>
+      <button class="btn-primary-lg" id="live-submit-btn" style="font-size:13px;padding:8px 22px;" disabled onclick="submitLiveChecklist()">Submit · Go Live</button>
     </div>
   </div>
 </div>
