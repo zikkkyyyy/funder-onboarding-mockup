@@ -2236,7 +2236,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                 <td><span class="scheme-badge">ABS</span></td>
                 <td style="color:#9CA3AF;font-size:12px;">2023-08-05 11:29:04</td>
                 <td><div class="tbl-actions"><button class="tbl-act-link">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">Edit</button><span class="tbl-act-sep">|</span><div class="more-dd-wrap" id="more-2"><button class="tbl-act-link" onclick="toggleMoreDD('more-2',event)">More ▾</button>
-                  <div class="more-dd-menu"><button class="more-dd-item" onclick="openExportJsonModal('TH_SPL_Pioneer_01')">Export JSON</button><button class="more-dd-item" onclick="showConfirmPopup('Mark Live','TH_SPL_Pioneer_01')">Mark Live</button></div>
+                  <div class="more-dd-menu"><button class="more-dd-item" onclick="openExportJsonModal('TH_SPL_Pioneer_01')">Export JSON</button><button class="more-dd-item" onclick="openLiveChecklist('TH_SPL_Pioneer_01')">Mark Live</button></div>
                 </div></div></td>
               </tr>
               <tr id="lrow-3">
@@ -2282,7 +2282,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                 <td><span class="scheme-badge">ABS</span></td>
                 <td style="color:#9CA3AF;font-size:12px;">2024-08-09 14:38:12</td>
                 <td><div class="tbl-actions"><button class="tbl-act-link">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link">Edit</button><span class="tbl-act-sep">|</span><div class="more-dd-wrap" id="more-6"><button class="tbl-act-link" onclick="toggleMoreDD('more-6',event)">More ▾</button>
-                  <div class="more-dd-menu"><button class="more-dd-item" onclick="openExportJsonModal('TH_SPL_Allstar_ABS_01')">Export JSON</button><button class="more-dd-item" onclick="showConfirmPopup('Mark Live','TH_SPL_Allstar_ABS_01')">Mark Live</button></div>
+                  <div class="more-dd-menu"><button class="more-dd-item" onclick="openExportJsonModal('TH_SPL_Allstar_ABS_01')">Export JSON</button><button class="more-dd-item" onclick="openLiveChecklist('TH_SPL_Allstar_ABS_01')">Mark Live</button></div>
                 </div></div></td>
               </tr>
               <tr id="lrow-7">
@@ -4033,6 +4033,43 @@ function showConfirmPopup(action, funderName) {
   popup.classList.add('open');
   popup._action = action;
   popup._funder = funderName;
+}
+
+/* ── Mark Live · Pre-flight Checklist ── */
+let liveChkFunder = '';
+function openLiveChecklist(funderName) {
+  liveChkFunder = funderName;
+  document.querySelectorAll('.more-dd-wrap.open').forEach(w => w.classList.remove('open'));
+  // reset all checkboxes (including the system Accounting one)
+  document.querySelectorAll('#live-checklist-modal .live-chk').forEach(c => { c.checked = false; });
+  const s = document.getElementById('lc-acct-status');
+  s.className = 'lc-acct-status waiting';
+  s.textContent = '⏳ 等待 Accounting 推送消息…';
+  document.getElementById('live-chk-funder').textContent = funderName;
+  updateLiveSubmit();
+  document.getElementById('live-checklist-modal').classList.add('open');
+}
+function closeLiveChecklist() { document.getElementById('live-checklist-modal').classList.remove('open'); }
+function onLiveChkToggle() { updateLiveSubmit(); }
+function updateLiveSubmit() {
+  // Submit stays disabled until EVERY box is ticked — including Accounting,
+  // which only the system (simulated push) can tick, never the BD manually.
+  const boxes = [...document.querySelectorAll('#live-checklist-modal .live-chk')];
+  document.getElementById('live-submit-btn').disabled = !boxes.every(c => c.checked);
+}
+function simulateAccountingPush() {
+  document.getElementById('chk-accounting').checked = true;
+  const s = document.getElementById('lc-acct-status');
+  s.className = 'lc-acct-status done';
+  s.textContent = '✓ 已收到 Accounting 推送消息 · 系统已自动勾选';
+  updateLiveSubmit();
+}
+function submitLiveChecklist() {
+  closeLiveChecklist();
+  const toast = document.getElementById('update-toast');
+  toast.textContent = `✓ ${liveChkFunder} 兜底校验通过,已发起 Live 流程(转 Live · 走 Ticket)`;
+  toast.classList.add('visible');
+  setTimeout(() => toast.classList.remove('visible'), 2800);
 }
 
 /* ── SPV & Tranche Edit Modal ── */
@@ -6711,6 +6748,58 @@ function spSubmit() {
     <div class="modal-footer" style="padding:12px 24px;display:flex;justify-content:flex-end;gap:10px;">
       <button class="btn-outline-sm" style="padding:8px 24px;font-size:13px;" onclick="closeSpvEditModal()">Cancel</button>
       <button class="btn-primary-lg" style="font-size:13px;padding:8px 24px;" onclick="submitSpvEdit()">OK</button>
+    </div>
+  </div>
+</div>
+
+<!-- Mark Live · Pre-flight Checklist Modal (global, outside flows to avoid clipping) -->
+<style>
+  .live-chk-list { display:flex; flex-direction:column; gap:10px; }
+  .live-chk-row { display:flex; align-items:flex-start; gap:12px; padding:13px 16px; border:1px solid #E5E7EB; border-radius:9px; cursor:pointer; transition:background .12s,border-color .12s; }
+  .live-chk-row:not(.sys):hover { background:#F9FAFB; border-color:#D1D5DB; }
+  .live-chk-row input[type=checkbox] { width:17px; height:17px; margin-top:1px; accent-color:#2563EB; cursor:pointer; flex-shrink:0; }
+  .live-chk-row .lc-title { font-size:13.5px; color:#111827; font-weight:500; }
+  .live-chk-row.sys { background:#F8FAFC; border-style:dashed; cursor:default; }
+  .live-chk-row.sys input[type=checkbox] { accent-color:#64748B; cursor:not-allowed; }
+  .lc-sys-tag { display:inline-block; margin-left:8px; font-size:10px; font-weight:700; color:#475569; background:#E2E8F0; padding:1px 7px; border-radius:9px; vertical-align:middle; }
+  .lc-hint { font-size:11.5px; color:#94A3B8; margin-top:3px; line-height:1.5; }
+  .lc-acct-status { font-size:11.5px; font-weight:600; margin-top:5px; }
+  .lc-acct-status.waiting { color:#B45309; }
+  .lc-acct-status.done { color:#16A34A; }
+  .lc-demo { margin-top:7px; font-size:11.5px; color:#2563EB; background:none; border:1px dashed #93C5FD; border-radius:6px; padding:4px 10px; cursor:pointer; font-family:inherit; }
+  .lc-demo:hover { background:#EFF6FF; }
+  #live-submit-btn:disabled { background:#C7D2FE; cursor:not-allowed; }
+</style>
+<div class="modal-overlay" id="live-checklist-modal">
+  <div class="modal" style="width:520px;">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">Mark Live · Pre-flight Checklist</div>
+        <div class="modal-sub"><b id="live-chk-funder">—</b> · 兜底校验:确认所有下游配置就绪后方可转为 Live</div>
+      </div>
+      <button class="modal-close" onclick="closeLiveChecklist()">✕</button>
+    </div>
+    <div class="modal-body" style="padding:18px 24px;">
+      <div style="font-size:12.5px;color:#6B7280;margin-bottom:14px;line-height:1.6;">BD 请逐项确认以下系统已完成配置。<b>Accounting</b> 项由系统在收到 Accounting 推送消息后自动勾选,不可人工勾选;未勾选无法 Submit。</div>
+      <div class="live-chk-list">
+        <label class="live-chk-row"><input type="checkbox" class="live-chk" onchange="onLiveChkToggle()"><span class="lc-title">Settlement 已完成配置</span></label>
+        <label class="live-chk-row"><input type="checkbox" class="live-chk" onchange="onLiveChkToggle()"><span class="lc-title">Investor Portal 已完成配置</span></label>
+        <label class="live-chk-row"><input type="checkbox" class="live-chk" onchange="onLiveChkToggle()"><span class="lc-title">Funding 已完成配置</span></label>
+        <label class="live-chk-row"><input type="checkbox" class="live-chk" onchange="onLiveChkToggle()"><span class="lc-title">AR 已完成配置</span></label>
+        <div class="live-chk-row sys">
+          <input type="checkbox" id="chk-accounting" class="live-chk" disabled onclick="return false;">
+          <div style="flex:1;">
+            <div class="lc-title">Accounting 已完成配置 <span class="lc-sys-tag">系统勾选</span></div>
+            <div class="lc-hint">由 Accounting 系统推送消息自动勾选 · 不可人工操作 · 未勾选无法 Submit</div>
+            <div id="lc-acct-status" class="lc-acct-status waiting">⏳ 等待 Accounting 推送消息…</div>
+            <button class="lc-demo" onclick="simulateAccountingPush()">🔧 Demo:模拟 Accounting 推送消息</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer" style="padding:14px 24px;">
+      <button class="btn-outline-sm" style="padding:8px 22px;font-size:13px;" onclick="closeLiveChecklist()">Cancel</button>
+      <button class="btn-primary-lg" id="live-submit-btn" style="font-size:13px;padding:8px 22px;" disabled onclick="submitLiveChecklist()">Submit · 发起 Live</button>
     </div>
   </div>
 </div>
