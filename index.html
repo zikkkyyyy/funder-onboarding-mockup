@@ -6776,7 +6776,7 @@ function spSubmit() {
   <div class="modal" style="width:500px;">
     <div class="modal-header">
       <div>
-        <div class="modal-title">Mark Live · Pre-flight Checklist</div>
+        <div class="modal-title">Mark this funder as Live?</div>
         <div class="modal-sub"><b id="live-chk-funder">—</b> · Confirm all downstream systems are configured before going Live</div>
       </div>
       <button class="modal-close" onclick="closeLiveChecklist()">✕</button>
@@ -6788,6 +6788,7 @@ function spSubmit() {
         <label class="live-chk-row"><input type="checkbox" class="live-chk" onchange="onLiveChkToggle()"><span class="lc-title">Investor Portal configured</span></label>
         <label class="live-chk-row"><input type="checkbox" class="live-chk" onchange="onLiveChkToggle()"><span class="lc-title">Funding configured</span></label>
         <label class="live-chk-row"><input type="checkbox" class="live-chk" onchange="onLiveChkToggle()"><span class="lc-title">AR configured</span></label>
+        <label class="live-chk-row"><input type="checkbox" class="live-chk" onchange="onLiveChkToggle()"><span class="lc-title">SPV name must be real value</span></label>
         <div class="live-chk-row sys">
           <input type="checkbox" id="chk-accounting" class="live-chk" disabled onclick="return false;">
           <div style="flex:1;">
