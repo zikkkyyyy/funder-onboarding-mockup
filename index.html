@@ -1397,7 +1397,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                 <td>Data Suite Pipeline (DE)</td>
                 <td>Investor Portal</td>
                 <td><input class="inline-edit path-input" value="/" /></td>
-                <td><input class="inline-edit path-input" value="" placeholder="To be filled by DE" /></td>
+                <td><input class="inline-edit path-input" value="live/{project_name}/{File_Category}/{File_Type}" /></td>
                 <td class="col-portal"><input class="inline-edit path-input" value="Loan_Tape/Transferred_Loan_Tape/" /></td>
                 <td style="text-align:center;"><span class="badge badge-active">Yes</span></td><td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDataFile(this)">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" onclick="deleteDataFile(this)">Delete</button></div></td>
               </tr>
@@ -1409,7 +1409,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                 <td>Data Suite Pipeline (DE)</td>
                 <td>Investor Portal</td>
                 <td><input class="inline-edit path-input" value="/" /></td>
-                <td><input class="inline-edit path-input" value="" placeholder="To be filled by DE" /></td>
+                <td><input class="inline-edit path-input" value="live/{project_name}/{File_Category}/{File_Type}" /></td>
                 <td class="col-portal"><input class="inline-edit path-input" value="Loan_Tape/Repurchased_Loan_Tape/" /></td>
                 <td style="text-align:center;"><span class="badge badge-active">Yes</span></td><td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDataFile(this)">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" onclick="deleteDataFile(this)">Delete</button></div></td>
               </tr>
@@ -1901,7 +1901,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                   
                   <td>Data Suite Pipeline (DE)</td>
                   <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">/</td>
-                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;color:#9CA3AF;font-style:italic;">To be filled by DE</td>
+                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">live/{project_name}/{File_Category}/{File_Type}</td>
                   <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;background:#F5F9FF;">Loan_Tape/Transferred_Loan_Tape/</td>
                   <td style="text-align:center;"><span class="badge badge-active">Yes</span></td>
                 </tr>
@@ -1912,7 +1912,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                   
                   <td>Data Suite Pipeline (DE)</td>
                   <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">/</td>
-                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;color:#9CA3AF;font-style:italic;">To be filled by DE</td>
+                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">live/{project_name}/{File_Category}/{File_Type}</td>
                   <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;background:#F5F9FF;">Loan_Tape/Repurchased_Loan_Tape/</td>
                   <td style="text-align:center;"><span class="badge badge-active">Yes</span></td>
                 </tr>
@@ -3151,7 +3151,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                 <td>Data Suite Pipeline (DE)</td>
                 <td>Investor Portal</td>
                 <td><input class="inline-edit path-input" value="/" /></td>
-                <td><input class="inline-edit path-input" value="" placeholder="To be filled by DE" /></td>
+                <td><input class="inline-edit path-input" value="live/{project_name}/{File_Category}/{File_Type}" /></td>
                 <td class="col-portal"><input class="inline-edit path-input" value="Loan_Tape/Transferred_Loan_Tape/" /></td>
                 <td style="text-align:center;"><span class="badge badge-active">Yes</span></td><td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDataFile(this)">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" onclick="deleteDataFile(this)">Delete</button></div></td>
               </tr>
@@ -3163,7 +3163,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                 <td>Data Suite Pipeline (DE)</td>
                 <td>Investor Portal</td>
                 <td><input class="inline-edit path-input" value="/" /></td>
-                <td><input class="inline-edit path-input" value="" placeholder="To be filled by DE" /></td>
+                <td><input class="inline-edit path-input" value="live/{project_name}/{File_Category}/{File_Type}" /></td>
                 <td class="col-portal"><input class="inline-edit path-input" value="Loan_Tape/Repurchased_Loan_Tape/" /></td>
                 <td style="text-align:center;"><span class="badge badge-active">Yes</span></td><td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDataFile(this)">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" onclick="deleteDataFile(this)">Delete</button></div></td>
               </tr>
@@ -4794,8 +4794,8 @@ const FILE_PRESETS = {
   sale_notice: { cat:'Sale_Notice', name:'{project_name}_Revolving_Period_Sale_Notice_YYYYMMDD', type:'pdf', timing:{time:'14:00',anchor:'Cut-off Date',offset:'',unit:''}, gen:'Offline (BD)', transfer:'Investor Portal', bd:'/', de:'/', portal:'Sale_Notice%cutoff_date/', sync:'Yes' },
   cert_solvency: { cat:'Sale_Notice', name:'{project_name}_Originator_Certificate_of_Solvency_YYYYMMDD', type:'pdf', timing:{time:'14:00',anchor:'Cut-off Date',offset:'',unit:''}, gen:'Offline (BD)', transfer:'Investor Portal', bd:'/', de:'/', portal:'Sale_Notice%cutoff_date/', sync:'Yes' },
   spa: { cat:'Sale_Notice', name:'{project_name}_Revolving_Period_Sale_and_Purchase_Agreement_YYYYMMDD', type:'pdf', timing:{time:'14:00',anchor:'Cut-off Date',offset:'',unit:''}, gen:'Offline (BD)', transfer:'Investor Portal', bd:'/', de:'/', portal:'Sale_Notice%cutoff_date/', sync:'Yes' },
-  transferred: { cat:'Loan_Tape', name:'{project_name}_Transferred_Loan_Tape_YYYY-MM-DD', type:'gz', timing:{time:'09:00',anchor:'20th of each month',offset:'1',unit:'D'}, gen:'Data Suite Pipeline (DE)', transfer:'Investor Portal', bd:'/', de:'', portal:'Loan_Tape/Transferred_Loan_Tape/', sync:'Yes' },
-  repurchased: { cat:'Loan_Tape', name:'{project_name}_Repurchased_Loan_Tape_YYYY-MM-DD', type:'gz', timing:{time:'09:00',anchor:'Batch Repurchase/Clawback Cut-off Date',offset:'',unit:''}, ttext:'by SGT 09:00 on Batch Repurchase/Clawback Cut-off Date / by SGT 09:00 on end of each reporting period + 1D', gen:'Data Suite Pipeline (DE)', transfer:'Investor Portal', bd:'/', de:'', portal:'Loan_Tape/Repurchased_Loan_Tape/', sync:'Yes' },
+  transferred: { cat:'Loan_Tape', name:'{project_name}_Transferred_Loan_Tape_YYYY-MM-DD', type:'gz', timing:{time:'09:00',anchor:'20th of each month',offset:'1',unit:'D'}, gen:'Data Suite Pipeline (DE)', transfer:'Investor Portal', bd:'/', de:'live/{project_name}/{File_Category}/{File_Type}', portal:'Loan_Tape/Transferred_Loan_Tape/', sync:'Yes' },
+  repurchased: { cat:'Loan_Tape', name:'{project_name}_Repurchased_Loan_Tape_YYYY-MM-DD', type:'gz', timing:{time:'09:00',anchor:'Batch Repurchase/Clawback Cut-off Date',offset:'',unit:''}, ttext:'by SGT 09:00 on Batch Repurchase/Clawback Cut-off Date / by SGT 09:00 on end of each reporting period + 1D', gen:'Data Suite Pipeline (DE)', transfer:'Investor Portal', bd:'/', de:'live/{project_name}/{File_Category}/{File_Type}', portal:'Loan_Tape/Repurchased_Loan_Tape/', sync:'Yes' },
   monthly_summary: { cat:'Report', name:'{project_name}_Monthly_Transferred_Loan_Tape_Summary_YYYYMMDD', type:'xlsx', timing:{time:'09:00',anchor:'20th of each month',offset:'1',unit:'D'}, gen:'Data Suite Pipeline (BD)', transfer:'Investor Portal', bd:'live/{project_name}/Report/Monthly_Portfolio_Summary/', de:'/', portal:'Report/Monthly_Portfolio_Summary/', sync:'Yes' },
   servicer: { cat:'Report', name:'{project_name}_Servicer_Report_YYYYMMDD', type:'xlsx', timing:{time:'09:00',anchor:'end of each reporting period',offset:'1',unit:'BD'}, gen:'Data Suite Pipeline (BD)', transfer:'Investor Portal', bd:'live/{project_name}/Report/Servicer_Report/', de:'/', portal:'Report/Servicer_Report/', sync:'Yes' }
 };
