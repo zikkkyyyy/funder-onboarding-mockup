@@ -2930,7 +2930,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
         <!-- Sub Plans section -->
         <div class="view-section">
           <div class="view-section-hd">
-            <span class="view-section-title">Sub Plans <span style="font-size:12px;font-weight:400;color:#9CA3AF;margin-left:6px;">2 active</span></span>
+            <span class="view-section-title">Sub Plans <span id="subplan-count" style="font-size:12px;font-weight:400;color:#9CA3AF;margin-left:6px;">2 active</span></span>
             <button class="btn-primary-lg" style="font-size:12px;padding:7px 16px;" onclick="switchFlow('sub-plan')">+ Create Sub Plan</button>
           </div>
           <div style="padding:0;">
@@ -2943,24 +2943,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                 <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;">Created At</th>
                 <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB;">Action</th>
               </tr></thead>
-              <tbody>
-                <tr style="border-bottom:1px solid #F3F4F6;">
-                  <td style="padding:12px 16px;font-size:13px;color:#2563EB;cursor:pointer;">SP-2026-017</td>
-                  <td style="padding:12px 16px;font-size:13px;">Cycle #17 · Apr 21 – May 18</td>
-                  <td style="padding:12px 16px;font-size:13px;color:#374151;">Bank holiday delay TH</td>
-                  <td style="padding:12px 16px;"><span class="badge badge-active" style="background:#DCFCE7;color:#16A34A;">Approved</span></td>
-                  <td style="padding:12px 16px;font-size:12px;color:#9CA3AF;">2026-04-18 10:22</td>
-                  <td style="padding:12px 16px;"><div class="tbl-actions"><button class="tbl-act-link">View</button></div></td>
-                </tr>
-                <tr>
-                  <td style="padding:12px 16px;font-size:13px;color:#2563EB;cursor:pointer;">SP-2026-018</td>
-                  <td style="padding:12px 16px;font-size:13px;">Cycle #18 · May 19 – Jun 15</td>
-                  <td style="padding:12px 16px;font-size:13px;color:#374151;">System maintenance window</td>
-                  <td style="padding:12px 16px;"><span class="badge badge-pending">Pending TC</span></td>
-                  <td style="padding:12px 16px;font-size:12px;color:#9CA3AF;">2026-05-15 14:07</td>
-                  <td style="padding:12px 16px;"><div class="tbl-actions"><button class="tbl-act-link">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" style="color:#DC2626;">Withdraw</button></div></td>
-                </tr>
-              </tbody>
+              <tbody id="subplan-tbody"></tbody>
             </table>
           </div>
         </div>
@@ -5965,6 +5948,49 @@ const LD_SUBPLANS = {
 let ldSelIdx = 0;
 function ldDate(s){ return new Date(s + 'T00:00:00'); }
 function ldAddDays(d,n){ const x=new Date(d); x.setDate(x.getDate()+n); return x; }
+
+/* ── Sub Plans list — status includes Expired (affected cycle end past today) ── */
+const SUBPLAN_ROWS = [
+  { id:'SP-2026-016', cycleNo:16, startOff:-52, endOff:-25, reason:'Cash flow reconciliation', baseStatus:'Approved',   createdOff:-70, createdTime:'09:41' },
+  { id:'SP-2026-017', cycleNo:17, startOff:-7,  endOff:20,  reason:'Bank holiday delay TH',     baseStatus:'Approved',   createdOff:-30, createdTime:'10:22' },
+  { id:'SP-2026-018', cycleNo:18, startOff:21,  endOff:48,  reason:'System maintenance window', baseStatus:'Pending TC', createdOff:-10, createdTime:'14:07' },
+];
+function renderSubPlans() {
+  const tbody = document.getElementById('subplan-tbody');
+  if (!tbody) return;
+  const today = new Date(); today.setHours(0,0,0,0);
+  const addDays = n => { const d = new Date(today); d.setDate(d.getDate()+n); return d; };
+  const fmt = d => d.toLocaleDateString('en-US', { month:'short', day:'numeric' });
+  const iso = d => d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  let active = 0;
+  tbody.innerHTML = SUBPLAN_ROWS.map(sp => {
+    const start = addDays(sp.startOff), end = addDays(sp.endOff), created = addDays(sp.createdOff);
+    const expired = end < today; // last day of affected cycle is past today
+    let status, sbg, sfg, action;
+    if (expired) {
+      status = 'Expired'; sbg = '#F3F4F6'; sfg = '#6B7280';
+      action = '<button class="tbl-act-link">View</button>';
+    } else if (sp.baseStatus === 'Pending TC') {
+      status = 'Pending TC'; sbg = '#FEF3C7'; sfg = '#92400E'; active++;
+      action = '<button class="tbl-act-link">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" style="color:#DC2626;">Withdraw</button>';
+    } else {
+      status = 'Approved'; sbg = '#DCFCE7'; sfg = '#16A34A'; active++;
+      action = '<button class="tbl-act-link">View</button>';
+    }
+    const td = 'padding:12px 16px;font-size:13px;';
+    return `<tr style="border-bottom:1px solid #F3F4F6;">
+      <td style="${td}color:#2563EB;cursor:pointer;">${sp.id}</td>
+      <td style="${td}">Cycle #${sp.cycleNo} · ${fmt(start)} – ${fmt(end)}</td>
+      <td style="${td}color:#374151;">${sp.reason}</td>
+      <td style="padding:12px 16px;"><span class="badge" style="background:${sbg};color:${sfg};">${status}</span></td>
+      <td style="padding:12px 16px;font-size:12px;color:#9CA3AF;">${iso(created)} ${sp.createdTime}</td>
+      <td style="padding:12px 16px;"><div class="tbl-actions">${action}</div></td>
+    </tr>`;
+  }).join('');
+  const cnt = document.getElementById('subplan-count');
+  if (cnt) cnt.textContent = active + ' active';
+}
+renderSubPlans();
 function ldKey(d){ return d.toISOString().slice(0,10); }
 function ldFmt(d){ const M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; return M[d.getMonth()]+' '+d.getDate(); }
 function ldCurrentIdx(){
