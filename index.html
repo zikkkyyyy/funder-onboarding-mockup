@@ -2806,47 +2806,10 @@ tr.drag-over { border-top: 2px solid #2563EB; }
             </table>
           </div>
         </div>
-        <!-- Issue size -->
+        <!-- Issue size (inline editable) -->
         <div class="view-section">
-          <div class="view-section-hd"><span class="view-section-title">Issue size</span></div>
-          <div class="view-section-body">
-            <div style="margin-bottom:16px;">
-              <div class="view-label" style="margin-bottom:4px;">Issued pool size</div>
-              <div style="font-size:13px;font-weight:600;color:#111827;">145 Mil USD</div>
-            </div>
-            <!-- Tranche Allocation -->
-            <div style="font-size:11px;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">Tranche Allocation</div>
-            <table style="width:100%;border-collapse:collapse;">
-              <thead>
-                <tr style="background:#F9FAFB;">
-                  <th style="padding:9px 14px;font-size:11px;font-weight:600;color:#6B7280;text-align:left;border-bottom:1px solid #E5E7EB;">Tranche</th>
-                  <th style="padding:9px 14px;font-size:11px;font-weight:600;color:#6B7280;text-align:left;border-bottom:1px solid #E5E7EB;">Size (USD'm)</th>
-                  <th style="padding:9px 14px;font-size:11px;font-weight:600;color:#6B7280;text-align:left;border-bottom:1px solid #E5E7EB;">% of Pool</th>
-                  <th style="padding:9px 14px;font-size:11px;font-weight:600;color:#6B7280;text-align:left;border-bottom:1px solid #E5E7EB;">Compulsory</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr style="border-bottom:1px solid #F3F4F6;">
-                  <td style="padding:12px 14px;"><div style="display:flex;align-items:center;gap:10px;"><div style="width:30px;height:30px;border-radius:50%;background:#1D4ED8;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">S</div><div><div style="font-size:13px;font-weight:600;color:#111827;">Senior tranche</div><div style="font-size:11px;color:#9CA3AF;">Priority 1</div></div></div></td>
-                  <td style="padding:12px 14px;font-size:13px;color:#374151;">107 USD'm</td>
-                  <td style="padding:12px 14px;font-size:13px;color:#374151;">73.79%</td>
-                  <td style="padding:12px 14px;"><div class="toggle" style="pointer-events:none;"></div></td>
-                </tr>
-                <tr style="border-bottom:1px solid #F3F4F6;background:#FAFAFA;">
-                  <td style="padding:12px 14px;"><div style="display:flex;align-items:center;gap:10px;"><div style="width:30px;height:30px;border-radius:50%;background:#16A34A;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">J</div><div><div style="font-size:13px;font-weight:600;color:#111827;">Junior tranche</div><div style="font-size:11px;color:#9CA3AF;">Priority 2 — residual</div></div></div></td>
-                  <td style="padding:12px 14px;font-size:13px;color:#374151;">38.00 USD'm</td>
-                  <td style="padding:12px 14px;font-size:13px;color:#374151;">26.21%</td>
-                  <td style="padding:12px 14px;"><div class="toggle off" style="pointer-events:none;"></div></td>
-                </tr>
-                <tr>
-                  <td style="padding:10px 14px;font-size:13px;font-weight:700;color:#111827;">Total issued pool</td>
-                  <td style="padding:10px 14px;font-size:13px;font-weight:700;color:#2563EB;">145 USD'm</td>
-                  <td style="padding:10px 14px;font-size:13px;font-weight:700;color:#2563EB;">100%</td>
-                  <td></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <div class="view-section-hd"><span class="view-section-title">Issue size</span><span id="issue-size-actions"></span></div>
+          <div class="view-section-body" id="issue-size-body"></div>
         </div>
         <!-- EC / PC Rules -->
         <div class="view-section">
@@ -4060,6 +4023,104 @@ function submitLiveChecklist() {
 }
 
 /* ── SPV & Tranche Edit Modal ── */
+/* ── Issue size — inline editable (View Funder > Portfolio Setting) ── */
+const ISSUE = { pool: 145, currency: 'Mil USD', senior: 107, seniorComp: true, juniorComp: false };
+let issueEdit = false;
+function issNum(v){ const n = parseFloat(String(v).replace(/[^0-9.]/g,'')); return isNaN(n) ? 0 : n; }
+function issFmt(n){ return Number.isInteger(n) ? String(n) : n.toFixed(2); }
+function issDerived(){
+  const junior = Math.max(0, ISSUE.pool - ISSUE.senior);
+  const sPct = ISSUE.pool > 0 ? (ISSUE.senior / ISSUE.pool * 100) : 0;
+  const jPct = ISSUE.pool > 0 ? (junior / ISSUE.pool * 100) : 0;
+  return { junior, sPct, jPct, over: ISSUE.senior > ISSUE.pool };
+}
+function renderIssueSize(){
+  const actions = document.getElementById('issue-size-actions');
+  const body = document.getElementById('issue-size-body');
+  if (!actions || !body) return;
+  actions.innerHTML = issueEdit
+    ? '<button class="btn-outline-sm" style="padding:6px 16px;font-size:13px;margin-right:8px;" onclick="cancelIssueSize()">Cancel</button><button class="btn-edit" id="issue-save-btn" style="padding:6px 18px;font-size:13px;border-radius:6px;" onclick="saveIssueSize()">Save</button>'
+    : '<button class="btn-edit" style="padding:6px 18px;font-size:13px;border-radius:6px;" onclick="startIssueEdit()">Edit</button>';
+  const d = issDerived();
+  // Issued pool size cell
+  const poolBlock = issueEdit
+    ? `<label class="form-label" style="margin-bottom:4px;">Issued pool size <span style="color:#DC2626;">*</span></label>
+       <div style="display:flex;gap:8px;align-items:center;">
+         <input class="form-input" id="ie-pool" type="number" min="0" value="${ISSUE.pool}" oninput="onIssueInput()" style="width:200px;" />
+         <select class="form-select" id="ie-cur" style="width:110px;">${['Mil USD','Mil MYR','Mil THB'].map(c=>`<option${ISSUE.currency===c?' selected':''}>${c}</option>`).join('')}</select>
+       </div>`
+    : `<div class="view-label" style="margin-bottom:4px;">Issued pool size</div>
+       <div style="font-size:13px;font-weight:600;color:#111827;">${issFmt(ISSUE.pool)} ${ISSUE.currency}</div>`;
+  // Senior size cell
+  const seniorSizeCell = issueEdit
+    ? `<div style="display:flex;gap:6px;align-items:center;"><input class="form-input" id="ie-senior" type="number" min="0" value="${ISSUE.senior}" oninput="onIssueInput()" style="width:110px;" /><span style="font-size:12px;color:#9CA3AF;">USD'm</span><span style="color:#DC2626;">*</span></div>`
+    : `${issFmt(ISSUE.senior)} USD'm`;
+  const seniorTog = `<div class="toggle${ISSUE.seniorComp?'':' off'}"${issueEdit?' onclick="toggleIssueComp(\'senior\',this)"':' style="pointer-events:none;"'}></div>`;
+  const juniorTog = `<div class="toggle${ISSUE.juniorComp?'':' off'}"${issueEdit?' onclick="toggleIssueComp(\'junior\',this)"':' style="pointer-events:none;"'}></div>`;
+  const warn = issueEdit ? `<div id="ie-warn" style="color:#DC2626;font-size:12px;margin-top:8px;display:${d.over?'':'none'};">Senior size cannot exceed the issued pool size.</div>` : '';
+  body.innerHTML = `
+    <div style="margin-bottom:16px;">${poolBlock}</div>
+    <div style="font-size:11px;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">Tranche Allocation</div>
+    <table style="width:100%;border-collapse:collapse;">
+      <thead><tr style="background:#F9FAFB;">
+        <th style="padding:9px 14px;font-size:11px;font-weight:600;color:#6B7280;text-align:left;border-bottom:1px solid #E5E7EB;">Tranche</th>
+        <th style="padding:9px 14px;font-size:11px;font-weight:600;color:#6B7280;text-align:left;border-bottom:1px solid #E5E7EB;">Size (USD'm)</th>
+        <th style="padding:9px 14px;font-size:11px;font-weight:600;color:#6B7280;text-align:left;border-bottom:1px solid #E5E7EB;">% of Pool</th>
+        <th style="padding:9px 14px;font-size:11px;font-weight:600;color:#6B7280;text-align:left;border-bottom:1px solid #E5E7EB;">Compulsory</th>
+      </tr></thead>
+      <tbody>
+        <tr style="border-bottom:1px solid #F3F4F6;">
+          <td style="padding:12px 14px;"><div style="display:flex;align-items:center;gap:10px;"><div style="width:30px;height:30px;border-radius:50%;background:#1D4ED8;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">S</div><div><div style="font-size:13px;font-weight:600;color:#111827;">Senior tranche</div><div style="font-size:11px;color:#9CA3AF;">Priority 1</div></div></div></td>
+          <td style="padding:12px 14px;font-size:13px;color:#374151;">${seniorSizeCell}</td>
+          <td style="padding:12px 14px;font-size:13px;color:#374151;" id="ie-senior-pct">${d.sPct.toFixed(2)}%</td>
+          <td style="padding:12px 14px;">${seniorTog}</td>
+        </tr>
+        <tr style="border-bottom:1px solid #F3F4F6;background:#FAFAFA;">
+          <td style="padding:12px 14px;"><div style="display:flex;align-items:center;gap:10px;"><div style="width:30px;height:30px;border-radius:50%;background:#16A34A;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">J</div><div><div style="font-size:13px;font-weight:600;color:#111827;">Junior tranche</div><div style="font-size:11px;color:#9CA3AF;">Priority 2 — residual</div></div></div></td>
+          <td style="padding:12px 14px;font-size:13px;color:#374151;" id="ie-junior-size">${issFmt(d.junior)} USD'm</td>
+          <td style="padding:12px 14px;font-size:13px;color:#374151;" id="ie-junior-pct">${d.jPct.toFixed(2)}%</td>
+          <td style="padding:12px 14px;">${juniorTog}</td>
+        </tr>
+        <tr>
+          <td style="padding:10px 14px;font-size:13px;font-weight:700;color:#111827;">Total issued pool</td>
+          <td style="padding:10px 14px;font-size:13px;font-weight:700;color:#2563EB;" id="ie-total">${issFmt(ISSUE.pool)} USD'm</td>
+          <td style="padding:10px 14px;font-size:13px;font-weight:700;color:#2563EB;">100%</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>${warn}`;
+}
+function startIssueEdit(){ issueEdit = true; renderIssueSize(); }
+function cancelIssueSize(){ issueEdit = false; renderIssueSize(); }
+function onIssueInput(){
+  ISSUE.pool = issNum(document.getElementById('ie-pool').value);
+  ISSUE.senior = issNum(document.getElementById('ie-senior').value);
+  const d = issDerived();
+  const set = (id,t)=>{ const el=document.getElementById(id); if(el) el.textContent=t; };
+  set('ie-senior-pct', d.sPct.toFixed(2)+'%');
+  set('ie-junior-size', issFmt(d.junior)+" USD'm");
+  set('ie-junior-pct', d.jPct.toFixed(2)+'%');
+  set('ie-total', issFmt(ISSUE.pool)+" USD'm");
+  const w=document.getElementById('ie-warn'); if(w) w.style.display = d.over?'':'none';
+  const btn=document.getElementById('issue-save-btn'); const bad=d.over||ISSUE.pool<=0;
+  if(btn){ btn.disabled=bad; btn.style.opacity=bad?'0.45':''; btn.style.cursor=bad?'not-allowed':''; }
+}
+function toggleIssueComp(which, el){
+  el.classList.toggle('off');
+  const on = !el.classList.contains('off');
+  if(which==='senior') ISSUE.seniorComp = on; else ISSUE.juniorComp = on;
+}
+function saveIssueSize(){
+  const d = issDerived();
+  if (ISSUE.pool <= 0 || d.over) return;
+  if (issueEdit) ISSUE.currency = document.getElementById('ie-cur').value;
+  issueEdit = false;
+  renderIssueSize();
+  const toast = document.getElementById('update-toast');
+  if (toast){ toast.textContent = '✓ Issue size updated'; toast.classList.add('visible'); setTimeout(()=>toast.classList.remove('visible'), 2600); }
+}
+renderIssueSize();
+
 function openSpvEditModal() {
   document.getElementById('spv-edit-field').value = '';
   document.getElementById('spv-edit-effective').value = '';
