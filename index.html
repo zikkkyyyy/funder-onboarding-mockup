@@ -4520,10 +4520,9 @@ function renderSpPreview(cycleNum) {
     const dotColor = hasChange ? '#D97706' : m.bg;
     const dotBorder = hasChange ? '' : `border:1.5px solid ${m.color};`;
     const dateDisplay = hasChange
-      ? `<span style="text-decoration:line-through;color:#9CA3AF;font-size:11px;margin-right:6px;">${origStr}</span><span style="color:#D97706;font-weight:600;">${newDateText}</span>`
+      ? `<span style="color:#D97706;font-weight:600;">${newDateText}</span>`
       : `<span style="color:#374151;">${origStr}</span>`;
-    const typePill = m.type === 'system'
-      ? `<span style="font-size:10px;color:#9CA3AF;background:#F3F4F6;padding:1px 5px;border-radius:3px;margin-left:6px;">auto</span>` : '';
+    const typePill = '';
     return `<div class="sp-preview-row">
       <div class="sp-preview-dot" style="background:${dotColor};${dotBorder}"></div>
       <div style="flex:1;min-width:0;">
@@ -6098,9 +6097,9 @@ function viewSubPlan(id){
     const dotColor = shift ? '#D97706' : m.bg;
     const dotBorder = shift ? '' : `border:1.5px solid ${m.color};`;
     const dateDisplay = shift
-      ? `<span style="text-decoration:line-through;color:#9CA3AF;font-size:11px;margin-right:6px;">${iso(orig)}</span><span style="color:#D97706;font-weight:600;">${iso(adj)}</span>`
+      ? `<span style="color:#D97706;font-weight:600;">${iso(adj)}</span>`
       : `<span style="color:#374151;">${iso(orig)}</span>`;
-    const typePill = isSys ? `<span style="font-size:10px;color:#9CA3AF;background:#F3F4F6;padding:1px 5px;border-radius:3px;margin-left:6px;">auto</span>` : '';
+    const typePill = '';
     return `<div class="sp-preview-row">
       <div class="sp-preview-dot" style="background:${dotColor};${dotBorder}"></div>
       <div style="flex:1;min-width:0;">
