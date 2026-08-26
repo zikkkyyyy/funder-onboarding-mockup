@@ -2247,9 +2247,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                 <td><span style="font-size:11px;font-weight:600;color:#1D4ED8;background:#DBEAFE;padding:2px 7px;border-radius:4px;">ABS</span></td>
                 <td><span class="scheme-badge">ABS</span></td>
                 <td style="color:#9CA3AF;font-size:12px;">2023-08-11 08:35:09</td>
-                <td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDraft(\'BCL_SEABANK01')">Edit</button>><button class="tbl-act-link" onclick="toggleMoreDD('more-3',event)">More ▾</button>
-                  <div class="more-dd-menu"><button class="more-dd-item disabled">Export JSON</button><button class="more-dd-item" onclick="showConfirmPopup('Mark Ready','BCL_SEABANK01')">Mark Ready</button></div>
-                </div></div></td>
+                <td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDraft('BCL_SEABANK01')">Edit</button><span class="tbl-act-sep">|</span><div class="more-dd-wrap" id="more-3"><button class="tbl-act-link" onclick="toggleMoreDD('more-3',event)">More ▾</button><div class="more-dd-menu"><button class="more-dd-item disabled">Export JSON</button><button class="more-dd-item" onclick="showConfirmPopup('Mark Ready','BCL_SEABANK01')">Mark Ready</button></div></div></div></td>
               </tr>
               <tr id="lrow-4">
                 <td style="padding:11px 10px 11px 16px;"><input type="checkbox" class="row-chk" data-ops="ABL" onchange="onRowCheck(this,'USD4_SPL_ABS_01','ABL')" /></td>
@@ -2293,10 +2291,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                 <td><span style="font-size:11px;font-weight:600;color:#6B7280;background:#F3F4F6;padding:2px 7px;border-radius:4px;">ABL</span></td>
                 <td><span class="scheme-badge" style="background:#F3F4F6;color:#6B7280;">ABL</span></td>
                 <td style="color:#9CA3AF;font-size:12px;">2024-11-18 16:41:53</td>
-                <td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDraft(\'TH_MND_SPL_ABS_01_2024')">Edit</button>><button class="tbl-act-link" onclick="toggleMoreDD('more-7',event)">More ▾</button>
-                    <div class="more-dd-menu"><button class="more-dd-item disabled">Export JSON</button><button class="more-dd-item" onclick="showConfirmPopup('Mark Ready','TH_MND_SPL_ABS_01_2024')">Mark Ready</button></div>
-                  </div>
-                </div></td>
+                <td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDraft('TH_MND_SPL_ABS_01_2024')">Edit</button><span class="tbl-act-sep">|</span><div class="more-dd-wrap" id="more-7"><button class="tbl-act-link" onclick="toggleMoreDD('more-7',event)">More ▾</button><div class="more-dd-menu"><button class="more-dd-item disabled">Export JSON</button><button class="more-dd-item" onclick="showConfirmPopup('Mark Ready','TH_MND_SPL_ABS_01_2024')">Mark Ready</button></div></div></div></td>
               </tr>
               <tr id="lrow-8">
                 <td style="padding:11px 10px 11px 16px;"><input type="checkbox" class="row-chk" data-ops="ABL" onchange="onRowCheck(this,'TH_SPL_SPL_01','ABL')" /></td>
@@ -2306,10 +2301,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
                 <td><span style="font-size:11px;font-weight:600;color:#6B7280;background:#F3F4F6;padding:2px 7px;border-radius:4px;">ABL</span></td>
                 <td><span class="scheme-badge" style="background:#F3F4F6;color:#6B7280;">ABL</span></td>
                 <td style="color:#9CA3AF;font-size:12px;">2024-11-19 17:40:48</td>
-                <td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDraft(\'TH_SPL_SPL_01')">Edit</button>><button class="tbl-act-link" onclick="toggleMoreDD('more-8',event)">More ▾</button>
-                    <div class="more-dd-menu"><button class="more-dd-item disabled">Export JSON</button><button class="more-dd-item" onclick="showConfirmPopup('Mark Ready','TH_SPL_SPL_01')">Mark Ready</button></div>
-                  </div>
-                </div></td>
+                <td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDraft('TH_SPL_SPL_01')">Edit</button><span class="tbl-act-sep">|</span><div class="more-dd-wrap" id="more-8"><button class="tbl-act-link" onclick="toggleMoreDD('more-8',event)">More ▾</button><div class="more-dd-menu"><button class="more-dd-item disabled">Export JSON</button><button class="more-dd-item" onclick="showConfirmPopup('Mark Ready','TH_SPL_SPL_01')">Mark Ready</button></div></div></div></td>
               </tr>
               <!-- Starlight -->
               <tr id="lrow-9" style="background:#FFFBEB;">
@@ -6055,13 +6047,13 @@ function renderSubPlans() {
     let status, sbg, sfg, action;
     if (expired) {
       status = 'Expired'; sbg = '#F3F4F6'; sfg = '#6B7280';
-      action = '<button class="tbl-act-link">View</button>';
+      action = `<button class="tbl-act-link" onclick="viewSubPlan('${sp.id}')">View</button>`;
     } else if (sp.baseStatus === 'Pending TC') {
       status = 'Pending TC'; sbg = '#FEF3C7'; sfg = '#92400E'; active++;
-      action = '<button class="tbl-act-link">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" style="color:#DC2626;">Withdraw</button>';
+      action = `<button class="tbl-act-link" onclick="viewSubPlan('${sp.id}')">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" style="color:#DC2626;" onclick="withdrawSubPlan('${sp.id}')">Withdraw</button>`;
     } else {
       status = 'Approved'; sbg = '#DCFCE7'; sfg = '#16A34A'; active++;
-      action = '<button class="tbl-act-link">View</button>';
+      action = `<button class="tbl-act-link" onclick="viewSubPlan('${sp.id}')">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" style="color:#DC2626;" onclick="withdrawSubPlan('${sp.id}')">Withdraw</button>`;
     }
     const td = 'padding:12px 16px;font-size:13px;';
     return `<tr style="border-bottom:1px solid #F3F4F6;">
@@ -6077,6 +6069,60 @@ function renderSubPlans() {
   if (cnt) cnt.textContent = active + ' active';
 }
 renderSubPlans();
+/* ── View / Withdraw Sub Plan ── */
+let vspCurrentId = null;
+function viewSubPlan(id){
+  const sp = SUBPLAN_ROWS.find(r=>r.id===id); if(!sp) return;
+  vspCurrentId = id;
+  const today=new Date(); today.setHours(0,0,0,0);
+  const addD=n=>{const d=new Date(today);d.setDate(d.getDate()+n);return d;};
+  const fmt=d=>d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+  const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  const start=addD(sp.startOff), end=addD(sp.endOff);
+  const expired = end<today;
+  let status,sbg,sfg;
+  if(expired){status='Expired';sbg='#F3F4F6';sfg='#6B7280';}
+  else if(sp.baseStatus==='Pending TC'){status='Pending TC';sbg='#FEF3C7';sfg='#92400E';}
+  else {status='Approved';sbg='#DCFCE7';sfg='#16A34A';}
+  const delay = LD_SUBPLANS[sp.cycleNo] ? LD_SUBPLANS[sp.cycleNo].delay : 0;
+
+  document.getElementById('vsp-title').textContent = sp.id;
+  document.getElementById('vsp-sub').textContent = 'Sub plan overriding the main plan for the affected cycle';
+  document.getElementById('vsp-cycle').textContent = `Cycle #${sp.cycleNo} · ${fmt(start)} – ${fmt(end)}`;
+  document.getElementById('vsp-status').innerHTML = `<span class="badge" style="background:${sbg};color:${sfg};font-weight:600;padding:2px 10px;border-radius:10px;font-size:12px;">${status}</span>`;
+  document.getElementById('vsp-reason').textContent = sp.reason;
+  document.getElementById('vsp-preview-title').textContent = `Preview — Cycle #${sp.cycleNo}`;
+
+  const milestones = OPS_FLOW_MILESTONES['abs'] || [];
+  document.getElementById('vsp-preview-body').innerHTML = milestones.map(m=>{
+    const orig=new Date(start); orig.setDate(orig.getDate()+m.offset);
+    const isSys = m.type==='system';
+    const shift = (!isSys && delay>0);
+    const adj=new Date(orig); if(shift) adj.setDate(adj.getDate()+delay);
+    const dotColor = shift ? '#D97706' : m.bg;
+    const dotBorder = shift ? '' : `border:1.5px solid ${m.color};`;
+    const dateDisplay = shift
+      ? `<span style="text-decoration:line-through;color:#9CA3AF;font-size:11px;margin-right:6px;">${iso(orig)}</span><span style="color:#D97706;font-weight:600;">${iso(adj)}</span>`
+      : `<span style="color:#374151;">${iso(orig)}</span>`;
+    const typePill = isSys ? `<span style="font-size:10px;color:#9CA3AF;background:#F3F4F6;padding:1px 5px;border-radius:3px;margin-left:6px;">auto</span>` : '';
+    return `<div class="sp-preview-row">
+      <div class="sp-preview-dot" style="background:${dotColor};${dotBorder}"></div>
+      <div style="flex:1;min-width:0;">
+        <div style="display:flex;align-items:center;gap:6px;"><span style="font-size:13px;color:#374151;font-weight:500;">${m.label}</span>${typePill}</div>
+        <div style="margin-top:2px;">${dateDisplay}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('vsp-withdraw-btn').style.display = expired ? 'none' : '';
+  document.getElementById('view-subplan-modal').classList.add('open');
+}
+function closeViewSubPlan(){ document.getElementById('view-subplan-modal').classList.remove('open'); }
+function withdrawSubPlan(id){
+  closeViewSubPlan();
+  const toast=document.getElementById('update-toast');
+  if(toast){ toast.textContent = `✓ Withdrawal request for ${id} submitted to Ticket Center — pending maker/checker approval`; toast.classList.add('visible'); setTimeout(()=>toast.classList.remove('visible'),3200); }
+}
 function ldKey(d){ return d.toISOString().slice(0,10); }
 function ldFmt(d){ const M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; return M[d.getMonth()]+' '+d.getDate(); }
 function ldCurrentIdx(){
@@ -6939,6 +6985,46 @@ function spSubmit() {
     <div class="modal-footer" style="padding:14px 24px;">
       <button class="btn-outline-sm" style="padding:8px 22px;font-size:13px;" onclick="closeLiveChecklist()">Cancel</button>
       <button class="btn-primary-lg" id="live-submit-btn" style="font-size:13px;padding:8px 22px;" disabled onclick="submitLiveChecklist()">Submit · Go Live</button>
+    </div>
+  </div>
+</div>
+
+<!-- View Sub Plan Modal (global, outside flows) -->
+<div class="modal-overlay" id="view-subplan-modal">
+  <div class="modal" style="width:560px;max-height:88vh;">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="vsp-title">Sub Plan</div>
+        <div class="modal-sub" id="vsp-sub">—</div>
+      </div>
+      <button class="modal-close" onclick="closeViewSubPlan()">✕</button>
+    </div>
+    <div class="modal-body" style="padding:18px 24px;">
+      <!-- Display fields: affected cycle + reason -->
+      <div style="display:flex;gap:40px;flex-wrap:wrap;margin-bottom:8px;">
+        <div>
+          <div class="view-label" style="margin-bottom:4px;">Affected Cycle</div>
+          <div id="vsp-cycle" style="font-size:13px;font-weight:600;color:#111827;">—</div>
+        </div>
+        <div>
+          <div class="view-label" style="margin-bottom:4px;">Status</div>
+          <div id="vsp-status"></div>
+        </div>
+      </div>
+      <div style="margin-top:14px;">
+        <div class="view-label" style="margin-bottom:4px;">Reason</div>
+        <div id="vsp-reason" style="font-size:13px;color:#374151;">—</div>
+      </div>
+      <!-- Preview timeline -->
+      <div style="margin-top:20px;border-top:1px solid #F3F4F6;padding-top:14px;">
+        <div style="font-size:13px;font-weight:700;color:#111827;" id="vsp-preview-title">Preview timeline</div>
+        <div style="font-size:11px;color:#9CA3AF;margin:2px 0 10px;">Orange = adjusted &nbsp;·&nbsp; Blue = original (unchanged)</div>
+        <div id="vsp-preview-body"></div>
+      </div>
+    </div>
+    <div class="modal-footer" style="padding:14px 24px;">
+      <button class="btn-outline-sm" style="padding:8px 22px;font-size:13px;" onclick="closeViewSubPlan()">Close</button>
+      <button class="btn-primary-lg" id="vsp-withdraw-btn" style="font-size:13px;padding:8px 22px;background:#DC2626;" onclick="withdrawSubPlan(vspCurrentId)">Withdraw</button>
     </div>
   </div>
 </div>
