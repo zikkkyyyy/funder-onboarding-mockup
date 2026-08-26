@@ -4332,13 +4332,9 @@ function renderSpMilestoneTable(cycleNum) {
       : (isSystem || isTbd)
       ? `<div style="display:flex;align-items:center;gap:5px;color:#9CA3AF;font-size:12px;"><span>🔒</span><span>— auto</span></div>`
       : `<div style="display:flex;align-items:center;gap:6px;">
-           <div class="sp-adj-toggle">
-             <button class="sp-adj-btn active" id="sp-btn-delay-${i}" onclick="setSpMode(${i},'delay')">+Xd</button>
-             <button class="sp-adj-btn" id="sp-btn-date-${i}" onclick="setSpMode(${i},'date')">Date</button>
-           </div>
+           <span class="sp-adj-btn active" style="cursor:default;">+Xd</span>
            <input class="sp-delay-input" id="sp-delay-${i}" type="number" min="0" placeholder="0" oninput="onSpDelayChange(${i},this)" />
            <div class="td-toggle"><button class="td-btn active" onclick="tdToggle(this)">T</button><button class="td-btn" onclick="tdToggle(this)">D</button></div>
-           <input class="sp-date-input" id="sp-date-${i}" type="date" value="${origStr}" style="display:none;" oninput="onSpDateChange(${i},this)" />
          </div>`;
     // Holiday checkboxes per Sub Plan row
     const spHolRegions = [
