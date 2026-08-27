@@ -1572,7 +1572,10 @@ tr.drag-over { border-top: 2px solid #2563EB; }
               <span style="font-size:10px;background:#F0FDF4;color:#15803D;padding:1px 6px;border-radius:3px;font-weight:600;">After first Sale</span>
             </label>
             <input class="form-input" type="date" id="revolving-start" oninput="recomputeSchedule()" style="width:180px;margin-top:4px;" />
-            <div style="font-size:11px;color:#9CA3AF;margin-top:4px;">T for cycle 1 — milestone dates are calculated from this anchor.</div>
+            <div style="font-size:11px;color:#9CA3AF;margin-top:4px;line-height:1.7;">
+              <div><strong>T</strong> for cycle 1 — milestone dates are calculated from this anchor.</div>
+              <div><span style="background:#FEE2E2;color:#991B1B;font-weight:700;font-size:10px;padding:1px 6px;border-radius:3px;margin-right:5px;">V2.0</span>T for the following cycles — T is the end date of the last cycle.</div>
+            </div>
           </div>
 
         </div>
@@ -3593,7 +3596,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
               <td style="color:#9CA3AF;text-align:center;">2</td>
               <td><span class="cal-chip" style="background:#EDE9FE;color:#6D28D9;">Batch Creation</span></td>
               <td><span style="font-size:11px;background:#EFF6FF;color:#2563EB;border-radius:3px;padding:2px 7px;font-weight:500;">Operation</span></td>
-              <td><select class="form-select" style="font-size:12px;padding:4px 8px;height:30px;"><option>T (Cycle Start)</option></select></td>
+              <td><select class="form-select" style="font-size:12px;padding:4px 8px;height:30px;"><option>Cycle Start</option></select></td>
               <td><div style="display:flex;align-items:center;gap:4px;font-size:13px;"><span style="color:#9CA3AF;">+</span><input class="sp-ms-input" type="number" min="0" value="1" style="width:60px;" /><span style="color:#6B7280;font-size:12px;">T</span></div></td>
               <td><div class="sp-hol-full-group"><label class="sp-hol-chk"><input type="checkbox" checked />Thailand (TH)</label><label class="sp-hol-chk"><input type="checkbox" checked />Malaysia (MY)</label><label class="sp-hol-chk"><input type="checkbox" checked />Singapore (SG)</label><label class="sp-hol-chk"><input type="checkbox" checked />Hong Kong (HK)</label><label class="sp-hol-chk" style="grid-column:span 2;"><input type="checkbox" checked />United States (US)</label></div></td>
             </tr>
@@ -3601,7 +3604,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
               <td style="color:#9CA3AF;text-align:center;">3</td>
               <td><span class="cal-chip" style="background:#FEF3C7;color:#92400E;">Sale Notice</span></td>
               <td><span style="font-size:11px;background:#EFF6FF;color:#2563EB;border-radius:3px;padding:2px 7px;font-weight:500;">Operation</span></td>
-              <td><select class="form-select" style="font-size:12px;padding:4px 8px;height:30px;"><option>M2 Batch Creation</option><option>T (Cycle Start)</option></select></td>
+              <td><select class="form-select" style="font-size:12px;padding:4px 8px;height:30px;"><option>M2 Batch Creation</option><option>Cycle Start</option></select></td>
               <td><div style="display:flex;align-items:center;gap:4px;font-size:13px;"><span style="color:#9CA3AF;">+</span><input class="sp-ms-input" type="number" min="0" value="1" style="width:60px;" /><span style="color:#6B7280;font-size:12px;">T</span></div></td>
               <td><div class="sp-hol-full-group"><label class="sp-hol-chk"><input type="checkbox" checked />Thailand (TH)</label><label class="sp-hol-chk"><input type="checkbox" checked />Malaysia (MY)</label><label class="sp-hol-chk"><input type="checkbox" checked />Singapore (SG)</label><label class="sp-hol-chk"><input type="checkbox" checked />Hong Kong (HK)</label><label class="sp-hol-chk" style="grid-column:span 2;"><input type="checkbox" checked />United States (US)</label></div></td>
             </tr>
@@ -3609,7 +3612,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
               <td style="color:#9CA3AF;text-align:center;">4</td>
               <td><span class="cal-chip" style="background:#F3F4F6;color:#374151;">Sys Cutoff</span></td>
               <td><span style="font-size:11px;background:#EFF6FF;color:#2563EB;border-radius:3px;padding:2px 7px;font-weight:500;">Operation</span></td>
-              <td><select class="form-select" style="font-size:12px;padding:4px 8px;height:30px;"><option>M2 Batch Creation</option><option>T (Cycle Start)</option></select></td>
+              <td><select class="form-select" style="font-size:12px;padding:4px 8px;height:30px;"><option>M2 Batch Creation</option><option>Cycle Start</option></select></td>
               <td><div style="display:flex;align-items:center;gap:4px;font-size:13px;"><span style="color:#9CA3AF;">+</span><input class="sp-ms-input" type="number" min="0" value="1" style="width:60px;" /><span style="color:#6B7280;font-size:12px;">T</span></div></td>
               <td><div class="sp-hol-full-group"><label class="sp-hol-chk"><input type="checkbox" checked />Thailand (TH)</label><label class="sp-hol-chk"><input type="checkbox" checked />Malaysia (MY)</label><label class="sp-hol-chk"><input type="checkbox" checked />Singapore (SG)</label><label class="sp-hol-chk"><input type="checkbox" checked />Hong Kong (HK)</label><label class="sp-hol-chk" style="grid-column:span 2;"><input type="checkbox" checked />United States (US)</label></div></td>
             </tr>
@@ -3617,7 +3620,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
               <td style="color:#9CA3AF;text-align:center;">5</td>
               <td><span class="cal-chip" style="background:#D1FAE5;color:#065F46;">Collection</span></td>
               <td><span style="font-size:11px;background:#EFF6FF;color:#2563EB;border-radius:3px;padding:2px 7px;font-weight:500;">Operation</span></td>
-              <td><select class="form-select" style="font-size:12px;padding:4px 8px;height:30px;"><option>M1 Servicer Report</option><option>T (Cycle Start)</option></select></td>
+              <td><select class="form-select" style="font-size:12px;padding:4px 8px;height:30px;"><option>M1 Servicer Report</option><option>Cycle Start</option></select></td>
               <td><div style="display:flex;align-items:center;gap:4px;font-size:13px;"><span style="color:#9CA3AF;">+</span><input class="sp-ms-input" type="number" min="0" value="3" style="width:60px;" /><span style="color:#6B7280;font-size:12px;">T</span></div></td>
               <td><div class="sp-hol-full-group"><label class="sp-hol-chk"><input type="checkbox" checked />Thailand (TH)</label><label class="sp-hol-chk"><input type="checkbox" checked />Malaysia (MY)</label><label class="sp-hol-chk"><input type="checkbox" checked />Singapore (SG)</label><label class="sp-hol-chk"><input type="checkbox" checked />Hong Kong (HK)</label><label class="sp-hol-chk" style="grid-column:span 2;"><input type="checkbox" checked />United States (US)</label></div></td>
             </tr>
@@ -4328,7 +4331,7 @@ function renderSpMilestoneTable(cycleNum) {
     const nameCell = `<span class="cal-chip" style="background:${m.bg};color:${m.color};">${m.label}</span>`;
     const ruleCell = `<select class="ms-rule-sel" onchange="onSpRuleChange(${i},this)">${
       ['anchor','relative'].map(r => `<option value="${r}"${m.rule===r?' selected':''}>${RULE_LABEL[r]}</option>`).join('')}</select>`;
-    const offsetFromOptions = ['<option value="T"'+(m.offsetFrom==='T'?' selected':'')+'>T (Cycle Start)</option>']
+    const offsetFromOptions = ['<option value="T"'+(m.offsetFrom==='T'?' selected':'')+'>Cycle Start</option>']
       .concat(ms.slice(0,i).map((prev,j)=>`<option value="${j+1}"${m.offsetFrom==='milestone'&&m.offsetRef===j+1?' selected':''}>M${j+1} ${prev.short}</option>`)).join('');
     const offsetFromCell = `<select class="offset-from-sel" onchange="onSpOffsetFromChange(${i},this)">${offsetFromOptions}</select>`;
     const offsetCell = `<div style="display:flex;align-items:center;gap:6px;"><span style="font-size:12px;color:#9CA3AF;">+</span><input class="ms-offset-input" type="number" value="${m.offset||0}" min="0" onchange="onSpOffsetChange(${i},this)" /><span style="font-size:12px;font-weight:600;color:#374151;">T</span></div>`;
@@ -4767,7 +4770,7 @@ function wftShowDetail(type) {
   tbody.innerHTML = milestones.map((m, i) => {
     const isSystem = m.type === 'system';
     const typeBadge = isSystem ? `<span class="ms-type-tag ms-type-system">System</span>` : `<span class="ms-type-tag ms-type-operation">Operation</span>`;
-    const offsetFromOptions = ['<option value="T" selected>T (Cycle Start)</option>']
+    const offsetFromOptions = ['<option value="T" selected>Cycle Start</option>']
       .concat(milestones.slice(0, i).map((_, j) => `<option value="${j+1}">Milestone ${j+1}</option>`)).join('');
     const offsetFromCell = isSystem
       ? `<span style="font-size:12px;color:#9CA3AF;">🔒 ${m.offsetFrom === 'T' ? 'T' : 'Milestone ' + m.offsetRef}</span>`
@@ -5434,7 +5437,7 @@ function renderMilestoneTable(type) {
         }</select>`;
 
     // Offset from — depends on rule
-    const offsetFromOptions = ['<option value="T"' + (m.offsetFrom === 'T' ? ' selected' : '') + '>T (Cycle Start)</option>']
+    const offsetFromOptions = ['<option value="T"' + (m.offsetFrom === 'T' ? ' selected' : '') + '>Cycle Start</option>']
       .concat(milestones.slice(0, i).map((prev, j) =>
         `<option value="${j+1}"${m.offsetFrom === 'milestone' && m.offsetRef === j+1 ? ' selected' : ''}>M${j+1} ${prev.short}</option>`
       )).join('');
