@@ -6166,7 +6166,7 @@ function openWithdrawTicket(id){
     const adj=new Date(orig); if(shifted) adj.setDate(adj.getDate()+delay);
     const td='padding:11px 14px;font-size:13px;';
     const revertCell = shifted
-      ? `<span style="color:#9CA3AF;text-decoration:line-through;">${iso(adj)}</span> <span style="color:#16A34A;font-weight:600;">→ ${iso(orig)}</span>`
+      ? `<span style="color:#16A34A;font-weight:600;">${iso(orig)}</span>`
       : `<span style="color:#374151;">${iso(orig)}</span>`;
     const changeCell = shifted
       ? `<span style="font-size:11px;font-weight:600;color:#16A34A;background:#DCFCE7;padding:2px 8px;border-radius:4px;">revert −${delay}d</span>`
