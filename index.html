@@ -6028,6 +6028,9 @@ const SUBPLAN_ROWS = [
   { id:'SP-2026-017', cycleNo:17, startOff:-7,  endOff:20,  reason:'Bank holiday delay TH',     baseStatus:'Approved',   createdOff:-30, createdTime:'10:22' },
   { id:'SP-2026-018', cycleNo:18, startOff:21,  endOff:48,  reason:'System maintenance window', baseStatus:'Pending TC', createdOff:-10, createdTime:'14:07' },
 ];
+// Withdraw state per sub plan id: undefined = none, 'pending' = withdraw ticket in flight,
+// 'approved' = withdraw ticket approved → sub plan drops off the list.
+const spWithdrawn = {};
 function renderSubPlans() {
   const tbody = document.getElementById('subplan-tbody');
   if (!tbody) return;
@@ -6036,11 +6039,14 @@ function renderSubPlans() {
   const fmt = d => d.toLocaleDateString('en-US', { month:'short', day:'numeric' });
   const iso = d => d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
   let active = 0;
-  tbody.innerHTML = SUBPLAN_ROWS.map(sp => {
+  tbody.innerHTML = SUBPLAN_ROWS.filter(sp => spWithdrawn[sp.id] !== 'approved').map(sp => {
     const start = addDays(sp.startOff), end = addDays(sp.endOff), created = addDays(sp.createdOff);
     const expired = end < today; // last day of affected cycle is past today
     let status, sbg, sfg, action;
-    if (expired) {
+    if (spWithdrawn[sp.id] === 'pending') {
+      status = 'Withdraw Pending'; sbg = '#FEF3C7'; sfg = '#92400E'; active++;
+      action = `<button class="tbl-act-link" onclick="openWithdrawTicket('${sp.id}')">View Ticket</button>`;
+    } else if (expired) {
       status = 'Expired'; sbg = '#F3F4F6'; sfg = '#6B7280';
       action = `<button class="tbl-act-link" onclick="viewSubPlan('${sp.id}')">View</button>`;
     } else if (sp.baseStatus === 'Pending TC') {
@@ -6124,10 +6130,61 @@ function viewSubPlan(id){
   document.getElementById('view-subplan-modal').classList.add('open');
 }
 function closeViewSubPlan(){ document.getElementById('view-subplan-modal').classList.remove('open'); }
+function spToast(msg){ const t=document.getElementById('update-toast'); if(t){ t.textContent=msg; t.classList.add('visible'); setTimeout(()=>t.classList.remove('visible'),3200); } }
 function withdrawSubPlan(id){
   closeViewSubPlan();
-  const toast=document.getElementById('update-toast');
-  if(toast){ toast.textContent = `✓ Withdrawal request for ${id} submitted to Ticket Center — pending maker/checker approval`; toast.classList.add('visible'); setTimeout(()=>toast.classList.remove('visible'),3200); }
+  // Raise a withdraw ticket → sub plan goes to "Withdraw Pending"; open the ticket detail.
+  spWithdrawn[id] = 'pending';
+  renderSubPlans();
+  openWithdrawTicket(id);
+}
+/* ── Withdraw Ticket detail ── */
+let wtCurrentId = null;
+function openWithdrawTicket(id){
+  const sp = SUBPLAN_ROWS.find(r=>r.id===id); if(!sp) return;
+  wtCurrentId = id;
+  const today=new Date(); today.setHours(0,0,0,0);
+  const addD=n=>{const d=new Date(today);d.setDate(d.getDate()+n);return d;};
+  const fmt=d=>d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  const start=addD(sp.startOff), end=addD(sp.endOff);
+  const delay = LD_SUBPLANS[sp.cycleNo] ? LD_SUBPLANS[sp.cycleNo].delay : 0;
+  const funder = 'TH_SPL_Starlight_ABS_01';
+  const ticketId = '20260' + (817000000 + sp.cycleNo*1234);
+  document.getElementById('wt-subtitle').textContent = `Withdraw ${sp.id} · revert Cycle #${sp.cycleNo} to the Main Plan`;
+  document.getElementById('wt-ticket-id').textContent = ticketId;
+  document.getElementById('wt-subject').textContent = `To withdraw sub plan ${sp.id} for ${funder} Cycle #${sp.cycleNo}`;
+  document.getElementById('wt-funder').textContent = funder;
+  document.getElementById('wt-cycle').textContent = `Cycle #${sp.cycleNo} (${fmt(start)} – ${fmt(end)})`;
+  document.getElementById('wt-reason').textContent = sp.reason;
+  // Milestone reversion: sub-plan adjusted date → back to main-plan original
+  const ms = OPS_FLOW_MILESTONES['abs'] || [];
+  document.getElementById('wt-ms-body').innerHTML = ms.map(m=>{
+    const orig=new Date(start); orig.setDate(orig.getDate()+m.offset);
+    const isSys=m.type==='system';
+    const shifted=(!isSys && delay>0);
+    const adj=new Date(orig); if(shifted) adj.setDate(adj.getDate()+delay);
+    const td='padding:11px 14px;font-size:13px;';
+    const revertCell = shifted
+      ? `<span style="color:#9CA3AF;text-decoration:line-through;">${iso(adj)}</span> <span style="color:#16A34A;font-weight:600;">→ ${iso(orig)}</span>`
+      : `<span style="color:#374151;">${iso(orig)}</span>`;
+    const changeCell = shifted
+      ? `<span style="font-size:11px;font-weight:600;color:#16A34A;background:#DCFCE7;padding:2px 8px;border-radius:4px;">revert −${delay}d</span>`
+      : `<span style="font-size:11px;color:#9CA3AF;">unchanged</span>`;
+    return `<tr style="border-bottom:1px solid #F3F4F6;"><td style="${td}"><span class="cal-chip" style="background:${m.bg};color:${m.color};">${m.label}</span></td><td style="${td}color:#374151;">${iso(adj)}</td><td style="${td}">${revertCell}</td><td style="padding:11px 14px;">${changeCell}</td></tr>`;
+  }).join('');
+  document.getElementById('withdraw-ticket-modal').classList.add('open');
+}
+function closeWithdrawTicket(){ document.getElementById('withdraw-ticket-modal').classList.remove('open'); }
+function approveWithdrawTicket(){
+  if(wtCurrentId){ spWithdrawn[wtCurrentId] = 'approved'; renderSubPlans(); }
+  closeWithdrawTicket();
+  spToast(`✓ Withdraw ticket approved — ${wtCurrentId} reverted to the Main Plan and removed from Sub Plans`);
+}
+function rejectWithdrawTicket(){
+  if(wtCurrentId){ delete spWithdrawn[wtCurrentId]; renderSubPlans(); }
+  closeWithdrawTicket();
+  spToast(`✓ Withdraw ticket rejected — ${wtCurrentId} kept as Approved`);
 }
 function rejectSubPlan(id){
   closeViewSubPlan();
@@ -7036,6 +7093,69 @@ function spSubmit() {
     <div class="modal-footer" style="padding:14px 24px;">
       <button class="btn-outline-sm" style="padding:8px 22px;font-size:13px;" onclick="closeViewSubPlan()">Close</button>
       <button class="btn-primary-lg" id="vsp-withdraw-btn" style="font-size:13px;padding:8px 22px;background:#DC2626;">Withdraw</button>
+    </div>
+  </div>
+</div>
+
+<!-- Withdraw Ticket detail modal (global, outside flows) -->
+<div class="modal-overlay" id="withdraw-ticket-modal">
+  <div class="modal" style="width:760px;max-height:90vh;">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">Withdraw Ticket</div>
+        <div class="modal-sub" id="wt-subtitle">—</div>
+      </div>
+      <button class="modal-close" onclick="closeWithdrawTicket()">✕</button>
+    </div>
+    <div class="modal-body" style="padding:0;">
+      <!-- Ticket Info -->
+      <div style="padding:16px 24px;border-bottom:1px solid #F3F4F6;">
+        <div style="font-size:13px;font-weight:700;color:#111827;margin-bottom:14px;">Ticket Info</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px 24px;">
+          <div><div class="view-label">Ticket ID</div><div style="font-size:13px;color:#2563EB;font-weight:600;" id="wt-ticket-id">—</div></div>
+          <div><div class="view-label">Operation Module</div><div style="font-size:13px;color:#111827;font-weight:600;">Withdraw Sub Plan</div></div>
+          <div><div class="view-label">Ticket Subject</div><div style="font-size:13px;color:#111827;font-weight:600;" id="wt-subject">—</div></div>
+          <div><div class="view-label">Ticket Status</div><div><span class="badge" style="background:#FEF3C7;color:#92400E;font-weight:600;padding:2px 10px;border-radius:10px;font-size:12px;">● PENDING</span></div></div>
+          <div><div class="view-label">Created By</div><div style="font-size:13px;color:#111827;font-weight:600;">ziqi.xu@monee.com</div></div>
+          <div><div class="view-label">Create Time</div><div style="font-size:13px;color:#111827;font-weight:600;">2026-08-27T09:00:00Z</div></div>
+        </div>
+      </div>
+      <!-- Ticket Stage -->
+      <div style="padding:18px 24px;border-bottom:1px solid #F3F4F6;">
+        <div style="font-size:13px;font-weight:700;color:#111827;margin-bottom:16px;">Ticket Stage</div>
+        <div style="display:flex;align-items:center;gap:0;">
+          <div style="display:flex;align-items:center;gap:8px;"><span style="width:22px;height:22px;border-radius:50%;background:#2563EB;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;">✓</span><span style="font-size:13px;font-weight:600;color:#111827;">Ticket Creation</span></div>
+          <div style="flex:1;height:2px;background:#2563EB;margin:0 12px;"></div>
+          <div style="display:flex;align-items:center;gap:8px;"><span style="width:22px;height:22px;border-radius:50%;background:#DBEAFE;color:#1D4ED8;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;">2</span><span style="font-size:13px;font-weight:600;color:#1D4ED8;">Checking</span></div>
+          <div style="flex:1;height:2px;background:#E5E7EB;margin:0 12px;"></div>
+          <div style="display:flex;align-items:center;gap:8px;"><span style="width:22px;height:22px;border-radius:50%;background:#F3F4F6;color:#9CA3AF;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;">3</span><span style="font-size:13px;font-weight:500;color:#9CA3AF;">Complete Success</span></div>
+        </div>
+      </div>
+      <!-- Ticket Detail -->
+      <div style="padding:18px 24px;">
+        <div style="font-size:13px;font-weight:700;color:#111827;margin-bottom:14px;">Ticket Detail</div>
+        <div style="display:grid;grid-template-columns:130px 1fr;gap:10px 12px;font-size:13px;margin-bottom:18px;">
+          <div style="color:#6B7280;">Funder Name</div><div style="color:#111827;font-weight:600;" id="wt-funder">—</div>
+          <div style="color:#6B7280;">Affected Cycle</div><div style="color:#111827;font-weight:600;" id="wt-cycle">—</div>
+          <div style="color:#6B7280;">Reason</div><div style="color:#111827;font-weight:600;" id="wt-reason">—</div>
+          <div style="color:#6B7280;">Action</div><div style="color:#111827;font-weight:600;">Revert all milestones of the affected cycle back to the Main Plan schedule.</div>
+        </div>
+        <div style="font-size:11px;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;">Milestone Reversion</div>
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#F9FAFB;">
+            <th style="padding:9px 14px;font-size:11px;font-weight:600;color:#6B7280;text-align:left;border-bottom:1px solid #E5E7EB;">Milestone</th>
+            <th style="padding:9px 14px;font-size:11px;font-weight:600;color:#6B7280;text-align:left;border-bottom:1px solid #E5E7EB;">Sub-Plan Date</th>
+            <th style="padding:9px 14px;font-size:11px;font-weight:600;color:#6B7280;text-align:left;border-bottom:1px solid #E5E7EB;">Reverts To (Main Plan)</th>
+            <th style="padding:9px 14px;font-size:11px;font-weight:600;color:#6B7280;text-align:left;border-bottom:1px solid #E5E7EB;">Change</th>
+          </tr></thead>
+          <tbody id="wt-ms-body"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="modal-footer" style="padding:14px 24px;">
+      <button class="btn-outline-sm" style="padding:8px 22px;font-size:13px;" onclick="closeWithdrawTicket()">Close</button>
+      <button class="btn-outline-sm" style="padding:8px 22px;font-size:13px;color:#DC2626;border-color:#FCA5A5;" onclick="rejectWithdrawTicket()">Reject Ticket</button>
+      <button class="btn-primary-lg" style="font-size:13px;padding:8px 22px;background:#16A34A;" onclick="approveWithdrawTicket()">✓ Approve (demo)</button>
     </div>
   </div>
 </div>
