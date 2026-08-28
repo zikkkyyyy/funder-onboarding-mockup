@@ -6051,7 +6051,7 @@ function renderSubPlans() {
       action = `<button class="tbl-act-link" onclick="viewSubPlan('${sp.id}')">View</button>`;
     } else if (sp.baseStatus === 'Pending TC') {
       status = 'Pending TC'; sbg = '#FEF3C7'; sfg = '#92400E'; active++;
-      action = `<button class="tbl-act-link" onclick="viewSubPlan('${sp.id}')">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" style="color:#DC2626;" onclick="rejectSubPlan('${sp.id}')">Reject</button>`;
+      action = `<button class="tbl-act-link" onclick="viewSubPlan('${sp.id}')">View</button>`;
     } else {
       status = 'Approved'; sbg = '#DCFCE7'; sfg = '#16A34A'; active++;
       action = `<button class="tbl-act-link" onclick="viewSubPlan('${sp.id}')">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" style="color:#DC2626;" onclick="withdrawSubPlan('${sp.id}')">Withdraw</button>`;
@@ -6115,17 +6115,13 @@ function viewSubPlan(id){
     </div>`;
   }).join('');
 
-  // Action button depends on status:
-  //  - Approved  → Withdraw (raises a NEW maker/checker ticket)
-  //  - Pending TC → Reject   (the pending ticket is simply rejected — no new ticket)
-  //  - Expired   → no action
+  // Only Approved sub plans can raise a Withdraw ticket here. Pending TC / Expired
+  // are view-only (rejecting a pending ticket happens in the Ticket Center).
   const wb = document.getElementById('vsp-withdraw-btn');
-  if (expired) {
-    wb.style.display = 'none';
-  } else if (status === 'Pending TC') {
-    wb.style.display = ''; wb.textContent = 'Reject'; wb.onclick = () => rejectSubPlan(sp.id);
-  } else {
+  if (status === 'Approved') {
     wb.style.display = ''; wb.textContent = 'Withdraw'; wb.onclick = () => withdrawSubPlan(sp.id);
+  } else {
+    wb.style.display = 'none';
   }
   document.getElementById('view-subplan-modal').classList.add('open');
 }
