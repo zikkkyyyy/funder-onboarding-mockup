@@ -6045,7 +6045,7 @@ function renderSubPlans() {
       action = `<button class="tbl-act-link" onclick="viewSubPlan('${sp.id}')">View</button>`;
     } else if (sp.baseStatus === 'Pending TC') {
       status = 'Pending TC'; sbg = '#FEF3C7'; sfg = '#92400E'; active++;
-      action = `<button class="tbl-act-link" onclick="viewSubPlan('${sp.id}')">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" style="color:#DC2626;" onclick="withdrawSubPlan('${sp.id}')">Withdraw</button>`;
+      action = `<button class="tbl-act-link" onclick="viewSubPlan('${sp.id}')">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" style="color:#DC2626;" onclick="rejectSubPlan('${sp.id}')">Reject</button>`;
     } else {
       status = 'Approved'; sbg = '#DCFCE7'; sfg = '#16A34A'; active++;
       action = `<button class="tbl-act-link" onclick="viewSubPlan('${sp.id}')">View</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" style="color:#DC2626;" onclick="withdrawSubPlan('${sp.id}')">Withdraw</button>`;
@@ -6109,7 +6109,18 @@ function viewSubPlan(id){
     </div>`;
   }).join('');
 
-  document.getElementById('vsp-withdraw-btn').style.display = expired ? 'none' : '';
+  // Action button depends on status:
+  //  - Approved  → Withdraw (raises a NEW maker/checker ticket)
+  //  - Pending TC → Reject   (the pending ticket is simply rejected — no new ticket)
+  //  - Expired   → no action
+  const wb = document.getElementById('vsp-withdraw-btn');
+  if (expired) {
+    wb.style.display = 'none';
+  } else if (status === 'Pending TC') {
+    wb.style.display = ''; wb.textContent = 'Reject'; wb.onclick = () => rejectSubPlan(sp.id);
+  } else {
+    wb.style.display = ''; wb.textContent = 'Withdraw'; wb.onclick = () => withdrawSubPlan(sp.id);
+  }
   document.getElementById('view-subplan-modal').classList.add('open');
 }
 function closeViewSubPlan(){ document.getElementById('view-subplan-modal').classList.remove('open'); }
@@ -6117,6 +6128,11 @@ function withdrawSubPlan(id){
   closeViewSubPlan();
   const toast=document.getElementById('update-toast');
   if(toast){ toast.textContent = `✓ Withdrawal request for ${id} submitted to Ticket Center — pending maker/checker approval`; toast.classList.add('visible'); setTimeout(()=>toast.classList.remove('visible'),3200); }
+}
+function rejectSubPlan(id){
+  closeViewSubPlan();
+  const toast=document.getElementById('update-toast');
+  if(toast){ toast.textContent = `✓ Pending ticket for ${id} rejected — sub plan cancelled`; toast.classList.add('visible'); setTimeout(()=>toast.classList.remove('visible'),3200); }
 }
 function ldKey(d){ return d.toISOString().slice(0,10); }
 function ldFmt(d){ const M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; return M[d.getMonth()]+' '+d.getDate(); }
@@ -7019,7 +7035,7 @@ function spSubmit() {
     </div>
     <div class="modal-footer" style="padding:14px 24px;">
       <button class="btn-outline-sm" style="padding:8px 22px;font-size:13px;" onclick="closeViewSubPlan()">Close</button>
-      <button class="btn-primary-lg" id="vsp-withdraw-btn" style="font-size:13px;padding:8px 22px;background:#DC2626;" onclick="withdrawSubPlan(vspCurrentId)">Withdraw</button>
+      <button class="btn-primary-lg" id="vsp-withdraw-btn" style="font-size:13px;padding:8px 22px;background:#DC2626;">Withdraw</button>
     </div>
   </div>
 </div>
