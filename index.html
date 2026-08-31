@@ -855,13 +855,39 @@ tr.drag-over { border-top: 2px solid #2563EB; }
     <div class="section-card">
       <div class="section-header">
         <div class="section-title">AR Task</div>
-        <div class="section-sub">Set the AR Task ID for this funder.</div>
+        <div class="section-sub">Set the Cutoff and Clawback AR tasks for this funder.</div>
       </div>
       <div class="section-body">
-        <div class="form-grid">
+        <!-- Cutoff -->
+        <div style="font-size:12px;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px;">Cutoff AR Task</div>
+        <div class="form-grid-3" style="margin-bottom:20px;">
           <div class="form-group">
-            <label class="form-label">AR Task ID</label>
-            <input class="form-input" id="s1-artask-input" placeholder="e.g. AR-2024-00123" />
+            <label class="form-label">Task ID</label>
+            <input class="form-input" id="s1-ar-cutoff-id" placeholder="e.g. AR-2024-00123" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Task Name</label>
+            <input class="form-input" id="s1-ar-cutoff-name" placeholder="e.g. Cutoff AR Task" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Transify Key</label>
+            <input class="form-input" id="s1-ar-cutoff-key" placeholder="e.g. cutoff_ar_send" />
+          </div>
+        </div>
+        <!-- Clawback -->
+        <div style="font-size:12px;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px;">Clawback AR Task</div>
+        <div class="form-grid-3">
+          <div class="form-group">
+            <label class="form-label">Task ID</label>
+            <input class="form-input" id="s1-ar-clawback-id" placeholder="e.g. AR-2024-00456" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Task Name</label>
+            <input class="form-input" id="s1-ar-clawback-name" placeholder="e.g. Clawback AR Task" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Transify Key</label>
+            <input class="form-input" id="s1-ar-clawback-key" placeholder="e.g. clawback_ar_send" />
           </div>
         </div>
       </div>
@@ -1716,7 +1742,12 @@ tr.drag-over { border-top: 2px solid #2563EB; }
           <div class="rv-row"><span class="rv-label">Licensee</span><span class="rv-value">CCC</span></div>
           <div class="rv-row"><span class="rv-label">SPV Name</span><span class="rv-value">Stellar</span></div>
           <div class="rv-row"><span class="rv-label">Tranche</span><span class="rv-value">01</span></div>
-          <div class="rv-row"><span class="rv-label">AR Task ID</span><span class="rv-value">AR-2024-00123</span></div>
+          <div class="rv-row"><span class="rv-label">Cutoff AR · Task ID</span><span class="rv-value">AR-2024-00123</span></div>
+          <div class="rv-row"><span class="rv-label">Cutoff AR · Task Name</span><span class="rv-value">Cutoff AR Task</span></div>
+          <div class="rv-row"><span class="rv-label">Cutoff AR · Transify Key</span><span class="rv-value">cutoff_ar_send</span></div>
+          <div class="rv-row"><span class="rv-label">Clawback AR · Task ID</span><span class="rv-value">AR-2024-00456</span></div>
+          <div class="rv-row"><span class="rv-label">Clawback AR · Task Name</span><span class="rv-value">Clawback AR Task</span></div>
+          <div class="rv-row"><span class="rv-label">Clawback AR · Transify Key</span><span class="rv-value">clawback_ar_send</span></div>
           <div class="rv-row" style="align-items:flex-start;">
             <span class="rv-label" style="padding-top:4px;">Supported Tenors</span>
             <div style="display:flex;flex-wrap:wrap;gap:5px;">
@@ -2606,11 +2637,40 @@ tr.drag-over { border-top: 2px solid #2563EB; }
           </div>
           <div id="vi-artask-body">
             <div style="padding:18px 20px;">
+              <div style="font-size:12px;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px;">Cutoff AR Task</div>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px 24px;margin-bottom:22px;">
+                <div>
+                  <div class="view-label" style="margin-bottom:3px;">Task ID</div>
+                  <div class="art-view" data-k="cutoff-id" style="font-size:13px;color:#111827;font-weight:500;">AR-2024-00123</div>
+                  <input class="form-input art-input" data-k="cutoff-id" value="AR-2024-00123" style="display:none;width:100%;font-size:13px;" />
+                </div>
+                <div>
+                  <div class="view-label" style="margin-bottom:3px;">Task Name</div>
+                  <div class="art-view" data-k="cutoff-name" style="font-size:13px;color:#111827;font-weight:500;">Cutoff AR Task</div>
+                  <input class="form-input art-input" data-k="cutoff-name" value="Cutoff AR Task" style="display:none;width:100%;font-size:13px;" />
+                </div>
+                <div>
+                  <div class="view-label" style="margin-bottom:3px;">Transify Key</div>
+                  <div class="art-view" data-k="cutoff-key" style="font-size:13px;color:#111827;font-weight:500;">cutoff_ar_send</div>
+                  <input class="form-input art-input" data-k="cutoff-key" value="cutoff_ar_send" style="display:none;width:100%;font-size:13px;" />
+                </div>
+              </div>
+              <div style="font-size:12px;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px;">Clawback AR Task</div>
               <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px 24px;">
                 <div>
-                  <div class="view-label" style="margin-bottom:3px;">AR Task ID</div>
-                  <div id="artask-view" style="font-size:13px;color:#9CA3AF;font-weight:500;">Not set</div>
-                  <input id="artask-input" class="form-input" placeholder="e.g. AR-2024-00123" style="display:none;width:100%;max-width:260px;font-size:13px;" />
+                  <div class="view-label" style="margin-bottom:3px;">Task ID</div>
+                  <div class="art-view" data-k="clawback-id" style="font-size:13px;color:#111827;font-weight:500;">AR-2024-00456</div>
+                  <input class="form-input art-input" data-k="clawback-id" value="AR-2024-00456" style="display:none;width:100%;font-size:13px;" />
+                </div>
+                <div>
+                  <div class="view-label" style="margin-bottom:3px;">Task Name</div>
+                  <div class="art-view" data-k="clawback-name" style="font-size:13px;color:#111827;font-weight:500;">Clawback AR Task</div>
+                  <input class="form-input art-input" data-k="clawback-name" value="Clawback AR Task" style="display:none;width:100%;font-size:13px;" />
+                </div>
+                <div>
+                  <div class="view-label" style="margin-bottom:3px;">Transify Key</div>
+                  <div class="art-view" data-k="clawback-key" style="font-size:13px;color:#111827;font-weight:500;">clawback_ar_send</div>
+                  <input class="form-input art-input" data-k="clawback-key" value="clawback_ar_send" style="display:none;width:100%;font-size:13px;" />
                 </div>
               </div>
             </div>
@@ -5045,24 +5105,29 @@ function confirmDeleteFile() {
   closeDelFile();
 }
 
-// AR Task ID — inline edit/save toggle (View Funder > Basic Info)
+// AR Task — inline edit/save toggle (Cutoff + Clawback: Task ID / Name / Transify Key)
 function toggleArTaskEdit() {
   const btn = document.getElementById('artask-edit-btn');
-  const view = document.getElementById('artask-view');
-  const input = document.getElementById('artask-input');
-  const editing = input.style.display !== 'none';
+  const views = [...document.querySelectorAll('#vi-artask-body .art-view')];
+  const inputs = [...document.querySelectorAll('#vi-artask-body .art-input')];
+  const editing = inputs.length && inputs[0].style.display !== 'none';
   if (editing) { // Save
-    const v = input.value.trim();
-    view.textContent = v || 'Not set';
-    view.style.color = v ? '#111827' : '#9CA3AF';
-    input.style.display = 'none'; view.style.display = '';
+    inputs.forEach(inp => {
+      const v = views.find(x => x.dataset.k === inp.dataset.k);
+      if (v) { v.textContent = inp.value.trim() || '—'; v.style.color = inp.value.trim() ? '#111827' : '#9CA3AF'; }
+      inp.style.display = 'none';
+    });
+    views.forEach(v => v.style.display = '');
     btn.textContent = 'Edit';
   } else { // Enter edit
-    const cur = view.textContent.trim();
-    input.value = cur === 'Not set' ? '' : cur;
-    input.style.display = ''; view.style.display = 'none';
+    views.forEach(v => {
+      const inp = inputs.find(x => x.dataset.k === v.dataset.k);
+      if (inp) inp.value = (v.textContent.trim() === '—' || v.textContent.trim() === 'Not set') ? '' : v.textContent.trim();
+      v.style.display = 'none';
+    });
+    inputs.forEach(inp => inp.style.display = '');
     btn.textContent = 'Save';
-    input.focus();
+    if (inputs[0]) inputs[0].focus();
   }
 }
 
