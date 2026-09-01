@@ -337,7 +337,7 @@ tbody tr:hover { background: #FAFAFA; }
 .datafile-table .fname { font-family: 'SF Mono', 'Roboto Mono', Menlo, Consolas, monospace; font-size: 11.5px; color: #1F2937; word-break: break-all; }
 .datafile-table .ftiming { color: #6B7280; font-size: 11.5px; line-height: 1.5; }
 .datafile-table .ftype { display: inline-block; padding: 1px 8px; border-radius: 4px; background: #F3F4F6; color: #4B5563; font-size: 11px; font-weight: 600; text-transform: uppercase; }
-.cat-badge { display: inline-block; padding: 3px 9px; border-radius: 6px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+.cat-badge { display: inline-block; padding: 3px 9px; border-radius: 6px; font-size: 11px; font-weight: 600; white-space: normal; line-height: 1.4; }
 .cat-loan-tape { background: #DBEAFE; color: #1D4ED8; }
 .cat-report { background: #FEF3C7; color: #92400E; }
 .cat-sale-notice { background: #EDE9FE; color: #6D28D9; }
@@ -1354,112 +1354,112 @@ tr.drag-over { border-top: 2px solid #2563EB; }
         <div class="tbl-wrap">
           <table class="report-table datafile-table" style="width:100%;min-width:1560px;">
             <thead><tr>
-              <th style="width:130px;">File Cat</th>
+              <th style="width:190px;">File Type</th>
               <th style="min-width:300px;">Name</th>
               <th style="width:70px;">File Type</th>
               
               <th style="min-width:170px;">File Generation</th>
               <th style="width:130px;">File Transfer Method</th>
               <th style="min-width:190px;">BD Ceph File Path</th>
-              <th style="min-width:190px;">DE Ceph File Path</th>
+              
               <th class="col-portal" style="min-width:230px;">Investor Portal File Path</th>
               <th style="width:120px;text-align:center;">If Sync by Funding</th>
               <th style="width:120px;">Action</th>
             </tr></thead>
             <tbody id="datafile-tbody">
               <tr>
-                <td><span class="cat-badge cat-loan-tape">Loan_Tape</span></td>
+                <td><span class="cat-badge cat-loan-tape">Pending Sold Loan Tape</span></td>
                 <td class="fname">{project_name}_Additional_Receivables_Loan_Tape_YYYY-MM-DD_[Pending-Sold]</td>
                 <td><span class="ftype">zip</span></td>
                 
                 <td>Funding System (BE)</td>
                 <td>Investor Portal</td>
                 <td><input class="inline-edit path-input" value="/" /></td>
-                <td><input class="inline-edit path-input" value="/" /></td>
+                
                 <td class="col-portal"><input class="inline-edit path-input" value="Loan_Tape/Pending_Sold_Loan_Tape/%cutoff_date/" /></td>
                 <td style="text-align:center;"><span class="badge badge-active">Yes</span></td><td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDataFile(this)">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" onclick="deleteDataFile(this)">Delete</button></div></td>
               </tr>
               <tr>
-                <td><span class="cat-badge cat-sale-notice">Sale_Notice</span></td>
+                <td><span class="cat-badge cat-sale-notice">Revolving Period Sale Notice</span></td>
                 <td class="fname">{project_name}_Revolving_Period_Sale_Notice_YYYYMMDD</td>
                 <td><span class="ftype">pdf</span></td>
                 
                 <td>Offline (BD)</td>
                 <td>Investor Portal</td>
                 <td><input class="inline-edit path-input" value="/" /></td>
-                <td><input class="inline-edit path-input" value="/" /></td>
+                
                 <td class="col-portal"><input class="inline-edit path-input" value="Sale_Notice%cutoff_date/" /></td>
                 <td style="text-align:center;"><span class="badge badge-active">Yes</span></td><td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDataFile(this)">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" onclick="deleteDataFile(this)">Delete</button></div></td>
               </tr>
               <tr>
-                <td><span class="cat-badge cat-sale-notice">Sale_Notice</span></td>
+                <td><span class="cat-badge cat-sale-notice">Originator Certificate of Solvency</span></td>
                 <td class="fname">{project_name}_Originator_Certificate_of_Solvency_YYYYMMDD</td>
                 <td><span class="ftype">pdf</span></td>
                 
                 <td>Offline (BD)</td>
                 <td>Investor Portal</td>
                 <td><input class="inline-edit path-input" value="/" /></td>
-                <td><input class="inline-edit path-input" value="/" /></td>
+                
                 <td class="col-portal"><input class="inline-edit path-input" value="Sale_Notice%cutoff_date/" /></td>
                 <td style="text-align:center;"><span class="badge badge-active">Yes</span></td><td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDataFile(this)">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" onclick="deleteDataFile(this)">Delete</button></div></td>
               </tr>
               <tr>
-                <td><span class="cat-badge cat-sale-notice">Sale_Notice</span></td>
+                <td><span class="cat-badge cat-sale-notice">Revolving Period Sale and Purchase Agreement</span></td>
                 <td class="fname">{project_name}_Revolving_Period_Sale_and_Purchase_Agreement_YYYYMMDD</td>
                 <td><span class="ftype">pdf</span></td>
                 
                 <td>Offline (BD)</td>
                 <td>Investor Portal</td>
                 <td><input class="inline-edit path-input" value="/" /></td>
-                <td><input class="inline-edit path-input" value="/" /></td>
+                
                 <td class="col-portal"><input class="inline-edit path-input" value="Sale_Notice%cutoff_date/" /></td>
                 <td style="text-align:center;"><span class="badge badge-active">Yes</span></td><td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDataFile(this)">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" onclick="deleteDataFile(this)">Delete</button></div></td>
               </tr>
               <tr>
-                <td><span class="cat-badge cat-loan-tape">Loan_Tape</span></td>
+                <td><span class="cat-badge cat-loan-tape">Transferred Loan Tape</span></td>
                 <td class="fname">{project_name}_Transferred_Loan_Tape_YYYY-MM-DD</td>
                 <td><span class="ftype">gz</span></td>
                 
                 <td>Data Suite Pipeline (DE)</td>
                 <td>Investor Portal</td>
                 <td><input class="inline-edit path-input" value="/" /></td>
-                <td><input class="inline-edit path-input" value="live/{project_name}/{File_Category}/{File_Type}" /></td>
+                
                 <td class="col-portal"><input class="inline-edit path-input" value="Loan_Tape/Transferred_Loan_Tape/" /></td>
                 <td style="text-align:center;"><span class="badge badge-active">Yes</span></td><td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDataFile(this)">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" onclick="deleteDataFile(this)">Delete</button></div></td>
               </tr>
               <tr>
-                <td><span class="cat-badge cat-loan-tape">Loan_Tape</span></td>
+                <td><span class="cat-badge cat-loan-tape">Repurchased Loan Tape</span></td>
                 <td class="fname">{project_name}_Repurchased_Loan_Tape_YYYY-MM-DD</td>
                 <td><span class="ftype">gz</span></td>
                 
                 <td>Data Suite Pipeline (DE)</td>
                 <td>Investor Portal</td>
                 <td><input class="inline-edit path-input" value="/" /></td>
-                <td><input class="inline-edit path-input" value="live/{project_name}/{File_Category}/{File_Type}" /></td>
+                
                 <td class="col-portal"><input class="inline-edit path-input" value="Loan_Tape/Repurchased_Loan_Tape/" /></td>
                 <td style="text-align:center;"><span class="badge badge-active">Yes</span></td><td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDataFile(this)">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" onclick="deleteDataFile(this)">Delete</button></div></td>
               </tr>
               <tr>
-                <td><span class="cat-badge cat-report">Report</span></td>
+                <td><span class="cat-badge cat-report">Monthly Transferred Loan Tape Summary</span></td>
                 <td class="fname">{project_name}_Monthly_Transferred_Loan_Tape_Summary_YYYYMMDD</td>
                 <td><span class="ftype">xlsx</span></td>
                 
                 <td>Data Suite Pipeline (BD)</td>
                 <td>Investor Portal</td>
                 <td><input class="inline-edit path-input" value="live/{project_name}/Report/Monthly_Portfolio_Summary/" /></td>
-                <td><input class="inline-edit path-input" value="/" /></td>
+                
                 <td class="col-portal"><input class="inline-edit path-input" value="Report/Monthly_Portfolio_Summary/" /></td>
                 <td style="text-align:center;"><span class="badge badge-active">Yes</span></td><td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDataFile(this)">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" onclick="deleteDataFile(this)">Delete</button></div></td>
               </tr>
               <tr>
-                <td><span class="cat-badge cat-report">Report</span></td>
+                <td><span class="cat-badge cat-report">Servicer Report</span></td>
                 <td class="fname">{project_name}_Servicer_Report_YYYYMMDD</td>
                 <td><span class="ftype">xlsx</span></td>
                 
                 <td>Data Suite Pipeline (BD)</td>
                 <td>Investor Portal</td>
                 <td><input class="inline-edit path-input" value="live/{project_name}/Report/Servicer_Report/" /></td>
-                <td><input class="inline-edit path-input" value="/" /></td>
+                
                 <td class="col-portal"><input class="inline-edit path-input" value="Report/Servicer_Report/" /></td>
                 <td style="text-align:center;"><span class="badge badge-active">Yes</span></td><td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDataFile(this)">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" onclick="deleteDataFile(this)">Delete</button></div></td>
               </tr>
@@ -1515,7 +1515,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
       </div>
       <div class="section-body">
         <div class="ops-flow-cards">
-          <div class="ops-flow-card selected" id="flow-card-abs" onclick="selectOpsFlow('abs')">
+          <div class="ops-flow-card selected" id="flow-card-abs" data-region="TH" onclick="selectOpsFlow('abs')">
             <div class="ops-flow-card-top">
               <div class="radio-dot on" id="flow-dot-abs"></div>
               <div class="ops-flow-card-title">Flow A · ABS Gross</div>
@@ -1526,7 +1526,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
               <div class="ops-stat" style="grid-column:1/-1;"><span class="ops-stat-label">Milestones</span><span class="ops-stat-val">10</span></div>
             </div>
           </div>
-          <div class="ops-flow-card" id="flow-card-abs-net" onclick="selectOpsFlow('abs-net')">
+          <div class="ops-flow-card" id="flow-card-abs-net" data-region="TH" onclick="selectOpsFlow('abs-net')">
             <div class="ops-flow-card-top">
               <div class="radio-dot" id="flow-dot-abs-net"></div>
               <div class="ops-flow-card-title">Flow B · ABS Net</div>
@@ -1537,7 +1537,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
               <div class="ops-stat" style="grid-column:1/-1;"><span class="ops-stat-label">Milestones</span><span class="ops-stat-val">13</span></div>
             </div>
           </div>
-          <div class="ops-flow-card" id="flow-card-abl" onclick="selectOpsFlow('abl')">
+          <div class="ops-flow-card" id="flow-card-abl" data-region="TH" onclick="selectOpsFlow('abl')">
             <div class="ops-flow-card-top">
               <div class="radio-dot" id="flow-dot-abl"></div>
               <div class="ops-flow-card-title">Flow C · ABL</div>
@@ -1548,7 +1548,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
               <div class="ops-stat" style="grid-column:1/-1;"><span class="ops-stat-label">Milestones</span><span class="ops-stat-val">13</span></div>
             </div>
           </div>
-          <div class="ops-flow-card" id="flow-card-my" onclick="selectOpsFlow('my')">
+          <div class="ops-flow-card" id="flow-card-my" data-region="MY" onclick="selectOpsFlow('my')">
             <div class="ops-flow-card-top">
               <div class="radio-dot" id="flow-dot-my"></div>
               <div class="ops-flow-card-title">Flow D · MY ABS Gross</div>
@@ -1873,102 +1873,102 @@ tr.drag-over { border-top: 2px solid #2563EB; }
           <div style="margin-top:8px;overflow-x:auto;">
             <table class="rv-table" style="min-width:1360px;">
               <thead><tr>
-                <th style="width:120px;">File Cat</th>
+                <th style="width:190px;">File Type</th>
                 <th style="min-width:280px;">Name</th>
                 <th style="width:70px;">File Type</th>
                 
                 <th style="min-width:160px;">File Generation</th>
                 <th style="min-width:160px;">BD Ceph File Path</th>
-                <th style="min-width:160px;">DE Ceph File Path</th>
+                
                 <th style="min-width:200px;background:#EFF6FF;color:#1D4ED8;">Investor Portal File Path</th>
                 <th style="width:70px;text-align:center;">Sync</th>
               </tr></thead>
               <tbody>
                 <tr>
-                  <td><span class="cat-badge cat-loan-tape">Loan_Tape</span></td>
+                  <td><span class="cat-badge cat-loan-tape">Pending Sold Loan Tape</span></td>
                   <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">{project_name}_Additional_Receivables_Loan_Tape_YYYY-MM-DD_[Pending-Sold]</td>
                   <td><span class="ftype">zip</span></td>
                   
                   <td>Funding System (BE)</td>
                   <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">/</td>
-                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">/</td>
+                  
                   <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;background:#F5F9FF;">Loan_Tape/Pending_Sold_Loan_Tape/%cutoff_date/</td>
                   <td style="text-align:center;"><span class="badge badge-active">Yes</span></td>
                 </tr>
                 <tr>
-                  <td><span class="cat-badge cat-sale-notice">Sale_Notice</span></td>
+                  <td><span class="cat-badge cat-sale-notice">Revolving Period Sale Notice</span></td>
                   <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">{project_name}_Revolving_Period_Sale_Notice_YYYYMMDD</td>
                   <td><span class="ftype">pdf</span></td>
                   
                   <td>Offline (BD)</td>
                   <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">/</td>
-                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">/</td>
+                  
                   <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;background:#F5F9FF;">Sale_Notice%cutoff_date/</td>
                   <td style="text-align:center;"><span class="badge badge-active">Yes</span></td>
                 </tr>
                 <tr>
-                  <td><span class="cat-badge cat-sale-notice">Sale_Notice</span></td>
+                  <td><span class="cat-badge cat-sale-notice">Originator Certificate of Solvency</span></td>
                   <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">{project_name}_Originator_Certificate_of_Solvency_YYYYMMDD</td>
                   <td><span class="ftype">pdf</span></td>
                   
                   <td>Offline (BD)</td>
                   <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">/</td>
-                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">/</td>
+                  
                   <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;background:#F5F9FF;">Sale_Notice%cutoff_date/</td>
                   <td style="text-align:center;"><span class="badge badge-active">Yes</span></td>
                 </tr>
                 <tr>
-                  <td><span class="cat-badge cat-sale-notice">Sale_Notice</span></td>
+                  <td><span class="cat-badge cat-sale-notice">Revolving Period Sale and Purchase Agreement</span></td>
                   <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">{project_name}_Revolving_Period_Sale_and_Purchase_Agreement_YYYYMMDD</td>
                   <td><span class="ftype">pdf</span></td>
                   
                   <td>Offline (BD)</td>
                   <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">/</td>
-                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">/</td>
+                  
                   <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;background:#F5F9FF;">Sale_Notice%cutoff_date/</td>
                   <td style="text-align:center;"><span class="badge badge-active">Yes</span></td>
                 </tr>
                 <tr>
-                  <td><span class="cat-badge cat-loan-tape">Loan_Tape</span></td>
+                  <td><span class="cat-badge cat-loan-tape">Transferred Loan Tape</span></td>
                   <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">{project_name}_Transferred_Loan_Tape_YYYY-MM-DD</td>
                   <td><span class="ftype">gz</span></td>
                   
                   <td>Data Suite Pipeline (DE)</td>
                   <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">/</td>
-                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">live/{project_name}/{File_Category}/{File_Type}</td>
+                  
                   <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;background:#F5F9FF;">Loan_Tape/Transferred_Loan_Tape/</td>
                   <td style="text-align:center;"><span class="badge badge-active">Yes</span></td>
                 </tr>
                 <tr>
-                  <td><span class="cat-badge cat-loan-tape">Loan_Tape</span></td>
+                  <td><span class="cat-badge cat-loan-tape">Repurchased Loan Tape</span></td>
                   <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">{project_name}_Repurchased_Loan_Tape_YYYY-MM-DD</td>
                   <td><span class="ftype">gz</span></td>
                   
                   <td>Data Suite Pipeline (DE)</td>
                   <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">/</td>
-                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">live/{project_name}/{File_Category}/{File_Type}</td>
+                  
                   <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;background:#F5F9FF;">Loan_Tape/Repurchased_Loan_Tape/</td>
                   <td style="text-align:center;"><span class="badge badge-active">Yes</span></td>
                 </tr>
                 <tr>
-                  <td><span class="cat-badge cat-report">Report</span></td>
+                  <td><span class="cat-badge cat-report">Monthly Transferred Loan Tape Summary</span></td>
                   <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">{project_name}_Monthly_Transferred_Loan_Tape_Summary_YYYYMMDD</td>
                   <td><span class="ftype">xlsx</span></td>
                   
                   <td>Data Suite Pipeline (BD)</td>
                   <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">live/{project_name}/Report/Monthly_Portfolio_Summary/</td>
-                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">/</td>
+                  
                   <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;background:#F5F9FF;">Report/Monthly_Portfolio_Summary/</td>
                   <td style="text-align:center;"><span class="badge badge-active">Yes</span></td>
                 </tr>
                 <tr>
-                  <td><span class="cat-badge cat-report">Report</span></td>
+                  <td><span class="cat-badge cat-report">Servicer Report</span></td>
                   <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">{project_name}_Servicer_Report_YYYYMMDD</td>
                   <td><span class="ftype">xlsx</span></td>
                   
                   <td>Data Suite Pipeline (BD)</td>
                   <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">live/{project_name}/Report/Servicer_Report/</td>
-                  <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;">/</td>
+                  
                   <td style="font-family:'SF Mono',Menlo,monospace;font-size:11.5px;background:#F5F9FF;">Report/Servicer_Report/</td>
                   <td style="text-align:center;"><span class="badge badge-active">Yes</span></td>
                 </tr>
@@ -3075,112 +3075,112 @@ tr.drag-over { border-top: 2px solid #2563EB; }
         <div class="tbl-wrap">
           <table class="report-table datafile-table" style="width:100%;min-width:1560px;">
             <thead><tr>
-              <th style="width:130px;">File Cat</th>
+              <th style="width:190px;">File Type</th>
               <th style="min-width:300px;">Name</th>
               <th style="width:70px;">File Type</th>
               
               <th style="min-width:170px;">File Generation</th>
               <th style="width:130px;">File Transfer Method</th>
               <th style="min-width:190px;">BD Ceph File Path</th>
-              <th style="min-width:190px;">DE Ceph File Path</th>
+              
               <th class="col-portal" style="min-width:230px;">Investor Portal File Path</th>
               <th style="width:120px;text-align:center;">If Sync by Funding</th>
               <th style="width:120px;">Action</th>
             </tr></thead>
             <tbody id="vt-datafile-tbody">
               <tr>
-                <td><span class="cat-badge cat-loan-tape">Loan_Tape</span></td>
+                <td><span class="cat-badge cat-loan-tape">Pending Sold Loan Tape</span></td>
                 <td class="fname">{project_name}_Additional_Receivables_Loan_Tape_YYYY-MM-DD_[Pending-Sold]</td>
                 <td><span class="ftype">zip</span></td>
                 
                 <td>Funding System (BE)</td>
                 <td>Investor Portal</td>
                 <td><input class="inline-edit path-input" value="/" /></td>
-                <td><input class="inline-edit path-input" value="/" /></td>
+                
                 <td class="col-portal"><input class="inline-edit path-input" value="Loan_Tape/Pending_Sold_Loan_Tape/%cutoff_date/" /></td>
                 <td style="text-align:center;"><span class="badge badge-active">Yes</span></td><td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDataFile(this)">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" onclick="deleteDataFile(this)">Delete</button></div></td>
               </tr>
               <tr>
-                <td><span class="cat-badge cat-sale-notice">Sale_Notice</span></td>
+                <td><span class="cat-badge cat-sale-notice">Revolving Period Sale Notice</span></td>
                 <td class="fname">{project_name}_Revolving_Period_Sale_Notice_YYYYMMDD</td>
                 <td><span class="ftype">pdf</span></td>
                 
                 <td>Offline (BD)</td>
                 <td>Investor Portal</td>
                 <td><input class="inline-edit path-input" value="/" /></td>
-                <td><input class="inline-edit path-input" value="/" /></td>
+                
                 <td class="col-portal"><input class="inline-edit path-input" value="Sale_Notice%cutoff_date/" /></td>
                 <td style="text-align:center;"><span class="badge badge-active">Yes</span></td><td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDataFile(this)">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" onclick="deleteDataFile(this)">Delete</button></div></td>
               </tr>
               <tr>
-                <td><span class="cat-badge cat-sale-notice">Sale_Notice</span></td>
+                <td><span class="cat-badge cat-sale-notice">Originator Certificate of Solvency</span></td>
                 <td class="fname">{project_name}_Originator_Certificate_of_Solvency_YYYYMMDD</td>
                 <td><span class="ftype">pdf</span></td>
                 
                 <td>Offline (BD)</td>
                 <td>Investor Portal</td>
                 <td><input class="inline-edit path-input" value="/" /></td>
-                <td><input class="inline-edit path-input" value="/" /></td>
+                
                 <td class="col-portal"><input class="inline-edit path-input" value="Sale_Notice%cutoff_date/" /></td>
                 <td style="text-align:center;"><span class="badge badge-active">Yes</span></td><td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDataFile(this)">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" onclick="deleteDataFile(this)">Delete</button></div></td>
               </tr>
               <tr>
-                <td><span class="cat-badge cat-sale-notice">Sale_Notice</span></td>
+                <td><span class="cat-badge cat-sale-notice">Revolving Period Sale and Purchase Agreement</span></td>
                 <td class="fname">{project_name}_Revolving_Period_Sale_and_Purchase_Agreement_YYYYMMDD</td>
                 <td><span class="ftype">pdf</span></td>
                 
                 <td>Offline (BD)</td>
                 <td>Investor Portal</td>
                 <td><input class="inline-edit path-input" value="/" /></td>
-                <td><input class="inline-edit path-input" value="/" /></td>
+                
                 <td class="col-portal"><input class="inline-edit path-input" value="Sale_Notice%cutoff_date/" /></td>
                 <td style="text-align:center;"><span class="badge badge-active">Yes</span></td><td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDataFile(this)">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" onclick="deleteDataFile(this)">Delete</button></div></td>
               </tr>
               <tr>
-                <td><span class="cat-badge cat-loan-tape">Loan_Tape</span></td>
+                <td><span class="cat-badge cat-loan-tape">Transferred Loan Tape</span></td>
                 <td class="fname">{project_name}_Transferred_Loan_Tape_YYYY-MM-DD</td>
                 <td><span class="ftype">gz</span></td>
                 
                 <td>Data Suite Pipeline (DE)</td>
                 <td>Investor Portal</td>
                 <td><input class="inline-edit path-input" value="/" /></td>
-                <td><input class="inline-edit path-input" value="live/{project_name}/{File_Category}/{File_Type}" /></td>
+                
                 <td class="col-portal"><input class="inline-edit path-input" value="Loan_Tape/Transferred_Loan_Tape/" /></td>
                 <td style="text-align:center;"><span class="badge badge-active">Yes</span></td><td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDataFile(this)">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" onclick="deleteDataFile(this)">Delete</button></div></td>
               </tr>
               <tr>
-                <td><span class="cat-badge cat-loan-tape">Loan_Tape</span></td>
+                <td><span class="cat-badge cat-loan-tape">Repurchased Loan Tape</span></td>
                 <td class="fname">{project_name}_Repurchased_Loan_Tape_YYYY-MM-DD</td>
                 <td><span class="ftype">gz</span></td>
                 
                 <td>Data Suite Pipeline (DE)</td>
                 <td>Investor Portal</td>
                 <td><input class="inline-edit path-input" value="/" /></td>
-                <td><input class="inline-edit path-input" value="live/{project_name}/{File_Category}/{File_Type}" /></td>
+                
                 <td class="col-portal"><input class="inline-edit path-input" value="Loan_Tape/Repurchased_Loan_Tape/" /></td>
                 <td style="text-align:center;"><span class="badge badge-active">Yes</span></td><td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDataFile(this)">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" onclick="deleteDataFile(this)">Delete</button></div></td>
               </tr>
               <tr>
-                <td><span class="cat-badge cat-report">Report</span></td>
+                <td><span class="cat-badge cat-report">Monthly Transferred Loan Tape Summary</span></td>
                 <td class="fname">{project_name}_Monthly_Transferred_Loan_Tape_Summary_YYYYMMDD</td>
                 <td><span class="ftype">xlsx</span></td>
                 
                 <td>Data Suite Pipeline (BD)</td>
                 <td>Investor Portal</td>
                 <td><input class="inline-edit path-input" value="live/{project_name}/Report/Monthly_Portfolio_Summary/" /></td>
-                <td><input class="inline-edit path-input" value="/" /></td>
+                
                 <td class="col-portal"><input class="inline-edit path-input" value="Report/Monthly_Portfolio_Summary/" /></td>
                 <td style="text-align:center;"><span class="badge badge-active">Yes</span></td><td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDataFile(this)">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" onclick="deleteDataFile(this)">Delete</button></div></td>
               </tr>
               <tr>
-                <td><span class="cat-badge cat-report">Report</span></td>
+                <td><span class="cat-badge cat-report">Servicer Report</span></td>
                 <td class="fname">{project_name}_Servicer_Report_YYYYMMDD</td>
                 <td><span class="ftype">xlsx</span></td>
                 
                 <td>Data Suite Pipeline (BD)</td>
                 <td>Investor Portal</td>
                 <td><input class="inline-edit path-input" value="live/{project_name}/Report/Servicer_Report/" /></td>
-                <td><input class="inline-edit path-input" value="/" /></td>
+                
                 <td class="col-portal"><input class="inline-edit path-input" value="Report/Servicer_Report/" /></td>
                 <td style="text-align:center;"><span class="badge badge-active">Yes</span></td><td><div class="tbl-actions"><button class="tbl-act-link" onclick="editDataFile(this)">Edit</button><span class="tbl-act-sep">|</span><button class="tbl-act-link danger" onclick="deleteDataFile(this)">Delete</button></div></td>
               </tr>
@@ -6317,8 +6317,26 @@ function renderLdSchedule(){
   grid.innerHTML=html;
 }
 
+/* Ops Flow cards are region-scoped: this deployment is TH (region is URL-isolated
+   in the real system), so only TH flows show. MY flows only appear in the MY region. */
+const OPS_REGION = 'TH';
+function applyOpsRegion() {
+  const cards = [...document.querySelectorAll('.ops-flow-card')];
+  let visible = 0, firstVisible = null;
+  cards.forEach(c => {
+    const match = (c.getAttribute('data-region') || 'TH') === OPS_REGION;
+    c.style.display = match ? '' : 'none';
+    if (match) { visible++; if (!firstVisible) firstVisible = c; }
+  });
+  const grid = document.querySelector('.ops-flow-cards');
+  if (grid) grid.style.gridTemplateColumns = `repeat(${Math.max(visible,1)}, 1fr)`;
+  const sel = document.querySelector('.ops-flow-card.selected');
+  if (sel && sel.style.display === 'none' && firstVisible) firstVisible.click();
+}
+
 /* ── Init after DOM ready ── */
 (function init() {
+  applyOpsRegion();     // show only this region's ops flows (TH)
   selectOpsFlow('abs'); // populate milestone table + calendar on load
   initCycleSegments();  // render default 4-segment cycle
   ldInitMonth();
