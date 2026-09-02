@@ -7145,8 +7145,7 @@ function spSubmit() {
           <tr style="background:#F9FAFB;position:sticky;top:0;z-index:1;">
             <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;text-align:left;border-bottom:1px solid #E5E7EB;width:80px;">Rule ID</th>
             <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;text-align:left;border-bottom:1px solid #E5E7EB;">Rules</th>
-            <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;text-align:center;border-bottom:1px solid #E5E7EB;width:110px;">Status</th>
-            <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;text-align:center;border-bottom:1px solid #E5E7EB;width:90px;">Edit Values</th>
+            <th style="padding:10px 16px;font-size:11px;font-weight:600;color:#6B7280;text-align:center;border-bottom:1px solid #E5E7EB;width:120px;">Operation</th>
           </tr>
         </thead>
         <tbody id="rl-library-tbody"></tbody>
@@ -7241,8 +7240,7 @@ let rlEditFromModal = false;
 
 function openAddRuleModal() {
   // Reset modal state
-  rlModalStatus = {};
-  RL_RULES.forEach(r => { rlModalStatus[r.id] = r.status; });
+  rlSelected = new Set();
   renderRlLibrary(RL_RULES);
   document.getElementById('rl-search').value = '';
   document.getElementById('add-rule-modal').classList.add('open');
@@ -7251,25 +7249,27 @@ function openAddRuleModal() {
 function renderRlLibrary(rules) {
   const tbody = document.getElementById('rl-library-tbody');
   tbody.innerHTML = rules.map(r => {
-    const isEnable = rlModalStatus[r.id] === 'enable';
+    const sel = rlSelected.has(r.id);
     return `<tr id="rl-lib-row-${r.id}" style="border-bottom:1px solid #F3F4F6;">
       <td style="padding:12px 16px;font-size:13px;color:#6B7280;">${r.id}</td>
       <td style="padding:12px 16px;font-size:13px;color:#111827;">${r.label}</td>
       <td style="padding:12px 16px;text-align:center;">
-        <button onclick="rlToggleStatus(${r.id})" id="rl-status-btn-${r.id}"
-          class="btn btn-sm ${isEnable ? 'btn-disable' : 'btn-enable'}"
-          style="min-width:70px;">
-          ${isEnable ? 'Disable' : 'Enable'}
+        <button onclick="rlToggleSelect(${r.id})" id="rl-select-btn-${r.id}"
+          class="btn btn-sm ${sel ? 'btn-enable' : 'btn-edit'}" style="min-width:92px;">
+          ${sel ? '✓ Selected' : 'Select'}
         </button>
-      </td>
-      <td style="padding:12px 16px;text-align:center;">
-        ${r.type !== 'none'
-          ? `<button onclick="rlOpenEditFromModal(${r.id})" class="btn btn-edit btn-sm">Edit</button>`
-          : `<span style="font-size:12px;color:#D1D5DB;">—</span>`
-        }
       </td>
     </tr>`;
   }).join('');
+}
+
+// Multi-select: track selected rule ids; toggle Select ⇄ Selected
+let rlSelected = new Set();
+function rlToggleSelect(id) {
+  if (rlSelected.has(id)) rlSelected.delete(id); else rlSelected.add(id);
+  const sel = rlSelected.has(id);
+  const btn = document.getElementById('rl-select-btn-' + id);
+  if (btn) { btn.className = 'btn btn-sm ' + (sel ? 'btn-enable' : 'btn-edit'); btn.textContent = sel ? '✓ Selected' : 'Select'; }
 }
 
 function rlToggleStatus(id) {
@@ -7368,9 +7368,12 @@ function rlDisableRow(rowId) {
 }
 
 function rlConfirmAdd() {
+  const n = rlSelected.size;
   document.getElementById('add-rule-modal').classList.remove('open');
   const toast = document.getElementById('toast');
-  toast.textContent = '✓ Rule selection saved — pending maker-checker approval';
+  toast.textContent = n > 0
+    ? `✓ ${n} rule${n > 1 ? 's' : ''} added — pending maker-checker approval`
+    : 'No rules selected';
   toast.classList.add('show');
   setTimeout(() => toast.classList.remove('show'), 3000);
 }
