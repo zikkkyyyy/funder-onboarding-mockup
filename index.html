@@ -1046,22 +1046,22 @@ tr.drag-over { border-top: 2px solid #2563EB; }
             <tr>
               <td style="font-weight:500;color:#111827;">Daily Disbursement Count</td>
               <td><span class="status-enable">Enable</span></td>
-              <td><div class="btn-ops"><button class="btn btn-edit" onclick="tcOpenEdit('Daily Disbursement Count','Default')">Edit</button><button class="btn btn-disable">Disable</button></div></td>
+              <td><button class="btn btn-disable" onclick="tcToggleStatus(this)">Disable</button></td>
             </tr>
             <tr>
               <td style="font-weight:500;color:#111827;">Daily Disbursement Count</td>
               <td><span class="status-enable">Enable</span></td>
-              <td><div class="btn-ops"><button class="btn btn-edit" onclick="tcOpenEdit('Daily Disbursement Count','1M')">Edit</button><button class="btn btn-disable">Disable</button></div></td>
+              <td><button class="btn btn-disable" onclick="tcToggleStatus(this)">Disable</button></td>
             </tr>
             <tr>
               <td style="font-weight:500;color:#111827;">Daily Disbursement Volume</td>
               <td><span class="status-disable">Disable</span></td>
-              <td><div class="btn-ops"><button class="btn btn-edit" onclick="tcOpenEdit('Daily Disbursement Volume','Default')">Edit</button><button class="btn btn-enable">Enable</button></div></td>
+              <td><button class="btn btn-enable" onclick="tcToggleStatus(this)">Enable</button></td>
             </tr>
             <tr>
               <td style="font-weight:500;color:#111827;">Batch Target OS</td>
               <td><span class="status-enable">Enable</span></td>
-              <td><div class="btn-ops"><button class="btn btn-edit" onclick="tcOpenEdit('Batch Target OS','Default')">Edit</button><button class="btn btn-disable">Disable</button></div></td>
+              <td><button class="btn btn-disable" onclick="tcToggleStatus(this)">Disable</button></td>
             </tr>
           </tbody>
         </table>
@@ -2719,13 +2719,13 @@ tr.drag-over { border-top: 2px solid #2563EB; }
           </div>
           <div id="vr-tc-body">
             <table class="accordion-table">
-              <thead><tr><th>Dimension</th><th style="width:90px;">Status</th></tr></thead>
+              <thead><tr><th>Dimension</th><th style="width:90px;">Status</th><th style="width:120px;">Operation</th></tr></thead>
               <tbody>
-                <tr><td style="font-weight:500;color:#111827;">Daily Disbursement Count</td><td><span class="status-enable">Enable</span></td></tr>
-                <tr><td style="font-weight:500;color:#111827;">Daily Disbursement Count</td><td><span class="status-enable">Enable</span></td></tr>
-                <tr><td style="font-weight:500;color:#111827;">Daily Disbursement Count</td><td><span class="status-disable">Disable</span></td></tr>
-                <tr><td style="font-weight:500;color:#111827;">Daily Disbursement Volume</td><td><span class="status-enable">Enable</span></td></tr>
-                <tr><td style="font-weight:500;color:#111827;">Batch Target OS</td><td><span class="status-enable">Enable</span></td></tr>
+                <tr><td style="font-weight:500;color:#111827;">Daily Disbursement Count</td><td><span class="status-enable">Enable</span></td><td><button class="btn btn-disable btn-sm" onclick="tcToggleStatus(this)">Disable</button></td></tr>
+                <tr><td style="font-weight:500;color:#111827;">Daily Disbursement Count</td><td><span class="status-enable">Enable</span></td><td><button class="btn btn-disable btn-sm" onclick="tcToggleStatus(this)">Disable</button></td></tr>
+                <tr><td style="font-weight:500;color:#111827;">Daily Disbursement Count</td><td><span class="status-disable">Disable</span></td><td><button class="btn btn-enable btn-sm" onclick="tcToggleStatus(this)">Enable</button></td></tr>
+                <tr><td style="font-weight:500;color:#111827;">Daily Disbursement Volume</td><td><span class="status-enable">Enable</span></td><td><button class="btn btn-disable btn-sm" onclick="tcToggleStatus(this)">Disable</button></td></tr>
+                <tr><td style="font-weight:500;color:#111827;">Batch Target OS</td><td><span class="status-enable">Enable</span></td><td><button class="btn btn-disable btn-sm" onclick="tcToggleStatus(this)">Disable</button></td></tr>
               </tbody>
             </table>
           </div>
@@ -7233,6 +7233,19 @@ function rlToggleSelect(id) {
   const sel = rlSelected.has(id);
   const btn = document.getElementById('rl-select-btn-' + id);
   if (btn) { btn.className = 'btn btn-sm ' + (sel ? 'btn-enable' : 'btn-edit'); btn.textContent = sel ? '✓ Selected' : 'Select'; }
+}
+
+function tcToggleStatus(btn){
+  var tr=btn.closest('tr');
+  var badge=tr.querySelector('.status-enable, .status-disable');
+  var sm=btn.classList.contains('btn-sm')?' btn-sm':'';
+  if(badge.classList.contains('status-enable')){
+    badge.className='status-disable'; badge.textContent='Disable';
+    btn.className='btn btn-enable'+sm; btn.textContent='Enable';
+  } else {
+    badge.className='status-enable'; badge.textContent='Enable';
+    btn.className='btn btn-disable'+sm; btn.textContent='Disable';
+  }
 }
 
 function rlToggleStatus(id) {
