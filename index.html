@@ -1334,9 +1334,9 @@ tr.drag-over { border-top: 2px solid #2563EB; }
         <div class="tbl-wrap">
           <table class="report-table datafile-table" style="width:100%;min-width:1560px;">
             <thead><tr>
-              <th style="width:190px;">File Type</th>
+              <th style="width:190px;">File Category</th>
               <th style="min-width:300px;">Name</th>
-              <th style="width:70px;">File Type</th>
+              <th style="width:70px;">File Format</th>
               
               <th style="min-width:170px;">File Generation</th>
               <th style="width:130px;">File Transfer Method</th>
@@ -1834,9 +1834,9 @@ tr.drag-over { border-top: 2px solid #2563EB; }
           <div style="margin-top:8px;overflow-x:auto;">
             <table class="rv-table" style="min-width:1360px;">
               <thead><tr>
-                <th style="width:190px;">File Type</th>
+                <th style="width:190px;">File Category</th>
                 <th style="min-width:280px;">Name</th>
-                <th style="width:70px;">File Type</th>
+                <th style="width:70px;">File Format</th>
                 
                 <th style="min-width:160px;">File Generation</th>
                 <th style="min-width:160px;">BD Ceph File Path</th>
@@ -2040,16 +2040,16 @@ tr.drag-over { border-top: 2px solid #2563EB; }
     <div class="modal-header">
       <div>
         <div class="modal-title" id="addfile-title">Add Data File</div>
-        <div class="modal-sub">BD selects the file type and whether Funding should sync it. Everything else is auto-resolved by the backend from a maintained file-type mapping.</div>
+        <div class="modal-sub">BD selects the file category and whether Funding should sync it. Everything else is auto-resolved by the backend from a maintained file-type mapping.</div>
       </div>
       <button class="modal-close" onclick="closeAddFile()">✕</button>
     </div>
     <div class="modal-body" style="padding:20px 24px;">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
         <div>
-          <label class="form-label">File Type (文件类型) <span style="color:#DC2626;">*</span></label>
+          <label class="form-label">File Category (文件类别) <span style="color:#DC2626;">*</span></label>
           <select class="form-select" id="af-filetype" style="width:100%;">
-            <option value="">Select file type…</option>
+            <option value="">Select file category…</option>
             <option value="pending_sold">Pending Sold Loan Tape</option>
             <option value="sale_notice">Revolving Period Sale Notice</option>
             <option value="cert_solvency">Originator Certificate of Solvency</option>
@@ -2065,7 +2065,7 @@ tr.drag-over { border-top: 2px solid #2563EB; }
           <select class="form-select" id="af-sync" style="width:100%;"><option>Yes</option><option>No</option></select>
         </div>
       </div>
-      <div class="form-hint" style="margin-top:10px;color:#6B7280;font-size:12px;">BD only selects the file type &amp; whether Funding should sync it. The file name, timing, S3 owner, bucket ID and Investor Portal path are all resolved automatically by the backend from a maintained file-type mapping.</div>
+      <div class="form-hint" style="margin-top:10px;color:#6B7280;font-size:12px;">BD only selects the file category &amp; whether Funding should sync it. The file name, timing, S3 owner, bucket ID and Investor Portal path are all resolved automatically by the backend from a maintained file-type mapping.</div>
     </div>
     <div class="modal-footer">
       <button class="btn-outline-sm" style="padding:9px 20px;font-size:13px;" onclick="closeAddFile()">Cancel</button>
@@ -2946,9 +2946,9 @@ tr.drag-over { border-top: 2px solid #2563EB; }
         <div class="tbl-wrap">
           <table class="report-table datafile-table" style="width:100%;min-width:1560px;">
             <thead><tr>
-              <th style="width:190px;">File Type</th>
+              <th style="width:190px;">File Category</th>
               <th style="min-width:300px;">Name</th>
-              <th style="width:70px;">File Type</th>
+              <th style="width:70px;">File Format</th>
               
               <th style="min-width:170px;">File Generation</th>
               <th style="width:130px;">File Transfer Method</th>
